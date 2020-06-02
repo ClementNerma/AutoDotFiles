@@ -1,0 +1,211 @@
+#!/bin/bash
+#
+# WARNING:
+# This installer should **NOT** contain **ANY** private information, as it is meant to be used on
+#  distant servers, computers at work, etc.
+#
+#
+# Make the script exit on error
+set -oeE pipefail
+trap "printf '\nerror: Script failed: see failed command above.\n'" ERR
+
+# Display a number of seconds in a human-readable format
+function print_seconds {
+	local T=$1
+	local D=$((T/60/60/24))
+	local H=$((T/60/60%24))
+	local M=$((T/60%60))
+	local S=$((T%60))
+	(( $D > 0 )) && printf '%d days ' $D
+	(( $H > 0 )) && printf '%d hours ' $H
+	(( $M > 0 )) && printf '%d minutes ' $M
+	(( $D > 0 || $H > 0 || $M > 0 )) && printf 'and '
+	printf '%d seconds\n' $S
+}
+
+# Show current step
+function _step() {
+	CURRENT_STEP=$((CURRENT_STEP + 1))
+	echo
+	echo -e "\e[92m>>> Step ${CURRENT_STEP}/${TOTAL_STEPS}: $*\e[0m"
+	echo
+}
+
+# Indicate the current step is skipped for whatever reason
+function _skip() {
+	echo -e "\e[95m>>> Skipping this step: $*"
+}
+
+# Get the total number of steps
+REALPATH=$(realpath "$0")
+TOTAL_STEPS=$(grep -c "^[\s\t]*_step" "$REALPATH")
+CURRENT_STEP=0
+
+# Get current timestamp
+AUTO_INSTALLER_STARTED_AT=$(date +%s)
+
+# Choose a temporary directory
+export TMPDIR="/tmp/_auto_installer"
+
+# Beginning of the installer!
+echo
+echo -e "\e[92m=================================\e[0m"
+echo -e "\e[92m====== AUTOMATED INSTALLER ======\e[0m"
+echo -e "\e[92m=================================\e[0m"
+
+_step "Creating temporary directory..."
+rm -rf "$TMPDIR"
+mkdir -p "$TMPDIR"
+
+_step "Ensuring the 'sudo' command is available..."
+
+if [ ! -x /usr/bin/sudo ]; then
+	echo -e "\e[33m\!/ WARNING: 'sudo' command was not found, installing it for compatibility reasons.\e[0m"
+	su -s /bin/bash -c "apt install sudo" root
+fi
+
+_step "Updating repositories..."
+sudo apt update
+
+_step "Installing required packages..."
+sudo apt install -y zsh git wget curl sed grep unzip apt-transport-https dos2unix
+
+_step "Installing Rust & Cargo..."
+
+if [ -d ~/.rustup ]; then
+	echo -e "\e[33m\!/ A previous version of \e[32mRust \e[33mwas detected ==> backing it up to \e[32m~/.rustup.bak\e[33m...\e[0m"
+	rm -rf ~/.rustup.bak
+	mv ~/.rustup ~/.rustup.bak
+fi
+
+if [ -d ~/.cargo ]; then
+	echo -e "\e[33m\!/ A previous version of \e[32mCargo \e[33mwas detected ==> backing it up to \e[32m~/.cargo.bak\e[33m...\e[0m"
+	rm -rf ~/.cargo.bak
+	mv ~/.cargo ~/.cargo.bak
+fi
+
+curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
+source $HOME/.cargo/env # Just for this session
+
+_step "Installing tools for Rust..."
+sudo apt install -y llvm libclang-dev
+
+_step "Installing NVM..."
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+
+# Load NVM for the current session
+export NVM_DIR="$HOME/.nvm"
+\. "$NVM_DIR/nvm.sh"
+
+_step "Installing Node.js & NPM..."
+nvm install node --latest-npm
+
+_step "Fixing NPM permission issues..."
+if [ ! -d ~/.npm-global ]; then
+	mkdir ~/.npm-global
+fi
+npm config set prefix '~/.npm-global'
+export PATH=~/.npm-global/bin:$PATH # Just for this session
+
+_step "Installing Yarn..."
+npm i -g yarn
+yarn -v # Just to be sure Yarn was installed correctly
+
+_step "Installing pnpm..."
+npm i -g pnpm
+pnpm -v # Just to be sure pnpm was installed correctly
+
+_step "Installing compilation tools..."
+sudo apt install -y build-essential gcc g++ make perl
+
+_step "Installing required tools for some Rust libraries..."
+sudo apt install -y pkg-config libssl-dev
+
+_step "Installing Tokei..."
+curl -s https://api.github.com/repos/XAMPPRocky/tokei/releases/latest \
+| grep "browser_download_url.*tokei-x86_64-unknown-linux-gnu.tar.gz" \
+| cut -d : -f 2,3 \
+| tr -d \" \
+| wget -qi - --show-progress -O "$TMPDIR/tokei.tar.gz"
+tar zxf "$TMPDIR/tokei.tar.gz"
+sudo mv tokei /usr/local/bin
+
+_step "Installing Micro..."
+curl https://getmic.ro | bash
+sudo mv ./micro /usr/bin/micro
+
+_step "Installing Bat..."
+curl -s https://api.github.com/repos/sharkdp/bat/releases/latest \
+| grep "browser_download_url.*bat_.*_amd64.deb" \
+| cut -d : -f 2,3 \
+| tr -d \" \
+| wget -qi - --show-progress -O "$TMPDIR/bat.deb"
+sudo dpkg -i "$TMPDIR/bat.deb"
+
+_step "Installing Exa..."
+curl -s https://api.github.com/repos/ogham/exa/releases/latest \
+| grep "browser_download_url.*exa-linux-x86_64-.*.zip" \
+| cut -d : -f 2,3 \
+| tr -d \" \
+| wget -qi - --show-progress -O "$TMPDIR/exa.zip"
+unzip "$TMPDIR/exa.zip" -d "$TMPDIR/exa"
+sudo mv "$TMPDIR/exa/"exa-* /usr/local/bin/exa
+
+_step "Installing Fuzzy Finder..."
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --all
+
+_step "Installing utilities..."
+sudo apt install -y pv htop ncdu net-tools rsync
+
+_step "Backing up important files before overriding them..."
+mv ~/.zshrc ~/.zshrc.bak
+
+if [ -f ~/.bashrc ]; then
+	mv ~/.bashrc ~/.bashrc.bak
+fi
+
+_step "Installing Oh-My-ZSH!..."
+if [ -d ~/.oh-my-zsh ]; then
+	echo -e "\e[33m\!/ A previous version of \e[32mOh-My-ZSH! \e[33mwas detected ==> backing it up to \e[32m~/.oh-my-zsh.bak\e[33m...\e[0m"
+	rm -rf ~/.oh-my-zsh.bak
+	mv ~/.oh-my-zsh ~/.oh-my-zsh.bak
+fi
+
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -- --unattended
+
+_step "Installing plugins for Oh-My-ZSH!..."
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+
+_step "Copying configuration files..."
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cp -a "$SCRIPT_DIR/home/." ~/
+
+_step "Cleaning up temporary directory..."
+rm -rf "$TMPDIR"
+
+echo Done\!
+
+# Unset 'sudo' alias if it was set up at the beginning of the script
+if [ ! -x /usr/bin/sudo ]; then
+	unset -f sudo
+fi
+
+printf "Automated installer completed in "
+print_seconds "$(($(date +%s) - ${AUTO_INSTALLER_STARTED_AT}))"
+
+echo
+echo You may want to reboot now.
+if [ -x /sbin/rboot ]; then
+	echo
+	echo
+	if [ ! -x /usr/bin/sudo ]; then
+		echo \> reboot
+	else
+		echo \> sudo reboot
+	fi
+fi
+echo
+echo
