@@ -169,7 +169,7 @@ function mkcd() {
 
 # Get most recent item in current directory
 function latest() {
-	command ls -Art | tail -n 1
+	command ls ${1:-$PWD} -Art | tail -n 1
 }
 
 # Software: Trasher
