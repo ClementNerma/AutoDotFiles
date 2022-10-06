@@ -26,6 +26,7 @@ function gitcommit() {
 
     if (( ${#first_line} > 72 )); then
         echowarn "Maximum recommanded message length is \z[cyan]°72\z[]° characters but provided one is \z[cyan]°${#1}\z[]° long."
+        return 1
     fi
 
     git commit -m "$1" "${@:2}"
