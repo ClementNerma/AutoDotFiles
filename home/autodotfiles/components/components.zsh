@@ -274,6 +274,16 @@ function tokei() {
     dlghbin XAMPPRocky/tokei "tokei-x86_64-unknown-linux-musl.tar.gz" "tokei-aarch64-unknown-linux-gnu.tar.gz" "tokei" tokei
 }
 
+function starship() {
+    # NAME: Starship
+    # PRIORITY: 1
+    # ENV: all
+    # VERSION: starship -V
+    # NEEDS_APT_UPDATE: no
+
+    dlghbin starship/starship "starship-x86_64-unknown-linux-gnu.tar.gz" "starship-aarch64-unknown-linux-musl.tar.gz" "starship" starship
+}
+
 function trasher() {
     # NAME: Trasher
     # PRIORITY: 1
