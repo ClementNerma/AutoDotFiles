@@ -65,8 +65,6 @@ function ytsync() {
 
     local started=$(timer_start)
 
-    echo -n ""
-
     for i in {1..${count}}; do
         # This system allows for super-fast checking
         local video_ie=${entries[((i*4-2))]}
