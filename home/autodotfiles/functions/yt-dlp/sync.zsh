@@ -620,3 +620,10 @@ function ytsync_unlock() {
         echowarn "This IE was not locked."
     fi
 }
+
+# Remove all lockfiles
+function ytsync_unlock_all() {
+    for lockfile in "$ADF_YS_LOCKFILES_DIR/"*.lock(N); do
+        command rm "$lockfile"
+    done
+}

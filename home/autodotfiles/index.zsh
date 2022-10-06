@@ -185,6 +185,9 @@ if ! typeset -f psymlink > /dev/null; then echowarn "WARNING: contractual 'psyml
 # Load the local script
 source "$ADF_USER_DIR/script.zsh"
 
+# Load the startup script
+source "$ADF_DIR/startup.zsh"
+
 if [[ -z $ADF_STARTUP_DIR ]]; then
 	echowarn "WARNING: Contractual '\$ADF_STARTUP_DIR' variable was not set by the local script."
 	export ADF_STARTUP_DIR="$HOMEDIR"
