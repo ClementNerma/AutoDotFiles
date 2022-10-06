@@ -81,35 +81,11 @@ function openfz() {
     openfd
 }
 
-# Open a search with the file explorer from a 'jumpy' search
-function opensz() {
-    if [[ -z $1 ]]; then
-        echoerr "Please provide a search for Jumpy."
-        return 1
-    fi
-
-    if [[ -z $1 ]]; then
-        echoerr "Please provide a search for the file explorer."
-        return 1
-    fi
-
-    local result=$(jumpy query "$1" 2>/dev/null)
-
-    if [[ -z $result ]]; then
-        echoerr "No result found by Jumpy."
-        return 1
-    fi
-  
-    opens "$result" "$2"
-}
-
 # Aliases to exit after open commands
 function opene() { open "$@" && exit }
 function openze() { openz "$@" && exit }
 function openfde() { openfd "$@" && exit }
 function openfze() { openfz "$@" && exit }
-function opense() { opens "$@" ; exit }
-function opensze() { opensz "$@" ; exit }
 
 function openl() { open "$(latest)" }
 function openle() { opene "$(latest)" }

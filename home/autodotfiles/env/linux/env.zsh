@@ -24,11 +24,6 @@ function open() {
     false
 }
 
-function opens() {
-    echoerr "Opening is not currently implemented for Linux"
-    false
-}
-
 function psymlink() {
     echoerr "Symlinks handling is not currently implemented for Linux"
     false

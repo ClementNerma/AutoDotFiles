@@ -44,13 +44,3 @@ function open() {
   ( cd "$(dirname "$topath")" && explorer.exe "$(basename "$topath")" )
   return 0
 }
-
-# Open a file or directory with a specific search
-function opens() {
-  if [[ -z $1 ]]; then
-    echoerr "Please provide a search."
-    return 2
-  fi
-
-  explorer.exe "search-ms:displayname=$1 - Search Results in $(basename "$PWD")&crumb=System.Generic.String%3A$1&crumb=location:$(wslpath -w "$PWD")"
-}

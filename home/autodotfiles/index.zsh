@@ -156,7 +156,6 @@ if [[ ! -d $LOCBAKDIR ]]; then mkdir -p "$LOCBAKDIR"; fi
 
 # Ensure the 'open' function is defined
 if ! typeset -f open > /dev/null; then echowarn "WARNING: contractual 'open' command is not defined. 'open'-related functions won't work correctly."; fi
-if ! typeset -f opens > /dev/null; then echowarn "WARNING: contractual 'opens' command is not defined. 'opens'-related functions won't work correctly."; fi
 
 # Set path to the functions directory
 for script in "$ADF_DIR/functions/"**/*; do
