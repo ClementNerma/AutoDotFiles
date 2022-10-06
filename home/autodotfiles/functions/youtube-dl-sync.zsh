@@ -1,8 +1,15 @@
 export ADF_YS_URL=".ytdlsync-url"
 export ADF_YS_CACHE=".ytdlsync-cache"
+export ADF_YS_CACHE_V2=".ytdlsync-cache2"
 export ADF_YS_BLACKLIST=".ytdlsync-blacklist"
 
 function ytsync() {
+    local cache_name="$ADF_YS_CACHE"
+
+    if (( $YTDL_SYNC_V2 )); then
+        local cache_name="$ADF_YS_CACHE_V2"
+    fi
+
     if [[ -z $1 ]]; then
         if [[ ! -f $ADF_YS_URL ]]; then
             echoerr "Missing URL container file \z[yellow]°$ADF_YS_URL\z[]°"
@@ -22,40 +29,79 @@ function ytsync() {
         echo "$url" > "$ADF_YS_URL"
     fi
 
-    if [[ -f $ADF_YS_CACHE ]]; then
+    if [[ -f $cache_name ]]; then
         local read_from_cache=1
         echoinfo "Retrieving videos list from cache file."
-        local json=$(command cat "$ADF_YS_CACHE")
+        local json=$(command cat "$cache_name")
     else
         local read_from_cache=0
         
         echoinfo "Downloading videos list from playlist URL \z[magenta]°$url\z[]°..."
 
         local started=$(timer_start)
-        local json=$(yt-dlp -J --flat-playlist -i "$url")
 
-        echoinfo "Videos list was retrieved in \z[yellow]°$(timer_end $started)\z[]°."
+        if (( $YTDL_SYNC_V2 )); then
+            local json=$(yt-dlp -J --flat-playlist -i "$url")
 
-        echoverb "Checking and mapping JSON..."
+            echoinfo "Videos list was retrieved in \z[yellow]°$(timer_end $started)\z[]°."
 
-        if ! json=$(echo -E "$json" | jq -c '[.entries[] | {id, title, url, ie_key}]'); then
-            echoerr "Failed to parse JSON, dumped invalid content in file \z[magenta]°$fallible_json_path\z[]°."
-            return 1
+            echoverb "Checking and mapping JSON..."
+
+            if ! json=$(echo -E "$json" | jq -c '[.entries[] | {id, title, url, ie_key}]'); then
+                echoerr "Failed to parse JSON!"
+                return 1
+            fi
+
+            echoverb "JSON is ready."
+        else
+            echoinfo "Counting videos from playlist URL \z[magenta]°$url\z[]°..."
+
+            local count=$(
+                yt-dlp "$url" --flat-playlist |
+                grep "Downloading video" |
+                tail -n1 |
+                sed -E "s/\[download\] Downloading video ([0-9]+) of ([0-9]+)/\2/"
+            )
+
+            if [[ -z "$count" ]]; then
+                echoerr "Got empty count (did the retrieval failed?)"
+                return 2
+            fi
+
+            echoinfo "Total count of videos is estimated at \z[yellow]°$count\z[]°."
+            echoinfo "Downloading videos list from playlist URL \z[magenta]°$url\z[]°..."
+
+            local started=$(timer_start)
+            local json=$(yt-dlp -J --get-filename -i "$url" "${@:2}" 2>/dev/null | pv -l -W -s "$((count+1))" | tail -n1)
+            
+            local fallible_json_path="$TEMPDIR/ytsync-fallible-$(humandate).json"
+            echoverb "Writing JSON data to temporary file \z[magenta]°$fallible\z[]°..."
+            echo -E "$json" > "$fallible_json_path"
+
+            echoinfo "Videos list was retrieved in \z[yellow]°$(timer_end $started)\z[]°."
+
+            echoinfo "Checking and mapping JSON..."
+
+            if ! json=$(echo -E "$json" | jq -c '[.entries[] | {id, title, _type, upload_date, webpage_url}]'); then
+                echoerr "Failed to parse JSON, dumped invalid content in file \z[magenta]°$fallible_json_path\z[]°."
+                return 1
+            fi
+
+            echoinfo "JSON is ready."
+            command rm "$fallible_json_path"
         fi
-
-        echoverb "JSON is ready."
     fi
 
     echoverb "Checking JSON data..."
 
     local count=$(echo -E "$json" | jq 'length')
 
-    echo -E "$json" > $ADF_YS_CACHE
+    echo -E "$json" > $cache_name
     echoverb "Written JSON output to the cache file."
 
     if ! (( $count )); then
         echosuccess "No video to download!"
-        rm "$ADF_YS_CACHE"
+        rm "$cache_name"
         return
     fi
 
@@ -68,77 +114,113 @@ function ytsync() {
         empty_dir=1
     fi
 
-    local display_list=()
     local download_list=()
 
     local max_spaces=$(echo -n "$count" | wc -c)
 
-    IFS=$'\n' local video_ids=($(jq -r -c '.[] | .id' "$ADF_YS_CACHE"))
-    IFS=$'\n' local video_titles=($(jq -r -c '.[] | .title' "$ADF_YS_CACHE"))
-    IFS=$'\n' local video_ies=($(jq -r -c '.[] | .ie_key' "$ADF_YS_CACHE"))
-    IFS=$'\n' local video_urls=($(jq -r -c '.[] | .url' "$ADF_YS_CACHE"))
+    if (( $YTDL_SYNC_V2 )); then
+        IFS=$'\n' local video_ids=($(jq -r -c '.[] | .id' "$cache_name"))
+        IFS=$'\n' local video_titles=($(jq -r -c '.[] | .title' "$cache_name"))
+        IFS=$'\n' local video_ies=($(jq -r -c '.[] | .ie_key' "$cache_name"))
+        IFS=$'\n' local video_urls=($(jq -r -c '.[] | .url' "$cache_name"))
 
-    local blacklisted_video_ids=()
+        local blacklisted_video_ids=()
 
-    if [[ -f "$ADF_YS_BLACKLIST" ]]; then
-        IFS=$'\n' local blacklisted_video_ids=($(cat "$ADF_YS_BLACKLIST"))
-    fi
-
-    for i in {1..$count}; do
-        local index=$((i-1))
-
-        local current=$(printf "%${max_spaces}s" $i)
-
-        local ie_url="${ADF_YS_IE_URLS[${video_ies[i]}]}"
-
-        if [[ -z $ie_url ]]; then
-            echoerr "Found unregistered IE: \z[yellow]°${video_ies[i]}\z[]°"
-            return 20
+        if [[ -f "$ADF_YS_BLACKLIST" ]]; then
+            IFS=$'\n' local blacklisted_video_ids=($(cat "$ADF_YS_BLACKLIST"))
         fi
 
-        local video_id=${video_ids[i]}
-        local video_title=${video_titles[i]}
-        local video_url=${video_urls[i]}
-        
-        if [[ -z $video_id || $video_id = "null" ]]; then
-            if [[ -z $video_url || $video_url = "null" ]]; then
-                echoerr "Video \z[yellow]°${video_title} does not have an ID nor an URL."
-                return 21
+        for i in {1..$count}; do
+            local index=$((i-1))
+
+            local current=$(printf "%${max_spaces}s" $i)
+
+            local ie_url="${ADF_YS_IE_URLS[${video_ies[i]}]}"
+
+            if [[ -z $ie_url ]]; then
+                echoerr "Found unregistered IE: \z[yellow]°${video_ies[i]}\z[]°"
+                return 20
             fi
+
+            local video_id=${video_ids[i]}
+            local video_title=${video_titles[i]}
+            local video_url=${video_urls[i]}
             
-            if [[ ! $video_url = "$ie_url"* ]]; then
-                echoerr "Video \z[yellow]°${video_title}\z[]° with URL \z[yellow]°$video_url\z[]° does not follow the IE's URL convention: \z[yellow]°$ie_url\z[]°"
-                return 22
-            fi
-
-            local video_id=${video_url[$((${#ie_url}+1)),-1]}
-        fi
-
-        if (( ${blacklisted_video_ids[(Ie)$video_id]} )); then
-            echowarn "Skipping blacklisted video: \z[red]°$video_id\z[]° \z[blue]°${video_title}\z[]°"
-            continue
-        fi
-
-        if (( $empty_dir )) || [[ -z $(find . -name "*-${video_id}.*") ]]; then
-            if [[ ! -z $video_id && $video_id != "null" ]]; then
-                local video_url=${ie_url}${video_id}
-            fi
-
-            local blacklist=${ADF_YS_IE_BLACKLIST[${video_ies[i]}]}
-
-            if [[ ! -z "$blacklist" ]]; then
-                local final_url=$(curl -Ls -o /dev/null -w '%{url_effective}' "$video_url")
-                
-                if [[ $final_url = "$blacklist"* ]]; then
-                    echowarn "Blacklisting redirected video (\z[blue]°$video_url\z[]° => \z[red]°$final_url\z[]°)"
-                    echo "$video_id" >> "$ADF_YS_BLACKLIST"
+            if [[ -z $video_id || $video_id = "null" ]]; then
+                if [[ -z $video_url || $video_url = "null" ]]; then
+                    echoerr "Video \z[yellow]°${video_title} does not have an ID nor an URL."
+                    return 21
                 fi
+                
+                if [[ ! $video_url = "$ie_url"* ]]; then
+                    echoerr "Video \z[yellow]°${video_title}\z[]° with URL \z[yellow]°$video_url\z[]° does not follow the IE's URL convention: \z[yellow]°$ie_url\z[]°"
+                    return 22
+                fi
+
+                local video_id=${video_url[$((${#ie_url}+1)),-1]}
             fi
 
-            echoinfo "\z[gray]°$current / $count\z[]° \z[magenta]°[$video_id]\z[]° \z[yellow]°${video_title}\z[]°"
-            download_list+=("$video_url")
-        fi
-    done
+            if (( ${blacklisted_video_ids[(Ie)$video_id]} )); then
+                echowarn "Skipping blacklisted video: \z[red]°$video_id\z[]° \z[blue]°${video_title}\z[]°"
+                continue
+            fi
+
+            if (( $empty_dir )) || [[ -z $(find . -name "*-${video_id}.*") ]]; then
+                if [[ ! -z $video_id && $video_id != "null" ]]; then
+                    local video_url=${ie_url}${video_id}
+                fi
+
+                local blacklist=${ADF_YS_IE_BLACKLIST[${video_ies[i]}]}
+
+                if [[ ! -z "$blacklist" ]]; then
+                    local final_url=$(curl -Ls -o /dev/null -w '%{url_effective}' "$video_url")
+
+                    if [[ $final_url = "$blacklist"* ]]; then
+                        echowarn "\z[gray]°$current / $count\z[]° Blacklisting redirected video (\z[blue]°$video_url\z[]° => \z[red]°$final_url\z[]°)"
+                        echo "$video_id" >> "$ADF_YS_BLACKLIST"
+                        continue
+                    fi
+                fi
+
+                echoinfo "\z[gray]°$current / $count\z[]° \z[magenta]°[$video_id]\z[]° \z[yellow]°${video_title}\z[]°"
+                download_list+=("$video_url")
+            fi
+        done
+    else
+        for i in {1..$count}; do
+            local index=$((i-1))
+            local videojson=$(echo -E "$json" | jq ".[$index]")
+
+            local entry_type=$(echo -E "$videojson" | jq "._type" -r)
+
+            if [[ $entry_type != "null" ]]; then
+                local entry_title=$(echo -E "$videojson" | jq ".title" -r)
+
+                if [[ $entry_type = "playlist" ]]; then
+                    echowarn "Found playlist entry: \z[yellow]°$entry_title\z[]°"
+                else
+                    echowarn "Found unknown entry type \z[blue]°$entry_type\z[]°: \z[yellow]°$entry_title\z[]°"
+                fi
+
+                return 20
+            fi
+
+            local videoid=$(echo -E "$videojson" | jq ".id" -r)
+
+            if [[ $videoid = "null" ]]; then
+                continue
+            fi
+
+            local current=$(printf "%${max_spaces}s" $i)
+
+            if (( $empty_dir )) || [[ -z $(find . -name "*-$videoid.*") ]]; then
+                local title=$(echo -E "$videojson" | jq ".title" -r)
+                local uploaded=$(echo -E "$videojson" | jq ".upload_date" -r | sed -E "s/([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])/\3\/\2\/\1/")
+                echoinfo "\z[gray]°$current / $count\z[]° \z[magenta]°[$videoid]\z[]° \z[cyan]°$uploaded\z[]° \z[yellow]°${title}\z[]°"
+                download_list+=($(echo -E "$videojson" | jq ".webpage_url" -r))
+            fi
+        done
+    fi
 
     echoinfo "\nGoing to download \z[yellow]°${#download_list}\z[]° videos."
 
@@ -148,7 +230,7 @@ function ytsync() {
 
     if ! (( ${#download_list} )); then
         echosuccess "No video to download!"
-        rm "$ADF_YS_CACHE"
+        rm "$cache_name"
         return
     fi
 
@@ -188,6 +270,11 @@ function ytsync() {
         echoerr "Failed to download \z[yellow]°$errors\z[]° video(s)."
         return 5
     fi
+}
+
+# YTSync v2
+function ytsync2() {
+    YTDL_SYNC_V2=1 ytsync "$@"
 }
 
 # URL mapper for IDs in playlists
