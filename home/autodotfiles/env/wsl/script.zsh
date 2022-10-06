@@ -158,10 +158,10 @@ function fd() {
   cd "$PWD" && command fd "$@"
 }
 
-# Load main PC exclusive modules
-if (( $ADF_CONF_MAIN_PERSONAL_COMPUTER )); then
-  source "$ADF_ENV_DIR/session-backuper.zsh"
-fi
+# # Load main PC exclusive modules
+# if (( $ADF_CONF_MAIN_PERSONAL_COMPUTER )); then
+#   source "$ADF_ENV_DIR/session-backuper.zsh"
+# fi
 
 # Enable screen provider on Windows
 export DISPLAY=":0"
