@@ -35,7 +35,7 @@ function zerupdate() {
 	if [[ ! -z $1 ]]; then
 		echoverb "Updating from provided path: \z[magenta]°$1\z[]°"
 		local update_path="$1"
-	elif [[ -z $ADF_UPDATE_PATH ]]; then
+	elif [[ ! -z $ADF_UPDATE_PATH ]]; then
 		echoverb "Updating from configured path: \z[magenta]°$ADF_UPDATE_PATH\z[]°"
 		local update_path="$ADF_UPDATE_PATH"
 	elif [[ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]]; then
