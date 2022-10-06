@@ -130,9 +130,8 @@ function rclone_mirror() {
                 echo ""
             fi
         
-            echoerr "$error_msg"
+            echoerr "RClone failed: \z[yellow]°$error_msg\z[]°"
             echoerr "Original output: >\z[yellow]°$rclone_list\z[]°<"
-            echoerr "Aborting transfer."
 
             return 9
         fi
