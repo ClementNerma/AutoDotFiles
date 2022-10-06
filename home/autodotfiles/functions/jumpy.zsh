@@ -5,7 +5,7 @@ function z() {
         return 1
     fi
 
-    local result=$(jumpy query "$1" --after "$PWD")
+    local result=$(jumpy query "$1" --checked --after "$PWD")
 
     if [[ -n $result ]]; then
         export __JUMPY_DONT_REGISTER=1
@@ -59,7 +59,7 @@ function openzi() {
         return 1
     fi
 
-    jumpy add "$selected"
+    jumpy inc "$selected"
     open "$selected"
 }
 
@@ -147,7 +147,7 @@ function jumpy_handler() {
     fi
 
     emulate -L zsh
-    jumpy add "$PWD"
+    jumpy inc "$PWD"
 }
 
 chpwd_functions=(${chpwd_functions[@]} "jumpy_handler")
