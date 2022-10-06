@@ -101,23 +101,29 @@ function rclone_mirror() {
             local item_c=$((item_c+1))
             echoinfo "> Going to transfer: \z[magenta]°$item\z[]° \z[yellow]°(${items_size[${items[(ie)$item]}]})\z[]°"
         done <<< $(printf '%s\n' "${items[@]}" | sort -n)
+        echo ""
     fi
 
     if (( ${#tomove} )); then
         while IFS= read -r item; do
             echosuccess "> Going to move from: \z[magenta]°$item\z[]°"
         done <<< $(printf '%s\n' "${tomove[@]}" | sort -n)
+        echo ""
     fi
 
     if (( ${#todelete} )); then
         while IFS= read -r item; do
             echowarn "> Going to delete: \z[magenta]°$item\z[]°"
         done <<< $(printf '%s\n' "${todelete[@]}" | sort -n)
+        echo ""
     fi
 
-    for line in $unparsed; do
-        echoerr "> Unparsed: $line"
-    done
+    if (( ${#unparsed} )); then
+        for line in $unparsed; do
+            echoerr "> Unparsed: $line"
+        done
+        echo ""
+    fi
 
     echoinfo "Built items list in \z[gray]°$(timer_end "$started")\z[]°."
     echoinfo "Found \z[yellow]°${#items}\z[]° item(s) to transfer, \z[yellow]°${#tomove}\z[]° to move and \z[yellow]°${#todelete}\z[]° to delete for a total of \z[yellow]°$size\z[]°."
