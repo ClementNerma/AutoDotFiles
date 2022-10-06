@@ -208,7 +208,8 @@ function humandate() {
 	date '+%Y_%m_%d-%Hh_%Mm_%Ss'
 }
 
-function _filebak() {
+# Move an item called <something> to <something>.bak-<timestamp>
+function mvbak() {
 	local itempath="${1%/}"
 
 	if [[ ! -f "$itempath" && ! -d "$itempath" ]]; then
@@ -218,18 +219,8 @@ function _filebak() {
 
 	local renpath="$itempath.bak-$(humandate)"
 
-	${*:2} "$itempath" "$renpath"
+	mv "$itempath" "$renpath"
 	export LAST_FILEBAK_PATH="$renpath"
-}
-
-# Copy an item called <something> to <something>.bak-<timestamp>
-function cpbak() {
-	_filebak "$@" cp -r
-}
-
-# Move an item called <something> to <something>.bak-<timestamp>
-function mvbak() {
-	_filebak "$@" mv
 }
 
 # Compute the 32-bit checksum of a flat directory (= only files)
