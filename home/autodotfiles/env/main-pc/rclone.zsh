@@ -191,6 +191,7 @@ function __rclone_sync_nocheck() {
         --filter "- \$RECYCLE.BIN/**" \
         --filter "- msdownld.tmp/**" \
         --filter "- desktop.ini" \
+        --filter "- sync.ffs_db" \
         --create-empty-src-dirs \
         --track-renames --track-renames-strategy "leaf,size" \
         "$@"
