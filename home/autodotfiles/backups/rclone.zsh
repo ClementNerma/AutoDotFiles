@@ -23,6 +23,8 @@ function rclone_mirror() {
     local source="$1"
     local dest="$2"
     
+    echoinfo "Checking files to transfer..."
+
     (){
         rclone_output=$(__rclone_sync_nocheck "$source" "$dest" --dry-run "${@:3}" 2> $1)
         rclone_status=$?
