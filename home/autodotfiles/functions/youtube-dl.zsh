@@ -101,7 +101,7 @@ function ytdl() {
 		return 1
 	fi
 
-	if ! (( $is_tempdir_cwd )); then
+	if (( $is_tempdir_cwd )); then
 		return
 	fi
 
