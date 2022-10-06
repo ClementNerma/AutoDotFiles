@@ -496,8 +496,10 @@ function ytsync_wait_lockfile() {
     while true; do
         if [[ -f $lockfile ]]; then
             local started_waiting=$(timer_start)
+            local waited=0
 
             while [[ -f $lockfile ]]; do
+                local waited=1
                 local pending=$(command cat "$lockfile")
                 local waiting_for=$(timer_elapsed_seconds "$started_waiting")
 
@@ -505,6 +507,10 @@ function ytsync_wait_lockfile() {
                 
                 sleep 1
             done
+
+            if (( $waited )); then
+                echo ""
+            fi
         fi
 
         echo "$PWD" > "$lockfile"
