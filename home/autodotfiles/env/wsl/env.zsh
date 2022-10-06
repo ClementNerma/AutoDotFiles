@@ -52,5 +52,5 @@ function opens() {
     return 2
   fi
 
-  explorer.exe "search-ms:displayname=$1 - Search Results&crumb=System.Generic.String%3A$1&crumb=location:$(wslpath -w "$PWD")"
+  explorer.exe "search-ms:displayname=$1 - Search Results in $(basename "$PWD")&crumb=System.Generic.String%3A$1&crumb=location:$(wslpath -w "$PWD")"
 }
