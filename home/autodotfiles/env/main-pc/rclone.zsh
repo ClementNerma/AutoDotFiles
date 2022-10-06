@@ -28,7 +28,7 @@ function rclone_mirror() {
         return 4
     fi
 
-    local rclone_list=$(cat "$rclone_output_file")
+    local rclone_list=$(cat "$rclone_output_file" | ansi2txt)
     rm "$rclone_output_file"
 
     local items=()
