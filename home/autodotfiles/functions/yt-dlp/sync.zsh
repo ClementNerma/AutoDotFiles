@@ -244,7 +244,7 @@ function ytsync_build_cache() {
 
     local started=$(timer_start)
 
-    IFS=$'\n' local playlist_url_files=($(fd --hidden --strip-cwd-prefix "$ADF_YS_URL_FILE" | sort))
+    IFS=$'\n' local playlist_url_files=($(fd --hidden --strip-cwd-prefix -g "$ADF_YS_URL_FILE" | sort))
 
     if [[ -z $playlist_url_files ]]; then
         echoerr "No playlist to synchronize!"
