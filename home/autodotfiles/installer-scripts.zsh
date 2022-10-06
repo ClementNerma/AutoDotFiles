@@ -37,6 +37,11 @@ function python() {
 
     sudo apt install -yqqq python3 python3-dev python-virtualenv python-is-python3
 
+    if (( $COMPONENT_UPDATING )); then
+        echowarn "Skipping PIP install due to update."
+        return
+    fi
+
     dl https://bootstrap.pypa.io/get-pip.py "$INSTALLER_TMPDIR/get-pip.py"
     export PATH="$HOME/.local/bin:$PATH"
 
@@ -111,11 +116,6 @@ function fzf() {
     # VERSION: fzf --version
     # NEEDS_APT_UPDATE: no
 
-    if (( $COMPONENT_UPDATING )); then
-        echowarn "Nothing to update."
-        return
-    fi
-
     if [[ -d ~/.fzf ]]; then
         mvbak ~/.fzf
         echowarn "\!/ A previous version of \z[green]°Fuzzy Finder\z[]° was found and moved to \z[magenta]°$LAST_MVBAK_PATH\z[]°..."
@@ -137,7 +137,7 @@ function micro() {
     chmod +x micro
     mv micro $ADF_BIN_DIR
 
-    if [[ ! -d $HOME/.config/micro ]]; then
+    if ! (( $COMPONENT_UPDATING )) && [[ ! -d $HOME/.config/micro ]]; then
         mkdir -p $HOME/.config/micro
         echo '{ "CtrlN": "AddTab", "CtrlW": "Quit", "CtrlD": "SpawnMultiCursor" }' | jq > $HOME/.config/micro/bindings.json
     fi
@@ -162,7 +162,12 @@ function nodejs() {
     # VERSION: volta -v
     # NEEDS_APT_UPDATE: no
 
-    if ! (( $COMPONENT_UPDATING )) && [[ -d ~/.volta ]]; then
+    if (( $COMPONENT_UPDATING )); then
+        echowarn "Nothing to update."
+        return
+    fi
+
+    if [[ -d ~/.volta ]]; then
         mvbak ~/.volta
         echowarn "\!/ A previous version of \z[green]°Volta\z[]° was found and moved to \z[magenta]°$LAST_MVBAK_PATH\z[]°..."
     fi
