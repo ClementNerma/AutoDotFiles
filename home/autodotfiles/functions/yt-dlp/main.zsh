@@ -124,6 +124,9 @@ function ytdl() {
 		echoinfo "> Repairing date as requested"
 
 		if ! ADF_NO_VERBOSE=1 ytrepairdate "$YTDL_REPAIR_DATE" "$tempdir"; then
+			echoerr "Failed to get repair date!"
+			echoerr "You can retry with:"
+			echowarn "$resume_cmdline"
 			return 1
 		fi
 	fi
