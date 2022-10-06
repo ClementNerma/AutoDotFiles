@@ -143,7 +143,7 @@ function adf_view_randomize() {
         local file="${files[counter]}"
         local padded_counter=$(printf "%05d" "$counter")
         local symlink="r$padded_counter-$(basename "$file")"
-        echoverb "> $padded_counter/\z[green]°$total\z[]°: \z[yellow]°r$padded_counter\z[]° -> \z[blue]°$(basename "$file")\z[]°"
+        echoinfo "\z[magenta]°> $padded_counter/\z[green]°$total\z[]°: \z[yellow]°r$padded_counter\z[]° -> \z[blue]°$(basename "$file")\z[]°\z[]°"
         psymlink "$target/$file" "$view_dir/$symlink"
 	done
 
