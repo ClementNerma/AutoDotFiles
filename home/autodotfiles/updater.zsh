@@ -24,22 +24,11 @@ function zerbackup() {
 
 # Update to latest version
 function zerupdate() {
-	if [[ -n $1 ]]; then
-		local update_path="$1"
-	elif [[ -n $ADF_UPDATE_PATH ]]; then
-		local update_path="$ADF_UPDATE_PATH"
-	else
-		if [[ -z $PROJDIR ]]; then
-			echoerr "Tried to update from projects directory, but \$PROJDIR is not defined."
-			return 1
-		fi
+	local update_path=${${1:-$ADF_UPDATE_PATH}:-$PROJDIR/AutoDotFiles}
 
-		local update_path="$PROJDIR/AutoDotFiles"
-
-		if [[ ! -d $update_path ]]; then
-			echoerr "Update directory \z[magenta]°$update_path\z[]° was not found, please provide one."
-			return 1
-		fi
+	if [[ ! -d $update_path ]]; then
+		echoerr "Update directory \z[magenta]°$update_path\z[]° was not found, please provide one."
+		return 1
 	fi
 	
 	if [[ ! -d $update_path ]] || [[ ! -f $update_path/installer.bash ]] || [[ ! -f $update_path/home/.zshrc ]]; then
