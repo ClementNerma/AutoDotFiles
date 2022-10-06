@@ -253,6 +253,7 @@ function adf_install() {
     export BASE_INSTALLER_TMPDIR="/tmp/adf-installer-$(humandate)"
 
     local failed=0
+    local successes=()
 
     for i in {1..$to_install}; do
         local func_name="$namespaced_functions_prefix${to_install_functions[i]}"
@@ -306,20 +307,33 @@ function adf_install() {
 
         echosuccess ""
 
+        local f_name="\z[yellow]°${to_install_names[i]}\z[]°"
+        local register_success=1
+
         if (( ${to_install_already_installed[i]} )); then
-            if [[ ${to_install_previous_version[i]} != "-" ]]; then
-                echosuccess "Successfully updated from version \z[yellow]°${to_install_previous_version[i]}\z[]° to version \z[yellow]°$new_installed_ver\z[]°!"
+            if [[ ${to_install_previous_version[i]} = "-" ]]; then
+                local success="Successfully updated $f_name!"
+                local register_success=0
+            elif [[ $new_installed_ver = ${to_install_previous_version[i]} ]]; then
+                local success="No update was needed for $f_name at version \z[yellow]°$new_installed_ver\z[]°!"
+                local register_success=0
             else
-                echosuccess "Successfully updated to version \z[yellow]°$new_installed_ver\z[]°!"
+                local success="Successfully updated $f_name from version \z[yellow]°${to_install_previous_version[i]}\z[]° to version \z[yellow]°$new_installed_ver\z[]°!"
             fi
         else
             if [[ $new_installed_ver != "-" ]]; then
-                echosuccess "Successfully installed component with version \z[yellow]°$new_installed_ver\z[]°!"
+                local success="Successfully installed component $f_name with version \z[yellow]°$new_installed_ver\z[]°!"
             else
-                echosuccess "Successfully installed component!"
+                local success="Successfully installed component $f_name!"
             fi
 
             echo "${to_install_functions[i]}" >> "$ADF_INSTALLED_LIST"
+        fi
+
+        echosuccess "$success"
+
+        if (( $register_success )); then
+            successes+=("$success")
         fi
         
         echosuccess ""
@@ -330,7 +344,15 @@ function adf_install() {
         return 89
     fi
 
-    echosuccess "All components were installed or updated successfully in \z[yellow]°$(timer_end "$started")\z[]°!"
+    echosuccess "All components were installed or updated successfully in \z[yellow]°$(timer_end "$started")\z[]°!\n"
+
+    if (( ${#successes} > 1 )); then
+        for success in $successes; do
+            echoinfo "* $success"
+        done
+    elif ! (( ${#successes} )); then
+        echoinfo "* No update was needed for any component, or the updated components didn't have a version."
+    fi
 
     command rm -rf "$BASE_INSTALLER_TMPDIR"
 
