@@ -114,7 +114,7 @@ function ytsync() {
             local video_id=${video_url[$((${#ie_url}+1)),-1]}
         fi
 
-        if (( ${blacklisted_video_ids[(Ie)video_id]} )); then
+        if (( ${blacklisted_video_ids[(Ie)$video_id]} )); then
             echowarn "Skipping blacklisted video: \z[red]°$video_id\z[]° \z[blue]°${video_title}\z[]°"
             continue
         fi
