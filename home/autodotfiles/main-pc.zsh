@@ -38,17 +38,3 @@ function adbtool() {
 
 alias adb="adbtool adb.exe"
 alias fastboot="adbtool fastboot.exe"
-
-# Provide Borg aliases with built-in passphrase
-function withborgpass() {
-  BORG_PASSPHRASE="$(adf_obf_decode "$ADF_LOCBAK_PASSPHRASE")" "$@"
-}
-
-alias borg="withborgpass borg"
-alias borgfs="withborgpass borgfs"
-alias borgmatic="withborgpass borgmatic"
-
-# Provide Kopia alises with built-in password
-function withkopiapass() {
-  KOPIA_PASSWORD="$(adf_obf_decode "$ADF_LOCBAK_PASSPHRASE")" "$@"
-}
