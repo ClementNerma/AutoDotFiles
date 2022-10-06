@@ -129,10 +129,10 @@ function echof() {
         return
     fi
 
-    formatted+=$(repeat $remaining printf ' ')
+    formatted+=$(printf ' %.0s' {1..$remaining})
 
     if (( $remaining > 1 )); then
-        formatted+=$(repeat $((remaining - 1)) printf '\b')
+        formatted+=$(printf '\b%.0s' {1..$((remaining - 1))})
     fi
 
     echo "${@:1:-2}" "$formatted"
