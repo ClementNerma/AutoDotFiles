@@ -158,18 +158,24 @@ function echowarn() {
 }
 
 function echosuccess() {
+    if (( $ADF_SILENT )); then return; fi
+
     local message="\z[green]°$1\z[]°"
     shift -p
     echoc "$@" "$message"
 }
 
 function echoinfo() {
+    if (( $ADF_SILENT )); then return; fi
+
     local message="\z[blue]°${@: -1}\z[]°"
     shift -p
     echoc "$@" "$message"
 }
 
 function echodata() {
+    if (( $ADF_SILENT )); then return; fi
+
     local message="\z[cyan]°${@: -1}\z[]°"
     shift -p
 	echoc "$@" "$message"
