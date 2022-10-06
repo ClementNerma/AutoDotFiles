@@ -162,7 +162,7 @@ function ___parse_arguments() {
     fi
 
     if (( ${#rest} < $__required_positional )); then
-        echoerr "This command accepts \z[yellow]°$__required_args\z[]°-\z[]°$__optional_args\z[]° positional arguments but only \z[yellow]°${#rest}\z[]° were provided."
+        echoerr "This command accepts \z[yellow]°$__required_positional\z[]°-\z[yellow]°$__optional_positional\z[]° positional arguments but only \z[yellow]°${#rest}\z[]° were provided."
         return 10
     fi
 
