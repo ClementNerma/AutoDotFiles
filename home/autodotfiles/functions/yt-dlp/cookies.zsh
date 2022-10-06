@@ -114,6 +114,7 @@ END
             fi
 
             echosuccess "Successfully renewed profile: \z[magenta]°$profile_name\z[]°"
+            rm "$backed_up_cookies"
             ;;
 
         rm)
