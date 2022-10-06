@@ -24,6 +24,18 @@ else
     echowarn "Starship does not seem to be installed yet."
 fi
 
+# Integration for Jumpy
+function jumpy_handler() {
+    if (( $__JUMPY_DONT_REGISTER )); then
+        return
+    fi
+
+    emulate -L zsh
+    jumpy inc "$PWD"
+}
+
+chpwd_functions=(${chpwd_functions[@]} "jumpy_handler")
+
 # Integration for FZF
 source ~/.fzf.zsh
 
