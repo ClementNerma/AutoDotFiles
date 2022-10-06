@@ -107,13 +107,13 @@ function rclone_mirror() {
             local exit_code=9
         fi
 
-        if [[ ${#tomove} ]] && [[ -z $renamed ]]; then
+        if (( ${#tomove} )) && [[ -z $renamed ]]; then
             local error_msg="Got a list of files to move but did not get their total count."
             local exit_code=10
         fi
 
-        if (( $renamed )) && [[ ${#tomove} -ne $renamed ]]; then
-            local error_msg="Found \z[yellow]°${#tomove}\z[]° items to remove, but expected \z[yellow]°$renamed\z[]°!"
+        if [[ ! -z $renamed ]] && [[ ${#tomove} -ne $renamed ]]; then
+            local error_msg="Found \z[yellow]°${#tomove}\z[]° items to move, but expected \z[yellow]°$renamed\z[]°!"
             local exit_code=11
         fi
 
