@@ -57,14 +57,25 @@ function cp_proj_nodeps() {
 
 # Backup a project
 function bakproj() {
-	if [[ ! -d "$1" ]]; then
-		echoerr "Source does not exist!"
+	if [[ -z "$1" ]]; then
+		echoerr "Please provide a source directory."
 		return 1
 	fi
 
-	if [[ -f "$2" || -d "$2" ]]; then
+	local target="$2"
+
+	if [[ -z "$target" ]]; then
+		local target="$(dirname "$1")/$(basename "$1")-$(humandate)"
+	fi
+
+	if [[ ! -d "$1" ]]; then
+		echoerr "Source does not exist!"
+		return 3
+	fi
+
+	if [[ -f "$target" || -d "$target" ]]; then
 		echoerr "Target already exists!"
-		return 1
+		return 4
 	fi
 
 	local files=""
@@ -84,16 +95,16 @@ function bakproj() {
 		return 3
 	fi
 
-	mkdir "$2"
+	mkdir "$target"
 
 	while IFS= read -r file; do
 		local relative="$(realpath --relative-to="$1" "$file")"
-		local target="$2/$relative"
+		local dest="$target/$relative"
 
 		echoinfo "Copying: \z[magenta]°$relative\z[]°..."
 		
-		mkdir -p "$(dirname "$target")"
-		cp "$file" "$target"
+		mkdir -p "$(dirname "$dest")"
+		cp "$file" "$dest"
 	done <<< $(printf "%s\n" "$files" | sort)
 
 	echosuccess "Done!"
