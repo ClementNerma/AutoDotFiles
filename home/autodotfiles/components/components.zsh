@@ -343,45 +343,7 @@ function ytsync_cache_builder() {
     dlghbin "ClementNerma/ytsync-cache-builder" "ytsync-cache-builder-linux-x86_64.zip" "-" "ytsync-cache-builder" "ytsync-cache-builder"
 }
 
-# function zoxide() {
-#     # NAME: Zoxide
-#     # PRIORITY: 1
-#     # ENV: all
-#     # VERSION: zoxide -V
-#     # NEEDS_APT_UPDATE: no
-
-#     dlghbin ajeetdsouza/zoxide "zoxide-v.*-x86_64-unknown-linux-musl.tar.gz" "zoxide-v.*-aarch64-unknown-linux-musl.tar.gz" "zoxide" "zoxide"
-# }
-
 # =============== MAIN COMPUTER =============== #
-
-# function borg() {
-#     # NAME: Borg
-#     # PRIORITY: 1
-#     # ENV: main-pc/all
-#     # VERSION: borg -V
-#     # NEEDS_APT_UPDATE: no
-
-#     if ! (( $COMPONENT_UPDATING )); then
-#         echoinfo "> Installing dependencies..."
-#         sudo apt install libacl1-dev libacl1 libacl1-dev liblz4-dev libzstd1 libzstd-dev liblz4-1 libb2-1 libb2-dev -y
-
-#         echoinfo "> Now installing Borg..."
-#     fi
-
-#     dlghrelease borgbackup/borg "borg-linux64$" "$ADF_BIN_DIR/borg"
-#     chmod +x "$ADF_BIN_DIR/borg"
-# }
-
-# function borgmatic() {
-#     # NAME: Borgmatic
-#     # PRIORITY: 1
-#     # ENV: main-pc/all
-#     # VERSION: borgmatic --version
-#     # NEEDS_APT_UPDATE: no
-
-#     pip3 install --user --upgrade "borgmatic"
-# }
 
 function kopia() {
     # NAME: Kopia
@@ -392,17 +354,6 @@ function kopia() {
 
     dlghbin kopia/kopia "kopia-.*-linux-x64.tar.gz" "kopia-.*-linux-arm64.tar.gz" "kopia-*/kopia" kopia
 }
-
-# function miniserve() {
-#     # NAME: MiniServe
-#     # PRIORITY: 1
-#     # ENV: main-pc/all
-#     # VERSION: miniserve -V
-#     # NEEDS_APT_UPDATE: no
-
-#     dlghrelease svenstaro/miniserve "miniserve-v.*-x86_64-unknown-linux-musl" "$ADF_BIN_DIR/miniserve"
-#     chmod +x "$ADF_BIN_DIR/miniserve"
-# }
 
 function rclone() {
     # NAME: RClone (Windows)
@@ -424,4 +375,53 @@ function imagemagick() {
     # NEEDS_APT_UPDATE: yes
 
     sudo apt install imagemagick
+}
+
+function miniserve() {
+    # NAME: MiniServe
+    # PRIORITY: 0
+    # ENV: main-pc/all
+    # VERSION: miniserve -V
+    # NEEDS_APT_UPDATE: no
+
+    dlghrelease svenstaro/miniserve "miniserve-v.*-x86_64-unknown-linux-musl" "$ADF_BIN_DIR/miniserve"
+    chmod +x "$ADF_BIN_DIR/miniserve"
+}
+
+function borg() {
+    # NAME: Borg
+    # PRIORITY: 0
+    # ENV: main-pc/all
+    # VERSION: borg -V
+    # NEEDS_APT_UPDATE: no
+
+    if ! (( $COMPONENT_UPDATING )); then
+        echoinfo "> Installing dependencies..."
+        sudo apt install libacl1-dev libacl1 libacl1-dev liblz4-dev libzstd1 libzstd-dev liblz4-1 libb2-1 libb2-dev -y
+
+        echoinfo "> Now installing Borg..."
+    fi
+
+    dlghrelease borgbackup/borg "borg-linux64$" "$ADF_BIN_DIR/borg"
+    chmod +x "$ADF_BIN_DIR/borg"
+}
+
+function borgmatic() {
+    # NAME: Borgmatic
+    # PRIORITY: 0
+    # ENV: main-pc/all
+    # VERSION: borgmatic --version
+    # NEEDS_APT_UPDATE: no
+
+    pip3 install --user --upgrade "borgmatic"
+}
+
+function zoxide() {
+    # NAME: Zoxide
+    # PRIORITY: 1
+    # ENV: all
+    # VERSION: zoxide -V
+    # NEEDS_APT_UPDATE: no
+
+    dlghbin ajeetdsouza/zoxide "zoxide-v.*-x86_64-unknown-linux-musl.tar.gz" "zoxide-v.*-aarch64-unknown-linux-musl.tar.gz" "zoxide" "zoxide"
 }
