@@ -13,7 +13,6 @@ export ADF_YTDL_DEFAULT_FILENAMING="%(title)s-%(id)s.%(ext)s"
 # * YTDL_COOKIE_PRESET   => load a cookie preset using "ytdlcookies"
 # * YTDL_NO_THUMBNAIL    => don't download the thumbnail
 function ytdl() {
-	local prev_cwd=$(pwd)
 	local tempdir=""
 	
 	local download_to=$(pwd)
@@ -35,11 +34,11 @@ function ytdl() {
 
 	if [[ ! -z $YTDL_OUTPUT_DIR ]]; then
 		local download_to="${YTDL_OUTPUT_DIR%/}"
-		echoinfo "Downloading to custom directory: \z[magenta]°$download_to\z[]°"
+		echoinfo "Downloading to provided directory: \z[magenta]°$download_to\z[]°"
 	fi
 
 	# Check if download must be performed in a temporary directory
-	local tempdir="$ADF_CONF_YTDL_TEMP_DL_DIR_PATH/$(humandate)-$(now)"
+	local tempdir="$ADF_CONF_YTDL_TEMP_DL_DIR_PATH/$RANDOM$RANDOM"
 
 	if [[ -z $YTDL_TEMP_DIR ]]; then
 		mkdir -p "$tempdir"
@@ -50,14 +49,12 @@ function ytdl() {
 		local tempdir="${YTDL_TEMP_DIR%/}"
 	fi
 
-	if [[ "$(realpath "$prev_cwd")" == "$(realpath "$tempdir")" ]]; then
+	if [[ "$(realpath "$(pwd)")" == "$(realpath "$tempdir")" ]]; then
 		local is_tempdir_cwd=1
 	else
 		local is_tempdir_cwd=0
 		echoinfo "> Downloading first to temporary directory: \z[magenta]°$tempdir\z[]°"
 	fi
-
-	cd "$tempdir"
 
 	# Store the command in an history
 	if (( $YTDL_NO_THUMBNAIL )); then
@@ -84,10 +81,9 @@ function ytdl() {
 			--limit-rate ${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH} $cookie_param $cookie_file \
 			--abort-on-unavailable-fragment \
 			--compat-options abort-on-error \
-			-o "${YTDL_FILENAMING:-$ADF_YTDL_DEFAULT_FILENAMING}" \
+			-o "$tempdir/${YTDL_FILENAMING:-$ADF_YTDL_DEFAULT_FILENAMING}" \
 			"$@"
 	then
-		cd "$prev_cwd"
 		echoerr "Failed to download videos with Youtube-DL!"
 		echoerr "You can resume the download with:"
 		echoinfo "ytdlresume '$tempdir' '$1' ${@:2}"
@@ -99,8 +95,6 @@ function ytdl() {
 	fi
 
 	# Move ready files & clean up
-	cd "$prev_cwd"
-
 	local files_count="$(command ls "$tempdir" -1A | wc -l)"
 	local counter=0
 
@@ -128,12 +122,8 @@ function ytdl() {
 					echoerr "Custom command failed"
 					echoerr "You can resume the download with:"
 					echoinfo "ytdlresume '$tempdir' '$1' ${*:2}"
-					cd "$prev_cwd"
 					return 1
 				fi
-
-				# Ensure we're still in the current working directory to avoid causing bugs if the executed commands decide to change it
-				cd "$prev_cwd"
 			done
 		done
 	fi

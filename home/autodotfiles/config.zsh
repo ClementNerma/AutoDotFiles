@@ -12,7 +12,7 @@ export ADF_CONF_RESTORATION_SCRIPT="/usr/local/bin/zerrestore"
 
 # Temporary path (must be on a VERY FAST storage) where Youtube-DL downloaded files are put
 # They are moved after the download has been finished, to avoid problems with parallel downloads
-export ADF_CONF_YTDL_TEMP_DL_DIR_PATH="/tmp/ytdl-videos"
+export ADF_CONF_YTDL_TEMP_DL_DIR_PATH="/tmp/ytdl"
 
 # Backup path for sessions (WSL-only)
 export ADF_CONF_WSL_BACKUP_SESSION_DIR="/mnt/c/Temp/SessionBackup"

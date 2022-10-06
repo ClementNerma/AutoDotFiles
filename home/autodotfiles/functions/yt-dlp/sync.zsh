@@ -10,29 +10,19 @@ fi
 function ytsync() {
     # === Determine the sync. URL and build the list of videos === #
 
-    if [[ -z $1 ]]; then
-        if [[ ! -f $ADF_YS_URL ]]; then
-            echoerr "Missing URL container file \z[yellow]°$ADF_YS_URL\z[]°"
+    if [[ ! -z $1 ]]; then
+        if [[ -f $ADF_YS_URL ]]; then
+            echoerr "An URL was provided but an URL file already exists."
             return 1
         fi
 
-        local url=$(command cat "$ADF_YS_URL")
-        
-        if [[ -f $ADF_YS_FILENAMING ]]; then
-            local filenaming=$(command cat "$ADF_YS_FILENAMING")
-        fi
-    elif [[ -f $ADF_YS_URL ]]; then
-        echoerr "An URL was provided but an URL file already exists."
-        return 1
-    else
         local url="$1"
-        shift
         
         echowarn "Writing provided URL to local directory file."
         echo "$url" > "$ADF_YS_URL"
 
-        if [[ ! -z $1 ]]; then
-            local filenaming="$1"
+        if [[ ! -z $2 ]]; then
+            local filenaming="$2"
             shift
 
             echowarn "Writing provided filenaming \z[cyan]°$filenaming\z[]° to local filenaming file."
@@ -48,7 +38,7 @@ function ytsync() {
     else
         local read_from_cache=0
         
-        if ! ytsync_build_cache "$url"; then
+        if ! ytsync_build_cache; then
             return 10
         fi
     fi
@@ -59,7 +49,7 @@ function ytsync() {
 
     local count=$(head -n1 < "$ADF_YS_CACHE")
 
-    local expected_lines=$((count * 4 + 1))
+    local expected_lines=$((count * 5 + 1))
 
     if [[ $expected_lines -ne ${#entries} ]]; then
         echoerr "Corrupted sync cache: expected \z[yellow]°$expected_lines\z[]° for \z[magenta]°$count\z[]° entries, found \z[yellow]°${#entries}\z[]°."
@@ -78,6 +68,7 @@ function ytsync() {
     # === Build the list of videos to download === #
 
     local download_list=()
+    local download_paths=()
     local download_ies=()
     local download_names=()
     local download_bandwidth_limits=()
@@ -88,17 +79,27 @@ function ytsync() {
 
     for i in {1..${count}}; do
         # This system allows for super-fast checking
-        local video_ie=${entries[((i*4-2))]}
-        local video_id=${entries[((i*4-1))]}
-        local video_title=${entries[(((i*4)))]}
-        local video_url=${entries[((i*4+1))]}
+        local video_ie=${entries[((i*5-3))]}
+        local video_path=${entries[((i*5-2))]}
+        local video_id=${entries[((i*5-1))]}
+        local video_title=${entries[(((i*5)))]}
+        local video_url=${entries[((i*5+1))]}
 
         # This is the fastest checking method I've found, even faster than building a list of files beforehand
         # and checking if the file is in the array!
         # We don't check for videos existence if the data was read from cache as the files were already checked during its creation
-        if ! (( $read_from_cache )) || [[ -z $(find . -name "*-${video_id}.*") ]]; then
-            progress_bar_print "\z[gray]°$(printf "%${max_spaces}s" $i) / $count\z[]° \z[magenta]°[$video_id]\z[]° \z[yellow]°${video_title}\z[]°"
+        if ! (( $read_from_cache )) || [[ -z $(find "$video_path" -name "*-${video_id}.*") ]]; then
+            local counter="\z[gray]°$(printf "%${max_spaces}s" $i) / $count\z[]°"
+
+            if [[ $video_path = "." ]]; then
+                local path_display=""
+            else
+                local path_display="\z[cyan]°$video_path\z[]° "
+            fi
+
+            progress_bar_print "$counter \z[magenta]°[$video_id]\z[]° $path_display\z[yellow]°${video_title}\z[]°"
             download_list+=("$video_url")
+            download_paths+=("$video_path")
             download_names+=("$video_title")
             download_ies+=("$video_ie")
             download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$video_ie]}")
@@ -132,49 +133,39 @@ function ytsync() {
         return 2
     fi
 
-    # === Ensure all IEs are identical (to simplify lockfile handling) === #
-
-    local global_ie=${download_ies[1]}
-
-    for ie in $download_ies; do
-        if [[ $ie != $global_ie ]]; then
-            echoerr "IE are not consistent for every video in the playlist."
-            return 12
-        fi
-    done
-
     # === Download videos === #
-
-    local lockfile="$ADF_YS_LOCKFILES_DIR/$ie.lock"
-
-    if (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$ie]} )); then
-        while true; do
-            if [[ -f $lockfile ]]; then
-                local started_waiting=$(timer_start)
-
-                while [[ -f $lockfile ]]; do
-                    local pending=$(command cat "$lockfile")
-                    local waiting_for=$(timer_show_seconds "$started_waiting")
-                    ADF_UPDATABLE_LINE=1 echowarn ">> Waiting for lockfile removal (download pending at \z[magenta]°$pending\z[]°)... \z[cyan]°$waiting_for\z[]°"
-                    sleep 1
-                done
-            fi
-
-            echo "$(pwd)" > "$lockfile"
-            echowarn "\n>> Writting current path to lockfile"
-
-            if [[ $(command cat "$lockfile") != "$(pwd)" ]]; then
-                echoerr "Internal error: inconsistency in the lockfile."
-            else
-                break
-            fi
-        done
-    fi
 
     local download_started=$(timer_start)
     local errors=0
 
     for i in {1..${#download_list}}; do
+        local video_ie=${download_ies[i]}
+        local lockfile="$ADF_YS_LOCKFILES_DIR/$video_ie.lock"
+
+        if (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$video_ie]} )); then
+            while true; do
+                if [[ -f $lockfile ]]; then
+                    local started_waiting=$(timer_start)
+
+                    while [[ -f $lockfile ]]; do
+                        local pending=$(command cat "$lockfile")
+                        local waiting_for=$(timer_show_seconds "$started_waiting")
+                        ADF_UPDATABLE_LINE=1 echowarn ">> Waiting for lockfile removal (download pending at \z[magenta]°$pending\z[]°)... \z[cyan]°$waiting_for\z[]°"
+                        sleep 1
+                    done
+                fi
+
+                echo "$(pwd)" > "$lockfile"
+                echowarn "\n>> Writting current path to lockfile"
+
+                if [[ $(command cat "$lockfile") != "$(pwd)" ]]; then
+                    echoerr "Internal error: inconsistency in the lockfile."
+                else
+                    break
+                fi
+            done
+        fi
+
         local cookie_preset=${ADF_YS_DOMAINS_PRESET[$global_ie]}
         local cookie_msg=""
 
@@ -187,6 +178,7 @@ function ytsync() {
 
         if ! YTDL_ALWAYS_THUMB=1 YTDL_FILENAMING="$filenaming" YTDL_COOKIE_PRESET="$cookie_preset" \
              YTDL_LIMIT_BANDWIDTH="${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[i]}}" \
+             YTDL_OUTPUT_DIR="${download_paths[i]}" \
              ytdl "${download_list[i]}" --write-sub --sub-lang fr,en \
              --match-filter "!is_live"
         then
@@ -224,40 +216,67 @@ function ytsync() {
 # Build cache for 'ytsync' (download videos and write them into the cache file)
 # The goal is to make a cache which is both human-readable and super-fast to parse
 function ytsync_build_cache() {
-    if [[ -z $1 ]]; then
-        echoerr "Please provide a URL to build the cache from."
-        return 1
-    fi
-
-    local url="$1"
-
     # Download the list of videos
 
-    echoinfo "Downloading videos list from playlist URL \z[magenta]°$url\z[]°..."
+    echoinfo "Downloading videos list from all available playlists..."
 
     local started=$(timer_start)
 
-    local json=$(yt-dlp -J --flat-playlist -i "$url")
+    IFS=$'\n' local playlist_url_files=($(fd --hidden "$ADF_YS_URL"))
+
+    if [[ -z $playlist_url_files ]]; then
+        echoerr "No playlist to synchronize!"
+        return 1
+    fi
+
+    echoinfo "Found \z[yellow]°${#playlist_url_files}\z[]° playlist(s) to treat."
+
+    local fetching_started=$(timer_start)
+    local json="[]"
+    local total=0
+
+    for i in {1..${#playlist_url_files}}; do
+        local url=$(command cat "${playlist_url_files[i]}")
+        local sub_json=$(yt-dlp -J --flat-playlist -i "$url")
+
+        if ! sub_json=$(echo -E "$sub_json" |
+            jq -c '[.entries[] | {ie_key, id, title, url} | .path = $path]' --arg path "$(dirname "${playlist_url_files[i]}")"
+        ); then
+            echoerr "Failed to parse JSON response!"
+            return 1
+        fi
+
+        local sub_total=$(echo -E "$sub_json" | jq 'length')
+        local total=$((total + sub_total))
+
+        if ! json=$(echo -E "[ $json, $sub_json ]" | jq '.[0,1]' | jq -s 'add'); then
+            echoerr "Failed to merge JSONs together!"
+            return 2
+        fi
+
+        progress_bar_detailed "Getting playlists content: " $i ${#playlist_url_files} 0 $fetching_started " | $sub_total new videos ($total total)"
+        printf "\n"
+    done
 
     echoinfo "Videos list was retrieved in \z[yellow]°$(timer_end $started)\z[]°."
 
     echoverb "Checking and mapping JSON..."
 
-    if ! json=$(echo -E "$json" | jq -c '[.entries[] | {ie_key, id, title, url}]'); then
-        echoerr "Failed to parse JSON!"
-        return 1
-    fi
-
     echoverb "JSON is ready. Checking JSON data..."
 
     local count=$(echo -E "$json" | jq 'length')
+
+    if [[ $count -ne $total ]]; then
+        echoerr "Internal error: count ($count) and total ($total) are not equal!"
+        return 90
+    fi
     
     if ! (( $count )); then
         echosuccess "No video to download!"
         return
     fi
 
-    echoinfo "$count videos were found."
+    echoinfo "\z[yellow]°$count\z[]° videos were found."
 
     # === Get complete informations on the video and check the ones to download === #
 
@@ -278,6 +297,7 @@ function ytsync_build_cache() {
 
     local max_spaces=$(echo -n "$count" | wc -c)
 
+    IFS=$'\n' local video_paths=($(echo -E "$json" | jq -r -c '.[] | .path'))
     IFS=$'\n' local video_ies=($(echo -E "$json" | jq -r -c '.[] | .ie_key'))
     IFS=$'\n' local video_ids=($(echo -E "$json" | jq -r -c '.[] | .id'))
     IFS=$'\n' local video_titles=($(echo -E "$json" | jq -r -c '.[] | .title'))
@@ -305,6 +325,7 @@ function ytsync_build_cache() {
             return 20
         fi
 
+        local video_path=${video_paths[i]}
         local video_id=${video_ids[i]}
         local video_title=${video_titles[i]}
         local video_url=${video_urls[i]}
@@ -326,7 +347,7 @@ function ytsync_build_cache() {
         fi
 
         # Don't download videos that are already present on the disk
-        if ! (( $empty_dir )) && [[ ! -z $(find . -name "*-${video_id}.*") ]]; then
+        if ! (( $empty_dir )) && [[ ! -z $(find "$video_path" -name "*-${video_id}.*") ]]; then
             continue
         fi
 
@@ -342,7 +363,7 @@ function ytsync_build_cache() {
             check_list_titles+=("$video_title")
             check_list_urls+=("$video_url")
         else
-            cache_content+="${video_ies[i]}\n${video_id}\n${video_title}\n${video_url}\n\n"
+            cache_content+="${video_ies[i]}\n${video_path}\n${video_id}\n${video_title}\n${video_url}\n\n"
             local total=$((total+1))
         fi
     done
