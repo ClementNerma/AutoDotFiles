@@ -156,7 +156,7 @@ source "$ADF_DIR/config-aliases.zsh"
 export ADF_FUNCTIONS_DIR="$ADF_DIR/functions"
 
 # Load functions
-for function_file in "$ADF_FUNCTIONS_DIR/"*; do
+for function_file in "$ADF_FUNCTIONS_DIR/"**/*; do
 	source "$function_file"
 done
 

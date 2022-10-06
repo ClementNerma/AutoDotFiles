@@ -176,6 +176,3 @@ function ytdlhere() {
 function ytdlclean() {
 	rm "$ADF_CONF_YTDL_TEMP_DL_DIR_PATH"
 }
-
-# Load the cookies function
-source "$ADF_FUNCTIONS_DIR/youtube-dl-cookies.zsh"
