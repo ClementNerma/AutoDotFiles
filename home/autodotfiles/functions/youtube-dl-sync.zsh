@@ -4,12 +4,6 @@ export ADF_YS_CACHE_V2=".ytdlsync-cache2"
 export ADF_YS_BLACKLIST=".ytdlsync-blacklist"
 
 function ytsync() {
-    local cache_name="$ADF_YS_CACHE"
-
-    if (( $YTDL_SYNC_V2 )); then
-        local cache_name="$ADF_YS_CACHE_V2"
-    fi
-
     if [[ -z $1 ]]; then
         if [[ ! -f $ADF_YS_URL ]]; then
             echoerr "Missing URL container file \z[yellow]°$ADF_YS_URL\z[]°"
@@ -29,6 +23,23 @@ function ytsync() {
         echo "$url" > "$ADF_YS_URL"
     fi
 
+    if (( $YTDL_SYNC_V2 )); then
+        local v2_mode=1
+        echosuccess "Using v2 mode as requested."
+    elif ! (( $YTDL_SYNC_NO_V2 )) && [[ $url = "https://www.youtube.com/"* ]]; then
+        local v2_mode=1
+        echosuccess "YouTube platform detected, using v2 mode."
+    else
+        local v2_mode=0
+        echosuccess "No specific mode indicated, falling back to v1 mode."
+    fi
+
+    if (( $v2_mode )); then
+        local cache_name="$ADF_YS_CACHE_V2"
+    else
+        local cache_name="$ADF_YS_CACHE"
+    fi
+
     if [[ -f $cache_name ]]; then
         local read_from_cache=1
         echoinfo "Retrieving videos list from cache file."
@@ -40,7 +51,7 @@ function ytsync() {
 
         local started=$(timer_start)
 
-        if (( $YTDL_SYNC_V2 )); then
+        if (( $v2_mode )); then
             local json=$(yt-dlp -J --flat-playlist -i "$url")
 
             echoinfo "Videos list was retrieved in \z[yellow]°$(timer_end $started)\z[]°."
@@ -118,7 +129,7 @@ function ytsync() {
 
     local max_spaces=$(echo -n "$count" | wc -c)
 
-    if (( $YTDL_SYNC_V2 )); then
+    if (( $v2_mode )); then
         IFS=$'\n' local video_ids=($(jq -r -c '.[] | .id' "$cache_name"))
         IFS=$'\n' local video_titles=($(jq -r -c '.[] | .title' "$cache_name"))
         IFS=$'\n' local video_ies=($(jq -r -c '.[] | .ie_key' "$cache_name"))
@@ -265,16 +276,11 @@ function ytsync() {
 
     if [[ $errors -eq 0 ]]; then
         echosuccess "Done!"
-        rm "$ADF_YS_CACHE"
+        rm "$cache_name"
     else
         echoerr "Failed to download \z[yellow]°$errors\z[]° video(s)."
         return 5
     fi
-}
-
-# YTSync v2
-function ytsync2() {
-    YTDL_SYNC_V2=1 ytsync "$@"
 }
 
 # URL mapper for IDs in playlists
