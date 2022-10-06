@@ -1,6 +1,11 @@
 export ADF_YS_URL=".ytdlsync-url"
 export ADF_YS_CACHE=".ytdlsync-cache"
 export ADF_YS_FILENAMING=".ytdlsync-filenaming"
+export ADF_YS_LOCKFILES_DIR="$ADF_ASSETS_DIR/ytsync-lockfiles"
+
+if [[ ! -d $ADF_YS_LOCKFILES_DIR ]]; then
+    mkdir "$ADF_YS_LOCKFILES_DIR"
+fi
 
 function ytsync() {
     # === Determine the sync. URL and build the list of videos === #
@@ -127,13 +132,42 @@ function ytsync() {
         return 2
     fi
 
+    # === Ensure all IEs are identical (to simplify lockfile handling) === #
+
+    local global_ie=${download_ies[1]}
+
+    for ie in $download_ies; do
+        if [[ $ie != $global_ie ]]; then
+            echoerr "IE are not consistent for every video in the playlist."
+            return 12
+        fi
+    done
+
     # === Download videos === #
+
+    local lockfile="$ADF_YS_LOCKFILES_DIR/$ie.lock"
+
+    if (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$ie]} )); then
+        if [[ -f $lockfile ]]; then
+            local started_waiting=$(timer_start)
+
+            while [[ -f $lockfile ]]; do
+                local pending=$(command cat "$lockfile")
+                local waiting_for=$(timer_show_seconds "$started_waiting")
+                ADF_UPDATABLE_LINE=1 echowarn ">> Waiting for lockfile removal (download pending at \z[magenta]°$pending\z[]°)... \z[cyan]°$waiting_for\z[]°"
+                sleep 1
+            done
+        fi
+
+        echo "$(pwd)" > "$lockfile"
+        echowarn "\n>> Writting current path to lockfile"
+    fi
 
     local download_started=$(timer_start)
     local errors=0
 
     for i in {1..${#download_list}}; do
-        local cookie_preset=${ADF_YS_DOMAINS_PRESET[$download_ies[i]]}
+        local cookie_preset=${ADF_YS_DOMAINS_PRESET[$global_ie]}
         local cookie_msg=""
 
         if [[ ! -z $cookie_preset ]]; then
@@ -141,7 +175,7 @@ function ytsync() {
         fi
 
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
-        echoinfo "| Video from \z[cyan]°${download_ies[i]}\z[]° at \z[green]°${download_list[i]}\z[]°$cookie_msg"
+        echoinfo "| Video from \z[cyan]°$global_ie\z[]° at \z[green]°${download_list[i]}\z[]°$cookie_msg"
 
         if ! YTDL_ALWAYS_THUMB=1 YTDL_FILENAMING="$filenaming" YTDL_COOKIE_PRESET="$cookie_preset" \
              YTDL_LIMIT_BANDWIDTH="${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[i]}}" \
@@ -150,12 +184,25 @@ function ytsync() {
         then
             local errors=$((errors+1))
             echowarn "Waiting 5 seconds before next video..."
-            sleep 5
+            
+            if ! passive_confirm; then
+                if (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$global_ie]} )); then
+                    echowarn ">> Removing lockfile..."
+                    rm "$lockfile"
+                fi
+
+                return
+            fi
         fi
 
         progress_bar_detailed "Instant progress: " $i ${#download_list} 0 $download_started
         printf "\n\n"
     done
+
+    if (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$ie]} )); then
+        echowarn ">> Removing lockfile..."
+        rm "$lockfile"
+    fi
 
     if [[ $errors -eq 0 ]]; then
         echosuccess "Done!"
@@ -321,9 +368,10 @@ typeset -A ADF_YS_DOMAINS_IE_URLS
 typeset -A ADF_YS_DOMAINS_CHECKING_MODE
 typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
 typeset -A ADF_YS_DOMAINS_PRESET
+typeset -A ADF_YS_DOMAINS_USE_LOCKFILE
 
 # Register a domain to use with 'ytsync'
-# Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <bandwidth limit> [<cookie preset>]
+# Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <bandwidth limit> [<use lockfile>] [<cookie preset>]
 function ytsync_register() {
     if [[ -z $1 ]]; then
         echoerr "Please provide an IE key."
@@ -358,7 +406,41 @@ function ytsync_register() {
 
     ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$1]="$4"
 
-    if [[ ! -z $5 ]]; then
-        ADF_YS_DOMAINS_PRESET[$1]="$5"
+    if [[ $5 = "1" ]]; then
+        ADF_YS_DOMAINS_USE_LOCKFILE[$1]=1
+    elif [[ ! -z $5 ]] && [[ $5 != "1" ]]; then
+        echoerr "Invalid value provided for lockfile status, must be either 0 or 1."
+        return 6
+    fi
+
+    if [[ ! -z $6 ]]; then
+        ADF_YS_DOMAINS_PRESET[$1]="$6"
+    fi
+}
+
+# Remove a lockfile
+function ytsync_unlock() {
+    if [[ -z $1 ]]; then
+        echoerr "Please provide an IE."
+        return 1
+    fi
+
+    if [[ -z ${ADF_YS_DOMAINS_IE_URLS[$1]} ]]; then
+        echoerr "Unknown IE provided."
+        return 2
+    fi
+
+    if ! (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$1]} )); then
+        echoerr "This IE does not use lockfiles."
+        return 3
+    fi
+
+    local lockfile="$ADF_YS_LOCKFILES_DIR/$1.lock"
+
+    if [[ -f $lockfile ]]; then
+        rm "$lockfile"
+        echowarn "Lockfile forcefully removed."
+    else
+        echowarn "This IE was not locked."
     fi
 }

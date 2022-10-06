@@ -26,6 +26,30 @@ function confirm() {
 	fi
 }
 
+# Passive confirmation
+function passive_confirm() {
+	export __adf__passive_confirm_aborted=0
+
+	local started=$(timer_start)
+	local elapsed=0
+
+	while (( elapsed < 5 )); do
+		trap 'echo "Use Ctrl+D to abort." && export __adf__passive_confirm_aborted=1' SIGINT
+		read -sk -t 5 __adf_passive_confirm_answer
+		trap SIGINT
+
+		if [[ ! -z $__adf__passive_confirm_answer ]] || (( $__adf__passive_confirm_aborted )) ; then
+			break
+		fi
+
+		local elapsed=$(timer_show_seconds "$started")
+	done
+
+    if [[ -z $__adf_passive_confirm_answer || $__adf_passive_confirm_answer != $'\n' ]] && (( $__adf__passive_confirm_aborted )); then
+        return 1
+    fi
+}
+
 # Faster replacement for "date +%s%N"
 function now() {
 	printf ${${EPOCHREALTIME//.}:0:19}

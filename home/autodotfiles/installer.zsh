@@ -228,12 +228,7 @@ function adf_install() {
     echowarn ""
 
     # Required trick to avoid getting the whole parent script to stop when getting a SIGINT (Ctrl+C)
-    export __installer_sigint_abort=0
-    trap 'echo "Use Ctrl+D to abort installation process." && export __installer_sigint_abort=1' SIGINT
-    read -sk -t 5 answer
-    trap SIGINT
-
-    if [[ ! -z $answer && $answer != $'\n' ]] || (( $__installer_sigint_abort )); then
+    if ! passive_confirm; then
         echoerr "Aborted due to user cancel."
         return 30
     fi
