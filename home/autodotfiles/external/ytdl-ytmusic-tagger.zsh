@@ -2,6 +2,7 @@
 
 # Function meant for internal use
 # Tags a file downloaded by 'ytdlalbum' with additional metadata
+# Also repair corrupted metadata badly written by Youtube-DL
 
 write_id4cover=1
 
