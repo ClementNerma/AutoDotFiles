@@ -184,3 +184,7 @@ fix_socket_connection
 
 # Mount storage devices on startup (this typically takes 50~100 ms)
 mount_wsl_drives
+
+# Schedule clock fix
+# Required as WSL2's clock tends to go out of sync from time to time
+crony register timesync --run 'sudo ntpdate time.windows.com' --at 'h=*' --ignore-identical
