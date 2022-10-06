@@ -26,22 +26,7 @@ location:
 # without the "prune" action. See borgmatic documentation for details.
 retention:
     # Keep all archives within this time interval.
-    # keep_within: 3H
-
-    # Number of secondly archives to keep.
-    # keep_secondly: 60
-
-    # Number of minutely archives to keep.
-    # keep_minutely: 60
-
-    # Number of hourly archives to keep.
-    # keep_hourly: 24
-
-    # Number of daily archives to keep.
-    keep_daily: 7
-
-    # Number of weekly archives to keep.
-    keep_weekly: 4
+    keep_within: 1M
 
     # Number of monthly archives to keep.
     keep_monthly: 6
