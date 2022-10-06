@@ -190,7 +190,7 @@ function ytsync() {
             echowarn "Waiting 5 seconds before next video..."
             
             if ! passive_confirm; then
-                if (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$global_ie]} )); then
+                if (( $needlockfile )); then
                     echowarn ">> Removing lockfile..."
                     rm "$lockfile"
                 fi
