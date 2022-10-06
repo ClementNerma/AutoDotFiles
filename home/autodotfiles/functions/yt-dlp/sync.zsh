@@ -1,5 +1,6 @@
 export ADF_YS_URL=".ytdlsync-url"
 export ADF_YS_CACHE=".ytdlsync-cache"
+export ADF_YS_FILENAMING=".ytdlsync-filenaming"
 
 function ytsync() {
     # === Determine the sync. URL and build the list of videos === #
@@ -11,6 +12,10 @@ function ytsync() {
         fi
 
         local url=$(command cat "$ADF_YS_URL")
+        
+        if [[ -f $ADF_YS_FILENAMING ]]; then
+            local filenaming=$(command cat "$ADF_YS_FILENAMING")
+        fi
     elif [[ -f $ADF_YS_URL ]]; then
         echoerr "An URL was provided but an URL file already exists."
         return 1
@@ -19,8 +24,17 @@ function ytsync() {
         shift
         
         echowarn "Writing provided URL to local directory file."
-        if [[ -f $ADF_YS_URL ]]; then rm "$ADF_YS_URL"; fi
         echo "$url" > "$ADF_YS_URL"
+
+        if [[ ! -z $1 ]]; then
+            local filenaming="$1"
+            shift
+
+            echowarn "Writing provided filenaming \z[cyan]°$filenaming\z[]° to local filenaming file."
+            echo "$filenaming" > "$ADF_YS_FILENAMING"
+        else
+            local filenaming=""
+        fi
     fi
 
     if [[ -f $ADF_YS_CACHE ]]; then
@@ -129,7 +143,7 @@ function ytsync() {
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°$cookie_msg: \z[magenta]°${download_names[i]}\z[]°..."
         echoinfo "| Video from \z[cyan]°${download_ies[i]}\z[]° at \z[green]°${download_list[i]}\z[]°"
 
-        if ! YTDL_ALWAYS_THUMB=1 YTDL_COOKIE_PRESET="$cookie_preset" YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" \
+        if ! YTDL_ALWAYS_THUMB=1 YTDL_FILENAMING="$filenaming" YTDL_COOKIE_PRESET="$cookie_preset" YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" \
              ytdl "${download_list[i]}" --write-sub --sub-lang fr,en \
              --match-filter "!is_live"
         then
