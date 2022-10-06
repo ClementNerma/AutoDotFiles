@@ -39,7 +39,7 @@ function rclone_mirror() {
     local noitem=0
 
     while IFS= read -r line; do
-        if [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]([^:]+):[[:space:]]Skipped[[:space:]](copy|delete|move|make[[:space:]]directory|remove[[:space:]]directory)[[:space:]]as[[:space:]]--dry-run[[:space:]]is[[:space:]]set([[:space:]]\\(size[[:space:]][0-9\\.kMGT]+\\))?$ ]]; then
+        if [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]([^:]+):[[:space:]]Skipped[[:space:]](copy|delete|move|make[[:space:]]directory|remove[[:space:]]directory)[[:space:]]as[[:space:]]--dry-run[[:space:]]is[[:space:]]set([[:space:]]\\(size[[:space:]][0-9\\.KMGTi]+\\))?$ ]]; then
             if [[ ${match[2]} = "copy" ]]; then
                 items+=("${match[1]}")
             elif [[ ${match[2]} = "delete" ]] || [[ ${match[2]} = "remove directory" ]]; then
@@ -58,7 +58,7 @@ function rclone_mirror() {
         elif [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]+(.+)$ ]]; then
             echoerr "Failed to parse line: \z[white]°$line\z[]°"
             return 5
-        elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9\\.]+[[:space:]][kMGTBytes]+),[[:space:]]100%, ]]; then
+        elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9\\.]+[[:space:]][KMGTiBytes]+),[[:space:]]100%, ]]; then
             size="${match[1]}"
         elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9]+),[[:space:]]100%$ ]]; then
             total="${match[1]}"
