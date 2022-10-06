@@ -90,7 +90,7 @@ END
             fi
 
             mvbak "$raw_cookies_path"
-            local backed_up_cookies="$LAST_FILEBAK_PATH"
+            local backed_up_cookies="$LAST_MVBAK_PATH"
 
             nano "$raw_cookies_path"
 

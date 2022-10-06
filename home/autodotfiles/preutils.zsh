@@ -220,7 +220,7 @@ function mvbak() {
 	local renpath="$itempath.bak-$(humandate)"
 
 	mv "$itempath" "$renpath"
-	export LAST_FILEBAK_PATH="$renpath"
+	export LAST_MVBAK_PATH="$renpath"
 }
 
 # Compute the 32-bit checksum of a flat directory (= only files)
