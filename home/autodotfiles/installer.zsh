@@ -180,7 +180,7 @@ function adf_install() {
     done
 
     if [[ $to_install -eq 0 ]]; then
-        if ! (( $skip_if_installed )); then
+        if (( $skip_if_installed )); then
             printf '%s' "$cksum" > "$ADF_INSTALLER_HASH_FILE"
         fi
 
@@ -321,7 +321,7 @@ function adf_install() {
 
     command rm -rf "$BASE_INSTALLER_TMPDIR"
 
-    if ! (( $skip_if_installed )); then
+    if (( $skip_if_installed )); then
         printf '%s' "$cksum" > "$ADF_INSTALLER_HASH_FILE"
     fi
 }
