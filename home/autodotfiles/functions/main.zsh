@@ -203,3 +203,15 @@ function cwr() {
 	local args="$@"
 	cargo watch -x "run --release -- $args"
 }
+
+# Push the current branch to remote even if it does not exist yet
+function gpb() {
+	git push --set-upstream origin "$(git rev-parse --abbrev-ref HEAD)"
+}
+
+# Optimize the current Git repository (WARNING: deletes unused content)
+function gop() {
+	git reflog expire --expire=now --all &&
+	git gc --prune=now &&
+	git repack -a -d --depth=250 --window=250
+}

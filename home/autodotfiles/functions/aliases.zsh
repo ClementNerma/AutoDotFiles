@@ -27,8 +27,6 @@ alias gr="git reset"
 alias gl="git log"
 alias gc="git checkout"
 alias gp="git push"
-alias gpb="git push --set-upstream origin \$(git rev-parse --abbrev-ref HEAD)"
-alias gop="git reflog expire --expire=now --all && git gc --prune=now && git repack -a -d --depth=250 --window=250"
 
 # Custom commit command
 alias gm="gitcommit"
