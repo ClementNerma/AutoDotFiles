@@ -29,7 +29,7 @@ function _report_echoc_error() {
 # ADF_SILENT=1                 => disable all messages, except those from `echowarn` and `echoerr`
 # ADF_FULLY_SILENT=1           => disable all messages
 function echoc() {
-    if (( $ADF_SILENT )) || (( $ADF_FULLY_SILENT )); then
+    if (( $ADF_FULLY_SILENT )); then
         return
     fi
 
