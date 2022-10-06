@@ -80,7 +80,12 @@ function zerupdate() {
 	command ls -1A "$update_path/home" > "$ADF_FILES_LIST"
 
 	# Restore user scripts
-	cp -R "$ADF_LAST_BACKUP_DIR/autodotfiles-user" ~
+	cp -R "$ADF_LAST_BACKUP_DIR/autodotfiles-user/"* "$ADF_USER_DIR"
+
+	if [[ -d $badly_nested ]]; then
+		echowarn "Badly nested user directory detected, removing it (at path \z[magenta]°$badly_nested\z[]°)"
+		rm "$badly_nested"
+	fi
 
 	# Update the restoration script
 	echoverb "Updating the restoration script..."
