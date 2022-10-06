@@ -32,7 +32,7 @@ function adf_cron_add_uq_raw() {
         return 4
     fi
 
-    if [[ ! $3 == *"$1"* ]]; then
+    if [[ $3 != *"$1"* ]]; then
         echoerr "Filter does not cover the command."
         return 4
     fi
