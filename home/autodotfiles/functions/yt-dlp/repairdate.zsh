@@ -116,16 +116,16 @@ function ytrepairdate() {
     done
 
     echo "=========================\n\n" >> "$ADF_YT_REPAIR_DATE_ERROR_LOG"
-    
-    echowarn "Please check the log file at \z[yellow]°$ADF_YT_REPAIR_DATE_ERROR_LOG\z[]°!"
 
     if (( errors > 0 )); then
         echoerr "Failed with \z[yellow]°$errors\z[]° errors."
+        echowarn "Please check the log file at \z[yellow]°$ADF_YT_REPAIR_DATE_ERROR_LOG\z[]°!"
         return 1
     fi
 
     if (( warnings > 0 )); then
         echowarn "Emitted $warnings warnings!"
+        echowarn "Please check the log file at \z[yellow]°$ADF_YT_REPAIR_DATE_ERROR_LOG\z[]°!"
     fi
 
     if ! (( $ADF_NO_VERBOSE )); then
