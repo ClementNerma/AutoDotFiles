@@ -336,7 +336,7 @@ function borgmatic() {
     # VERSION: borgmatic --version
     # NEEDS_APT_UPDATE: no
 
-    sudo pip3 install --upgrade "borgmatic"
+    pip3 install --user --upgrade "borgmatic"
 }
 
 function miniserve() {
