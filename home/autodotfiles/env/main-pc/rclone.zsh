@@ -40,6 +40,7 @@ function rclone_mirror() {
     local total=""
     local size=""
     local renamed=""
+    local deleted=""
     local noitem=0
 
     while IFS= read -r line; do
@@ -77,7 +78,9 @@ function rclone_mirror() {
             local total=0
             local size="-"
         elif [[ $line =~ ^Renamed:[[:space:]]+([0-9]+)$ ]]; then
-            local renamed="${match[1]}"
+            local renamed=$((${match[1]}))
+        elif [[ $line =~ ^Deleted:[[:space:]]+([0-9]+)[[:space:]]\\(files\\),[[:space:]]([0-9]+)[[:space:]]\\(dirs\\)$ ]]; then
+            local deleted=$((${match[1]} + ${match[2]}))
         elif [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]*$ ]]; then
         elif [[ $line =~ ^Checks:[[:space:]]+[0-9]+[[:space:]]/[[:space:]][0-9]+,[[:space:]]100%$ ]]; then
         elif [[ $line =~ ^Elapsed[[:space:]]time:[[:space:]]+[0-9\\.smhd]+$ ]]; then
@@ -118,6 +121,16 @@ function rclone_mirror() {
         if [[ ! -z $renamed ]] && [[ ${#tomove} -ne $renamed ]]; then
             local error_msg="Found \z[yellow]°${#tomove}\z[]° items to move, but expected \z[yellow]°$renamed\z[]°!"
             local exit_code=11
+        fi
+
+        if (( ${#todelete} )) && [[ -z $deleted ]]; then
+            local error_msg="Got a list of files to delete but did not get their total count."
+            local exit_code=12
+        fi
+
+        if [[ ! -z $deleted ]] && [[ ${#todelete} -ne $deleted ]]; then
+            local error_msg="Found \z[yellow]°${#todelete}\z[]° items to delete, but expected \z[yellow]°$deleted\z[]°!"
+            local exit_code=13
         fi
 
         if (( $exit_code )); then
