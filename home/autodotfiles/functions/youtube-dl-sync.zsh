@@ -64,7 +64,7 @@ function ytsync() {
             echoinfo "$beginning \z[yellow]°${video_title}\z[]°"
             download_list+=("$video_url")
             download_names+=("$video_title")
-            download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[video_ie]}")
+            download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$video_ie]}")
         else
             echoinfo "$beginning Skipping \z[yellow]°${video_title}\z[]° (already downloaded)"
         fi
@@ -94,7 +94,7 @@ function ytsync() {
 
     for i in {1..${#download_list}}; do
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
-    
+
         if ! YTDL_ALWAYS_THUMB=1 YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" ytdl "${download_list[i]}" --match-filter "!is_live"; then
             errors=$((errors+1))
             echowarn "Waiting 5 seconds before next video..."
