@@ -106,12 +106,14 @@ function ytdl() {
 	local ytdl_debug_cmd="$bestquality_params $metadata_params $thumbnail_params -r $bandwidth_limit "$@" $YTDL_APPEND"
 
 	if (( $YTDL_PRINT_CMD )) || (( $YTDL_DRY_RUN )); then
-		echoinfo "Command >> youtube-dl $ytdl_debug_cmd"
+		echoinfo "Command >> yt-dlp $ytdl_debug_cmd"
 	fi
 
 	# Perform the download
 	if [[ "$YTDL_DRY_RUN" != 1 ]] && [[ -z "$YTDL_JUST_ITEM_CMD" ]]; then
-		if ! youtube-dl -f "$quality_format" $metadata_params $thumbnail_params -r $bandwidth_limit --abort-on-unavailable-fragment "$@" $YTDL_APPEND
+		if ! yt-dlp -f "$quality_format" $metadata_params $thumbnail_params -r $bandwidth_limit \
+			 --abort-on-unavailable-fragment --compat-options format-spec --compat-options abort-on-error \
+			 "$@" $YTDL_APPEND
 		then
 			if ! (( $YTDL_IGNORE_ERR )); then
 				if [[ $decrease_counter = 1 ]]; then

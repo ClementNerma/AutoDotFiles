@@ -135,7 +135,7 @@ END
                 return 1
             fi
 
-            youtube-dl "${@:3}" --cookies "$converted_cookies_path"
+            yt-dlp "${@:3}" --cookies "$converted_cookies_path"
             ;;
 
 

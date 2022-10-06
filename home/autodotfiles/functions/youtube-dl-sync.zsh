@@ -31,7 +31,7 @@ function ytsync() {
         echoinfo "Counting videos from playlist URL \z[magenta]°$url\z[]°..."
 
         local count=$(
-            youtube-dl "$url" --flat-playlist |
+            yt-dlp "$url" --flat-playlist |
             grep "Downloading video" |
             tail -n1 |
             sed -E "s/\[download\] Downloading video ([0-9]+) of ([0-9]+)/\2/"
@@ -46,7 +46,7 @@ function ytsync() {
         echoinfo "Downloading videos list from playlist URL \z[magenta]°$url\z[]°..."
 
         local started=$(timer_start)
-        local json=$(youtube-dl -J --get-filename -i "$url" "${@:2}" 2>/dev/null | pv -l -W -s "$((count+1))" | tail -n1)
+        local json=$(yt-dlp -J --get-filename -i "$url" "${@:2}" 2>/dev/null | pv -l -W -s "$((count+1))" | tail -n1)
         
         local fallible_json_path="$TEMPDIR/ytsync-fallible-$(humandate).json"
         echoverb "Writing JSON data to temporary file \z[magenta]°$fallible\z[]°..."
@@ -221,7 +221,7 @@ function ytrepairres() {
 
                 echoverb "Checking formats for $url..."
 
-                if ! (youtube-dl -F "$url" | grep "1920x1080" > /dev/null); then
+                if ! (yt-dlp -F "$url" | grep "1920x1080" > /dev/null); then
                     continue
                 fi
 
