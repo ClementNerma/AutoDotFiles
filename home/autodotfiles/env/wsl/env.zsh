@@ -42,7 +42,7 @@ function open() {
   fi
 
   ( cd "$(dirname "$topath")" && explorer.exe "$(basename "$topath")" )
-  return
+  return 0
 }
 
 # Open a file or directory with a specific search
