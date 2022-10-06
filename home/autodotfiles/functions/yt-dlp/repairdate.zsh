@@ -33,7 +33,12 @@ function ytrepairdate() {
         echoinfo "Establishing the list of videos to repair..."
     fi
 
-    IFS=$'\n' local entries=($(fd -e mp4 -e mkv -e ogg -e webm -e flv -e avi -e gif --search-path "$check_dir" | sort))
+    if ! _fdout=$(fd -e mp4 -e mkv -e ogg -e webm -e flv -e avi -e gif --search-path "$check_dir"); then
+        echoerr "Command \z[yellow]°fd\z[]° failed (see error above)"
+        return 10
+    fi
+
+    IFS=$'\n' local entries=($(echo -E "$_fdout" | sort))
 
     if ! (( $ADF_NO_VERBOSE )); then
         echoinfo "Found \z[yellow]°${#entries}\z[]° video files."
