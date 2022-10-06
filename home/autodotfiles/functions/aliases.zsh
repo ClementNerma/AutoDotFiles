@@ -28,6 +28,7 @@ alias gl="git log"
 alias glo="git log --oneline"
 alias gc="git checkout"
 alias gp="git push"
+alias gpf="git push --force-with-lease"
 
 # Custom commit command
 alias gm="gitcommit"
