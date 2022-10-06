@@ -6,11 +6,20 @@ function ytrepairdate() {
         return 1
     fi
 
+    if [[ -z $2 ]]; then
+        local check_dir=$PWD
+    elif [[ ! -d $2 ]]; then
+        echoerr "Provided directory does not exist."
+        return 2
+    else
+        local check_dir=$2
+    fi
+
     local url_prefix=${ADF_YS_DOMAINS_IE_URLS[$1]}
 
     if [[ -z $url_prefix ]]; then
         echoerr "Unknown cookie profile provided."
-        return 2
+        return 3
     fi
 
     local cookie_profile=${ADF_YS_DOMAINS_PROFILE[$1]}
@@ -20,11 +29,15 @@ function ytrepairdate() {
         local cookie_params=("--cookies" "$(ytdlcookies get-path "$cookie_profile")")
     fi
 
-    echoinfo "Establishing the list of videos to repair..."
+    if ! (( $ADF_NO_VERBOSE )); then
+        echoinfo "Establishing the list of videos to repair..."
+    fi
 
-    IFS=$'\n' local entries=($(fd -e mp4 -e mkv -e ogg -e webm -e flv -e avi -e gif | sort))
+    IFS=$'\n' local entries=($(fd -e mp4 -e mkv -e ogg -e webm -e flv -e avi -e gif --search-path "$check_dir" | sort))
 
-    echoinfo "Found \z[yellow]°${#entries}\z[]° video files."
+    if ! (( $ADF_NO_VERBOSE )); then
+        echoinfo "Found \z[yellow]°${#entries}\z[]° video files."
+    fi
 
     if [[ ! -f $ADF_YT_REPAIR_DATE_LIST ]]; then
         touch "$ADF_YT_REPAIR_DATE_LIST"
@@ -96,6 +109,9 @@ function ytrepairdate() {
         echowarn "Emitted $warnings warnings!"
     fi
 
-    echosuccess "Successfully set date for \z[yellow]°${#entries}\z[]° videos!"
-    rm "$ADF_YT_REPAIR_DATE_LIST"
+    if ! (( $ADF_NO_VERBOSE )); then
+        echosuccess "Successfully set date for \z[yellow]°${#entries}\z[]° videos!"
+    fi
+    
+    command rm "$ADF_YT_REPAIR_DATE_LIST"
 }

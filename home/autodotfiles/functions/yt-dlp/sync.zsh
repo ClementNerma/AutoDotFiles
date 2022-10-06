@@ -174,12 +174,19 @@ function ytsync() {
             local cookie_msg=" (with cookie profile \z[yellow]°$cookie_profile\z[]°)"
         fi
 
+        if (( ${ADF_YS_DOMAINS_REPAIR_DATE_MODE[$video_ie]} )); then
+            local repair_date="$video_ie"
+        else
+            local repair_date=""
+        fi
+
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
         echoinfo "| Video from \z[cyan]°$video_ie\z[]° at \z[green]°${download_list[i]}\z[]°$cookie_msg"
 
         if ! YTDL_ALWAYS_THUMB=1 \
              YTDL_FILENAMING="$filenaming" \
              YTDL_COOKIE_PROFILE="$cookie_profile" \
+             YTDL_REPAIR_DATE="$repair_date" \
              YTDL_LIMIT_BANDWIDTH="${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[i]}}" \
              YTDL_OUTPUT_DIR="${download_paths[i]}" \
              YTDL_FORMAT="$format" \
@@ -488,12 +495,13 @@ function ytsync_wait_lockfile() {
 # URL mapper for IDs in playlists
 typeset -A ADF_YS_DOMAINS_IE_URLS
 typeset -A ADF_YS_DOMAINS_CHECKING_MODE
+typeset -A ADF_YS_DOMAINS_REPAIR_DATE_MODE
 typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
 typeset -A ADF_YS_DOMAINS_PROFILE
 typeset -A ADF_YS_DOMAINS_USE_LOCKFILE
 
 # Register a domain to use with 'ytsync'
-# Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <bandwidth limit> [<use lockfile>] [<cookie profile>]
+# Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <builtindate | repairdate> <bandwidth limit> [<use lockfile>] [<cookie profile>]
 function ytsync_register() {
     if [[ -z $1 ]]; then
         echoerr "Please provide an IE key."
@@ -511,8 +519,13 @@ function ytsync_register() {
     fi
 
     if [[ -z $4 ]]; then
-        echoerr "Please provide a bandwidth limit."
+        echoerr "Please provide a date repair mode."
         return 4
+    fi
+
+    if [[ -z $5 ]]; then
+        echoerr "Please provide a bandwidth limit."
+        return 5
     fi
 
     ADF_YS_DOMAINS_IE_URLS[$1]="$2"
@@ -526,17 +539,26 @@ function ytsync_register() {
         return 5
     fi
 
-    ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$1]="$4"
+    if [[ $4 = "builtindate" ]]; then
+        ADF_YS_DOMAINS_REPAIR_DATE_MODE[$1]=0
+    elif [[ $4 = "repairdate" ]]; then
+        ADF_YS_DOMAINS_REPAIR_DATE_MODE[$1]=1
+    else
+        echoerr "Invalid repair date mode provided for IE key \z[yellow]°$1\z[]°: \z[gray]°$3\z[]°"
+        return 5
+    fi
 
-    if [[ $5 = "1" ]]; then
+    ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$1]="$5"
+
+    if [[ $6 = "1" ]]; then
         ADF_YS_DOMAINS_USE_LOCKFILE[$1]=1
-    elif [[ ! -z $5 ]] && [[ $5 != "1" ]]; then
+    elif [[ ! -z $6 ]] && [[ $6 != "1" ]]; then
         echoerr "Invalid value provided for lockfile status, must be either 0 or 1."
         return 6
     fi
 
-    if [[ ! -z $6 ]]; then
-        ADF_YS_DOMAINS_PROFILE[$1]="$6"
+    if [[ ! -z $7 ]]; then
+        ADF_YS_DOMAINS_PROFILE[$1]="$7"
     fi
 }
 

@@ -20,6 +20,7 @@ export ADF_YTDL_DEFAULT_FILENAMING="%(title)s-%(id)s.%(ext)s"
 # * YTDL_ITEM_CMD        => run a command for each root item when download is finished
 # * YTDL_LIMIT_BANDWIDTH => limit download bandwidth
 # * YTDL_COOKIE_PROFILE  => load a cookie profile using "ytdlcookies"
+# * YTDL_REPAIR_DATE     => repair date of all videos after download
 # * YTDL_NO_THUMBNAIL    => don't download the thumbnail
 function ytdl() {
 	local tempdir=""
@@ -63,10 +64,20 @@ function ytdl() {
 	fi
 
 	if [[ "$(realpath "$PWD")" == "$(realpath "$tempdir")" ]]; then
+		if [[ ! -z $YTDL_REPAIR_DATE ]]; then
+			echoerr "Cannot repair date in non-temporary directory."
+			return 3
+		fi
+
 		local is_tempdir_cwd=1
 	else
 		local is_tempdir_cwd=0
 		echoinfo "> Downloading first to temporary directory: \z[magenta]°$tempdir\z[]°"
+	fi
+
+	if [[ ! -z $YTDL_REPAIR_DATE ]] && [[ -z ${ADF_YS_DOMAINS_IE_URLS[$YTDL_REPAIR_DATE]} ]]; then
+		echoerr "Unknown profile provided for date repairing."
+		return 4
 	fi
 
 	# Store the command in an history
@@ -106,6 +117,15 @@ function ytdl() {
 		echoerr "You can resume the download with:"
 		echowarn "$resume_cmdline"
 		return 1
+	fi
+
+	# Repair date
+	if [[ ! -z $YTDL_REPAIR_DATE ]]; then
+		echoinfo "> Repairing date as requested"
+
+		if ! ADF_NO_VERBOSE=1 ytrepairdate "$YTDL_REPAIR_DATE" "$tempdir"; then
+			return 1
+		fi
 	fi
 
 	if (( $is_tempdir_cwd )); then
@@ -185,6 +205,7 @@ function _ytdl_build_resume_cmdline() {
 		"YTDL_ITEM_CMD"
 		"YTDL_LIMIT_BANDWIDTH"
 		"YTDL_COOKIE_PROFILE"
+		"YTDL_REPAIR_DATE"
 		"YTDL_NO_THUMBNAIL"
 	)
 
