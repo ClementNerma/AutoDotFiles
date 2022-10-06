@@ -109,9 +109,9 @@ function rclone_mirror() {
             echoerr "Original output:"
             echowarn "$rclone_list"
             echoerr "Aborting transfer."
+            
+            return $exit_code
         fi
-
-        return $exit_code
     fi
 
     if (( ${#items} )); then
