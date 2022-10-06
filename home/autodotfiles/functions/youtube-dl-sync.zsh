@@ -256,6 +256,10 @@ function ytsync() {
     local errors=0
     local bandwidth_limit="$ADF_CONF_YTDL_SYNC_LIMIT_BANDWIDTH"
 
+    if (( $v2_mode )); then
+        local bandwidth_limit="$ADF_CONF_YTDL_SYNC_LIMIT_BANDWIDTH_V2"
+    fi
+
     if [[ ! -z $SLOWSYNC ]]; then
         if [[ $SLOWSYNC = "1" ]]; then
             bandwidth_limit="2M"
