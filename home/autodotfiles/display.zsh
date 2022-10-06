@@ -3,6 +3,7 @@
 export ADF_PREFIX_FORMAT="ADF_FORMAT_"
 
 export ADF_FORMAT_RESET="\e[0m"
+export ADF_FORMAT_BLACK="\e[30m"
 export ADF_FORMAT_GRAY="\e[90m"
 export ADF_FORMAT_RED="\e[91m"
 export ADF_FORMAT_GREEN="\e[92m"
@@ -35,6 +36,9 @@ function _report_echoc_error() {
     >&2 echo "${ADF_FORMAT_RED}=========================================================${ADF_FORMAT_RESET}"
 }
 
+# ADF_NO_NEWLINE=1     => don't display a newline symbol
+# ADF_CLEAN_EOL=1      => clean with space characters up to the end of the line (based on `tput cols` value)
+# ADF_UPDATABLE_LINE=1 => clear the line instantly everytime we're writing on it (requires to print a line to overwrite beforehand)
 function echoc() {
     if (( $ADF_FULLY_SILENT )); then
         return
@@ -43,13 +47,15 @@ function echoc() {
     local text="$1"
     local output=""
     local colors_history=()
-    local i=-1
+    local i=0
+    local len=0
 
     while (( i < ${#text} )); do
         local i=$((i+1))
 
         if [[ $text[$i,$i+2] != "\z[" ]]; then
             local output="${output}${text[$i]}"
+            local len=$((len + 1))
             continue
         fi
 
@@ -97,32 +103,49 @@ function echoc() {
         return 1
     fi
 
+    if (( $ADF_UPDATABLE_LINE )); then
+        local output="\r$output"
+    fi
+
+    if (( $ADF_CLEAN_EOL )) || (( $ADF_UPDATABLE_LINE )); then
+        local term_width=$(tput cols)
+        local remaining=$((term_width - len))
+
+        if (( $remaining )); then
+            local output="$output$(printf ' %.0s' {1..$remaining})"
+        fi
+
+        if (( $remaining > 1 )); then
+            local output="$output$(printf '\b%.0s' {1..$((remaining-1))})"
+        fi
+    fi
+
     if (( $ADF_DISPLAY_TO_STDERR )); then
         if [[ $# > 1 ]]; then
-            if (( $ADF_DISPLAY_NO_NEWLINE )); then
-                >&2 printf "$ADF_DISPLAY_PREFIXMSG$output" "${@:2}"
+            if (( $ADF_DISPLAY_NO_NEWLINE )) || (( $ADF_UPDATABLE_LINE )); then
+                >&2 printf "$output" "${@:2}"
             else
-                >&2 printf "$ADF_DISPLAY_PREFIXMSG$output\n" "${@:2}"
+                >&2 printf "$output\n" "${@:2}"
             fi
         else
-            if (( $ADF_DISPLAY_NO_NEWLINE )); then
-                >&2 echo -n "$ADF_DISPLAY_PREFIXMSG$output"
+            if (( $ADF_DISPLAY_NO_NEWLINE )) || (( $ADF_UPDATABLE_LINE )); then
+                >&2 echo -n "$output"
             else
-                >&2 echo "$ADF_DISPLAY_PREFIXMSG$output"
+                >&2 echo "$output"
             fi
         fi
     else
         if [[ $# > 1 ]]; then
-            if (( $ADF_DISPLAY_NO_NEWLINE )); then
-                printf "$ADF_DISPLAY_PREFIXMSG$output" "${@:2}"
+            if (( $ADF_DISPLAY_NO_NEWLINE )) || (( $ADF_UPDATABLE_LINE )); then
+                printf "$output" "${@:2}"
             else
-                printf "$ADF_DISPLAY_PREFIXMSG$output\n" "${@:2}"
+                printf "$output\n" "${@:2}"
             fi
         else
-            if (( $ADF_DISPLAY_NO_NEWLINE )); then
-                echo -n "$ADF_DISPLAY_PREFIXMSG$output"
+            if (( $ADF_DISPLAY_NO_NEWLINE )) || (( $ADF_UPDATABLE_LINE )); then
+                echo -n "$output"
             else
-                echo "$ADF_DISPLAY_PREFIXMSG$output"
+                echo "$output"
             fi
         fi
     fi
