@@ -15,7 +15,7 @@ The goal of this project is to install with a simple single command my whole env
 
 It also adapts the environment depending on if the platform is WSL 2 or a real Ubuntu distribution, and also if the computer is my main computer or not, meaning I also use it on my professional computer.
 
-Currently, it contains ~2k of ZSH (not counting blank lines and comments).
+Currently, it contains ~4k lines of ZSH (not counting blank lines and comments).
 
 ## Features
 
@@ -24,6 +24,20 @@ Currently, it contains ~2k of ZSH (not counting blank lines and comments).
 * Auto-backup of current environment during update process
 * Remote installer to setup the environment on a distant server
 * Works both on WSL (Ubuntu) and Debian-based distributions
+
+## Content
+
+* Periodic single-archive full backups of important directories, excluding all files listed in a `.gitignore`
+* Periodic incremental archive with deduplication and replication of multiple data sources
+* Transfer program to synchronize local directories to a remote server safely and ensure consistency
+* Data hoarding programs to download, tag, manage and synchronize videos and playlists from many different platforms easily
+* Remote programs install from Github archives (binaries, ZIP and 7Z archives mainly)
+* Custom function-based installers for many programs
+* Views management to open files from a directory in random order (e.g. photos, videos or music)
+* Built-in CRON tasks management
+* Messages formatting for display and logging in the terminal
+* Session backup program to save and restore a navigation session from different softwares in case of crash or re-use
+
 
 ## Content
 
