@@ -16,10 +16,6 @@ function ytdl() {
 	
 	local download_to=$(pwd)
 
-	if [[ -z $YTDL_LIMIT_BANDWIDTH ]]; then
-		local YTDL_LIMIT_BANDWIDTH="$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH"
-	fi
-
 	if [[ ! -z $YTDL_LIMIT_BANDWIDTH && ! $YTDL_LIMIT_BANDWIDTH = *"K" && ! $YTDL_LIMIT_BANDWIDTH = *"M" ]]; then
 		echoerr "Invalid bandwidth limit provided."
 		return 1
@@ -83,7 +79,7 @@ function ytdl() {
 			--format "${YTDL_FORMAT:-$ADF_YTDL_DEFAULT_BEST_FORMAT}" \
 			--add-metadata \
 			$thumbnail_params \
-			--limit-rate ${YTDL_LIMIT_BANDWIDTH:-1G} $cookie_param $cookie_file \
+			--limit-rate ${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH} $cookie_param $cookie_file \
 			--abort-on-unavailable-fragment \
 			--compat-options all \
 			-o "%(title)s-%(id)s.%(ext)s" \
