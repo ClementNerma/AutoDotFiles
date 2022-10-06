@@ -31,14 +31,14 @@ function ytsync() {
             return 10
         fi
 
-        echo "\n\n"
+        echo
     fi
 
     IFS=$'\n' local entries=($(command cat "$ADF_YS_CACHE"))
 
     local count=$(head -n1 < "$ADF_YS_CACHE")
 
-    local expected_lines=$((count * 3 + 1))
+    local expected_lines=$((count * 4 + 1))
 
     if [[ $expected_lines -ne ${#entries} ]]; then
         echoerr "Corrupted sync cache: expected \z[yellow]°$expected_lines\z[]°, found \z[yellow]°${#entries}\z[]°."
@@ -50,18 +50,21 @@ function ytsync() {
 
     local download_names=()
     local download_list=()
+    local download_bandwidth_limits=()
 
     for i in {1..${count}}; do
-        local video_id=${entries[((i*3-1))]}
-        local video_title=${entries[(((i*3)))]}
-        local video_url=${entries[((i*3+1))]}
+        local video_ie=${entries[((i*4-2))]}
+        local video_id=${entries[((i*4-1))]}
+        local video_title=${entries[(((i*4)))]}
+        local video_url=${entries[((i*4+1))]}
 
         local beginning="\z[gray]°$(printf "%${max_spaces}s" $i) / $count\z[]° \z[magenta]°[$video_id]\z[]°"
 
         if [[ -z $(find . -name "*-${video_id}.*") ]]; then
             echoinfo "$beginning \z[yellow]°${video_title}\z[]°"
             download_list+=("$video_url")
-            download_names=("$video_title")
+            download_names+=("$video_title")
+            download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[video_ie]}")
         else
             echoinfo "$beginning Skipping \z[yellow]°${video_title}\z[]° (already downloaded)"
         fi
@@ -88,20 +91,11 @@ function ytsync() {
     fi
 
     local errors=0
-    local bandwidth_limit="$ADF_CONF_YTDL_SYNC_LIMIT_BANDWIDTH"
-
-    if [[ ! -z $SLOWSYNC ]]; then
-        if [[ $SLOWSYNC = "1" ]]; then
-            bandwidth_limit="2M"
-        else
-            bandwidth_limit="$SLOWSYNC"
-        fi
-    fi
 
     for i in {1..${#download_list}}; do
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
     
-        if ! YTDL_ALWAYS_THUMB=1 YTDL_LIMIT_BANDWIDTH="$bandwidth_limit" ytdl "${download_list[i]}" --match-filter "!is_live"; then
+        if ! YTDL_ALWAYS_THUMB=1 YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" ytdl "${download_list[i]}" --match-filter "!is_live"; then
             errors=$((errors+1))
             echowarn "Waiting 5 seconds before next video..."
             sleep 5
@@ -161,6 +155,7 @@ function ytsync_build_cache() {
 
     local download_list=()
 
+    local check_list_ies=()
     local check_list_ids=()
     local check_list_titles=()
     local check_list_urls=()
@@ -176,7 +171,7 @@ function ytsync_build_cache() {
     local total=0
 
     for i in {1..$count}; do
-        local ie_url="${ADF_YS_IE_URLS[${video_ies[i]}]}"
+        local ie_url="${ADF_YS_DOMAINS_IE_URLS[${video_ies[i]}]}"
 
         if [[ -z $ie_url ]]; then
             echoerr "Found unregistered IE: \z[yellow]°${video_ies[i]}\z[]°"
@@ -206,12 +201,12 @@ function ytsync_build_cache() {
                 local video_url=${ie_url}${video_id}
             fi
 
-            if (( ${ADF_YS_IE_CHECKING_OPTION[${video_ies[i]}]} )); then
+            if (( ${ADF_YS_DOMAINS_CHECKING_MODE[${video_ies[i]}]} )); then
                 check_list_ids+=("$video_id")
                 check_list_titles+=("$video_title")
                 check_list_urls+=("$video_url")
             else
-                cache_content+="${video_id}\n${video_title}\n${video_url}\n\n"
+                cache_content+="${video_ies[i]}\n${video_id}\n${video_title}\n${video_url}\n\n"
                 total=$((total+1))
             fi
         fi
@@ -228,7 +223,7 @@ function ytsync_build_cache() {
                 continue
             fi
 
-            cache_content+="${check_list_ids[i]}\n${check_list_titles[i]}\n${check_list_urls[i]}\n\n"
+            cache_content+="${check_list_ies[i]}\n${check_list_ids[i]}\n${check_list_titles[i]}\n${check_list_urls[i]}\n\n"
             total=$((total+1))
         done
     fi
@@ -238,7 +233,9 @@ function ytsync_build_cache() {
 }
 
 # URL mapper for IDs in playlists
-typeset -A ADF_YS_IE_URLS
+typeset -A ADF_YS_DOMAINS_IE_URLS
+typeset -A ADF_YS_DOMAINS_CHECKING_MODE
+typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
 
 function ytsync_register() {
     if [[ -z "$1" ]]; then
@@ -251,19 +248,28 @@ function ytsync_register() {
         return 2
     fi
 
-    ADF_YS_IE_URLS[$1]="$2"
-}
-
-# Videos checking option
-typeset -A ADF_YS_IE_CHECKING_OPTION
-
-function ytsync_set_videos_checking() {
-    if [[ -z "$1" ]]; then
-        echoerr "Please provide an IE key."
-        return 1
+    if [[ -z "$3" ]]; then
+        echoerr "Please provide a checking mode."
+        return 3
     fi
 
-    ADF_YS_IE_CHECKING_OPTION[$1]=1
+    if [[ -z "$4" ]]; then
+        echoerr "Please provide a bandwidth limit."
+        return 4
+    fi
+
+    ADF_YS_DOMAINS_IE_URLS[$1]="$2"
+
+    if [[ $3 = "nocheck" ]]; then
+        ADF_YS_DOMAINS_CHECKING_MODE[$1]=0
+    elif [[ $3 = "alwayscheck" ]]; then
+        ADF_YS_DOMAINS_CHECKING_MODE[$1]=1
+    else
+        echoerr "Invalid checking mode provided for IE key \z[yellow]°$1\z[]°: \z[gray]°$3\z[]°"
+        return 5
+    fi
+
+    ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$1]="$4"
 }
 
 # Look for videos that have a resolution lower than 1920x1080 pixels, and re-download them
