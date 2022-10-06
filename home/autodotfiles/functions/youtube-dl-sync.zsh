@@ -184,7 +184,7 @@ function ytsync_build_cache() {
     local empty_dir=0
 
     if [[ -z $(find . -not -name '.*') ]]; then
-        empty_dir=1
+        local empty_dir=1
     fi
 
     local download_list=()
@@ -271,7 +271,7 @@ function ytsync_build_cache() {
             fi
 
             cache_content+="${check_list_ies[i]}\n${check_list_ids[i]}\n${check_list_titles[i]}\n${check_list_urls[i]}\n\n"
-            total=$((total+1))
+            local total=$((total+1))
         done
     fi
 

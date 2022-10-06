@@ -121,7 +121,7 @@ function _adf_bss_set_array() {
 
     for value in "${@:3}"; do
         ADF_SESSION_BACKUPER_SW[$1/$2/$i]="$value"
-        i=$((i+1))
+        local i=$((i+1))
     done
 
     ADF_SESSION_BACKUPER_SW[$1/.exists]=1

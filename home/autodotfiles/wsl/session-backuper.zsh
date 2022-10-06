@@ -103,7 +103,7 @@ function adf_restore_session() {
     local filter=""
 
     if [[ ! -z "$CKSUM" ]]; then
-      filter="\-$CKSUM$"
+      local filter="\-$CKSUM$"
     fi
 
     # Get the last backup's directory name, taking into account the provided filter (if any)
@@ -149,7 +149,7 @@ function adf_restore_session() {
 
         if [[ ! $filename =~ ^(.*)\.txt$ ]]; then
             echoerr "Unknown session software file: \z[yellow]°$list_file\z[]°"
-            failed=1
+            local failed=1
             continue
         fi
 
@@ -161,7 +161,7 @@ function adf_restore_session() {
         
         if ! _adf_bss_has_entry "$software"; then
             echoerr "Unknown software \z[cyan]°$software\z[]°"
-            failed=1
+            local failed=1
             continue
         fi
 
@@ -209,7 +209,7 @@ function adf_restore_session_softlist() {
 
         # If the item is not found, increase the failures counter
         if [[ -z "$item" ]]; then
-            failed=$((failed+1))
+            local failed=$((failed+1))
         else
             # Else, open it
 	    	echoinfo ">> Software $software_brackets: found \z[yellow]°$item\z[]°"

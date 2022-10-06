@@ -191,21 +191,21 @@ function ytdlalbum() {
     local id_suffix=""
 
     if (( $YTDL_ALBUM_ID_SUFFIX )); then
-        id_suffix=" [%(playlist_id)s]"
+        local id_suffix=" [%(playlist_id)s]"
     fi
 
     local dir_format="%(artist)s - %(release_year)s - %(album)s$id_suffix"
 
     if [[ ! -z "$YTDL_DIR_FORMAT" ]]; then
-        dir_format="$YTDL_DIR_FORMAT"
+        local dir_format="$YTDL_DIR_FORMAT"
     fi
 
     local thumbnail_cmd="__ytdlalbumthumbnail"
     local thumbnail_args=""
 
     if (( $YTDL_SKIP_THUMBNAIL )); then
-        thumbnail_cmd=""
-        thumbnail_args=" --no-id4cover"
+        local thumbnail_cmd=""
+        local thumbnail_args=" --no-id4cover"
     fi
 
     YTDL_AUDIO_ONLY=1 YTDL_OUTPUT_DIR="$YTDL_ALBUM_OUTPUT_DIR" YTDL_ITEM_CMD=("$thumbnail_cmd" "${YTDL_ALBUM_ITEM_CMD[@]}") \
@@ -246,8 +246,8 @@ function __ytdlalbumthumbnail() {
     fi
 
     local thumbnail_url=$(ytdlcookies use-raw "$YTDL_ALBUM_PRESET" --get-thumbnail "https://music.youtube.com/watch?v=$id")
-    thumbnail_url="${thumbnail_url%%\?*}"
-    thumbnail_url="${thumbnail_url/hqdefault/maxresdefault}"
+    local thumbnail_url="${thumbnail_url%%\?*}"
+    local thumbnail_url="${thumbnail_url/hqdefault/maxresdefault}"
 
     if [[ $? != 0 ]]; then
         echoerr "Failed to get thumbnail's URL."

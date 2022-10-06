@@ -45,7 +45,7 @@ function adf_cron_add_uq_raw() {
     local line="$3"
 
     if [[ $2 != "-" ]]; then
-        line="$2 $3"
+        local line="$2 $3"
     fi
 
     if [[ $4 != "--head" ]]; then
@@ -90,7 +90,7 @@ function _adf_cron_logged() {
     local exitcodemsg="command ended successfully (exit code 0)"
 
     if (( $ret )); then
-        exitcodemsg="\z[red]°command failed with exit code \z[yellow]°$ret\z[]°\z[]°"
+        local exitcodemsg="\z[red]°command failed with exit code \z[yellow]°$ret\z[]°\z[]°"
     fi
 
     echoinfo "[ADF:CRON] Finished running task \z[yellow]°$1\z[]° at \z[magenta]°$(humandate)\z[]°, $exitcodemsg."

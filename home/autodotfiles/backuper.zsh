@@ -154,11 +154,11 @@ function adf_build_files_list() {
         local regex_sep_index=${item[(ie)::(REGEX)::]}
 
         if (( $glob_sep_index > 0 )) && (( $glob_sep_index <= ${#item} )); then
-            pattern="--glob=${item:$((glob_sep_index + 9))}"
-            item=${item:0:$((glob_sep_index - 1))}
+            local pattern="--glob=${item:$((glob_sep_index + 9))}"
+            local item=${item:0:$((glob_sep_index - 1))}
         elif (( $regex_sep_index > 0 )) && (( $regex_sep_index <= ${#item} )); then
-            pattern=${item:$((regex_sep_index + 10))}
-            item=${item:0:$((regex_sep_index - 1))}
+            local pattern=${item:$((regex_sep_index + 10))}
+            local item=${item:0:$((regex_sep_index - 1))}
         fi
 
         >&2 echoinfo "> Treating: \z[magenta]°$item\z[]° \z[cyan]°$pattern\z[]°"
@@ -166,7 +166,7 @@ function adf_build_files_list() {
         local files=""
         
         if [[ -f $item && -z $pattern ]]; then
-            files="$item"
+            local files="$item"
         elif [[ ! -d $item ]]; then
             echoerr "Input directory \z[yellow]°$item\z[]° does not exist!"
             return 2
@@ -175,7 +175,7 @@ function adf_build_files_list() {
             return 2
         fi
 
-        files=$(printf "%s" "$files" | grep "\S")
+        local files=$(printf "%s" "$files" | grep "\S")
 
         if [[ -z "$files" ]]; then
             echowarn ">  WARNING: No matching found for this item!"

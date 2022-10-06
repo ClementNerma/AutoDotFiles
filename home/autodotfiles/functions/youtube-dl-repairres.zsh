@@ -17,7 +17,7 @@ function ytrepairres() {
             return 2
         fi
 
-        loc="$2"
+        local loc="$2"
     fi
 
     local total=0
@@ -36,13 +36,13 @@ function ytrepairres() {
             continue
         fi
 
-        total=$((total+1))
+        local total=$((total+1))
 
         local width=""
         
         if ! width=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=s=x:p=0 "$entry"); then
             echoerr "Failed to get resolution for invalid video file \z[magenta]°$(basename "$entry")\z[]°."
-            errors=$((errors+1))
+            local errors=$((errors+1))
             continue
         fi
 
@@ -60,16 +60,16 @@ function ytrepairres() {
                 echoinfo "URL: \z[gray]°$url\z[]°"
 
                 if ! (( $YTDL_REPAIR_SIMULATE )) && ! YTDL_LIMIT_BANDWIDTH="$ADF_CONF_YTDL_SYNC_LIMIT_BANDWIDTH" ytdl "$url"; then
-                    errors=$((errors+1))
+                    local errors=$((errors+1))
                     echoerr "Failed to download video. Waiting 3 seconds now."
                     sleep 3
                 else
                     echoinfo "New file size: \z[yellow]°$(filesize "$entry")\z[]° for \z[magenta]°$(basename "$entry")\z[]°."
                     echoinfo "------------------------------------------------------------------------------------------------"
-                    success=$((success+1))
+                    local success=$((success+1))
                 fi
             else
-                errors=$((errors+1))
+                local errors=$((errors+1))
                 echoerr "Failed to match: $entry"
             fi
         fi

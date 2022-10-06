@@ -151,13 +151,13 @@ function adf_obf_transform() {
     local raw_input=""
 
     if [[ -z "$1" ]]; then
-        raw_input=$(printf "%s" "$(</dev/stdin)")
+        local raw_input=$(printf "%s" "$(</dev/stdin)")
     else
         if (( $is_encoding )) && ! (( $OBF_ARG_SAFE )); then
             echowarn "ENSURE TO NOT PROVIDE ANY SENSITIVE DATA AS AN ARGUMENT!"
         fi
 
-        raw_input="$1"
+        local raw_input="$1"
     fi
 
     if [[ $is_encoding = 0 && -z "$OBF_NO_BASE64" ]]; then
@@ -166,7 +166,7 @@ function adf_obf_transform() {
             return 1
         fi
     else
-        input="$raw_input"
+        local input="$raw_input"
     fi
 
     if [[ -z $input && ! -z $OBF_NO_CHECKSUM ]]; then
@@ -175,12 +175,12 @@ function adf_obf_transform() {
     fi
 
     if [[ $is_encoding = 1 && -z $OBF_NO_CHECKSUM ]]; then
-        input="$(adf_obf_checksum "$input"):$input"
+        local input="$(adf_obf_checksum "$input"):$input"
     fi
 
     local out=()
 
-    converted_alphabet="$converted_alphabet$converted_alphabet$converted_alphabet"
+    local converted_alphabet="$converted_alphabet$converted_alphabet$converted_alphabet"
 
     for i in {1..${#input}}; do
         local char=${input[i]}
@@ -197,7 +197,7 @@ function adf_obf_transform() {
         if [[ -z $OBF_NO_SHIFT ]]; then
             if (( i % 3 >= ${#input} % 3 )) || (( i % 4 == ${#input} % 4 )); then
                 local shift=$((floor((exp(i) + ${#input}) % 100)))
-                index=$((index + (${shift%.} * shift_multiplier)))
+                local index=$((index + (${shift%.} * shift_multiplier)))
             fi
         fi
 
@@ -216,7 +216,7 @@ function adf_obf_transform() {
     fi
 
     if [[ $is_encoding = 0 && -z $OBF_NO_CHECKSUM ]]; then
-        output=$(adf_obf_validate_checksum "$output")
+        local output=$(adf_obf_validate_checksum "$output")
 
         if [[ $? != 0 ]]; then
             return 3
@@ -224,7 +224,7 @@ function adf_obf_transform() {
     fi
 
     if [[ $is_encoding = 1 && -z $OBF_NO_BASE64 ]]; then
-        output="$(printf '%s' "$output" | base64 -w0)"
+        local output="$(printf '%s' "$output" | base64 -w0)"
     fi
 
     printf '%s' "$output"

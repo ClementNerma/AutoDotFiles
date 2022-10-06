@@ -66,7 +66,7 @@ function adf_sync_files() {
         if [[ ! -f $(__adf_file_sync_path "$2" "$rel_path") ]]; then
             echoinfo "> Going to synchronize file: \z[green]°$(LC_TIME=fr_FR.UTF-8 date -r "$file")\z[]° \z[magenta]°$rel_path\z[]° (\z[yellow]°$(filesize "$file")\z[]°)"
             tosync+=("$rel_path")
-            sync_size=$((sync_size+$(stat -c %s "$file")))
+            local sync_size=$((sync_size+$(stat -c %s "$file")))
         fi
     done <<< "$source_files"
 
@@ -101,7 +101,7 @@ function adf_sync_files() {
 
         if ! sync_7z_output=$(7z a -t7z -m0=Copy -mhe=on -p"$passphrase" "$dest_file" "$1/${tosync[$i]}" 2>&1 > /dev/null); then
             echoerr "> Failed to transfer file (command \z[yellow]°7z\z[]° failed): \z[yellow]°${sync_7z_output}\z[]°."
-            errors=$((errors+1))
+            local errors=$((errors+1))
         fi
     done
 

@@ -16,16 +16,16 @@ function _report_echoc_error() {
     local cursor=""
 
     for i in {1..$(($3-1))}; do
-        cursor="$cursor "
+        local cursor="$cursor "
     done
 
     local carets=""
 
     for i in {1..$4}; do
-        carets="$carets^"
+        local carets="$carets^"
     done
 
-    cursor="$cursor${ADF_FORMAT_BLUE}$carets${ADF_FORMAT_RESET}"
+    local cursor="$cursor${ADF_FORMAT_BLUE}$carets${ADF_FORMAT_RESET}"
 
     >&2 echo "${ADF_FORMAT_RED}====================== echoc error ======================${ADF_FORMAT_RESET}"
     >&2 echo "${ADF_FORMAT_RED}| $1${ADF_FORMAT_RESET}"
@@ -46,10 +46,10 @@ function echoc() {
     local i=-1
 
     while (( i < ${#text} )); do
-        i=$((i+1))
+        local i=$((i+1))
 
         if [[ $text[$i,$i+2] != "\z[" ]]; then
-            output="${output}${text[$i]}"
+            local output="${output}${text[$i]}"
             continue
         fi
 
@@ -60,7 +60,7 @@ function echoc() {
 
         local format_test_varname="$ADF_PREFIX_FORMAT${color:u}"
         if [[ $color = $substr ]]; then
-            output="${output}${text[$i]}"
+            local output="${output}${text[$i]}"
             continue
         fi
 
@@ -81,15 +81,15 @@ function echoc() {
 
             shift -p colors_history
 
-            add_color="${colors_history[-1]:-reset}"
+            local add_color="${colors_history[-1]:-reset}"
         else
             colors_history+=("$color")
-            add_color="$color"
+            local add_color="$color"
         fi
 
         local format_varname="$ADF_PREFIX_FORMAT${add_color:u}"
-        output="${output}${(P)format_varname}"
-        i=$((i+4+${#color}))
+        local output="${output}${(P)format_varname}"
+        local i=$((i+4+${#color}))
     done
 
     if [[ ${#colors_history[@]} != 0 ]]; then
