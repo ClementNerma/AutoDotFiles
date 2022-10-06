@@ -1,6 +1,6 @@
 #
-# This file is run during startup on Linux platforms only
-# Its role is to configure all required environment variables and options
+# This file is run during startup on bare Linux platforms only
+# Its role is to setup aliases and make the environment ready to go
 #
 
 # Set up path to main directories

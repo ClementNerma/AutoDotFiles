@@ -15,15 +15,6 @@ cd "."
 # Load required ZSH modules
 zmodload zsh/mathfunc
 
-# Determine if current environment is WSL
-if grep -q microsoft /proc/version; then
-	command rm -rf "$ADF_DIR/linux"
-	export ENV_NAME_STR="wsl"
-else
-	command rm -rf "$ADF_DIR/wsl"
-	export ENV_NAME_STR="linux"
-fi
-
 # Set path to the main script of AutoDotFiles
 export ADF_ENTRYPOINT="${(%):-%x}"
 
@@ -81,11 +72,13 @@ if (( $ADF_INSTALLER_ABORTED )); then
 	return
 fi
 
-# Set path to platform-specific scripts
-export ADF_ENV_DIR="$ADF_DIR/env/$ENV_NAME_STR"
 
-# Load platform-specific configuration
-source "$ADF_ENV_DIR/env.zsh"
+# Determine if current environment is WSL
+if grep -q microsoft /proc/version; then
+	source "$ADF_DIR/env/wsl.zsh"
+else
+	source "$ADF_DIR/env/bare.zsh"
+fi
 
 # Load the local configuration
 source "$ADF_USER_DIR/env.zsh"
@@ -129,9 +122,6 @@ done
 
 # Load software
 source "$ADF_DIR/software.zsh"
-
-# Load platform-specific scripts
-source "$ADF_ENV_DIR/script.zsh"
 
 # Load the local script
 source "$ADF_USER_DIR/script.zsh"

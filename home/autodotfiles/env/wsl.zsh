@@ -13,8 +13,46 @@ export WIN_CMD_PATH=${$(command -v "cmd.exe"):-"/mnt/c/Windows/system32/cmd.exe"
 if [[ ! -f $WIN_POWERSHELL_PATH ]]; then echoerr "PowerShell executable was not found at path \z[yellow]°$WIN_POWERSHELL_PATH\z[]°!"; fi
 if [[ ! -f $WIN_CMD_PATH ]]; then echoerr "CMD executable was not found at path \z[yellow]°$WIN_CMD_PATH\z[]°!"; fi
 
+# Get Windows username (cached for better performance)
+export ADF_WSL_USERNAME_CACHE_FILE="$ADF_ASSETS_DIR/wsl-username.txt"
+
+if [[ ! -f $ADF_WSL_USERNAME_CACHE_FILE ]]; then
+  export WINUSER=$(powershell.exe -command '$env:UserName' | tr -d "\r")
+  printf "$WINUSER" > "$ADF_WSL_USERNAME_CACHE_FILE"
+else
+  export WINUSER=$(command cat "$ADF_WSL_USERNAME_CACHE_FILE")
+fi
+
+# Fail if username couldn't be get
+if [[ -z $WINUSER ]]; then
+  echoerr "Failed to get username from command-line (see error above)"
+  return
+fi
+
+# Set up path to main directories
+export HOMEDIR="/mnt/c/Users/$WINUSER"
+export TEMPDIR="$HOME/.tempdata"
+export DLDIR="$HOMEDIR/Downloads"
+export SOFTWAREDIR="$HOMEDIR/Logiciels"
+export LOCBAKDIR="$HOMEDIR/Sauvegardes/ADF"
+
+# Main data are located in WSL's own filesystem
+export PROJDIR="$HOME/Projets"
+export WORKDIR="$HOME/Work"
+export TRASHDIR="$HOME/.trasher"
+
 # Alternate default entry directory that may occur sometimes
 export ALTERNATE_HOMEDIR="/mnt/c/WINDOWS/system32"
+
+# Open a file or directory in Windows
+function open() {
+  local topath=${1:-$PWD}
+
+  [[ ! -f $topath && ! -d $topath && ! -L $topath ]] && { echoerr "Target path \z[yellow]°$topath\z[]° was not found!"; return 1 }
+
+  ( cd "$(dirname "$topath")" && explorer.exe "$(basename "$topath")" )
+  return 0
+}
 
 # Run a Windows command through PowerShell
 # e.g. "win echo Hello!" will display "Hello!" by running PowerShell transparently
