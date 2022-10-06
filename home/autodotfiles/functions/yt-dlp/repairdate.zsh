@@ -60,19 +60,19 @@ function ytrepairdate() {
 
         if ! upload_date=$(yt-dlp --get-filename -o "%(upload_date)s" "${cookie_params[@]}" "$url_prefix$video_id"); then
             local errors=$((errors + 1))
-            echoc "\z[]°FAILED\z[]°"
+            echoc "\z[red]°FAILED\z[]°"
             continue
         fi
 
         if [[ ! $upload_date =~ ^20[0-9]{6}$ ]]; then
             local errors=$((errors + 1))
-            echoc "\z[]°INVALID\z[]° DATE\z[]°"
+            echoc "\z[red]°INVALID\z[]° DATE\z[]°"
             continue
         fi
 
-        if ! touch "$entry" -m -d "$upload_date"; then
+        if ! sudo touch "$entry" -m -d "$upload_date"; then
             local errors=$((errors + 1))
-            echoc "\z[]°FAILED TO SET DATE\z[]°"
+            echoc "\z[red]°FAILED TO SET DATE\z[]°"
             continue
         fi
 
