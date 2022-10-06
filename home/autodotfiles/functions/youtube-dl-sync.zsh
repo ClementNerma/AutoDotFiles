@@ -72,6 +72,12 @@ function ytsync() {
         fi
     done
 
+    if [[ ${#download_list} -eq 0 ]]; then
+        echosuccess "Nothing to download!"
+        rm "$ADF_YS_CACHE"
+        return
+    fi
+
     echoinfo "\nGoing to download \z[yellow]°${#download_list}\z[]° videos."
 
     if (( $read_from_cache )); then
