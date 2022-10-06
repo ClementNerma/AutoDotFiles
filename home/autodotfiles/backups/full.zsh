@@ -131,39 +131,20 @@ function adf_local_backup() {
 function adf_build_files_list() {
     local plain_output=0
 
-    if [[ $1 = "--raw" ]]; then
-        local plain_output=1
-    elif [[ ! -f $1 ]]; then
+    if [[ ! -f $1 ]]; then
         echoerr "List file not found while building files list"
         return 1
-    fi
-
-    if [[ $# = 1 ]]; then
-        return
     fi
 
     local listfile="$1"
     shift
 
     for item in "$@"; do
-        local pattern=""
-
-        local glob_sep_index=${item[(ie)::(GLOB)::]}
-        local regex_sep_index=${item[(ie)::(REGEX)::]}
-
-        if (( $glob_sep_index > 0 )) && (( $glob_sep_index <= ${#item} )); then
-            local pattern="--glob=${item:$((glob_sep_index + 9))}"
-            local item=${item:0:$((glob_sep_index - 1))}
-        elif (( $regex_sep_index > 0 )) && (( $regex_sep_index <= ${#item} )); then
-            local pattern=${item:$((regex_sep_index + 10))}
-            local item=${item:0:$((regex_sep_index - 1))}
-        fi
-
         >&2 echoinfo "> Treating: \z[magenta]°$item\z[]° \z[cyan]°$pattern\z[]°"
 
         local files=""
         
-        if [[ -f $item && -z $pattern ]]; then
+        if [[ -f $item ]]; then
             local files="$item"
         elif [[ ! -d $item ]]; then
             echoerr "Input directory \z[yellow]°$item\z[]° does not exist!"
@@ -177,8 +158,6 @@ function adf_build_files_list() {
 
         if [[ -z $files ]]; then
             echowarn ">  WARNING: No matching found for this item!"
-        elif [[ $listfile = "--raw" ]]; then
-            printf "%s\n" "$files"
         else
             printf "%s\n" "$files" | sort >> "$listfile"
         fi
