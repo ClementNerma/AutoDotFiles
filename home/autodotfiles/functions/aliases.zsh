@@ -32,6 +32,7 @@ alias gp="git push"
 alias gm="gitcommit"
 
 # Software: 'ytdl'
+alias yd="ytdl dl"
 alias ytsync="ytdl sync"
 
 # Set the default editor
