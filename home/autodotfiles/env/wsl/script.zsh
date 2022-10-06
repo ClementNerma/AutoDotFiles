@@ -22,36 +22,11 @@ function win() {
   "$WIN_POWERSHELL_PATH" -command "$@"
 }
 
-# Run a Windows command through CMD.EXE
-function wincmd() {
-  "$WIN_CMD_PATH" /C "$@"
-}
-
-# Run a Windows command through PowerShell and use its content in WSL
-# This uses "tr" because Window's newline symbols are different than Linux's ones, thus resulting in weird string behaviours
-function win2text() {
-  "$WIN_POWERSHELL_PATH" "$@" | tr -d "\r"
-}
-
-# Run a Windows command through CMD.EXE and use its content in WSL
-# This uses "tr" because Window's newline symbols are different than Linux's ones, thus resulting in weird string behaviours
-function wincmd2text() {
-  "$WIN_CMD_PATH" /C "$@" | tr -d "\r"
-}
-
 # Remount a drive in WSL
 function remount() {
 	sudo umount /mnt/${1:l} 2> /dev/null
 	sudo mkdir /mnt/${1:l} 2> /dev/null
 	sudo mount -t drvfs "${1:u}:" /mnt/${1:l} -o uid=$UID,gid=$GID
-}
-
-# Get IP of host Windows system (can be used to access its ports)
-export WSL_HOST_IP=$(awk '/nameserver/ { print $2 }' /etc/resolv.conf)
-
-# Synchronize WSL's time with Windows' one
-function wslclocksync() {
-  sudo ntpdate time.windows.com
 }
 
 # Mount drives in WSL, including removable ones
@@ -100,20 +75,6 @@ function clip() {
 # Copy a string to clipboard
 function clipstr() {
   echo "$*" | clip.exe
-}
-
-# Get the list of all open windows for a given process name
-function process_windows() {
-  if [[ -z $1 ]]; then
-    echoerr "Please provide a process name to check."
-    return 1
-  fi
-
-  win 'Get-Process'\
-       '| Where-Object {$_.MainWindowTitle -ne "" -and $_.ProcessName -eq "'$1'"}'\
-       '| Select-Object MainWindowTitle'\
-       '| Format-Table -AutoSize -Wrap -HideTableHeaders'\
-       '| Out-String -Stream -Width 1000000000'
 }
 
 # Fix for 'fd' (otherwise always getting error '[fd error]: Could not retrieve current directory (has it been deleted?).')
