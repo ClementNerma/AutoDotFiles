@@ -20,6 +20,10 @@ export PATH="$HOME/.local/bin:$PATH"
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
+# Integration for PNPM
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+
 # Integration for FZF
 source ~/.fzf.zsh
 
