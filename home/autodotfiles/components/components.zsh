@@ -443,25 +443,3 @@ function borgmatic() {
 
     pip3 install --user --upgrade "borgmatic"
 }
-
-# =============== REMOVED =============== #
-
-# function rclone() {
-#     # NAME: RClone (Windows)
-#     # PRIORITY: 1
-#     # ENV: wsl
-#     # VERSION: rclone.exe -V | sed -n 1p
-#     # NEEDS_APT_UPDATE: no
-    
-#     dlghbin "rclone/rclone" "rclone-.*-windows-amd64.zip" "-" "rclone-*/rclone.exe" "rclone.exe"
-# }
-
-# function zoxide() {
-#     # NAME: Zoxide
-#     # PRIORITY: 1
-#     # ENV: all
-#     # VERSION: zoxide -V
-#     # NEEDS_APT_UPDATE: no
-
-#     dlghbin ajeetdsouza/zoxide "zoxide-v.*-x86_64-unknown-linux-musl.tar.gz" "zoxide-v.*-aarch64-unknown-linux-musl.tar.gz" "zoxide" "zoxide"
-# }
