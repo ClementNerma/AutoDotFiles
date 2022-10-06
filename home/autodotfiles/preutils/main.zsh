@@ -17,6 +17,11 @@ function prompt() {
 	echo "$input"
 }
 
+# Faster replacement for "date +%s%N"
+function now() {
+	printf ${${EPOCHREALTIME//.}:0:19}
+}
+
 function humandate() {
 	date '+%Y_%m_%d-%Hh_%Mm_%Ss'
 }

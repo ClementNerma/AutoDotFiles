@@ -37,7 +37,7 @@ function ytdl() {
 	fi
 
 	# Check if download must be performed in a temporary directory
-	local tempdir="$ADF_CONF_YTDL_TEMP_DL_DIR_PATH/$(humandate)-$(date +%N)"
+	local tempdir="$ADF_CONF_YTDL_TEMP_DL_DIR_PATH/$(humandate)-$(now)"
 
 	if [[ -z $YTDL_TEMP_DIR ]]; then
 		mkdir -p "$tempdir"

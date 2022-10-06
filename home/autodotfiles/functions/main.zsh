@@ -97,9 +97,9 @@ function make7z() {
 
 # Measure time a command takes to complete
 function howlong() {
-	local started=$(($(date +%s%N)))
+	local started=$(now)
 	"$@"
-	local finished=$(($(date +%s%N)))
+	local finished=$(now)
 	local elapsed=$(((finished - started) / 1000000))
 
 	printf 'Command "'
@@ -142,7 +142,7 @@ function debi() {
 
 # Install a Debian package from the web
 function debir() {
-	local debpath="/tmp/$(date +%s%N).deb"
+	local debpath="/tmp/$(now).deb"
 	dl "$1" "$debpath"
 	debi "$debpath"
 	command rm "$debpath"
@@ -241,7 +241,7 @@ function progress_bar_print() {
 }
 
 # Estimate remaining time
-# Usage: <start date (from $(date +%s%N))> <current> <max>
+# Usage: <start date (from $(now))> <current> <max>
 function compute_eta() {
 	local started=$(($1))
 	local progress=$(($2))
@@ -255,7 +255,7 @@ function compute_eta() {
 		return
 	fi
 
-	local now=$(date +%s%N)
+	local now=$(now)
 	local elapsed=$((now - started))
 	local remaining=$((maximum - progress))
 

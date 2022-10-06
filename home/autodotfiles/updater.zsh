@@ -97,7 +97,7 @@ function zerupdate() {
 
 # Download latest version and update
 function zerupdate_online() {
-	local tmpdir="/tmp/autodotfiles-update-$(date +%s%N)"
+	local tmpdir="/tmp/autodotfiles-update-$(now)"
 
 	# Download the update from GitHub
 	if ! ghdl "ClementNerma/AutoDotFiles" "$tmpdir"; then

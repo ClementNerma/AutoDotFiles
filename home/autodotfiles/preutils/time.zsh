@@ -1,7 +1,5 @@
 # Start a timer
-function timer_start() {
-	date +%s%N
-}
+alias timer_start="now"
 
 function timer_elapsed() {
 	if [[ -z $1 ]]; then
@@ -10,7 +8,7 @@ function timer_elapsed() {
 	fi
 
 	local started=$(($1))
-	local now=$(($(date +%s%N)))
+	local now=$(now)
 	local elapsed=$((now - started))
 
 	printf '%s' $elapsed
