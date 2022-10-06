@@ -1,13 +1,13 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# format="""
-# $all\
-# $fill\
-# $time\
-# $line_break\
-# $character
-# """
+format="""
+$all\
+$fill\
+$time\
+$line_break\
+$character
+"""
 
 [directory]
 fish_style_pwd_dir_length=30
@@ -22,11 +22,10 @@ conflicted="[!](red)"
 [cmd_duration]
 format="[($duration)](yellow)"
 
-# [fill]
-# symbol=" "
+[fill]
+symbol=" "
 
-# [time]
-# disabled=false
-# format="[@ $time]($style)"
-# format="[[\\[$time\\]]($style)]"
-# style="bold white bg:black"
+[time]
+disabled=false
+format="[$time]($style)"
+style="bold bright-black"
