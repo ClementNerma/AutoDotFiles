@@ -63,6 +63,7 @@ function bakproj() {
 	done <<< "$files"
 
 	echosuccess "Done in \z[magenta]°$target\z[]°"
+	export LAST_BAKPROJ_DIR="$target"
 }
 
 # Backup the current project
