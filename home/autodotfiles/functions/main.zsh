@@ -146,39 +146,20 @@ function timer_elapsed() {
 }
 
 function humanduration() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a duration in milliseconds."
-		return 1
-	fi
-
 	local duration=$(($1))
-	local duration_s=$duration
-	local ms_precision=0
-
-	if [[ ! -z $2 ]]; then
-		if [[ $2 != "--ms" ]]; then
-			echoerr "Second argument must be '\z[yellow]°--ms\z[]°' or nothing."
-			return 2
-		fi
-
-		local ms_precision=1
-		local duration_s=$((duration / 1000))
-	fi
+	local duration_s=$((duration / 1000))
 
 	local D=$((duration_s / 60 / 60 / 24))
 	local H=$((duration_s / 60 / 60 % 24))
 	local M=$((duration_s / 60 % 60))
 	local S=$((duration_s % 60))
+	
 	if [ $D != 0 ]; then printf "${D}d "; fi
 	if [ $H != 0 ]; then printf "${H}h "; fi
 	if [ $M != 0 ]; then printf "${M}m "; fi
 
-	if (( $ms_precision )); then
-		local duration_ms=$((duration % 1000))
-		printf "${S}.%03ds" $duration_ms
-	else
-		printf "${S}s"
-	fi
+	local duration_ms=$((duration % 1000))
+	printf "${S}.%03ds" $duration_ms
 
 }
 
