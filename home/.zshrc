@@ -16,6 +16,9 @@ function zerperf() {
 # Load required ZSH modules
 zmodload zsh/mathfunc
 
+# Disable bang history (allows to input '!' characters without escaping)
+unsetopt BANG_HIST
+
 # Disable history expansion
 set +H
 
