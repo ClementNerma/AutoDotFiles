@@ -62,8 +62,12 @@ function mount_wsl_drives() {
     local chrlen=${#letter}
 
     if [[ $chrlen == 1 ]]; then
-      if [[ $letter != "c" ]] && mountpoint -q "/mnt/$letter"; then
-        remount "$letter"
+      if [[ $letter != "c" ]]; then
+        if mountpoint -q "/mnt/$letter"; then
+          remount "$letter"
+        else
+          sudo rmdir "/mnt/$letter"
+        fi
       fi
     fi
   done
