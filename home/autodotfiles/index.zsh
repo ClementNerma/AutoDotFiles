@@ -88,15 +88,13 @@ source "$ADF_DIR/sync.zsh"
 # Load the obfuscator
 source "$ADF_DIR/obfuscator.zsh"
 
-# Set path to the installer
-export ADF_INSTALLER_DIR="$ADF_DIR/installer"
-
 # Run the installer
 export ADF_INSTALLER_ABORTED=0
-source "$ADF_INSTALLER_DIR/index.zsh"
+
+source "$ADF_DIR/installer.zsh"
 
 # Exit if the installer aborted
-if [[ $ADF_INSTALLER_ABORTED = 1 ]]; then
+if (( $ADF_INSTALLER_ABORTED )); then
 	return
 fi
 
