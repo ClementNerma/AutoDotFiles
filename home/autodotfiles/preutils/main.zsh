@@ -28,28 +28,45 @@ function confirm() {
 
 # Passive confirmation
 function passive_confirm() {
-	export __adf__passive_confirm_aborted=0
+	export ___pc_aborted=0
+	export ___pc_answer=""
 
-	local started=$(timer_start)
-	local elapsed=0
-
-	while (( $elapsed < 5 )); do
-		trap 'echo "Use Ctrl+D to abort." && export __adf__passive_confirm_aborted=1' SIGINT
-		read -sk -t 5 __adf_passive_confirm_answer
+	while [[ $___pc_answer != $'\n' ]] && ! (( $___pc_aborted )); do
+		trap 'echowarn "Use Ctrl+D to abort." && export ___pc_aborted=1' SIGINT
+		read -sk ___pc_answer
 		trap SIGINT
 
-		if [[ ! -z $__adf__passive_confirm_answer ]] || (( $__adf__passive_confirm_aborted )) ||
-		   [[ $__adf__passive_confirm_aborted -eq 0 && -z $__adf__passive_confirm_answer ]]
-		then
-			break
+		if [[ $___pc_answer = "p" ]]; then
+			while true; do
+				export ___pc_choice=""
+
+				trap 'echo "Use A to abort."' SIGINT
+				echoinfo "Sleeping, press C to continue or A to abort."
+				read -sk ___pc_choice
+				trap SIGINT
+
+				if [[ $___pc_choice = "c" ]]; then
+					return
+				fi
+
+				if [[ $___pc_choice = "a" ]]; then
+					return 1
+				fi
+
+				echowarn "Invalid response (C or A expected)."
+			done
 		fi
 
-		local elapsed=$(timer_elapsed_seconds "$started")
-	done
+		if (( $___pc_aborted )); then
+			return 1
+		fi
+		
+		if [[ $___pc_answer = '$\n' ]]; then
+			return
+		fi
 
-    if [[ -z $__adf_passive_confirm_answer || $__adf_passive_confirm_answer != $'\n' ]] && (( $__adf__passive_confirm_aborted )); then
-        return 1
-    fi
+		echowarn "Unrecognized key (<Enter> to continue, <Ctrl+D> to abort, <P> to pause)"
+	done
 }
 
 # Faster replacement for "date +%s%N"
