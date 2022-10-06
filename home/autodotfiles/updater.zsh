@@ -22,7 +22,6 @@ function zerbackup() {
 		fi
 	done < "$ADF_FILES_LIST"
 
-	echoverb "Synchronizing..."
 	sync
 
 	# Done!
@@ -33,10 +32,8 @@ function zerbackup() {
 # Update to latest version
 function zerupdate() {
 	if [[ -n $1 ]]; then
-		echoverb "Updating from provided path: \z[magenta]°$1\z[]°"
 		local update_path="$1"
 	elif [[ -n $ADF_UPDATE_PATH ]]; then
-		echoverb "Updating from configured path: \z[magenta]°$ADF_UPDATE_PATH\z[]°"
 		local update_path="$ADF_UPDATE_PATH"
 	else
 		if [[ -z $PROJDIR ]]; then
@@ -68,8 +65,6 @@ function zerupdate() {
 	ADF_SILENT=1 zerbackup
 	
 	# Remove old files
-	echoverb "Removing old environment..."
-
 	while read item
 	do
 		# Security (should never happen, this check is here just in case)
@@ -81,7 +76,6 @@ function zerupdate() {
 	done < "$ADF_FILES_LIST"
 
 	# Copy updated files
-	echoverb "Updating environment..."
 	cp -R "$update_path/home/." ~/
 
 	# Save the new files list
@@ -99,7 +93,6 @@ function zerupdate() {
 	fi
 
 	# Load new environment
-	echoverb "Loading environment..."
 	export ADF_JUST_UPDATED=1
 	source "$ADF_DIR/index.zsh"
 

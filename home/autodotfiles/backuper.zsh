@@ -102,8 +102,6 @@ function adf_local_backup() {
         echowarn " "
     fi
 
-    sync
-
     echosuccess "Done! Archive path is \z[magenta]°$outfile\z[]°"
 }
 
