@@ -41,7 +41,7 @@ function ytsync() {
     local expected_lines=$((count * 4 + 1))
 
     if [[ $expected_lines -ne ${#entries} ]]; then
-        echoerr "Corrupted sync cache: expected \z[yellow]°$expected_lines\z[]°, found \z[yellow]°${#entries}\z[]°."
+        echoerr "Corrupted sync cache: expected \z[yellow]°$expected_lines\z[]° for \z[magenta]°$count\z[]° entries, found \z[yellow]°${#entries}\z[]°."
         rm "$ADF_YS_CACHE"
         return 11
     fi
@@ -202,6 +202,7 @@ function ytsync_build_cache() {
             fi
 
             if (( ${ADF_YS_DOMAINS_CHECKING_MODE[${video_ies[i]}]} )); then
+                check_list_ies+=("${video_ies[i]}")
                 check_list_ids+=("$video_id")
                 check_list_titles+=("$video_title")
                 check_list_urls+=("$video_url")
@@ -216,11 +217,14 @@ function ytsync_build_cache() {
         echoinfo "Checking availibility of \z[yellow]°${#check_list_ids}\z[]° videos..."
 
         for i in {1..${#check_list_ids}}; do
-            echoinfo "| Checking video \z[yellow]°$i\z[]° / \z[yellow]°${#check_list_ids}\z[]° \z[gray]°(${check_list_ids[i]})\z[]°..."
+            ADF_DISPLAY_NO_NEWLINE=1 echoinfo "| Checking video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#check_list_ids}\z[]° \z[gray]°(${check_list_ids[i]})\z[]°..."
 
             if ! yt-dlp "${check_list_urls[i]}" --get-url > /dev/null 2>&1; then
+                echoc " \z[red]°ERROR\z[]°"
                 echoverb "| > Video \z[magenta]°${check_list_titles[i]}\z[]° is unavailable, skipping it."
                 continue
+            else
+                echoc " \z[green]°OK\z[]°"
             fi
 
             cache_content+="${check_list_ies[i]}\n${check_list_ids[i]}\n${check_list_titles[i]}\n${check_list_urls[i]}\n\n"
