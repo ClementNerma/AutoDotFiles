@@ -34,11 +34,13 @@ function prompt() {
 
 # Ask for confirmation
 function confirm() {
-	trap 'echowarn "Ctrl+C is not allowed here."' SIGINT
-	read -s 'answer?'
+	local cancelled=0
+
+	trap 'echowarn "Ctrl+C is not allowed here." && cancelled=1' SIGINT
+	read -ks 'answer?'
 	trap - SIGINT
 
-	if [[ -n $answer && $answer != "y" && $answer != "Y" ]]; then
+	if [[ -z $answer ]] || (( $cancelled )); then
 		return 1
 	fi
 }
