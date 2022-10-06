@@ -149,6 +149,11 @@ function psymlink() {
   fi
 }
 
+# Fix for 'fd' (otherwise always getting error '[fd error]: Could not retrieve current directory (has it been deleted?).')
+function fd() {
+  cd "$PWD" && command fd "$@"
+}
+
 # Load main PC exclusive modules
 if (( $ADF_CONF_MAIN_PERSONAL_COMPUTER )); then
   source "$ADF_ENV_DIR/session-backuper.zsh"
