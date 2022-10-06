@@ -129,6 +129,9 @@ function adf_build_files_list() {
         elif [[ ! -d $item ]]; then
             echoerr "Input directory \z[yellow]°$item\z[]° does not exist!"
             return 2
+        elif ! files=$(fd --threads=1 --hidden --one-file-system --type 'file' --absolute-path --search-path "$item" "$pattern"); then
+            echoerr "Command \z[yellow]°fd\z[]° failed."
+            return 2
         fi
 
         local files=$(printf "%s" "$files" | grep "\S")
