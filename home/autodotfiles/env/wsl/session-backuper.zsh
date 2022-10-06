@@ -125,7 +125,7 @@ function adf_restore_session() {
       local filter="\-$CKSUM$"
     fi
 
-    local files=$(command ls -1A "$ADF_CONF_WSL_BACKUP_SESSION_DIR" | grep "^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\.txt$" | sort -r)
+    local files=($(command ls -1A "$ADF_CONF_WSL_BACKUP_SESSION_DIR" | grep "^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\.txt$" | sort -r))
     local session_file=""
     local content=""
 
@@ -138,7 +138,8 @@ function adf_restore_session() {
         local start_line=$(grep -n "$ADF_SESSION_UPDATE_START_LINE_MARKER" "$file_path" | tail -1 | cut -f1 -d':')
         local end_line=$(grep -n "$ADF_SESSION_UPDATE_END_LINE_MARKER" "$file_path" | tail -1 | cut -f1 -d':')
 
-        local content=$(command cat "$file_path" | tail +$((start_line + 2)) | head -n$(($end_line - $start_line - 2)))
+        local content=$(command cat "$file_path" | tail +$(($start_line + 1)) | head -n$(($end_line - $start_line - 1)))
+        break
     done
 
     if [[ -z $session_file ]]; then
@@ -201,14 +202,19 @@ function adf_restore_session() {
         fi
     done <<< "$content"
 
+    if [[ ${#files_to_open} -eq 0 ]]; then
+        echowarn "Nothing to open."
+        return
+    fi
+
     # HACK: Launching the software pieces directly in the loop above would make it break
     #       This is a known bug amongst most shells
     local opened=0
 
     echoverb "Opening ${#files_to_open} files..."
-    
-    for i in {1..${#softwares}}; do
-		(nohup "${softwares[i]}" "${files_to_open[i]}" > /dev/null 2>&1 &)
+   
+    for i in {1..${#files_to_open}}; do
+    	(nohup "${softwares[i]}" "${files_to_open[i]}" > /dev/null 2>&1 &)
 		opened=$((opened+1))
     done
 
