@@ -40,7 +40,9 @@ alias adb="adbtool adb.exe"
 alias fastboot="adbtool fastboot.exe"
 
 # Provide Borg aliases with built-in passphrase
-alias withborgpass="BORG_PASSPHRASE=\"\$(command cat \$PROJDIR/_Done/Backupy/BORG_PASSPHRASE.txt)\""
+function withborgpass() {
+  BORG_PASSPHRASE="$(adf_obf_decode "$ADF_LOCBAK_PASSPHRASE")" "$@"
+}
 
 alias borg="withborgpass borg"
 alias borgfs="withborgpass borgfs"
