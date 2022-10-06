@@ -57,8 +57,8 @@ function echoc() {
         local i=$((i+1))
 
         if [[ $text[$i,$i+2] != "\z[" ]]; then
-            local output="${output}${text[$i]}"
-            local rawtext="${rawtext}${text[$i]}"
+            output+="${text[$i]}"
+            rawtext+="${text[$i]}"
             continue
         fi
 
@@ -68,8 +68,9 @@ function echoc() {
         local color="${substr%%$look*}"
 
         local format_test_varname="$ADF_PREFIX_FORMAT${color:u}"
+
         if [[ $color = $substr ]]; then
-            local output="${output}${text[$i]}"
+            output+="${text[$i]}"
             continue
         fi
 
