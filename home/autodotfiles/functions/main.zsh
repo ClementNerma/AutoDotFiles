@@ -131,14 +131,12 @@ function mvprogress() {
 	done
 }
 
-# Archive a directory into a .tar file
-function maketar() {
-	tar cf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1-$(humandate).tar"
-}
+# Archive a file or directory into a .7z file
+function make7z() {
+	if [[ -z $1 ]]; then echoerr "Please provide an item to archive."; return 1; fi
+	if [[ ! -e $1 ]]; then echoerr "Provided input item does not exist."; return 10; fi
 
-# Archive a directory into a .tar.gz file
-function maketargz() {
-	tar czf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1-$(humandate).tar.gz"
+	7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=32m -ms=on -mhc=on -mhe=on -spf2 -bso0 "$(basename "$1")-$(humandate).7z" "$1"
 }
 
 # Measure time a command takes to complete
