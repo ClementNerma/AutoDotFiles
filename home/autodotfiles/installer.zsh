@@ -19,7 +19,7 @@ function adf_install() {
     local scripts=$(cat "$ADF_INSTALLER_SCRIPTS")
     local cksum=$(cksumstr "$scripts")
 
-    if (( $skip_if_installed )) && [[ -f $ADF_INSTALLER_HASH_FILE ]] && [[ $(cat "$ADF_INSTALLER_HASH_FILE") != $cksum ]]; then
+    if (( $skip_if_installed )) && [[ -f $ADF_INSTALLER_HASH_FILE ]] && [[ $(cat "$ADF_INSTALLER_HASH_FILE") = $cksum ]]; then
         return
     fi
 
