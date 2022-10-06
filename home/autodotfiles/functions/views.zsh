@@ -207,6 +207,11 @@ function adf_view_delete() {
 
 function adf_view_ids() {
     while IFS= read -r id; do
+        if [[ -z $id ]]; then
+            echowarn "No saved ID was found."
+            return
+        fi
+
         echoinfo "* \z[yellow]°$id\z[]° -> \z[magenta]°$(command cat "$ADF_VIEW_IDENTIFIERS_DIR/$id")\z[]°"
     done <<< "$(command ls -1A "$ADF_VIEW_IDENTIFIERS_DIR" | sort)"
 }
