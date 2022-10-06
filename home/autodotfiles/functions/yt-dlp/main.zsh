@@ -101,7 +101,7 @@ function ytdl() {
 	then
 		echoerr "Failed to download videos with Youtube-DL!"
 		echoerr "You can resume the download with:"
-		echoinfo "$resume_cmdline"
+		echowarn "$resume_cmdline"
 		return 1
 	fi
 
@@ -136,7 +136,7 @@ function ytdl() {
 				if ! "$cmd" "$item"; then
 					echoerr "Custom command failed"
 					echoerr "You can resume the download with:"
-					echoinfo "$ytdl_cmdline"
+					echowarn "$ytdl_cmdline"
 					return 1
 				fi
 			done
