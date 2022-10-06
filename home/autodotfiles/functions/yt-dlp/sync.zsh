@@ -154,8 +154,8 @@ function ytsync() {
     local errors=0
     local forecast_lock=0
 
-    for i in {1..${#download_list}}; do
-        local video_ie=${download_ies[i]}
+    for di in {1..${#download_list}}; do
+        local video_ie=${download_ies[di]}
         local lockfile="$ADF_YS_LOCKFILES_DIR/$video_ie.lock"
         local needlockfile=${ADF_YS_DOMAINS_USE_LOCKFILE[$video_ie]}
 
@@ -181,17 +181,17 @@ function ytsync() {
             local repair_date=""
         fi
 
-        echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
-        echoinfo "| Video from \z[cyan]°$video_ie\z[]° at \z[green]°${download_list[i]}\z[]°$cookie_msg"
+        echoinfo "| Downloading video \z[yellow]°${di}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[di]}\z[]°..."
+        echoinfo "| Video from \z[cyan]°$video_ie\z[]° at \z[green]°${download_list[di]}\z[]°$cookie_msg"
 
         if ! YTDL_ALWAYS_THUMB=1 \
              YTDL_FILENAMING="$filenaming" \
              YTDL_COOKIE_PROFILE="$cookie_profile" \
              YTDL_REPAIR_DATE="$repair_date" \
-             YTDL_LIMIT_BANDWIDTH="${YTSYNC_OVERRIDE_BANDWIDTH_LIMIT:-${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[i]}}}" \
-             YTDL_OUTPUT_DIR="${download_paths[i]}" \
+             YTDL_LIMIT_BANDWIDTH="${YTSYNC_OVERRIDE_BANDWIDTH_LIMIT:-${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[di]}}}" \
+             YTDL_OUTPUT_DIR="${download_paths[di]}" \
              YTDL_FORMAT="$format" \
-             ytdl "${download_list[i]}" --write-sub --sub-lang fr,en \
+             ytdl "${download_list[di]}" --write-sub --sub-lang fr,en \
              --match-filter "!is_live"
         then
             local errors=$((errors+1))
@@ -207,7 +207,7 @@ function ytsync() {
             fi
         fi
 
-        if (( $needlockfile )) && (( $i < ${#download_list} )); then
+        if (( $needlockfile )) && (( $di < ${#download_list} )); then
             if [[ ${download_ies[i+1]} = ${download_ies[i]} ]]; then
                 local forecast_lock=1
             else
@@ -215,7 +215,7 @@ function ytsync() {
             fi
         fi
 
-        progress_bar_detailed "Instant progress: " $i ${#download_list} 0 $download_started
+        progress_bar_detailed "Instant progress: " $di ${#download_list} 0 $download_started
         printf "\n\n"
     done
 
