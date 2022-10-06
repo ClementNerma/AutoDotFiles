@@ -102,7 +102,6 @@ function adf_local_backup() {
         echowarn " "
     fi
 
-    echoverb "Synchronizing storage..."
     sync
 
     echosuccess "Done! Archive path is \z[magenta]°$outfile\z[]°"

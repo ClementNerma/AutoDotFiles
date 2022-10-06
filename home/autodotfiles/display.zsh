@@ -132,12 +132,6 @@ function echoinfo() {
     fi
 }
 
-function echodata() {
-    if ! (( $ADF_SILENT )); then
-    	echoc "\z[cyan]°$1\z[]°" "${@:2}"
-    fi
-}
-
 function echoverb() {
     if (( $ADF_VERBOSE )); then
 	    >&2 echoc "\z[gray]°[Verbose]\z[]° \z[magenta]°$1\z[]°" "${@:2}"
