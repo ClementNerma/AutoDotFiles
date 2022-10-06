@@ -42,7 +42,7 @@ export ADF_ARCHITECTURE=$(dpkg --print-architecture)
 if [[ $ADF_ARCHITECTURE = "amd64" ]]; then
 	export ADF_IS_AMD64=1
 	export ADF_IS_ARM64=0
-elif if [[ $ADF_ARCHITECTURE = "arm64" ]]; then
+elif [[ $ADF_ARCHITECTURE = "arm64" ]]; then
 	export ADF_IS_AMD64=1
 	export ADF_IS_ARM64=0
 else
