@@ -112,7 +112,7 @@ function ytdl() {
 	# Perform the download
 	if [[ "$YTDL_DRY_RUN" != 1 ]] && [[ -z "$YTDL_JUST_ITEM_CMD" ]]; then
 		if ! yt-dlp -f "$quality_format" $metadata_params $thumbnail_params -r $bandwidth_limit \
-			 --abort-on-unavailable-fragment --compat-options format-spec --compat-options abort-on-error -o "%(title)s-%(id)s.%(ext)s" \
+			 --abort-on-unavailable-fragment --compat-options all -o "%(title)s-%(id)s.%(ext)s" \
 			 "$@" $YTDL_APPEND
 		then
 			if ! (( $YTDL_IGNORE_ERR )); then
