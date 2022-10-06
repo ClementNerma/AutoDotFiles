@@ -26,11 +26,9 @@ fi
 # Determine if current environment is WSL
 if grep -q microsoft /proc/version; then
 	command rm -rf "$ADF_DIR/linux"
-	export IS_WSL_ENV=1
 	export ENV_NAME_STR="wsl"
 else
 	command rm -rf "$ADF_DIR/wsl"
-	export IS_WSL_ENV=0
 	export ENV_NAME_STR="linux"
 fi
 
@@ -120,11 +118,6 @@ source "$ADF_USER_DIR/env.zsh"
 
 # Allow fast reloading of this file after changes
 alias reload="source ${(%):-%x}"
-
-# # Load the script for the main computer (if applies)
-# if [ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]; then
-# 	source "$ADF_DIR/main-pc.zsh"
-# fi
 
 # Ensure main directories are defined
 if [[ -z $HOMEDIR ]]; then echoerr "Directory variable \z[green]°\$HOMEDIR\z[]° is not defined!"; fi
