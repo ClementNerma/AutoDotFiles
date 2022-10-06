@@ -6,5 +6,8 @@
 # Edit this file and reload it
 alias zerl="nano ${(%):-%x} && source ${(%):-%x}"
 
+# Startup directory
+export ADF_STARTUP_DIR="$PROJDIR"
+
 # Put your own commands here
 

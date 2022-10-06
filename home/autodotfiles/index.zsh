@@ -176,6 +176,11 @@ if ! typeset -f psymlink > /dev/null; then echowarn "WARNING: contractual 'psyml
 # Load the local script
 source "$ADF_LOCAL_DIR/script.zsh"
 
+if [[ -z $ADF_STARTUP_DIR ]]; then
+	echowarn "WARNING: Contractual '\$ADF_STARTUP_DIR' variable was not set by the local script."
+	export ADF_STARTUP_DIR="$HOMEDIR"
+fi
+
 # Filter the commands to put in the history
 function zshaddhistory() {
   emulate -L zsh
@@ -192,7 +197,7 @@ function gostartupdir() {
 	local cwd=$(pwd)
 
 	if [[ "$cwd" = "$HOME" || "$cwd" = "$HOMEDIR" ]] || [[ -d "$ALTERNATE_HOMEDIR" && "$cwd" = "$ALTERNATE_HOMEDIR" ]]; then
-		goproj
+		cd "$ADF_STARTUP_DIR"
 	fi
 }
 
