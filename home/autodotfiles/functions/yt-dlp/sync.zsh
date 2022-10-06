@@ -190,6 +190,15 @@ function ytsync() {
                 local blocked_at=$di
 
                 local di=$(($di - 1))
+
+                if (( $needlockfile )) && (( $di < $count )); then
+                    if [[ $next_video_ie = $video_ie ]]; then
+                        local forecast_lock=1
+                    else
+                        command rm "$lockfile"
+                    fi
+                fi
+                
                 continue
             fi
 
