@@ -291,11 +291,23 @@ function filesize() {
 		return 1
 	fi
 
-	local size=$(stat -c %s "$1")
+	humansize "$(stat -c %s "$1")"
+}
 
-	if (( $size < 1024 )); then
-		echo "${size}B"
+function humansize() {
+	if [[ -z "$1" ]]; then
+		echoerr "Please provide an integer size."
+		return 1
+	fi
+
+	if [[ $1 =~ [^0-9] ]]; then
+		echoerr "Provided size (\z[yellow]°$1\z[]°) is invalid."
+		return 2
+	fi
+	
+	if (( $1 < 1024 )); then
+		echo "${1}B"
 	else
-		numfmt --to=iec-i --suffix=B --format="%.2f" "$size"
+		numfmt --to=iec-i --suffix=B --format="%.2f" "$1"
 	fi
 }
