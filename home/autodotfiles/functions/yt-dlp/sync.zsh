@@ -1,6 +1,7 @@
 export ADF_YS_URL_FILE=".ytdlsync-url"
 export ADF_YS_CACHE=".ytdlsync-cache"
 export ADF_YS_FILENAMING=".ytdlsync-filenaming"
+export ADF_YS_FORMAT=".ytdlsync-quality"
 export ADF_YS_LOCKFILES_DIR="$ADF_ASSETS_DIR/ytsync-lockfiles"
 
 if [[ ! -d $ADF_YS_LOCKFILES_DIR ]]; then
@@ -48,6 +49,12 @@ function ytsync() {
         if [[ ! -f $ADF_YS_CACHE ]]; then
             return
         fi
+    fi
+
+    local format=""
+
+    if [[ -f $ADF_YS_FORMAT ]]; then
+        local format=$(command cat "$ADF_YS_FORMAT")
     fi
 
     # === Parse and validate the cache === #
@@ -170,9 +177,12 @@ function ytsync() {
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
         echoinfo "| Video from \z[cyan]°$video_ie\z[]° at \z[green]°${download_list[i]}\z[]°$cookie_msg"
 
-        if ! YTDL_ALWAYS_THUMB=1 YTDL_FILENAMING="$filenaming" YTDL_COOKIE_PROFILE="$cookie_profile" \
+        if ! YTDL_ALWAYS_THUMB=1 \
+             YTDL_FILENAMING="$filenaming" \
+             YTDL_COOKIE_PROFILE="$cookie_profile" \
              YTDL_LIMIT_BANDWIDTH="${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[i]}}" \
              YTDL_OUTPUT_DIR="${download_paths[i]}" \
+             YTDL_FORMAT="$format" \
              ytdl "${download_list[i]}" --write-sub --sub-lang fr,en \
              --match-filter "!is_live"
         then

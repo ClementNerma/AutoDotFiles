@@ -1,6 +1,12 @@
 # Software: Youtube-DL
 
-export ADF_YTDL_DEFAULT_BEST_FORMAT="bestvideo*[height>2160]+bestaudio/best[height>2160]/bestvideo*[height=2160]+bestaudio/best[height=2160]/bestvideo*[height>1440]+bestaudio/best[height>1440]/bestvideo*[height=1440]+bestaudio/best[height=1440]/bestvideo*[height>1080]+bestaudio/best[height>1080]/bestvideo*[height=1080]+bestaudio/best[height=1080]/bestvideo*[height>720]+bestaudio/best[height>720]/bestvideo*[height=720]+bestaudio/best[height=720]/bestvideo*[height>480]+bestaudio/best[height>480]/bestvideo*[height=480]+bestaudio/best[height=480]/bestvideo*[height>320]+bestaudio/best[height>320]/bestvideo*[height=320]+bestaudio/best[height=320]/bestvideo*[height>240]+bestaudio/best[height>240]/bestvideo*[height=240]+bestaudio/best[height=240]/bestvideo*[height>144]+bestaudio/best[height>144]/bestvideo*[height=144]+bestaudio/best[height=144]/bestvideo+bestaudio/best"
+export ADF_YTDL_BEST_FORMAT_SUB_HD="bestvideo*[height>480]+bestaudio/best[height>480]/bestvideo*[height=480]+bestaudio/best[height=480]/bestvideo*[height>320]+bestaudio/best[height>320]/bestvideo*[height=320]+bestaudio/best[height=320]/bestvideo*[height>240]+bestaudio/best[height>240]/bestvideo*[height=240]+bestaudio/best[height=240]/bestvideo*[height>144]+bestaudio/best[height>144]/bestvideo*[height=144]+bestaudio/best[height=144]/bestvideo+bestaudio/best"
+export ADF_YTDL_BEST_FORMAT_720P="bestvideo*[height>720][height<1080]+bestaudio/best[height>720][height<1080]/bestvideo*[height=720]+bestaudio/best[height=720]/$ADF_YTDL_BEST_FORMAT_SUB_HD"
+export ADF_YTDL_BEST_FORMAT_1080P="bestvideo*[height>1080][height<1440]+bestaudio/best[height>1080][height<1440]/bestvideo*[height=1080]+bestaudio/best[height=1080]/$ADF_YTDL_BEST_FORMAT_720P"
+export ADF_YTDL_BEST_FORMAT_1440P="bestvideo*[height>1440][height<2160]+bestaudio/best[height>1440][height<2160]/bestvideo*[height=1440]+bestaudio/best[height=1440]/$ADF_YTDL_BEST_FORMAT_1080P"
+export ADF_YTDL_BEST_FORMAT_2160P="bestvideo*[height>2160][height<4320]+bestaudio/best[height>2160][height<4320]/bestvideo*[height=2160]+bestaudio/best[height=2160]/$ADF_YTDL_BEST_FORMAT_1440P"
+export ADF_YTDL_DEFAULT_BEST_FORMAT="bestvideo*[height>=4320]+bestaudio/best[height>=4320]/$ADF_YTDL_BEST_FORMAT_2160P"
+
 export ADF_YTDL_DEFAULT_FILENAMING="%(title)s-%(id)s.%(ext)s"
 
 # Overriding variables:
