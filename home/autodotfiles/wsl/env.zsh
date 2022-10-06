@@ -14,8 +14,7 @@ else
 fi
 
 # Fail if username couldn't be get
-if [[ -z $WINUSER ]]
-then
+if [[ -z $WINUSER ]]; then
   echoerr "Failed to get username from command-line (see error above)"
   return
 fi
@@ -28,15 +27,10 @@ export SOFTWAREDIR="$HOMEDIR/Logiciels"
 export LOCBAKDIR="$HOMEDIR/Sauvegardes/ADF"
 export PLOCALDIR="$HOMEDIR/AppData/Local/AutoDotFilesLocalDirectory"
 
-if [[ $ADF_CONF_PROJECT_DIRS_IN_WSL_FS != 1 ]]; then
-  export PROJDIR="$HOMEDIR/Projets"
-  export WORKDIR="$HOMEDIR/Work"
-  export TRASHDIR="$HOMEDIR/.trasher"
-else
-  export PROJDIR="$HOME/Projets"
-  export WORKDIR="$HOME/Work"
-  export TRASHDIR="$HOME/.trasher"
-fi
+# Main data are located in WSL's own filesystem
+export PROJDIR="$HOME/Projets"
+export WORKDIR="$HOME/Work"
+export TRASHDIR="$HOME/.trasher"
 
 # Open a file or directory in Windows
 function open() {

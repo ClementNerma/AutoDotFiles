@@ -67,20 +67,6 @@ function remount() {
 # Get IP of host Windows system (can be used to access its ports)
 export WSL_HOST_IP=$(awk '/nameserver/ { print $2 }' /etc/resolv.conf)
 
-# Integration of some Windows tools
-if [[ $ADF_CONF_PROJECT_DIRS_IN_WSL_FS = 0 ]]; then
-  function code() {
-    if [[ -z $1 ]]; then
-      command code
-    else
-      local from=$(pwd)
-      cd "$1"
-      command code .
-      cd "$from"
-    fi
-  }
-fi
-
 # Synchronize WSL's time with Windows' one
 function wslclocksync() {
   sudo ntpdate time.windows.com
@@ -205,19 +191,6 @@ function psymlink() {
 if (( $ADF_CONF_MAIN_PERSONAL_COMPUTER )); then
   source "$ADF_ENV_DIR/session-backuper.zsh"
   source "$ADF_ENV_DIR/rclone.zsh"
-fi
-
-# Run Git commands from Windows if the project directories are not stored inside WSL's own filesystem
-if [[ $ADF_CONF_PROJECT_DIRS_IN_WSL_FS = 0 ]]; then
-  alias git="git.exe" 
-  alias gms="command git commit -m" # For signing commits, from WSL
-
-  # Run Node.js tools from Windows
-  winalias volta node npm yarn pnpm ts-node
-
-  # Run Rust tools from Windows
-  alias cargo="cargo.exe" # Faster
-  winalias rustup rustc mdbook
 fi
 
 # Enable screen provider on Windows
