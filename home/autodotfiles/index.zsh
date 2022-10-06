@@ -193,7 +193,7 @@ fi
 # Filter the commands to put in the history
 function zshaddhistory() {
   emulate -L zsh
-  if ! [[ "$1" == "open"* || "$1" == "z "* ]] ; then
+  if zer_filter_history "$1" ; then
       print -sr -- "${1%%$'\n'}"
       fc -p
   else

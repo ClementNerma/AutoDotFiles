@@ -9,5 +9,10 @@ alias zerl="nano ${(%):-%x} && source ${(%):-%x}"
 # Startup directory
 export ADF_STARTUP_DIR="$PROJDIR"
 
+# History filtering
+function zer_filter_history() {
+    # Return a non-zero exit code if you do not want to log "$1" in ZSH's history
+}
+
 # Put your own commands here
 
