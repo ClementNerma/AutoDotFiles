@@ -197,6 +197,11 @@ function nodejs() {
         return
     fi
 
+    if (( $ADF_IS_ARM64 )); then
+        echoerr "Volta is unsupported on ARM64 architectures."
+        return 1
+    fi
+
     if [[ -d ~/.volta ]]; then
         mvbak ~/.volta
         echowarn "\!/ A previous version of \z[green]°Volta\z[]° was found and moved to \z[magenta]°$LAST_MVBAK_PATH\z[]°..."
