@@ -30,6 +30,12 @@ function python() {
     # VERSION: python3 --version
     # NEEDS_APT_UPDATE: yes
 
+    if (( $ADF_IS_ARM64 )); then
+        echowarn "Detected ARM64, Python should already be installed:"
+        python3 -V && pip3 -V
+        return
+    fi
+
     sudo apt install -yqqq python3-pip
     
     # sudo apt install -yqqq python3 python3-dev python-virtualenv python-is-python3
