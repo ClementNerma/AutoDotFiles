@@ -446,7 +446,8 @@ function ytsync_build_cache() {
             local checking_msg="| Checking video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#check_list_ids}\z[]° $path_display\z[gray]°(${check_list_ids[i]})\z[]°..."
 
             if [[ -f $playlist_blacklist ]] && grep -q "$blacklist_pattern" "$playlist_blacklist"; then
-                echoinfo "$checking_msg \z[yellow]°BLACKLISTED\z[]°"
+                # echoinfo "\z[gray]°$(NO_COLOR=1 echoinfo "$checking_msg BLACKLISTED")\z[]°"
+                echoinfo "\z[gray]°$checking_msg BLACKLISTED\z[]°"
                 continue
             fi
 
