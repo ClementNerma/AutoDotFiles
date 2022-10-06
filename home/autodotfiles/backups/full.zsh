@@ -62,12 +62,6 @@ function adf_local_backup() {
         adf_build_files_list "$listfile" "$ADF_LAST_BACKUP_DIR"
     fi
 
-    if (( $ADF_BACKUP_DRY_RUN )); then
-        cat "$listfile"
-        rm "$listfile"
-        return 99
-    fi
-
     echoinfo ""
     echoinfo "(3/5) Compressing \z[yellow]°$(wc -l < "$listfile")\z[]° elements..."
     echoinfo ""
