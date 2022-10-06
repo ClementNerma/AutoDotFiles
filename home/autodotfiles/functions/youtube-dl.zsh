@@ -222,10 +222,6 @@ function ytdl() {
 	fi
 }
 
-function ytdlclean() {
-	rm "$ADF_CONF_YTDL_TEMP_DL_DIR_PATH"
-}
-
 function ytdlresume() {
 	YTDL_TEMP_DIR="$1" ytdl "${@:2}"
 }
@@ -234,13 +230,8 @@ function ytdlhere() {
 	YTDL_TEMP_DIR="." ytdl "$@"
 }
 
-function ytdlaria() {
-	ytdl --external-downloader aria2c --external-downloader-args "-c -x 10 --summary-interval=0" "$@"
-}
-
-# Download a YouTube video with separate french and english subtitle files (if available)
-function ytdlsubs() {
-	ytdl "$@" --write-sub --sub-lang "fr,en"
+function ytdlclean() {
+	rm "$ADF_CONF_YTDL_TEMP_DL_DIR_PATH"
 }
 
 # Load the cookies function
