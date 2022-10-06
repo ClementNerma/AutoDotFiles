@@ -238,10 +238,6 @@ function ytdlhere() {
 	YTDL_TEMP_DIR="." ytdl "$@"
 }
 
-function ytdlmveach() {
-	ytdl "$@" --exec "invmv '$(pwd)'"
-}
-
 function ytdlhistory() {
 	command cat "$ADF_CONF_YTDL_HISTORY_FILE"
 }
