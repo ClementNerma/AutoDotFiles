@@ -25,13 +25,10 @@ function rclone_mirror() {
     
     echoinfo "Checking files to transfer..."
 
-    (){
-        rclone_output=$(__rclone_sync_nocheck "$source" "$dest" --dry-run "${@:3}" 2> $1)
-        rclone_status=$?
-        rclone_err=$(<$1)
-    } =(:)
+    local rclone_output
+    rclone_output=$(__rclone_sync_nocheck "$source" "$dest" --dry-run "${@:3}" 2>&1)
 
-    if (( $rclone_status )); then
+    if (( $? )); then
         echoerr "RClone failed: \z[yellow]°$rclone_err\z[]°"
         return 4
     fi
