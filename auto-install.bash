@@ -75,7 +75,7 @@ fi
 _step "Backing up important files before overriding them..."
 
 if [ -d ~/autodotfiles ]; then
-	echo -e "\e[33m\!/ A previous version of \e[32mSetup Env \e[33mwas detected ==> backing it up to \e[32m~/autodotfiles.$AUTO_INSTALLER_STARTED_AT\e[33m...\e[0m"
+	echo -e "\e[33m\!/ A previous version of \e[32mAutoDotFiles \e[33mwas detected ==> backing it up to \e[32m~/autodotfiles.$AUTO_INSTALLER_STARTED_AT\e[33m...\e[0m"
 	mv ~/autodotfiles ~/autodotfiles.$AUTO_INSTALLER_STARTED_AT
 fi
 
