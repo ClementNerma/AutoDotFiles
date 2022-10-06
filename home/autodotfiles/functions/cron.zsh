@@ -82,15 +82,17 @@ function adf_cron_logged() {
 
 function _adf_cron_logged() {
     echoinfo "[ADF:CRON] Running task \z[yellow]°$1\z[]° at \z[yellow]°$(printabledate)\z[]°..."
+    local started=$(timer_start)
 
     "${@:2}"
 
     local ret=$?
+    local elapsed=$(timer_show "$started")
     local ended=$(printabledate)
 
     local failure_file="$ADF_CONF_CRON_FAILURE_DIR/$1"
 
-    local exitcodemsg="command ended successfully (exit code 0)"
+    local exitcodemsg="\z[green]°command ended successfully (exit code 0)\z[]°"
 
     if (( $ret )); then
         local exitcodemsg="\z[red]°command failed with exit code \z[yellow]°$ret\z[]°\z[]°"
@@ -99,7 +101,7 @@ function _adf_cron_logged() {
         command rm "$failure_file"
     fi
 
-    echoinfo "[ADF:CRON] Finished running task \z[yellow]°$ended\z[]° at \z[yellow]°$(printabledate)\z[]°, $exitcodemsg."
+    echoinfo "[ADF:CRON] Finished running task at \z[yellow]°$ended\z[]° in \z[yellow]°$(timer_show "$elapsed")\z[]°, $exitcodemsg."
     echoinfo " "
     echoinfo " "
 
