@@ -85,9 +85,7 @@ function ytsync() {
 
     echoinfo "Do you want to continue (Y/n)?"
 
-    if ! confirm; then
-        return 2
-    fi
+    confirm || return 2
 
     # === Download videos === #
 

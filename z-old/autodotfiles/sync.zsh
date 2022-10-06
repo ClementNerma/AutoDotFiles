@@ -39,9 +39,7 @@ function adf_sync_files() {
     local passphrase="$ADF_LOCBAK_PASSPHRASE"
     
     if (( $ADF_DEOBFUSCATE_PASSPHRASE )); then
-        if ! passphrase=$(echo "$passphrase" | adf_obf_decode); then
-            return 6
-        fi
+        passphrase=$(echo "$passphrase" | adf_obf_decode) || return 6
     fi
 
     if [[ -z $passphrase ]]; then
@@ -80,9 +78,7 @@ function adf_sync_files() {
     
     echoinfo "Do you want to continue (Y/n)?"
 
-    if ! confirm; then
-        return 10
-    fi
+    confirm || return 10
 
     local errors=0
     local max_spaces=$(echo -n "${#tosync}" | wc -c)

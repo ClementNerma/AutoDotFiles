@@ -195,9 +195,7 @@ function rclone_mirror() {
     echoinfo "Sleeping 2 seconds before starting..."
     sleep 2
 
-    if ! __rclone_sync_nocheck --check-first --progress "$@"; then
-        return 10
-    fi
+    __rclone_sync_nocheck --check-first --progress "$@" || return 10
 
     echosuccess "Successfully synchronized \z[magenta]°$1\z[]° to \z[magenta]°$2\z[]°."
 }

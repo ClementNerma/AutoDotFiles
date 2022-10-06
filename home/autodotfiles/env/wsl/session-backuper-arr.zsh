@@ -24,9 +24,7 @@ function _adf_bss_has_entry() {
 }
 
 function _adf_bss_has_entry_key() {
-    if ! _adf_bss_has_plain_entry_key "$1" "$2" && ! _adf_bss_has_array_entry_key "$1" "$2"; then
-        return 1
-    fi
+    _adf_bss_has_plain_entry_key "$1" "$2" || _adf_bss_has_array_entry_key "$1" "$2"
 }
 
 function _adf_bss_has_plain_entry_key() {

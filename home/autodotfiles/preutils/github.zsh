@@ -96,9 +96,7 @@ function dlghbin() {
 
 	echoinfo "> (1/4) Download release from GitHub..."
 
-	if ! dlghrelease "$1" "$2" "$file"; then
-		return 10
-	fi
+	dlghrelease "$1" "$2" "$file" || return 10
 
 	echoinfo "> (2/4) Extracting archive..."
 
@@ -108,9 +106,7 @@ function dlghbin() {
 	elif [[ $2 = *.tar.gz ]] || [[ $2 = *.tgz ]]; then
 		mkdir "$exdir"
 
-		if ! tar zxf "$file" -C "$exdir"; then
-			return 12
-		fi
+		tar zxf "$file" -C "$exdir" || return 12
 	else
 		echoerr "Internal error: unhandled file extension in pattern \z[yellow]°$2\z[]°"
 		return 13
@@ -118,9 +114,7 @@ function dlghbin() {
 
 	echoinfo "> (3/4) Moving final binary..."
 
-	if ! mv "$exdir/"${~4} "$ADF_BIN_DIR/$5"; then
-		return 14
-	fi
+	mv "$exdir/"${~4} "$ADF_BIN_DIR/$5" || return 14
 
 	chmod +x "$ADF_BIN_DIR/$5"
 

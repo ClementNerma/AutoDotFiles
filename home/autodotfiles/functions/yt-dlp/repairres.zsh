@@ -32,9 +32,7 @@ function ytrepairres() {
     local errors=0
 
     if [[ ! -f $ADF_YT_REPAIR_CACHE_FILE ]]; then
-        if ! __ytrepairres_build_stage_1_cache "$1"; then
-            return 10
-        fi
+        __ytrepairres_build_stage_1_cache "$1" || return 10
     fi
     
     local cache_total=$(command cat "$ADF_YT_REPAIR_CACHE_FILE" | head -n1)

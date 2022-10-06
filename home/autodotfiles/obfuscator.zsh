@@ -216,11 +216,7 @@ function adf_obf_transform() {
     fi
 
     if [[ $is_encoding = 0 && -z $OBF_NO_CHECKSUM ]]; then
-        local output=$(adf_obf_validate_checksum "$output")
-
-        if [[ $? != 0 ]]; then
-            return 3
-        fi
+        output=$(adf_obf_validate_checksum "$output") || return 3
     fi
 
     if [[ $is_encoding = 1 && -z $OBF_NO_BASE64 ]]; then
@@ -265,9 +261,7 @@ function adf_obf_test() {
     echoinfo "Plain (input) =\n\n\z[yellow]°%s\z[]°" "$input"
 
     echoverb "Encoding the message..."
-    if ! encoded=$(printf '%s' "$input" | adf_obf_encode); then
-        return 2
-    fi
+    encoded=$(printf '%s' "$input" | adf_obf_encode) || return 2
 
     if [[ -z $OBF_NO_INTERMEDIARY_TEST_DATA ]]; then
         echoinfo "\nEncoded (obfuscated) =\n\n\z[yellow]°%s\z[]°\n" "$encoded"
@@ -278,9 +272,7 @@ function adf_obf_test() {
     fi
 
     echoverb "Decoding the encoded message..."
-    if ! decoded=$(printf '%s' "$encoded" | adf_obf_decode); then
-        return 3
-    fi
+    decoded=$(printf '%s' "$encoded" | adf_obf_decode) || return 3
 
     echoinfo "\nDecoded (output) =\n\n\z[yellow]°%s\z[]°\n" "$decoded"
 

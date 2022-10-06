@@ -31,9 +31,7 @@ function adf_local_backup() {
     local passphrase="$ADF_LOCBAK_PASSPHRASE"
     
     if (( $ADF_DEOBFUSCATE_PASSPHRASE )); then
-        if ! passphrase=$(echo "$passphrase" | adf_obf_decode); then
-            return 2
-        fi
+        passphrase=$(echo "$passphrase" | adf_obf_decode) || return 2
     fi
 
     if [[ -z $passphrase ]]; then

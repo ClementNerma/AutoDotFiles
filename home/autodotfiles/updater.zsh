@@ -117,9 +117,7 @@ function zerupdate_online() {
 	local tmpdir="/tmp/autodotfiles-update-$(now)"
 
 	# Download the update from GitHub
-	if ! ghdl "ClementNerma/AutoDotFiles" "$tmpdir"; then
-		return 1
-	fi
+	ghdl "ClementNerma/AutoDotFiles" "$tmpdir" || return 10
 
 	# Update the environment
 	zerupdate "$tmpdir"

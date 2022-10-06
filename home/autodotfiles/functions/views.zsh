@@ -231,9 +231,7 @@ function adf_view_id() {
 function adf_view_ids_clean() {
     echowarn "Do you REALLY want to delete all saved identifiers?"
  
-    if ! confirm; then
-        return 10
-    fi
+    confirm || return 10
 
     command rm -rf "$ADF_VIEW_IDENTIFIERS_DIR"
     mkdir "$ADF_VIEW_IDENTIFIERS_DIR"
