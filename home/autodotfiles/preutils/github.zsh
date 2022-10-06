@@ -63,7 +63,7 @@ function dlghbin() {
 
 	if [[ $2 = *.zip ]]; then
 		# Cannot test for exit code as 'unzip' will return a non-zero code if the value is valid but with extra bytes
-		unzip "$2" -d "$exdir"
+		unzip "$2" -d "$exdir" || return 12
 	elif [[ $2 = *.tar.gz ]] || [[ $2 = *.tgz ]]; then
 		tar zxf "$2" -C "$exdir" || return 12
 	elif [[ $3 != "-" ]]; then
