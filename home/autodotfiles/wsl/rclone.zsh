@@ -137,7 +137,7 @@ function rclone_mirror() {
 }
 
 function __rclone_sync_nocheck() {
-    rclone.exe sync "$1" "$2" \
+    rclone.exe sync \
         --progress-terminal-title \
         --stats-file-name-length 0 \
         --order-by "name,mixed,75" \
@@ -146,5 +146,5 @@ function __rclone_sync_nocheck() {
         --filter "- \$RECYCLE.BIN/**" \
         --create-empty-src-dirs \
         --track-renames --track-renames-strategy "leaf,size" \
-        "${@:3}"
+        "$@"
 }
