@@ -54,13 +54,13 @@ function bakproj() {
 		local relative="$(realpath --relative-to="$1" "$file")"
 		local dest="$target/$relative"
 
-		CLEAR_COMPLETE_SUFFIX=1 progress_bar "Copying: " $i $count 0 " \z[magenta]°$relative\z[]°"
+		echo -n "\r$((i * 100 / count)) % ($i / $count)"
 
 		mkdir -p "$(dirname "$dest")"
 		cp "$file" "$dest"
 	done <<< "$files"
 
-	echosuccess "Done in \z[magenta]°$target\z[]°"
+	echosuccess "\nDone in \z[magenta]°$target\z[]°"
 }
 
 # Backup the current project
