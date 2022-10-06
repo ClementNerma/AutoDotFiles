@@ -7,19 +7,6 @@ function dl() {
 	curl -L "$1" -o "$2"
 }
 
-# Ask for an input with a simple prompt
-function prompt() {
-	local input=""
-	
-	if [[ $1 = "-s" ]]; then
-		read -s "input?$2"
-	else
-		read "input?$1"
-	fi
-
-	echo "$input"
-}
-
 # Ask for confirmation
 function confirm() {
 	local cancelled=0
