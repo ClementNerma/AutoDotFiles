@@ -83,35 +83,6 @@ function latest() {
 	command ls ${1:-$PWD} -Art | tail -n 1
 }
 
-# Install a Debian package
-function debi() {
-	sudo apt update
-	sudo dpkg -i "$1"
-	sudo apt install -f
-}
-
-# Install a Debian package from the web
-function debir() {
-	local debpath=$(mktemp)
-	dl "$1" "$debpath"
-	debi "$debpath"
-	command rm "$debpath"
-}
-
-# Run a command each time a Cargo project is modified
-# NOTE: Requires 'cargo-watch' to be installed (otherwise: 'cargo install cargo-watch')
-function cw() {
-	local args="$@"
-	cargo watch -x "run -- $args"
-}
-
-# Run a command each time a Cargo project is modified, in release mode
-# NOTE: Requires 'cargo-watch' to be installed (otherwise: 'cargo install cargo-watch')
-function cwr() {
-	local args="$@"
-	cargo watch -x "run --release -- $args"
-}
-
 # Push the current branch to remote even if it does not exist yet
 function gpb() {
 	git push --set-upstream origin "$(git rev-parse --abbrev-ref HEAD)"
@@ -161,7 +132,6 @@ function humanduration() {
 function opene() {
 	open "$@" && exit
 }
-
 
 function z() {
     [[ -z $1 ]] && { echoerr "Please provide a query."; return 1 }
