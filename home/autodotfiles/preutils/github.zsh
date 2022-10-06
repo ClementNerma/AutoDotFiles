@@ -51,30 +51,14 @@ function dlghrelease() {
 # Download a .tar.gz from GitHub releases and extract a single file to the binaries directory
 # Usage: dlbin <github repo name> <asset pattern for AMD64> <file to extract> <binary name>
 function dlghbin() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a GitHub repository name."
-		return 1
-	fi
+	[[ -z $1 ]] && { echoerr "Please provide a GitHub repository name."; return 1 }
+	[[ -z $2 ]] && { echoerr "Please provide an asset pattern."; return 1 }
+	[[ -z $3 ]] && { echoerr "Please provide an extraction pattern for AMD64."; return 1 }
 
-	if [[ -z $2 ]]; then
-		echoerr "Please provide an asset pattern."
-		return 2
-	fi
-
-	if [[ -z $3 ]]; then
-		echoerr "Please provide an extraction pattern for AMD64."
-		return 3
-	fi
-
-	local dldir="$TEMPDIR"
-
-	if [[ -n $INSTALLER_TMPDIR ]]; then
-		local dldir="$INSTALLER_TMPDIR"
-	fi
-
+	local dldir="${INSTALLER_TMPDIR:-$(mktemp -d)}"
 	local file="$dldir/dlbin-$4-$(humandate)"
 	
-	echoinfo "> (1/4) Download release from GitHub..."
+	echoinfo "> (1/4) Downloading release from GitHub..."
 
 	dlghrelease "$1" "$2" "$file" || return 10
 
