@@ -96,7 +96,7 @@ function dlghbin() {
 
 	echoinfo "> (1/4) Download release from GitHub..."
 
-	dlghrelease "$1" "$2" "$file" || return 10
+	dlghrelease "$1" "$asset_pattern" "$file" || return 10
 
 	echoinfo "> (2/4) Extracting archive..."
 
