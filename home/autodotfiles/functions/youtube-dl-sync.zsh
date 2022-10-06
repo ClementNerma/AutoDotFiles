@@ -120,8 +120,8 @@ function ytsync() {
         fi
 
         if (( $empty_dir )) || [[ -z $(find . -name "*-${video_id}.*") ]]; then
-            if [[ ! -z $video_id && $video_id = "null" ]]; then
-                local video_url=${ie_url}${video_ids[i]}
+            if [[ ! -z $video_id && $video_id != "null" ]]; then
+                local video_url=${ie_url}${video_id}
             fi
 
             local blacklist=${ADF_YS_IE_BLACKLIST[${video_ies[i]}]}
