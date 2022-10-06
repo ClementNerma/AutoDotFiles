@@ -25,6 +25,7 @@ set +H
 # Increase history capacity
 export HISTSIZE=10000000
 export SAVEHIST=10000000
+export HISTFILE=$HOME/.zsh_history
 
 # Load modules
 source ~/zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
