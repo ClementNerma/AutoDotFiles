@@ -162,7 +162,7 @@ function micro() {
     chmod +x micro
     mv micro $ADF_BIN_DIR
 
-    cd "$PWD"
+    cd "$current"
 
     if ! (( $COMPONENT_UPDATING )) && [[ ! -d $HOME/.config/micro ]]; then
         mkdir -p $HOME/.config/micro
