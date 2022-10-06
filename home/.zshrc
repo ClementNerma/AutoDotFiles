@@ -13,6 +13,12 @@ function zerperf() {
 	ZSH_PROFILING=true zsh -c "source ~/.zshrc && exit"
 }
 
+# Load required ZSH modules
+zmodload zsh/mathfunc
+
+# Disable history expansion
+set +H
+
 # Increase history capacity
 export HISTSIZE=10000000
 export SAVEHIST=10000000

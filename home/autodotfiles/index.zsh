@@ -12,9 +12,6 @@
 # when running some commands like `service`
 cd "."
 
-# Load required ZSH modules
-zmodload zsh/mathfunc
-
 # Set path to the main script of AutoDotFiles
 export ADF_ENTRYPOINT="${(%):-%x}"
 
