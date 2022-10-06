@@ -170,7 +170,7 @@ function ytsync() {
                 echowarn "Failed due to too many requests being made to server."
                 echowarn ""
 
-                local waiting=$((10 * 60))
+                local waiting=$((15 * 60))
 
                 while (( $waiting > 0 )); do
                     local waiting=$((waiting - 1))
