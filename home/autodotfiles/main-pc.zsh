@@ -48,3 +48,7 @@ alias borg="withborgpass borg"
 alias borgfs="withborgpass borgfs"
 alias borgmatic="withborgpass borgmatic"
 
+# Provide Kopia alises with built-in password
+function withkopiapass() {
+  KOPIA_PASSWORD="$(adf_obf_decode "$ADF_LOCBAK_PASSPHRASE")" "$@"
+}
