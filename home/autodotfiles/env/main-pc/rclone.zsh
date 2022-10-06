@@ -171,7 +171,7 @@ function __rclone_sync_nocheck() {
         --transfers 8 \
         --filter "- System Volume Information/**" \
         --filter "- \$RECYCLE.BIN/**" \
-        --filter "- msdownld.tmp/**"
+        --filter "- msdownld.tmp/**" \
         --filter "- desktop.ini" \
         --create-empty-src-dirs \
         --track-renames --track-renames-strategy "leaf,size" \
