@@ -31,12 +31,14 @@ function ytsync() {
         if [[ -n $2 ]]; then
             local filenaming="$2"
             shift
-
             echowarn "Writing provided filenaming \z[cyan]°$filenaming\z[]° to local filenaming file."
             echo "$filenaming" > "$ADF_YS_FILENAMING_FILE"
-        else
-            local filenaming=""
         fi
+    fi
+
+    if [[ -f $ADF_YS_FILENAMING_FILE ]]; then
+        local filenaming=$(cat "$ADF_YS_FILENAMING_FILE")
+        echoinfo "Detected filenaming: \z[magenta]°$filenaming\z[]°"
     fi
 
     local cache_builder_config=$(ytsync_cache_builder_config)
