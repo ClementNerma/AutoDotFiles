@@ -48,6 +48,7 @@ function dlghbin() {
 	[[ -z $1 ]] && { echoerr "Please provide a GitHub repository name."; return 1 }
 	[[ -z $2 ]] && { echoerr "Please provide an asset pattern."; return 1 }
 	[[ -z $3 ]] && { echoerr "Please provide an extraction pattern for AMD64."; return 1 }
+	[[ $3 != "-" ]] && [[ -z $4 ]] && { echoerr "Please provide a target filename."; return 1 }
 
 	local dldir="${INSTALLER_TMPDIR:-$(mktemp -d)}"
 	local file="$dldir/dlbin-$4-$(humandate)"
@@ -76,9 +77,6 @@ function dlghbin() {
 	if [[ $3 = "-" ]]; then
 		local to_move="$file"
 		local target_name=${4:-$(basename "$2")}
-	elif [[ -z $4 ]]; then
-		echoerr "Please provide a target filename!"
-		return 10
 	else
 		local expanded=("$exdir/"${~3})
 		local to_move=${expanded[1]}
