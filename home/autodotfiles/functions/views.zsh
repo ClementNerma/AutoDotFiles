@@ -1,11 +1,16 @@
 
 # Views location
 export ADF_VIEWS_DIR="$PLOCALDIR/views"
+export ADF_VIEW_IDENTIFIERS_DIR="$ADF_VIEWS_DIR/.ids"
 export ADF_VIEW_PATH_FILENAME=".viewpath"
 export ADF_VIEW_SOFTWARE_FILENAME=".viewsoftware"
 
 if [[ ! -d "$ADF_VIEWS_DIR" ]]; then
     mkdir "$ADF_VIEWS_DIR"
+fi
+
+if [[ ! -d "$ADF_VIEW_IDENTIFIERS_DIR" ]]; then
+    mkdir "$ADF_VIEW_IDENTIFIERS_DIR"
 fi
 
 function adf_view_list() {
@@ -142,9 +147,12 @@ function adf_view_randomize() {
     for counter in {1..$total}; do
         local file="${files[counter]}"
         local padded_counter=$(printf "%05d" "$counter")
-        local symlink="r$padded_counter-${$(basename "$file"):0:160}"
+        local rid=$(cat /proc/sys/kernel/random/uuid)
+        local rid=${rid:0:8}
+        local symlink="r$padded_counter-${rid}-${${$(basename "$file"):t:r}:0:150}.${file:t:e}"
         echoinfo "\z[magenta]°> $padded_counter/\z[green]°$total\z[]°: \z[yellow]°r$padded_counter\z[]° -> \z[blue]°$(basename "$file")\z[]°\z[]°"
         psymlink "$target/$file" "$view_dir/$symlink"
+        echo "$target/$file" > "$ADF_VIEW_IDENTIFIERS_DIR/$rid"
 	done
 
     echoinfo "View was randomized successfully."
@@ -195,4 +203,40 @@ function adf_view_delete() {
     command rm -rf "$view_dir"
 
     echosuccess "View was successfully deleted."
+}
+
+function adf_view_ids() {
+    while IFS= read -r id; do
+        echoinfo "* \z[yellow]°$id\z[]° -> \z[magenta]°$(command cat "$ADF_VIEW_IDENTIFIERS_DIR/$id")\z[]°"
+    done <<< "$(command ls -1A "$ADF_VIEW_IDENTIFIERS_DIR" | sort)"
+}
+
+function adf_view_id() {
+    if [[ -z $1 ]]; then
+        echoerr "Please provide an identifier."
+        return 1
+    fi
+
+    local id_path="$ADF_VIEW_IDENTIFIERS_DIR/$id"
+
+    if [[ ! -f $id_path ]]; then
+        echoerr "Provided identifier was not found."
+        return 10
+    fi
+
+    command cat "$id_path"
+}
+
+function adf_view_ids_clean() {
+    echowarn "Do you REALLY want to delete all saved identifiers?"
+ 
+    read 'answer?'
+
+    if [[ ! -z $answer && $answer != "y" && $answer != "Y" ]]; then
+        return 10
+    fi
+
+    command rm -rf "$ADF_VIEW_IDENTIFIERS_DIR"
+    mkdir "$ADF_VIEW_IDENTIFIERS_DIR"
+    return
 }
