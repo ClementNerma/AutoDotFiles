@@ -161,7 +161,7 @@ function ghdl() {
 	echoinfo "> Fetching default branch..."
 	local branch=$(curl -s -S "https://api.github.com/repos/$repoauthor/$reponame" | jq -r ".default_branch")
 
-	if [[ $branch == "null" ]]; then
+	if [[ $branch = "null" ]]; then
 		echoerr "> Failed to determine default branch!"
 		return 1
 	fi

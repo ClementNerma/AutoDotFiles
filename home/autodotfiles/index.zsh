@@ -211,7 +211,7 @@ function gostartupdir() {
 gostartupdir
 
 # Run a command and exit if required
-if [[ $1 == "--just-run" && -n $2 ]]; then
+if [[ $1 = "--just-run" && -n $2 ]]; then
 	${@:2}
 	ADF_JUST_RUN_RET=$? 
 	if (( $ADF_JUST_RUN_RET )); then

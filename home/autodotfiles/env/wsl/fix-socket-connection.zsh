@@ -11,10 +11,10 @@ function fix_socket_connection() {
   while true ; do
     [[ -e /run/WSL/${interop_pid}_interop ]] && break
     local interop_pid=$(__wsl_fix_parentof ${interop_pid})
-    [[ ${interop_pid} == 1 ]] && break
+    [[ ${interop_pid} = 1 ]] && break
   done
 
-  if [[ ${interop_pid} == 1 ]] ; then
+  if [[ ${interop_pid} = 1 ]] ; then
       echo "Failed to find a parent process with a working interop socket.  Interop is broken."
   else
       export WSL_INTEROP=/run/WSL/${interop_pid}_interop

@@ -61,7 +61,7 @@ function mount_wsl_drives() {
     local letter=${drive:s/\/mnt\//}
     local chrlen=${#letter}
 
-    if [[ $chrlen == 1 ]]; then
+    if [[ $chrlen = 1 ]]; then
       if [[ $letter != "c" ]]; then
         if mountpoint -q "/mnt/$letter"; then
           remount "$letter"

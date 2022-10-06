@@ -32,7 +32,7 @@ function adf_obf_gen_alphabet() {
 
 # Ensure the random alphabets exist locally
 function adf_obf_init_alphabets() {
-    if [[ ! -f $ADF_OBF_INPUT_ALPHABET_FILE || $1 == "--regen" ]]; then
+    if [[ ! -f $ADF_OBF_INPUT_ALPHABET_FILE || $1 = "--regen" ]]; then
         echoinfo "Generating input alphabet..."
 
         if ! adf_obf_gen_alphabet > "$ADF_OBF_INPUT_ALPHABET_FILE"; then
@@ -41,7 +41,7 @@ function adf_obf_init_alphabets() {
         fi
     fi
 
-    if [[ ! -f $ADF_OBF_OUTPUT_ALPHABET_FILE || $1 == "--regen" ]]; then
+    if [[ ! -f $ADF_OBF_OUTPUT_ALPHABET_FILE || $1 = "--regen" ]]; then
         echoinfo "Generating output alphabet..."
     
         if ! adf_obf_gen_alphabet > "$ADF_OBF_OUTPUT_ALPHABET_FILE"; then
@@ -134,7 +134,7 @@ function adf_obf_transform() {
         return 2
     fi
 
-    if [[ $4 == 0 ]]; then
+    if [[ $4 = 0 ]]; then
         local is_encoding=1
         local base_alphabet="$2"
         local converted_alphabet="$3"
@@ -189,13 +189,13 @@ function adf_obf_transform() {
 
         local index=${base_alphabet[(ie)$char]}
 
-        if [[ $index == 0 || $index -gt ${#base_alphabet} ]]; then
+        if [[ $index = 0 || $index -gt ${#base_alphabet} ]]; then
             echoerr "Failed to $fail_word character >\z[yellow]°$char\z[]°<: unknown character"
             return 2
         fi
 
         if [[ -z $OBF_NO_SHIFT ]]; then
-            if (( i % 3 >= ${#input} % 3 )) || (( i % 4 == ${#input} % 4 )); then
+            if (( i % 3 >= ${#input} % 3 )) || (( i % 4 = ${#input} % 4 )); then
                 local shift=$((floor((exp(i) + ${#input}) % 100)))
                 local index=$((index + (${shift%.} * shift_multiplier)))
             fi
