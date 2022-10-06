@@ -145,6 +145,34 @@ function z() {
     fi
 }
 
+function pss() {
+	ps -u \
+    | pomsky \
+        "Start :user(![s]+) [s]+ :pid(![s]+) [s]+ :cpu(![s]+) [s]+ :mem(![s]+) [s]+ :vsz(![s]+) [s]+ :rss(![s]+) [s]+ :tty(![s]+) [s]+ :stat(![s]+) [s]+ :start(![s]+) [s]+ :time(![s]+) [s]+ :command(![Zl]+)" \
+        '$pid   $command'
+}
+
+function find_pid() {
+	IFS=$'\n' local pids=($(
+		pss | grep "$1" | grep -v "grep "
+	))
+
+	local parse_pid_result="Start :pid(![s]+) '   ' :command(Codepoint+) End"
+
+	if (( ${#pids} > 1 )); then
+		echowarn "Found multiple candidates:"
+
+		for entry in $pids; do
+			IFS=$'\n' local parsed=($(printf '%s' "$entry" | pomsky "$parse_pid_result" '$pid\n$command'))
+			echoinfo "* \z[yellow]°${parsed[1]}\z[]° \z[blue]°${parsed[2]}\z[]°"
+		done
+
+		return 1
+	fi
+
+	printf '%s' "$entry" | pomsky "$parse_pid_result" '$pid'
+}
+
 function pomsky() {
 	if ! _pomsky_regex=$(command pomsky "$1"); then
 		return 1
@@ -155,7 +183,7 @@ function pomsky() {
 	# 	return
 	# fi
 
-	while read _input_line; do
+	while read _input_line || [[ -n "$_input_line" ]]; do
 		if ! _tr_line=$(sd --flags m "$_pomsky_regex" "$2" <<< "$_input_line"); then
 			return 1
 		fi
