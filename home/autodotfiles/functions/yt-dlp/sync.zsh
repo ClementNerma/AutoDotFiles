@@ -200,14 +200,14 @@ function ytsync() {
             if ! PC_TIMEOUT=5 passive_confirm; then
                 if (( $needlockfile )); then
                     echowarn ">> Removing lockfile..."
-                    rm "$lockfile"
+                    command rm "$lockfile"
                 fi
 
                 return
             fi
         fi
 
-        if (( $needlockfile )); then
+        if (( $needlockfile )) && (( $i < ${#download_list} )); then
             if [[ ${download_ies[i+1]} = ${download_ies[i]} ]]; then
                 local forecast_lock=1
             else
@@ -221,7 +221,7 @@ function ytsync() {
 
     if (( $needlockfile )); then
         echowarn ">> Removing lockfile..."
-        rm "$lockfile"
+        command rm "$lockfile"
     fi
 
     if [[ $errors -eq 0 ]]; then
