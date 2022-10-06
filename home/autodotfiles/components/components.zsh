@@ -333,24 +333,6 @@ function ytdlp() {
     # chmod +x "$ADF_BIN_DIR/phantomjs"
 }
 
-function ytsync_cache_builder() {
-    # NAME: YTSync Cache Builder
-    # PRIORITY: 1
-    # ENV: all
-    # VERSION: ytsync-cache-builder -V
-    # NEEDS_APT_UPDATE: no
-
-    if (( $ADF_IS_ARM64 )); then
-        ghdl "ClementNerma/ytsync-cache-builder" "$INSTALLER_TMPDIR/ytsync-cache-builder"
-        cargo build --release --manifest-path="$INSTALLER_TMPDIR/ytsync-cache-builder/Cargo.toml"
-        mv "$INSTALLER_TMPDIR/ytsync-cache-builder/target/release/ytsync-cache-builder" "$ADF_BIN_DIR/ytsync-cache-builder"
-        command rm -rf "$INSTALLER_TMPDIR/ytsync-cache-builder"
-        return
-    fi
-
-    dlghbin "ClementNerma/ytsync-cache-builder" "ytsync-cache-builder-linux-x86_64.zip" "-" "ytsync-cache-builder" "ytsync-cache-builder"
-}
-
 # =============== MAIN COMPUTER =============== #
 
 function kopia() {
@@ -371,6 +353,24 @@ function rclone() {
     # NEEDS_APT_UPDATE: no
     
     dlghbin "rclone/rclone" "rclone-.*-windows-amd64.zip" "-" "rclone-*/rclone.exe" "rclone.exe"
+}
+
+function ytsync_cache_builder() {
+    # NAME: YTSync Cache Builder
+    # PRIORITY: 1
+    # ENV: all
+    # VERSION: ytsync-cache-builder -V
+    # NEEDS_APT_UPDATE: no
+
+    if (( $ADF_IS_ARM64 )); then
+        ghdl "ClementNerma/ytsync-cache-builder" "$INSTALLER_TMPDIR/ytsync-cache-builder"
+        cargo build --release --manifest-path="$INSTALLER_TMPDIR/ytsync-cache-builder/Cargo.toml"
+        mv "$INSTALLER_TMPDIR/ytsync-cache-builder/target/release/ytsync-cache-builder" "$ADF_BIN_DIR/ytsync-cache-builder"
+        command rm -rf "$INSTALLER_TMPDIR/ytsync-cache-builder"
+        return
+    fi
+
+    dlghbin "ClementNerma/ytsync-cache-builder" "ytsync-cache-builder-linux-x86_64.zip" "-" "ytsync-cache-builder" "ytsync-cache-builder"
 }
 
 # =============== OPTIONAL =============== #
