@@ -88,6 +88,9 @@ function zerupdate() {
 	# Restore user scripts
 	cp -R "$ADF_LAST_BACKUP_DIR/autodotfiles-user/"* "$ADF_USER_DIR"
 
+	# TODO: Ugly fix, find the source of this problem
+	local badly_nested="$ADF_USER_DIR/$(basename "$ADF_USER_DIR")"
+
 	if [[ -d $badly_nested ]]; then
 		echowarn "Badly nested user directory detected, removing it (at path \z[magenta]°$badly_nested\z[]°)"
 		rm "$badly_nested"
