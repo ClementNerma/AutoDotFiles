@@ -32,6 +32,7 @@ function rclone_mirror() {
     rm "$rclone_output_file"
 
     local items=()
+    local items_size=()
     local todelete=()
     local tomove=()
     local total=""
@@ -39,9 +40,10 @@ function rclone_mirror() {
     local noitem=0
 
     while IFS= read -r line; do
-        if [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]([^:]+):[[:space:]]Skipped[[:space:]](copy|delete|move|make[[:space:]]directory|remove[[:space:]]directory)[[:space:]]as[[:space:]]--dry-run[[:space:]]is[[:space:]]set([[:space:]]\\(size[[:space:]][0-9\\.KMGTi]+\\))?$ ]]; then
+        if [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]([^:]+):[[:space:]]Skipped[[:space:]](copy|delete|move|make[[:space:]]directory|remove[[:space:]]directory)[[:space:]]as[[:space:]]--dry-run[[:space:]]is[[:space:]]set([[:space:]]\\(size[[:space:]]([0-9\\.]+)([KMGTi]+)?\\))?$ ]]; then
             if [[ ${match[2]} = "copy" ]]; then
                 items+=("${match[1]}")
+                items_size+=("${match[4]} ${match[5]}B")
             elif [[ ${match[2]} = "delete" ]] || [[ ${match[2]} = "remove directory" ]]; then
                 todelete+=("${match[1]}")
             elif [[ ${match[2]} = "move" ]]; then
@@ -93,14 +95,16 @@ function rclone_mirror() {
     fi
 
     if (( ${#items} )); then
+        local item_c=0
         while IFS= read -r item; do
-            echoinfo "> Going to transfer: \z[magenta]°$item\z[]°"
+            local item_c=$((item_c+1))
+            echoinfo "> Going to transfer: \z[magenta]°$item\z[]° \z[yellow]°(${items_size[${items[(ie)$item]}]})\z[]°"
         done <<< $(printf '%s\n' "${items[@]}" | sort -n)
     fi
 
     if (( ${#tomove} )); then
         while IFS= read -r item; do
-            echoinfo "> Going to move from: \z[magenta]°$item\z[]°"
+            echosuccess "> Going to move from: \z[magenta]°$item\z[]°"
         done <<< $(printf '%s\n' "${tomove[@]}" | sort -n)
     fi
 
