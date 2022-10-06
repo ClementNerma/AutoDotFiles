@@ -188,7 +188,7 @@ function ytsync() {
              YTDL_FILENAMING="$filenaming" \
              YTDL_COOKIE_PROFILE="$cookie_profile" \
              YTDL_REPAIR_DATE="$repair_date" \
-             YTDL_LIMIT_BANDWIDTH="${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[i]}}" \
+             YTDL_LIMIT_BANDWIDTH="${YTSYNC_OVERRIDE_BANDWIDTH_LIMIT:-${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[i]}}}" \
              YTDL_OUTPUT_DIR="${download_paths[i]}" \
              YTDL_FORMAT="$format" \
              ytdl "${download_list[i]}" --write-sub --sub-lang fr,en \
