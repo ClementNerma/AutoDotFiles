@@ -122,7 +122,7 @@ function rclone_mirror() {
             local error_msg="Found \z[yellow]°${#todelete}\z[]° items to delete, but expected \z[yellow]°$deleted\z[]°!"
         fi
 
-        if (( $error_msg )); then
+        if [[ -n $error_msg ]]; then
             if (( ${#unparsed} )); then
                 for line in $unparsed; do
                     echoerr "> Unparsed: >$line<"
