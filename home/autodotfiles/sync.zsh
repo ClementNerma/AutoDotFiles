@@ -54,6 +54,7 @@ function adf_sync_files() {
     local source_files=$(fd --hidden --type 'file' --absolute-path --search-path "$1" | sort)
 
     echoinfo "Found \z[yellow]°$(wc -l <<< "$source_files")\z[]° files in the source directory."
+    echoinfo "Determining which files to synchronize...\n"
 
     local tosync=()
     local sync_size=0
@@ -64,7 +65,7 @@ function adf_sync_files() {
         local rel_path=$(realpath --relative-to="$1" "$file")
         
         if [[ ! -f $(__adf_file_sync_path "$2" "$rel_path") ]]; then
-            echoinfo "> Going to synchronize file: \z[green]°$(LC_TIME=fr_FR.UTF-8 date -r "$file")\z[]° \z[magenta]°$rel_path\z[]° (\z[yellow]°$(filesize "$file")\z[]°)"
+            echoinfo "> Going to synchronize file: \z[green]°$(padendspaces "$(LC_TIME=fr_FR.UTF-8 date -r "$file")" 29)\z[]° \z[yellow]°$(padspaces "$(filesize "$file")" 10)\z[]° \z[magenta]°$rel_path\z[]°"
             tosync+=("$rel_path")
             local sync_size=$((sync_size+$(stat -c %s "$file")))
         fi
@@ -84,6 +85,7 @@ function adf_sync_files() {
     fi
 
     local errors=0
+    local max_spaces=$(echo -n "${#tosync}" | wc -c)
 
     echoinfo "Starting the synchronization..."
 
@@ -91,7 +93,7 @@ function adf_sync_files() {
         local dest_file=$(__adf_file_sync_path "$2" "${tosync[$i]}")
         local dest_file_dir=$(dirname "$dest_file")
 
-        echoinfo "| Transferring encrypted file \z[yellow]°$i\z[]° / \z[yellow]°${#tosync}\z[]°: \z[magenta]°${tosync[$i]}\z[]° (\z[yellow]°$(filesize "$1/${tosync[$i]}")\z[]°) as \z[gray]°$(basename "$dest_file")\z[]°..."
+        echoinfo "| Transferring encrypted file \z[yellow]°$i\z[]° / \z[yellow]°${#tosync}\z[]°: \z[gray]°[$(basename "$dest_file")]\z[]° \z[magenta]°${tosync[$i]}\z[]° (\z[yellow]°$(padspaces "$(filesize "$1/${tosync[$i]}")" 10)\z[]°)"
 
         if [[ $dest_file_dir != "$2" ]]; then
             mkdir -p "$dest_file_dir"
