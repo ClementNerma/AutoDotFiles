@@ -59,13 +59,9 @@ function ytdl() {
 
 	# Store the command in an history
 	if [[ $1 == "https://www.youtube.com/"* || $1 == "https://music.youtube.com/"* ]]; then
-		if (( $YTDL_ALWAYS_THUMB )); then
-			local thumbnail_params="--write-thumbnail"
-		else
-			local thumbnail_params=""
-		fi
+		local thumbnail_params=("--merge-output-format" "mkv")
 	else
-		local thumbnail_params="--embed-thumbnail"
+		local thumbnail_params=()
 	fi
 
 	if [[ ! -z $cookie_file ]]; then
@@ -78,10 +74,11 @@ function ytdl() {
 	if ! yt-dlp \
 			--format "${YTDL_FORMAT:-$ADF_YTDL_DEFAULT_BEST_FORMAT}" \
 			--add-metadata \
-			$thumbnail_params \
+			--embed-thumbnail \
+			"${thumbnail_params[@]}" \
 			--limit-rate ${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH} $cookie_param $cookie_file \
 			--abort-on-unavailable-fragment \
-			--compat-options all \
+			--compat-options abort-on-error \
 			-o "%(title)s-%(id)s.%(ext)s" \
 			"$@"
 	then
