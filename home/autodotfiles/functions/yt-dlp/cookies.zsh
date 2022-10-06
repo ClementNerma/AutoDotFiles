@@ -59,6 +59,11 @@ for (const cookie of cookies) {
 END
 )"
 
+    if [[ -z $2 ]]; then
+        echoerr "Please provide a preset name."
+        return 1
+    fi
+
     case "$1" in
         create)
             if [[ -d $profile_path ]]; then
@@ -87,7 +92,7 @@ END
 
         renew)
             if [[ ! -d $profile_path ]]; then
-                echoerr "Cannot create profile as it does not exist."
+                echoerr "Profile was not found (use 'ytdlcookies list' to see them all)"
                 return 1
             fi
 
