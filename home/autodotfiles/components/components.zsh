@@ -393,16 +393,16 @@ function kopia() {
     dlghbin kopia/kopia "kopia-.*-linux-x64.tar.gz" "kopia-.*-linux-arm64.tar.gz" "kopia-*/kopia" kopia
 }
 
-function miniserve() {
-    # NAME: MiniServe
-    # PRIORITY: 1
-    # ENV: main-pc/all
-    # VERSION: miniserve -V
-    # NEEDS_APT_UPDATE: no
+# function miniserve() {
+#     # NAME: MiniServe
+#     # PRIORITY: 1
+#     # ENV: main-pc/all
+#     # VERSION: miniserve -V
+#     # NEEDS_APT_UPDATE: no
 
-    dlghrelease svenstaro/miniserve "miniserve-v.*-x86_64-unknown-linux-musl" "$ADF_BIN_DIR/miniserve"
-    chmod +x "$ADF_BIN_DIR/miniserve"
-}
+#     dlghrelease svenstaro/miniserve "miniserve-v.*-x86_64-unknown-linux-musl" "$ADF_BIN_DIR/miniserve"
+#     chmod +x "$ADF_BIN_DIR/miniserve"
+# }
 
 function rclone() {
     # NAME: RClone (Windows)
