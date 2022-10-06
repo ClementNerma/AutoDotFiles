@@ -26,15 +26,12 @@ function ytrepairres() {
 
     local prev_cwd=$(pwd)
 
-    cd "$loc"
-    
-    for entry in *; do
-        echoverb "Analyzing: $entry..."
+    IFS=$'\n' local entries=($(find "$loc" -type f))
+    local i=0
 
-        if [[ -d $entry ]]; then
-            YTDL_REPAIR_SUBROUTINE=1 ytrepairres "$1" "$entry"
-            continue
-        fi
+    for entry in $entries; do
+        local i=$((i + 1))
+        echoinfo "Analyzing \z[gray]°$i/${#entries}\z[]°: \z[yellow]°$entry\z[]°..."
 
         local total=$((total+1))
 
@@ -76,10 +73,6 @@ function ytrepairres() {
     done
 
     cd "$prev_cwd"
-
-    if (( $YTDL_REPAIR_SUBROUTINE )); then
-        return
-    fi
 
     if (( $errors )); then
         echoerr "Failed with \z[yellow]°$errors\z[]° error(s)."
