@@ -223,7 +223,7 @@ function __adf_install_component() {
                   ensure_config_file "$HOME/.config/micro/bindings.json" '{ "CtrlN": "AddTab", "CtrlW": "Quit", "CtrlD": "SpawnMultiCursor" }' ;;
         ncdu)
             # TODO: Find a way to not hardcode NCDU's version and link here
-            dl "https://dev.yorhel.nl/download/ncdu-2.0-linux-x86_64.tar.gz" "$INSTALLER_TMPDIR/ncdu.tar.gz" &&
+            dl "https://dev.yorhel.nl/download/ncdu-2.1.2-linux-x86_64.tar.gz" "$INSTALLER_TMPDIR/ncdu.tar.gz" &&
             tar zxf "$INSTALLER_TMPDIR/ncdu.tar.gz" -C "$ADF_BIN_DIR" ;;
 
         *)
