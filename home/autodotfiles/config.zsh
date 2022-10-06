@@ -10,9 +10,6 @@ export ADF_CONF_MAIN_PERSONAL_COMPUTER=0
 # Path to the restoration script
 export ADF_CONF_RESTORATION_SCRIPT="/usr/local/bin/zerrestore"
 
-# Disable automatic switching to directory if current path is home at startup
-export ADF_CONF_DISABLE_DIR_HOME_SWITCHING=0
-
 # Minimum parallel downloads that have to occur in parallel to enable the temporary path feature
 export ADF_CONF_YTDL_TEMP_DL_DIR_THRESOLD=0
 

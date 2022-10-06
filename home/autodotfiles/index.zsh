@@ -196,9 +196,7 @@ function gostartupdir() {
 	fi
 }
 
-if [[ $ADF_CONF_DISABLE_DIR_HOME_SWITCHING != 1 ]]; then
-	gostartupdir
-fi
+gostartupdir
 
 # Run a command and exit if required
 if [[ $1 == "--just-run" && ! -z $2 ]]; then
