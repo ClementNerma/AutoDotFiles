@@ -8,29 +8,29 @@ function ytdlcookies() {
         help)
             echoinfo "1. Go to: \z[magenta]°Chrome's Application -> Storage -> Cookies -> [domain] table\z[]°"
             echoinfo "2. Copy it (Ctrl+C)"
-            echoinfo "3. Run 'ytdlcookies create <your preset name>'"
+            echoinfo "3. Run 'ytdlcookies create <your profile name>'"
             echoinfo "4. Paste the copied table (Ctrl+V) in the editor"
             echoinfo "5. Save and exit (Ctrl+S & Ctrl+X)"
-            echoinfo "6. Use it with 'ytdlcookies use <your preset name> <ytdl arguments>"
+            echoinfo "6. Use it with 'ytdlcookies use <your profile name> <ytdl arguments>"
             echoinfo ""
-            echodata "A. Renew expired cookies with 'ytdlcookies renew <your preset name>' (then steps from 4.)"
-            echodata "B. Delete a preset with 'ytdlcookies rm <your preset name>"
-            echodata "C. List all existing presets with 'ytdlcookies list'"
+            echodata "A. Renew expired cookies with 'ytdlcookies renew <your profile name>' (then steps from 4.)"
+            echodata "B. Delete a profile with 'ytdlcookies rm <your profile name>"
+            echodata "C. List all existing profiles with 'ytdlcookies list'"
             echodata ""
             echodata "Sub-commands: \z[yellow]°create renew rm use use-raw get-path display\z[]°"
             return 99
             ;;
 
         list)
-            command ls -1A "$ADF_YTDL_COOKIES_PRESETS_DIR"
+            command ls -1A "$ADF_YTDL_COOKIES_PROFILE_DIR"
             return
             ;;
     esac
     
-    local preset_name="$2"
-    local preset_path="$ADF_YTDL_COOKIES_PRESETS_DIR/$preset_name"
-    local raw_cookies_path="$preset_path/raw-cookies.txt"
-    local converted_cookies_path="$preset_path/formatted-cookies.txt"
+    local profile_name="$2"
+    local profile_path="$ADF_YTDL_COOKIES_PROFILE_DIR/$profile_name"
+    local raw_cookies_path="$profile_path/raw-cookies.txt"
+    local converted_cookies_path="$profile_path/formatted-cookies.txt"
 
     local nodejs_script="const SHELL_INJECTED_FILENAME=\"$raw_cookies_path\"; $(cat <<END
 /**
@@ -61,33 +61,33 @@ END
 
     case "$1" in
         create)
-            if [[ -d $preset_path ]]; then
-                echoerr "Cannot create preset as it already exists."
+            if [[ -d $profile_path ]]; then
+                echoerr "Cannot create profile as it already exists."
                 return 1
             fi
 
-            mkdir -p "$preset_path"
+            mkdir -p "$profile_path"
             nano "$raw_cookies_path"
 
             if [[ ! -s "$raw_cookies_path" ]]; then
-                echoerr "Preset creation aborted."
-                rmdir "$preset_path"
+                echoerr "Profile creation aborted."
+                rmdir "$profile_path"
                 return 2
             fi
 
             if ! node -e "$nodejs_script" > "$converted_cookies_path"; then
                 echoerr "Cookies conversion failed, aborting creation."
-                command rm -rf "$preset_path"
+                command rm -rf "$profile_path"
                 return 3
             fi
 
-            echosuccess "Successfully created preset: \z[magenta]°$preset_name\z[]°"
+            echosuccess "Successfully created profile: \z[magenta]°$profile_name\z[]°"
             ;;
 
 
         renew)
-            if [[ ! -d $preset_path ]]; then
-                echoerr "Cannot create preset as it does not exist."
+            if [[ ! -d $profile_path ]]; then
+                echoerr "Cannot create profile as it does not exist."
                 return 1
             fi
 
@@ -97,7 +97,7 @@ END
             nano "$raw_cookies_path"
 
             if [[ ! -s "$raw_cookies_path" ]]; then
-                echoerr "Preset renewal aborted, restoring previous cookies file."
+                echoerr "Profile renewal aborted, restoring previous cookies file."
                 mv "$backed_up_cookies" "$raw_cookies_path"
                 return 2
             fi
@@ -108,23 +108,23 @@ END
                 return 3
             fi
 
-            echosuccess "Successfully renewed preset: \z[magenta]°$preset_name\z[]°"
+            echosuccess "Successfully renewed profile: \z[magenta]°$profile_name\z[]°"
             ;;
 
         rm)
-            if [[ ! -d $preset_path ]]; then
-                echoerr "Preset was not found (provide ':list' to see them all)"
+            if [[ ! -d $profile_path ]]; then
+                echoerr "Profile was not found (provide ':list' to see them all)"
                 return 1
             fi
 
-            rm "$preset_path"
-            echosuccess "Successfully removed preset: \z[magenta]°$preset_name\z[]°"
+            rm "$profile_path"
+            echosuccess "Successfully removed profile: \z[magenta]°$profile_name\z[]°"
             return
             ;;
 
         use)
             if [[ ! -f $converted_cookies_path ]]; then
-                echoerr "Preset was not found (provide ':list' to see them all)"
+                echoerr "Profile was not found (provide ':list' to see them all)"
                 return 1
             fi
 
@@ -133,7 +133,7 @@ END
 
         use-raw)
             if [[ ! -f $converted_cookies_path ]]; then
-                echoerr "Preset was not found (provide ':list' to see them all)"
+                echoerr "Profile was not found (provide ':list' to see them all)"
                 return 1
             fi
 
@@ -143,7 +143,7 @@ END
 
         get-path)
             if [[ ! -f $converted_cookies_path ]]; then
-                echoerr "Preset was not found (provide ':list' to see them all)"
+                echoerr "Profile was not found (provide ':list' to see them all)"
                 return 1
             fi
 
@@ -153,7 +153,7 @@ END
 
         display)
             if [[ ! -f $converted_cookies_path ]]; then
-                echoerr "Preset was not found (provide ':list' to see them all)"
+                echoerr "Profile was not found (provide ':list' to see them all)"
                 return 1
             fi
 

@@ -157,17 +157,17 @@ function ytsync() {
             ytsync_wait_lockfile
         fi
 
-        local cookie_preset=${ADF_YS_DOMAINS_PRESET[$global_ie]}
+        local cookie_profile=${ADF_YS_DOMAINS_PROFILE[$global_ie]}
         local cookie_msg=""
 
-        if [[ ! -z $cookie_preset ]]; then
-            local cookie_msg=" (with cookie preset \z[yellow]°$cookie_preset\z[]°)"
+        if [[ ! -z $cookie_profile ]]; then
+            local cookie_msg=" (with cookie profile \z[yellow]°$cookie_profile\z[]°)"
         fi
 
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
         echoinfo "| Video from \z[cyan]°$video_ie\z[]° at \z[green]°${download_list[i]}\z[]°$cookie_msg"
 
-        if ! YTDL_ALWAYS_THUMB=1 YTDL_FILENAMING="$filenaming" YTDL_COOKIE_PRESET="$cookie_preset" \
+        if ! YTDL_ALWAYS_THUMB=1 YTDL_FILENAMING="$filenaming" YTDL_COOKIE_Profile="$cookie_profile" \
              YTDL_LIMIT_BANDWIDTH="${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[i]}}" \
              YTDL_OUTPUT_DIR="${download_paths[i]}" \
              ytdl "${download_list[i]}" --write-sub --sub-lang fr,en \
@@ -445,11 +445,11 @@ function ytsync_wait_lockfile() {
 typeset -A ADF_YS_DOMAINS_IE_URLS
 typeset -A ADF_YS_DOMAINS_CHECKING_MODE
 typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
-typeset -A ADF_YS_DOMAINS_PRESET
+typeset -A ADF_YS_DOMAINS_PROFILE
 typeset -A ADF_YS_DOMAINS_USE_LOCKFILE
 
 # Register a domain to use with 'ytsync'
-# Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <bandwidth limit> [<use lockfile>] [<cookie preset>]
+# Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <bandwidth limit> [<use lockfile>] [<cookie profile>]
 function ytsync_register() {
     if [[ -z $1 ]]; then
         echoerr "Please provide an IE key."
@@ -492,7 +492,7 @@ function ytsync_register() {
     fi
 
     if [[ ! -z $6 ]]; then
-        ADF_YS_DOMAINS_PRESET[$1]="$6"
+        ADF_YS_DOMAINS_PROFILE[$1]="$6"
     fi
 }
 

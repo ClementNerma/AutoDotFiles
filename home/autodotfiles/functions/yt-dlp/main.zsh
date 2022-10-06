@@ -10,7 +10,7 @@ export ADF_YTDL_DEFAULT_FILENAMING="%(title)s-%(id)s.%(ext)s"
 # * YTDL_FILENAMING      => use specific filenaming for output files
 # * YTDL_ITEM_CMD        => run a command for each root item when download is finished
 # * YTDL_LIMIT_BANDWIDTH => limit download bandwidth
-# * YTDL_COOKIE_PRESET   => load a cookie preset using "ytdlcookies"
+# * YTDL_COOKIE_PROFILE  => load a cookie profile using "ytdlcookies"
 # * YTDL_NO_THUMBNAIL    => don't download the thumbnail
 function ytdl() {
 	local tempdir=""
@@ -24,10 +24,10 @@ function ytdl() {
 
 	local cookie_file=""
 
-	if [[ ! -z $YTDL_COOKIE_PRESET ]]; then
-		echoverb "> Using preset \z[yellow]°$YTDL_COOKIE_PRESET\z[]°..."
+	if [[ ! -z $YTDL_COOKIE_PROFILE ]]; then
+		echoverb "> Using profile \z[yellow]°$YTDL_COOKIE_PROFILE\z[]°..."
 
-		if ! cookie_file=$(ytdlcookies get-path "$YTDL_COOKIE_PRESET"); then
+		if ! cookie_file=$(ytdlcookies get-path "$YTDL_COOKIE_PROFILE"); then
 			return 2
 		fi
 	fi

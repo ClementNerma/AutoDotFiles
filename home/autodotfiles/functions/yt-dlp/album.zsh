@@ -6,8 +6,8 @@
 # Thumbnails downloading can be skipped by setting "$YTDL_SKIP_THUMBNAIL"
 # Custom Youtube-DL folder can be set with "$YTDL_DIR_FORMAT"
 function ytdlalbum() {
-    if [[ -z $YTDL_ALBUM_PRESET ]]; then
-        echoerr "Please provide a cookies preset in variable \$YTDL_ALBUM_PRESET. To list them, type: \z[magenta]°ytdlcookies list\z[]°"
+    if [[ -z $YTDL_ALBUM_PROFILE ]]; then
+        echoerr "Please provide a cookies profile in variable \$YTDL_ALBUM_PROFILE. To list them, type: \z[magenta]°ytdlcookies list\z[]°"
         return 1
     fi
 
@@ -42,7 +42,7 @@ function ytdlalbum() {
     fi
 
     YTDL_FORMAT="bestaudio" YTDL_OUTPUT_DIR="$YTDL_ALBUM_OUTPUT_DIR" YTDL_ITEM_CMD=("$thumbnail_cmd" "${YTDL_ALBUM_ITEM_CMD[@]}") YTDL_NO_THUMBNAIL=1 \
-    ytdlcookies use "$YTDL_ALBUM_PRESET" "$@" \
+    ytdlcookies use "$YTDL_ALBUM_PROFILE" "$@" \
         -o "$dir_format/%(playlist_index)s.%(release_year)s.%(id)s. %(track)s.%(ext)s" \
         --exec "zsh $ADF_EXTERNAL_DIR/ytdl-ytmusic-tagger.zsh$thumbnail_args"
 }
@@ -54,8 +54,8 @@ function ytdlplaylist() {
 
 # (Internal) Download a thumbnail (requires tagging)
 function __ytdlalbumthumbnail() {
-    if [[ -z $1 || -z $YTDL_ALBUM_PRESET ]]; then
-        echoerr "Either preset, directory or both were not provided."
+    if [[ -z $1 || -z $YTDL_ALBUM_PROFILE ]]; then
+        echoerr "Either profile, directory or both were not provided."
         return 1
     fi
 
@@ -78,7 +78,7 @@ function __ytdlalbumthumbnail() {
         return 1
     fi
 
-    local thumbnail_url=$(ytdlcookies use-raw "$YTDL_ALBUM_PRESET" --get-thumbnail "https://music.youtube.com/watch?v=$id")
+    local thumbnail_url=$(ytdlcookies use-raw "$YTDL_ALBUM_PROFILE" --get-thumbnail "https://music.youtube.com/watch?v=$id")
     local thumbnail_url="${thumbnail_url%%\?*}"
     local thumbnail_url="${thumbnail_url/hqdefault/maxresdefault}"
 
@@ -105,10 +105,10 @@ function __ytdlalbumthumbnail() {
     rm "$id4cover_file"
 }
 
-export ADF_YTDL_COOKIES_PRESETS_DIR="$ADF_DATA_DIR/ytdl-cookies-presets"
+export ADF_YTDL_COOKIES_PROFILE_DIR="$ADF_DATA_DIR/ytdl-cookie-profiles"
 
-if [[ ! -d $ADF_YTDL_COOKIES_PRESETS_DIR ]]; then
-    mkdir -p "$ADF_YTDL_COOKIES_PRESETS_DIR"
+if [[ ! -d $ADF_YTDL_COOKIES_PROFILE_DIR ]]; then
+    mkdir -p "$ADF_YTDL_COOKIES_PROFILE_DIR"
 fi
 
 alias yr="ytdlcookies renew"
