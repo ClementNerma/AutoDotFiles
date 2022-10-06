@@ -232,7 +232,7 @@ function ytsync_build_cache() {
         fi
 
         # Don't download videos that are already present on the disk
-        if ! (( $empty_dir )) && [[ -z $(find . -name "*-${video_id}.*") ]]; then
+        if ! (( $empty_dir )) && [[ ! -z $(find . -name "*-${video_id}.*") ]]; then
             continue
         fi
 
