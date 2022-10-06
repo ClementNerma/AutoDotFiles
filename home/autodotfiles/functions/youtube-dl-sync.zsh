@@ -219,7 +219,7 @@ function ytsync_build_cache() {
             echoinfo "| Checking video \z[yellow]°$i\z[]° / \z[yellow]°${#check_list_ids}\z[]° \z[gray]°(${check_list_ids[i]})\z[]°..."
 
             if ! yt-dlp "${check_list_urls[i]}" --get-url > /dev/null 2>&1; then
-                echowarn "| > Video \z[magenta]°${check_list_titles[i]}\z[]° is unavailable, skipping it."
+                echoverb "| > Video \z[magenta]°${check_list_titles[i]}\z[]° is unavailable, skipping it."
                 continue
             fi
 
