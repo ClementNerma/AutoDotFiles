@@ -113,7 +113,7 @@ END
 
         rm)
             if [[ ! -d $profile_path ]]; then
-                echoerr "Profile was not found (provide ':list' to see them all)"
+                echoerr "Profile was not found (use 'ytdlcookies list' to see them all)"
                 return 1
             fi
 
@@ -124,7 +124,7 @@ END
 
         use)
             if [[ ! -f $converted_cookies_path ]]; then
-                echoerr "Profile was not found (provide ':list' to see them all)"
+                echoerr "Profile was not found (use 'ytdlcookies list' to see them all)"
                 return 1
             fi
 
@@ -133,7 +133,7 @@ END
 
         use-raw)
             if [[ ! -f $converted_cookies_path ]]; then
-                echoerr "Profile was not found (provide ':list' to see them all)"
+                echoerr "Profile was not found (use 'ytdlcookies list' to see them all)"
                 return 1
             fi
 
@@ -143,7 +143,7 @@ END
 
         get-path)
             if [[ ! -f $converted_cookies_path ]]; then
-                echoerr "Profile was not found (provide ':list' to see them all)"
+                echoerr "Profile was not found (use 'ytdlcookies list' to see them all)"
                 return 1
             fi
 
@@ -153,7 +153,7 @@ END
 
         display)
             if [[ ! -f $converted_cookies_path ]]; then
-                echoerr "Profile was not found (provide ':list' to see them all)"
+                echoerr "Profile was not found (use 'ytdlcookies list' to see them all)"
                 return 1
             fi
 
