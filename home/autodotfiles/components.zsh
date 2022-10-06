@@ -120,6 +120,7 @@ export ADF_INSTALLABLE_COMPONENTS=(
     crony
     exa
     fd
+    gitui
     jumpy
     pomsky
     micro
@@ -193,6 +194,7 @@ function __adf_install_component() {
         crony)    dlghbin ClementNerma/Crony "crony-linux-x86_64-musl.zip" "crony" ;;
         exa)      dlghbin ogham/exa "exa-linux-x86_64-musl-.*.zip" "bin/exa" ;;
         fd)       dlghbin sharkdp/fd "fd-.*-x86_64-unknown-linux-musl.tar.gz" "fd-*/fd" ;;
+        gitui)    dlghbin extrawurst/gitui "gitui-linux-musl.tar.gz" "gitui" ;;
         jumpy)    dlghbin ClementNerma/Jumpy "jumpy-linux-x86_64-musl.zip" "jumpy" ;;
         pomsky)   dlghbin rulex-rs/pomsky "pomsky_linux_v.*" "-" "pomsky" ;;
         ripgrep)  dlghbin BurntSushi/ripgrep "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz" "ripgrep-*/rg" ;;

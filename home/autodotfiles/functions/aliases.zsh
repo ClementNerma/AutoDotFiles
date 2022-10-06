@@ -23,7 +23,7 @@ alias ga="git add"
 alias gb="git checkout -b"
 alias gd="git diff"
 alias gds="git diff --staged"
-alias gs="git status"
+alias gs="gitui"
 alias gr="git reset"
 alias gl="git log"
 alias glo="git log --oneline"
@@ -33,6 +33,9 @@ alias gpf="git push --force-with-lease"
 
 # Custom commit command
 alias gm="gitcommit"
+
+# Software: GitUI
+alias g="gitui"
 
 # Software: 'ytdl'
 alias yd="ytdl dl"
