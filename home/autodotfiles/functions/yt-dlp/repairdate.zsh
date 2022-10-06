@@ -40,6 +40,11 @@ function ytrepairdate() {
 
     IFS=$'\n' local entries=($(echo -E "$_fdout" | sort))
 
+    if [[ ${#entries} -eq 0 ]]; then
+        echowarn "No video found."
+        return
+    fi
+
     if ! (( $ADF_NO_VERBOSE )); then
         echoinfo "Found \z[yellow]°${#entries}\z[]° video files."
     fi
