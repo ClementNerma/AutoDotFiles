@@ -137,11 +137,11 @@ function ytsync() {
         local cookie_msg=""
 
         if [[ ! -z $cookie_preset ]]; then
-            local cookie_msg=" (with cookie preset \z[cyan]°$cookie_preset\z[]°)"
+            local cookie_msg=" (with cookie preset \z[yellow]°$cookie_preset\z[]°)"
         fi
 
-        echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°$cookie_msg: \z[magenta]°${download_names[i]}\z[]°..."
-        echoinfo "| Video from \z[cyan]°${download_ies[i]}\z[]° at \z[green]°${download_list[i]}\z[]°"
+        echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
+        echoinfo "| Video from \z[cyan]°${download_ies[i]}\z[]° at \z[green]°${download_list[i]}\z[]°$cookie_msg"
 
         if ! YTDL_ALWAYS_THUMB=1 YTDL_FILENAMING="$filenaming" YTDL_COOKIE_PRESET="$cookie_preset" YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" \
              ytdl "${download_list[i]}" --write-sub --sub-lang fr,en \
