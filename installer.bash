@@ -26,22 +26,8 @@ function _fail() {
 	exit $1
 }
 
-# Show current step
-function _step() {
-	echo
-	echo -e "\e[92m>>> $1\e[0m"
-	echo
-}
-
-# Indicate the current step is skipped for whatever reason
-function _skip() {
-	echo -e "\e[95m>>> Skipping this step: $@"
-}
-
 # Get the total number of steps
 REALPATH=$(realpath "$0")
-TOTAL_STEPS=$(grep -c "^[\s\t]*_step" "$REALPATH")
-CURRENT_STEP=0
 
 # Get current timestamp
 AUTO_INSTALLER_STARTED_AT=$(date +%s)
