@@ -18,18 +18,18 @@ function rclone_mirror() {
         return 3
     fi
 
-    local rclone_output_file="$TEMPDIR/rclone-output-$(humandate).txt"
-
     local started=$(timer_start)
     
-    if ! __rclone_sync_nocheck "$1" "$2" --dry-run "${@:3}" > "$rclone_output_file" 2>&1; then
-        echoerr "RClone failed: \z[yellow]°$(command cat "$rclone_output_file")\z[]°"
-        rm "$rclone_output_file"
+    (){
+        rclone_output=$(__rclone_sync_nocheck "$1" "$2" --dry-run "${@:3}" 2> $1)
+        rclone_status=$?
+        rclone_err=$(<$1)
+    } =(:)
+
+    if (( $rclone_status )); then
+        echoerr "RClone failed: \z[yellow]°$rclone_err\z[]°"
         return 4
     fi
-
-    local rclone_list=$(cat "$rclone_output_file" | ansi2txt)
-    rm "$rclone_output_file"
 
     local items=()
     local items_size=()
@@ -87,7 +87,7 @@ function rclone_mirror() {
         else
             unparsed+=("$line")
         fi
-    done <<< "$rclone_list"
+    done <<< "$rclone_output"
 
     if [[ $noitem -eq 0 ]]; then
         local error_msg=""
