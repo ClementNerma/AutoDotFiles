@@ -23,17 +23,3 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 # Integration for PNPM
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
-
-# # Integration for FZF
-# source ~/.fzf.zsh
-
-# # Integration for Zoxide
-# export _ZO_DATA_DIR="$ADF_ASSETS_DIR/zoxide"
-# ZOXIDE_LOAD_FILE="$ADF_ASSETS_DIR/zoxide.zsh"
-
-# if [[ ! -f $ZOXIDE_LOAD_FILE ]]; then
-# 	zoxide init zsh > "$ZOXIDE_LOAD_FILE"
-# fi
-
-# # NOTE: Forced to "source" as a simple "eval" isn't enough to declare aliases
-# source "$ZOXIDE_LOAD_FILE"

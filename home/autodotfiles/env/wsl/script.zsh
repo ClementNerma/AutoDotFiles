@@ -158,11 +158,6 @@ function fd() {
   cd "$PWD" && command fd "$@"
 }
 
-# # Load main PC exclusive modules
-# if (( $ADF_CONF_MAIN_PERSONAL_COMPUTER )); then
-#   source "$ADF_ENV_DIR/session-backuper.zsh"
-# fi
-
 # Fix external connection for e.g. Explorer, VSCode, etc.
 function fix_socket_connection() {
   local interop_pid=$$
