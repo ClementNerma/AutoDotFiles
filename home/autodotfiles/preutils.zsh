@@ -1,35 +1,50 @@
 
 # Arguments: "<url>" "<download location>"
 function dl() {
-    if [[ ! -z $2 ]]; then
-        wget -q --show-progress -O "$2" "$1" "${@:3}"
-    else
-        wget -q --show-progress "$@"
-    fi
-}
-
-function sudodl() {
-    if [[ ! -z $2 ]]; then
-        sudo wget -q --show-progress -O "$2" "$1" "${@:3}"
-    else
-        sudo wget -q --show-progress "$@"
-    fi
+	curl -L "$1" -o "$2"
 }
 
 # Download a file from the latest of a GitHub repository
 # Arguments: "<repo author>/<reponame>" "<file grep pattern>" "<download location>"
 function dlghrelease() {
-	local api_response=$(curl -s "https://api.github.com/repos/$1/releases/latest")
-
-	local release_url=$(printf "%s" "$api_response" | grep "browser_download_url.*$2" | cut -d : -f 2,3 | tr -d \")
-
-	if [[ -z $release_url ]]; then
-		echoerr "Failed to find an URL matching in repository \z[yellow]°$1\z[]° (pattern \z[cyan]°$2\z[]°)"
+	if ! api_response=$(curl -s -S "https://api.github.com/repos/$1/releases/latest"); then
+		echoerr "Failed to fetch GitHub API (listing releases)."
 		echoerr "API response: \z[blue]°$(echo -E "${api_response:0:$((COLUMNS - 25))}" | tr '\n' ' ')\z[]°"
-		return 1
+		return 10
 	fi
 
-    dl "$release_url" "$3"
+	if ! release_urls=($(echo -E "$api_response" | jq -r '.assets[].browser_download_url')); then
+		echoerr "Failed to parse JSON response: $release_urls"
+		return 11
+	fi
+
+	if [[ -z $release_urls ]]; then
+		echoerr "Failed to get release URLs from GitHub API."
+		echoerr "API reponse: \z[cyan]°$(echo -E "${api_response:0:$((COLUMNS - 25))}" | tr '\n' ' ')\z[]°"
+		return 12
+	fi
+
+	local found=""
+
+	for url in $release_urls; do
+		if [[ $url =~ $2 ]]; then
+			if [[ ! -z $found ]]; then
+				echoerr "Found multiple URLs matching the provided pattern:"
+				echoerr "* \z[yellow]°$found\z[]°"
+				echoerr "* \z[yellow]°$url\z[]°"
+				return 20
+			fi
+
+			local found="$url"
+		fi
+	done
+
+	if [[ -z $found ]]; then
+		echoerr "Failed to find an URL matching in repository \z[yellow]°$1\z[]° (pattern \z[cyan]°$2\z[]°)"
+		return 12
+	fi
+
+    dl "$found" "$3"
 }
 
 # Download the latest version of the source code from a GitHub repository
@@ -67,7 +82,7 @@ function ghdl() {
 	fi
 
 	echoinfo "> Fetching default branch..."
-	local branch=$(curl -s "https://api.github.com/repos/$repoauthor/$reponame" | jq -r ".default_branch")
+	local branch=$(curl -s -S "https://api.github.com/repos/$repoauthor/$reponame" | jq -r ".default_branch")
 
 	if [[ $branch == "null" ]]; then
 		echoerr "> Failed to determine default branch!"

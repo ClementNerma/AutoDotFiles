@@ -91,7 +91,7 @@ function exa() {
     # VERSION: exa -v
     # NEEDS_APT_UPDATE: no
 
-    dlghbin ogham/exa "exa-linux-x86_64-.*.zip" "exa-linux-armv7-.*.zip" "bin/exa" exa
+    dlghbin ogham/exa "exa-linux-x86_64-musl-.*.zip" "exa-linux-armv7-.*.zip" "bin/exa" exa
 }
 
 function fd() {
