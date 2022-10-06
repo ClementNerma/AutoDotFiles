@@ -82,12 +82,16 @@ function ytsync() {
 
         local entry_type=$(echo -E "$videojson" | jq "._type" -r)
 
-        if [[ $entry_type = "playlist" ]]; then
-            echoerr "Found playlist entry: \z[yellow]°$(echo -E "$videojson" | jq ".title" -r)\z[]°"
-            return 10
-        elif [[ $entry_type != "video" ]]; then
-            echoerr "Found unknown entry type \z[blue]°$entry_type\z[]°: \z[yellow]°$(echo -E "$videojson" | jq ".title" -r)\z[]°"
-            return 11
+        if [[ $entry_type != "null" ]]; then
+            local entry_title=$(echo -E "$videojson" | jq ".title" -r)
+
+            if [[ $entry_type = "playlist" ]]; then
+                echowarn "Found playlist entry: \z[yellow]°$entry_title\z[]°"
+            else
+                echowarn "Found unknown entry type \z[blue]°$entry_type\z[]°: \z[yellow]°$entry_title\z[]°"
+            fi
+
+            return 20
         fi
 
         local videoid=$(echo -E "$videojson" | jq ".id" -r)
