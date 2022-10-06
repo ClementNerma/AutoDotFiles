@@ -91,46 +91,32 @@ function rclone_mirror() {
         fi
     done <<< "$rclone_output"
 
-    if [[ $noitem -eq 0 ]]; then
-        local error_msg=""
+    local error_msgs=()
 
+    if [[ $noitem -eq 0 ]]; then
         if [[ -z $size ]] && [[ -z $total ]]; then
-            local error_msg="Failed to get both the total transfer size and the number of items to transfer."
+            error_msgs+=("Failed to get both the total transfer size and the number of items to transfer.")
 
         elif [[ -z $size ]]; then
-            local error_msg="Failed to get the total transfer size."
+            error_msgs+=("Failed to get the total transfer size.")
         
         elif [[ -z $total ]]; then
-            local error_msg="Failed to get the total number of items to transfer."
+            error_msgs+=("Failed to get the total number of items to transfer.")
         
         elif [[ ${#items} -ne $total ]]; then
-            local error_msg="Found \z[yellow]°${#items}\z[]°, but expected a total of \z[yellow]°$total\z[]° items to transfer!"
+            error_msgs+=("Found \z[yellow]°${#items}\z[]°, but expected a total of \z[yellow]°$total\z[]° items to transfer!")
         
         elif (( ${#tomove} )) && [[ -z $renamed ]]; then
-            local error_msg="Got a list of files to move but did not get their total count."
+            error_msgs+=("Got a list of files to move but did not get their total count.")
         
         elif [[ -n $renamed ]] && [[ ${#tomove} -ne $renamed ]]; then
-            local error_msg="Found \z[yellow]°${#tomove}\z[]° items to move, but expected \z[yellow]°$renamed\z[]°!"
+            error_msgs+=("Found \z[yellow]°${#tomove}\z[]° items to move, but expected \z[yellow]°$renamed\z[]°!")
         
         elif (( ${#todelete} )) && [[ -z $deleted ]]; then
-            local error_msg="Got a list of files to delete but did not get their total count."
+            error_msgs+=("Got a list of files to delete but did not get their total count.")
         
         elif [[ -n $deleted ]] && [[ ${#todelete} -ne $deleted ]]; then
-            local error_msg="Found \z[yellow]°${#todelete}\z[]° items to delete, but expected \z[yellow]°$deleted\z[]°!"
-        fi
-
-        if [[ -n $error_msg ]]; then
-            if (( ${#unparsed} )); then
-                for line in $unparsed; do
-                    echoerr "> Unparsed: >$line<"
-                done
-                echo ""
-            fi
-        
-            echoerr "RClone failed: \z[yellow]°$error_msg\z[]°"
-            echoerr "Original output: >\z[yellow]°$rclone_output\z[]°<"
-
-            return 9
+            error_msgs+=("Found \z[yellow]°${#todelete}\z[]° items to delete, but expected \z[yellow]°$deleted\z[]°!")
         fi
     fi
 
@@ -166,9 +152,18 @@ function rclone_mirror() {
 
     if (( ${#unparsed} )); then
         for line in $unparsed; do
-            echoerr "> Unparsed: >\z[yellow]°$line\z[]°<"
+            echoerr "> Unparsed: >$line<"
         done
         echo ""
+    fi
+
+    if (( ${#error_msgs} )); then
+        for error_msg in $error_msgs; do
+            echowarn "$error_msg"
+        done
+
+        # echoerr "Original output: >\z[yellow]°$rclone_output\z[]°<"
+        # return 9
     fi
 
     echoinfo "Built items list in \z[gray]°$(timer_elapsed "$started")\z[]°."
