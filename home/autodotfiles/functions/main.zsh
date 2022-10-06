@@ -150,10 +150,10 @@ function pomsky() {
 		return 1
 	fi
 
-	if [[ -z $2 ]]; then
-		rg -i "$_pomsky_regex"
-		return
-	fi
+	# if [[ -z $2 ]]; then
+	# 	rg -i "$_pomsky_regex"
+	# 	return
+	# fi
 
 	while read _input_line; do
 		if ! _tr_line=$(sd --flags m "$_pomsky_regex" "$2" <<< "$_input_line"); then
