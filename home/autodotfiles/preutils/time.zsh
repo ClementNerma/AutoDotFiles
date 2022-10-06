@@ -14,6 +14,19 @@ function timer_elapsed() {
 	printf '%s' $elapsed
 }
 
+function timer_elapsed_seconds() {
+	if [[ -z $1 ]]; then
+		echoerr "Please provide a timer value."
+		return 1
+	fi
+
+	local started=$(($1))
+	local now=$(now)
+	local elapsed=$((now - started))
+
+	printf '%s' $((elapsed / 1000000000))
+}
+
 function timer_show() {
 	if [[ -z $1 ]]; then
 		echoerr "Please provide a timer value."
