@@ -216,6 +216,11 @@ function progress_bar() {
 	local current=$(($2))
 	local max=$(($3))
 
+	if ! (( $NO_CLEAR_ON_COMPLETE )) && [[ $current -eq $max ]]; then
+		echof -n "\r" ""
+		return
+	fi
+
 	if (( PB_EVERY )) && (( current > 0 )) && (( current < max )) && (( current % PB_EVERY )); then
 		return
 	fi
@@ -243,11 +248,7 @@ function progress_bar() {
 
 	local suffix="$5"
 
-	if ! (( $NO_CLEAR_ON_COMPLETE )) && [[ $current -eq $max ]]; then
-		echof -n "\r" ""
-	else
-		echof -n "\r$1$ADF_FORMAT_WHITE$filled$ADF_FORMAT_GRAY$remaining$ADF_FORMAT_RESET$suffix" "$1$filled$remaining$suffix"
-	fi
+	echof -n "\r$1$ADF_FORMAT_WHITE$filled$ADF_FORMAT_GRAY$remaining$ADF_FORMAT_RESET$suffix" "$1$filled$remaining$suffix"
 }
 
 # Display a progressbar with full informations
