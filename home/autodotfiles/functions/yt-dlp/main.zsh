@@ -10,6 +10,8 @@ export ADF_YTDL_DEFAULT_BEST_FORMAT="bestvideo*[height>=4320]+bestaudio/best[hei
 export ADF_YTDL_DEFAULT_FILENAMING="%(title)s-%(id)s.%(ext)s"
 
 # Overriding variables:
+# (NOTE: when updating this list, update "_ytdl_build_resume_cmdline" as well)
+#
 # * YTDL_FORMAT          => use a custom format
 # * YTDL_TEMP_DIR        => download in the specified temporary directory before moving it to the final one
 # * YTDL_OUTPUT_DIR      => download to the specified directory (default: the current working directory)
@@ -77,25 +79,28 @@ function ytdl() {
 	fi
 
 	if [[ ! -z $cookie_file ]]; then
-		local cookie_param="--cookies"
+		local cookie_params=("--cookies" "$cookie_file")
 	else
-		local cookie_param=""
+		local cookie_param=()
 	fi
+
+	local resume_cmdline=$(_ytdl_build_resume_cmdline "$tempdir" "$@")
 
 	# Perform the download
 	if ! yt-dlp \
-			--format "${YTDL_FORMAT:-$ADF_YTDL_DEFAULT_BEST_FORMAT}" \
-			--add-metadata \
-			"${thumbnail_params[@]}" \
-			--limit-rate ${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH} $cookie_param $cookie_file \
-			--abort-on-unavailable-fragment \
-			--compat-options abort-on-error \
-			-o "$tempdir/${YTDL_FILENAMING:-$ADF_YTDL_DEFAULT_FILENAMING}" \
-			"$@"
+		--format "${YTDL_FORMAT:-$ADF_YTDL_DEFAULT_BEST_FORMAT}" \
+		--add-metadata \
+		--limit-rate ${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH} \
+		--abort-on-unavailable-fragment \
+		--compat-options abort-on-error \
+		-o "$tempdir/${YTDL_FILENAMING:-$ADF_YTDL_DEFAULT_FILENAMING}" \
+		"${thumbnail_params[@]}" \
+		"${cookie_params[@]}" \
+		"$@";
 	then
 		echoerr "Failed to download videos with Youtube-DL!"
 		echoerr "You can resume the download with:"
-		echoinfo "ytdlresume '$tempdir' '$1' ${@:2}"
+		echoinfo "$resume_cmdline"
 		return 1
 	fi
 
@@ -130,7 +135,7 @@ function ytdl() {
 				if ! "$cmd" "$item"; then
 					echoerr "Custom command failed"
 					echoerr "You can resume the download with:"
-					echoinfo "ytdlresume '$tempdir' '$1' ${*:2}"
+					echoinfo "$ytdl_cmdline"
 					return 1
 				fi
 			done
@@ -164,6 +169,44 @@ function ytdl() {
 
 	echoinfo "Done!"
 	rmdir "$tempdir"
+}
+
+# Usage: _ytdl_build_resume_cmdline <tempdir> <arguments provided to 'ytdl'>
+function _ytdl_build_resume_cmdline() {
+	local ytdl_resume_vars=(
+		"YTDL_FORMAT"
+		# "YTDL_TEMP_DIR"
+		"YTDL_OUTPUT_DIR"
+		"YTDL_FILENAMING"
+		"YTDL_ITEM_CMD"
+		"YTDL_LIMIT_BANDWIDTH"
+		"YTDL_COOKIE_PROFILE"
+		"YTDL_NO_THUMBNAIL"
+	)
+
+	local setvars=()
+
+	for varname in $ytdl_resume_vars; do
+		if [[ ! -z ${(P)varname} ]]; then
+			setvars+=("$varname='${(P)varname}'")
+		fi
+	done
+
+	local args=()
+
+	for arg in "$@"; do
+		if [[ $arg =~ ^\-\-?[a-zA-Z0-9_]+$ ]]; then
+			args+=("$arg")
+		else
+			args+=("'$arg'")
+		fi
+	done
+
+	if ! (( ${#setvars} )); then
+		printf '%s' "ytdlresume ${(j: :)args}"
+	else
+		printf '%s' "${(j: :)setvars} ytdlresume ${(j: :)args}"
+	fi
 }
 
 function ytdlresume() {
