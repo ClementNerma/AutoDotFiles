@@ -35,6 +35,7 @@ function rclone_mirror() {
     local items_size=()
     local todelete=()
     local tomove=()
+    local toupdatemodtime=()
     local unparsed=()
     local total=""
     local size=""
@@ -42,7 +43,7 @@ function rclone_mirror() {
     local noitem=0
 
     while IFS= read -r line; do
-        if [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]([^:]+):[[:space:]]Skipped[[:space:]](copy|delete|move|make[[:space:]]directory|remove[[:space:]]directory)[[:space:]]as[[:space:]]--dry-run[[:space:]]is[[:space:]]set([[:space:]]\\(size[[:space:]]([0-9\\.]+)([KMGTi]+)?\\))?$ ]]; then
+        if [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]([^:]+):[[:space:]]Skipped[[:space:]](copy|delete|move|update[[:space:]]modification[[:space:]]time|make[[:space:]]directory|remove[[:space:]]directory)[[:space:]]as[[:space:]]--dry-run[[:space:]]is[[:space:]]set([[:space:]]\\(size[[:space:]]([0-9\\.]+)([KMGTi]+)?\\))?$ ]]; then
             if [[ ${match[2]} = "copy" ]]; then
                 items+=("${match[1]}")
                 items_size+=("${match[4]} ${match[5]}B")
@@ -50,6 +51,8 @@ function rclone_mirror() {
                 todelete+=("${match[1]}")
             elif [[ ${match[2]} = "move" ]]; then
                 tomove+=("${match[1]}")
+            elif [[ ${match[2]} = "update modification time" ]]; then
+                toupdatemodtime+=("${match[1]}")
             elif [[ ${match[2]} = "make directory" ]]; then
             else
                 echoerr "Unreachable: expected 'copy', 'delete' or 'move' in regex result, got '${match[2]}'"
@@ -150,6 +153,13 @@ function rclone_mirror() {
         echo ""
     fi
 
+    if (( ${#toupdatemodtime} )); then
+        while IFS= read -r item; do
+            echoinfo "> Going to update modtime for: \z[magenta]°$item\z[]°"
+        done <<< $(printf '%s\n' "${toupdatemodtime[@]}" | sort -n)
+        echo ""
+    fi
+
     if (( ${#todelete} )); then
         while IFS= read -r item; do
             echowarn "> Going to delete: \z[magenta]°$item\z[]°"
@@ -165,9 +175,9 @@ function rclone_mirror() {
     fi
 
     echoinfo "Built items list in \z[gray]°$(timer_end "$started")\z[]°."
-    echoinfo "Found \z[yellow]°${#items}\z[]° item(s) to transfer, \z[yellow]°${#tomove}\z[]° to move and \z[yellow]°${#todelete}\z[]° to delete for a total of \z[yellow]°$size\z[]°."
+    echoinfo "Found \z[yellow]°${#items}\z[]° item(s) to transfer, \z[yellow]°${#tomove}\z[]° to move, \z[yellow]°${#toupdatemodtime}\z[]° to update modtime of and \z[yellow]°${#todelete}\z[]° to delete for a total of \z[yellow]°$size\z[]°."
 
-    if [[ ${#items} -eq 0 && ${#todelete} -eq 0 && ${#tomove} -eq 0 ]]; then
+    if [[ ${#items} -eq 0 && ${#toupdatemodtime} -eq 0 && ${#todelete} -eq 0 && ${#tomove} -eq 0 ]]; then
         echosuccess "Nothing to do."
         return
     fi
