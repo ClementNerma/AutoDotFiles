@@ -1,6 +1,5 @@
 export ADF_YS_URL_FILE=".ytdlsync-url"
 export ADF_YS_CACHE_FILE=".ytdlsync-cache"
-export ADF_YS_FILENAMING_FILE=".ytdlsync-filenaming"
 export ADF_YS_FORMAT_FILE=".ytdlsync-quality"
 export ADF_YS_AUTO_BLACKLIST_FILE=".ytdlsync-blacklist"
 export ADF_YS_CUSTOM_BLACKLIST_FILE=".ytdlsync-custom-blacklist"
@@ -12,7 +11,6 @@ if [[ ! -d $ADF_YS_LOCKFILES_DIR ]]; then
 fi
 
 # To set up a playlist to synchronize: ytsync <url>
-# To set up with a specific filenaming: ytsync <url> <filenaming>
 # To set up with a specific profile: ytsync "withprofile[<profile> with_ie <alternative_ie>]:<url>"
 function ytsync() {
     # === Determine the sync. URL and build the list of videos === #
@@ -27,18 +25,6 @@ function ytsync() {
         
         echowarn "Writing provided URL to local directory file."
         echo "$url" > "$ADF_YS_URL_FILE"
-
-        if [[ -n $2 ]]; then
-            local filenaming="$2"
-            shift
-            echowarn "Writing provided filenaming \z[cyan]°$filenaming\z[]° to local filenaming file."
-            echo "$filenaming" > "$ADF_YS_FILENAMING_FILE"
-        fi
-    fi
-
-    if [[ -f $ADF_YS_FILENAMING_FILE ]]; then
-        local filenaming=$(cat "$ADF_YS_FILENAMING_FILE")
-        echoinfo "Detected filenaming: \z[magenta]°$filenaming\z[]°"
     fi
 
     local cache_builder_config=$(ytsync_cache_builder_config)
@@ -154,8 +140,7 @@ function ytsync() {
         echoinfo "| Downloading video \z[yellow]°$di\z[]° / \z[yellow]°$count\z[]°: \z[magenta]°$video_title\z[]°..."
         echoinfo "| Video from \z[cyan]°$video_ie\z[]° at \z[green]°$video_url\z[]°$cookie_msg"
 
-        if ! YTDL_FILENAMING="$filenaming" \
-             YTDL_COOKIE_PROFILE="$cookie_profile" \
+        if ! YTDL_COOKIE_PROFILE="$cookie_profile" \
              YTDL_REPAIR_DATE="$repair_date" \
              YTDL_LIMIT_BANDWIDTH="${YTSYNC_OVERRIDE_BANDWIDTH_LIMIT:-${YTDL_LIMIT_BANDWIDTH:-$bandwidth_limit}}" \
              YTDL_OUTPUT_DIR="$video_dir" \
