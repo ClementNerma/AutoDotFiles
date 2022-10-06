@@ -33,7 +33,7 @@ function zerbackup() {
 # Update to latest version
 function zerupdate() {
 	if [[ ! -z $1 ]]; then
-		echosuccess "Updating from provided path: \z[magenta]°$1\z[]°"
+		echoverb "Updating from provided path: \z[magenta]°$1\z[]°"
 		local update_path="$1"
 	else
 		if [[ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]]; then
@@ -60,7 +60,7 @@ function zerupdate() {
 	ADF_SILENT=1 zerbackup
 	
 	# Remove old files
-	echoinfo "Removing old environment..."
+	echoverb "Removing old environment..."
 
 	while read item
 	do
@@ -73,7 +73,7 @@ function zerupdate() {
 	done < "$ADF_FILES_LIST"
 
 	# Copy updated files
-	echoinfo "Updating environment..."
+	echoverb "Updating environment..."
 	cp -R "$update_path/home/." ~/
 
 	# Save the new files list
@@ -87,17 +87,12 @@ function zerupdate() {
 	zerupdate_restoration_script
 
 	# Load new environment
-	echoinfo "Loading environment..."
+	echoverb "Loading environment..."
 	export ADF_JUST_UPDATED=1
 	source "$ADF_DIR/index.zsh"
 
 	# Done!
 	echosuccess "Environment successfully updated!"
-}
-
-# Update to test local changes
-function zerupdate_testing() {
-	ADF_SILENT=1 zerupdate "$@"
 }
 
 # Download latest version and update

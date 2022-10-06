@@ -11,5 +11,5 @@ fi
 curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y
 source $HOME/.cargo/env # Just for this session
 
-_step "Installing tools for Rust..."
+echoinfo "> Installing tools for Rust..."
 sudo apt install -yqqq llvm libclang-dev

@@ -11,26 +11,30 @@ fi
 export ADF_INSTALLED_DIR=$(realpath "$ADF_THISCOMP_DIR/.installer.auto")
 mkdir -p "$ADF_INSTALLED_DIR"
 
-function zercomponent_install_from_list() {
+function zercomponent_install() {
+    if ! (( $# )); then
+        echosuccess "No component to install."
+        return
+    fi
+
     # Choose a temporary directory
     local AUTO_INSTALLER_STARTED_AT=$(date +%s%N)
     export INSTALLER_TMPDIR="/tmp/autodotfiles_autoinstaller_$AUTO_INSTALLER_STARTED_AT"
     mkdir -p "$INSTALLER_TMPDIR"
 
-    echowarn "Detected \z[red]°${#__ADF_TO_INSTALL[@]}\z[]° $1:"
+    echowarn "There are \z[red]°$#\z[]° components to install:"
 
     local longest_component_name=0
 
-    for component in $__ADF_TO_INSTALL
-    do
+    for component in "$@"; do
         local component_name=$(basename "$component")
+
         if (( ${#component_name} > $longest_component_name )); then
             local longest_component_name=${#component_name}
         fi
     done
 
-    for component in $__ADF_TO_INSTALL
-    do
+    for component in "$@"; do
         local component_name=$(basename "$component")
         local component_dir="($(dirname "$component"))"
         echodata "\z[cyan]°    $(basename "$component")\z[green]°${(l($longest_component_name-${#component_name}+${#component_dir}+5)( ))component_dir}\z[]°\z[]°"
@@ -38,7 +42,7 @@ function zercomponent_install_from_list() {
 
     echowarn ""
     echowarn "These components will now be installed."
-    echowarn "$2type \z[red]°N\z[]°\z[yellow]°/\z[]°\z[red]°n\z[]°."
+    echowarn "To get a raw prompt, type \z[red]°N\z[]°\z[yellow]°/\z[]°\z[red]°n\z[]°."
 
     local install_choice
     read "install_choice?"
@@ -69,7 +73,7 @@ function zercomponent_install_from_list() {
 
     local install_step=0
 
-    for component in $__ADF_TO_INSTALL
+    for component in "$@"
     do
         local install_step=$((install_step + 1))
 
@@ -77,7 +81,7 @@ function zercomponent_install_from_list() {
 
         echosuccess ""
         echosuccess ">"
-        echosuccess "> Installing component \z[blue]°$install_step\z[]° / \z[red]°${#__ADF_TO_INSTALL}\z[]°: $pretty_component_display"
+        echosuccess "> Installing component \z[blue]°$install_step\z[]° / \z[red]°$#\z[]°: $pretty_component_display"
         echosuccess ">"
         echosuccess ""
 
@@ -106,20 +110,8 @@ function zercomponent_install_from_list() {
     command rm -rf "$INSTALLER_TMPDIR"
 
     echoinfo ""
-    echoinfo "=> Successfully $4 \z[red]°${#__ADF_TO_INSTALL[@]}\z[]° component(s)!"
+    echoinfo "=> Successfully installed \z[red]°$#\z[]° component(s)!"
     echoinfo ""
-
-    unset ADF_INSTALL_STEP
-    unset __ADF_TO_INSTALL
-}
-
-function zercomponent_addtolist() {
-    local file_name=$(realpath --relative-to="$ADF_INSTALLER_SCRIPTS_DIR" "$1")
-    local script_name="${file_name/.zsh/}"
-
-    if [[ ! -f $ADF_INSTALLED_DIR/$script_name ]]; then
-        __ADF_TO_INSTALL+=("$script_name")
-    fi
 }
 
 # Arguments:
@@ -155,7 +147,7 @@ function zcmni() { zercomponent_mark_custom "$@" "0" }
 
 # Z Component Update
 function zcu() {
-    __ADF_TO_INSTALL=()
+    local to_install=()
 
     for component in "$@"
     do
@@ -176,65 +168,41 @@ function zcu() {
             fi
         fi
 
-        __ADF_TO_INSTALL+=("$component")
+        to_install+=("$component")
     done
 
-    zercomponent_install_from_list "components to update" "To abort the update process, " 0 "updated" 1
+    zercomponent_install $to_install
 }
 
-function _step() {
-    echowarn ""
-    echowarn ">>> Sub-step: $1"
-    echowarn ""
-}
+function zercomponent_install_required() {
+    local check_list=()
 
-function _checkdir() {
-    if [[ ! -d $1 ]]; then
-        return
+    for script in "$ADF_INSTALLER_SCRIPTS_DIR/"{all,$ENV_NAME_STR}/**/*(N); do
+        if [[ -f $script ]]; then check_list+=("$script"); fi
+    done
+
+    if (( $ADF_CONF_MAIN_PERSONAL_COMPUTER )); then
+        for script in "$ADF_INSTALLER_SCRIPTS_DIR/"main-pc/{all,$ENV_NAME_STR}/*(N); do
+            if [[ -f $script ]]; then check_list+=("$script"); fi
+        done
     fi
 
-    if [[ -f $1/_init.zsh ]]; then
-        zercomponent_addtolist "$1/_init.zsh"
+    local to_install=()
+
+    for script in $check_list; do
+        local file_name=$(realpath --relative-to="$ADF_INSTALLER_SCRIPTS_DIR" "$script")
+        local script_name="${file_name/.zsh/}"
+
+        if [[ ! -f $ADF_INSTALLED_DIR/$script_name ]]; then
+            to_install+=("$script_name")
+        fi
+    done
+
+    if (( ${#to_install} )); then
+        zercomponent_install $to_install
     fi
-
-    for file in "$1/_"*.zsh(N)
-    do
-        if [[ "$(basename "$file")" = "_init.zsh" || $file = *".old.zsh" ]]; then
-            continue
-        fi
-
-        zercomponent_addtolist "$file"
-    done
-
-    for file in "$1/"*.zsh(N)
-    do
-        if [[ "$(basename "$file")" = "_"* || $file = *".old.zsh" ]]; then
-            continue
-        fi
-
-        zercomponent_addtolist "$file"
-    done
 }
-
-__ADF_TO_INSTALL=()
 
 export ADF_INSTALLER_SCRIPTS_DIR="$ADF_INSTALLER_DIR/scripts"
 
-_checkdir "$ADF_INSTALLER_SCRIPTS_DIR/all/pre"
-_checkdir "$ADF_INSTALLER_SCRIPTS_DIR/all"
-_checkdir "$ADF_INSTALLER_SCRIPTS_DIR/$ENV_NAME_STR/pre"
-_checkdir "$ADF_INSTALLER_SCRIPTS_DIR/$ENV_NAME_STR"
-
-if [[ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]]; then
-    _checkdir "$ADF_INSTALLER_SCRIPTS_DIR/main-pc/all/pre"
-    _checkdir "$ADF_INSTALLER_SCRIPTS_DIR/main-pc/all"
-    _checkdir "$ADF_INSTALLER_SCRIPTS_DIR/main-pc/$ENV_NAME_STR/pre"
-    _checkdir "$ADF_INSTALLER_SCRIPTS_DIR/main-pc/$ENV_NAME_STR"
-fi
-
-if [[ ${#__ADF_TO_INSTALL[@]} != 0 ]]; then
-    zercomponent_install_from_list "missing components" "To skip the installation process for now and not load the environment, " 1 "installed" 0
-fi
-
-unset INSTALLER_TMPDIR
-unset -f _checkdir
+zercomponent_install_required
