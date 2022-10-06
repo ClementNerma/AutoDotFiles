@@ -33,7 +33,7 @@ function gitcommit() {
 
 # Software: Trasher
 function trasher() {
-	sudo "$ADF_BIN_DIR/trasher" --create-trash-dir --trash-dir "$TRASHDIR" "$@"
+	command trasher --create-trash-dir --trash-dir "$TRASHDIR" "$@"
 }
 
 function rm() {
