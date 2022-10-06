@@ -69,11 +69,6 @@ function adf_install() {
         return 30
     fi
 
-    if ! sudo apt update; then
-        echoerr "Failed to update repositories."
-        return 87
-    fi
-
     export BASE_INSTALLER_TMPDIR="/tmp/adf-installer-$(humandate)"
 
     local failed=0
@@ -133,32 +128,37 @@ export ADF_INSTALLABLE_COMPONENTS=(
     buildtools
     python
     rust
+
+    utils
+    ntpdate
+    p7zip
+    fzf
+
     bat
     crony
     exa
     fd
-    fzf
     jumpy
+    micro
+    ripgrep
+    scout
+    tokei
+    starship
+    trasher
+    kopia
+    ytdl
+
     micro
     ncdu
     nodejs
-    ntpdate
-    p7zip
+    ytdlp
 )
 
 function __adf_install_component() {
     case "$1" in
-        prerequisites)
-            sudo apt install -yqqq wget sed grep unzip jq apt-transport-https dos2unix libssl-dev pkg-config fuse libfuse-dev colorized-logs
-        ;;
-
-        buildtools)
-            sudo apt install -yqqq build-essential gcc g++ make perl
-        ;;
-
-        python)
-            sudo apt install -yqqq python3-pip
-        ;;
+        prerequisites) sudo apt install -yqqq wget sed grep unzip jq apt-transport-https dos2unix libssl-dev pkg-config fuse libfuse-dev colorized-logs ;;
+        buildtools)    sudo apt install -yqqq build-essential gcc g++ make perl ;;
+        python)        sudo apt install -yqqq python3-pip ;;
 
         rust)
             if (( $COMPONENT_UPDATING )); then
@@ -170,15 +170,8 @@ function __adf_install_component() {
                 return
             fi
 
-            if [ -d ~/.rustup ]; then
-                mvbak ~/.rustup
-                echowarn "\!/ A previous version of \z[green]°Rust\z[]° was detected and moved to \z[magenta]°$LAST_MVBAK_PATH\z[]°..."
-            fi
-
-            if [ -d ~/.cargo ]; then
-                mvbak ~/.cargo
-                echowarn "\!/ A previous version of \z[green]°Cargo\z[]° was detected and moved to \z[magenta]°$LAST_MVBAK_PATH\\z[]°..."
-            fi
+            mvoldbak ~/.rustup
+            mvoldbak ~/.cargo
 
             curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y
             source $HOME/.cargo/env # Just for this session
@@ -187,69 +180,10 @@ function __adf_install_component() {
             sudo apt install -yqqq llvm libclang-dev
         ;;
 
-        bat)
-            dlghbin sharkdp/bat "bat-.*-x86_64-unknown-linux-musl.tar.gz" "bat-*/bat" bat
-        ;;
-
-        crony)
-            dlghbin "ClementNerma/Crony" "crony-linux-x86_64-musl.zip" "crony" "crony"
-        ;;
-
-        exa)
-            dlghbin ogham/exa "exa-linux-x86_64-musl-.*.zip" "bin/exa" exa
-        ;;
-
-        fd)
-            dlghbin sharkdp/fd "fd-.*-x86_64-unknown-linux-musl.tar.gz" "fd-*/fd" fd
-        ;;
-
-        fzf)
-            if [[ -d ~/.fzf ]]; then
-                mvbak ~/.fzf
-            fi
-
-            git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-            chmod +x ~/.fzf/install
-            ~/.fzf/install --all
-        ;;
-
-        jumpy)
-            dlghbin "ClementNerma/Jumpy" "jumpy-linux-x86_64.zip" "jumpy" "jumpy"
-        ;;
-
-        micro)
-            local current=$PWD
-
-            cd "$INSTALLER_TMPDIR"
-            
-            curl https://getmic.ro | bash
-            chmod +x micro
-            mv micro $ADF_BIN_DIR
-
-            cd "$current"
-
-            if ! (( $COMPONENT_UPDATING )) && [[ ! -d $HOME/.config/micro ]]; then
-                mkdir -p $HOME/.config/micro
-                echo '{ "CtrlN": "AddTab", "CtrlW": "Quit", "CtrlD": "SpawnMultiCursor" ;;' | jq > $HOME/.config/micro/bindings.json
-            fi
-        ;;
-
-        ncdu)
-            # TODO: Find a way to not hardcode NCDU's version and link here
-            dl "https://dev.yorhel.nl/download/ncdu-2.0-linux-x86_64.tar.gz" "$INSTALLER_TMPDIR/ncdu.tar.gz"
-            tar zxf "$INSTALLER_TMPDIR/ncdu.tar.gz" -C "$ADF_BIN_DIR"
-        ;;
-
         nodejs)
-            if (( $COMPONENT_UPDATING )); then
-                echowarn "Nothing to update."
-                return
-            fi
+            if (( $COMPONENT_UPDATING )); then echowarn "Nothing to update."; return; fi
 
-            if [[ -d ~/.volta ]]; then
-                mvbak ~/.volta
-                echowarn "\!/ A previous version of \z[green]°Volta\z[]° was found and moved to \z[magenta]°$LAST_MVBAK_PATH\z[]°..."
-            fi
+            mvoldbak ~/.volta
 
             echoinfo ">\n> Installing Volta...\n>"
             curl https://get.volta.sh | bash
@@ -257,79 +191,40 @@ function __adf_install_component() {
             export VOLTA_HOME="$HOME/.volta"    # Just for this session
             export PATH="$VOLTA_HOME/bin:$PATH" # Just for this session
 
-            if (( $COMPONENT_UPDATING )); then
-                echowarn "Not updating Node.js & Yarn."
-                return
-            fi
-
             echoinfo ">\n> Installing Node.js & NPM...\n>"
             volta install node@latest
 
             echoinfo ">\n> Installing Yarn & PNPM...\n>"
             volta install yarn pnpm
 
-            yarn -v # Just to be sure Yarn was installed correctly
-            pnpm -v # Just to be sure PNPM was installed correctly
+            yarn -v > /dev/null # Just to be sure Yarn was installed correctly
+            pnpm -v > /dev/null # Just to be sure PNPM was installed correctly
         ;;
 
-        ntpdate)
-            sudo apt install -yqqq ntpdate
-        ;;
+        utils)    sudo apt install -yqqq pv htop net-tools ;;
+        ntpdate)  sudo apt install -yqqq ntpdate ;;
+        p7zip)    sudo apt install -yqqq p7zip-full ;;
+        fzf)      command rm -rf ~/.fzf && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && bash ~/.fzf/install --all ;;
 
-        p7zip)
-            sudo apt install -yqqq p7zip-full
-        ;;
-
-        ripgrep)
-            dlghbin BurntSushi/ripgrep "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz" "ripgrep-*/rg" "rg"
-        ;;
-
-        scout)
-            dlghrelease jhbabon/scout scout-linux "$ADF_BIN_DIR/scout"
-            chmod +x "$ADF_BIN_DIR/scout"
-        ;;
-
-        sd)
-            dlghrelease chmln/sd unknown-linux-musl "$ADF_BIN_DIR/sd"
-            chmod +x "$ADF_BIN_DIR/sd"
-        ;;
-
-        tokei)
-            dlghbin XAMPPRocky/tokei "tokei-x86_64-unknown-linux-musl.tar.gz" "tokei" tokei
-        ;;
-
-        starship)
-            dlghbin starship/starship "starship-x86_64-unknown-linux-gnu.tar.gz" "starship" starship
-        ;;
-
-        trasher)
-            dlghbin "ClementNerma/Trasher" "trasher-linux-x86_64.zip" "trasher" "trasher"
-        ;;
-
-        utils)
-            sudo apt install -yqqq pv htop net-tools
-        ;;
-
-        ytdlp)
-            dl "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp" "$ADF_BIN_DIR/yt-dlp"
-
-            sudo chmod a+rx "$ADF_BIN_DIR/yt-dlp"
-
-            echoinfo "> Installing FFMpeg and AtomicParsley..."
-            sudo apt install -yqqq ffmpeg atomicparsley
-
-            # PhantomJS was **REMOVED** as it made yt-dlp buggy in many situations (wrong format selection, wrong playlists fetching, etc.)
-        ;;
-
-        # =============== MAIN COMPUTER =============== #
-
-        kopia)
-            dlghbin kopia/kopia "kopia-.*-linux-x64.tar.gz" "kopia-*/kopia" kopia
-        ;;
-
-        ytdl)
-            dlghbin "ClementNerma/ytdl" "ytdl-linux-x86_64-musl.zip" "ytdl" "ytdl"
-        ;;
+        bat)      dlghbin sharkdp/bat "bat-.*-x86_64-unknown-linux-musl.tar.gz" "bat-*/bat" ;;
+        crony)    dlghbin "ClementNerma/Crony" "crony-linux-x86_64-musl.zip" "crony" ;;
+        exa)      dlghbin ogham/exa "exa-linux-x86_64-musl-.*.zip" "bin/exa" ;;
+        fd)       dlghbin sharkdp/fd "fd-.*-x86_64-unknown-linux-musl.tar.gz" "fd-*/fd" ;;
+        jumpy)    dlghbin "ClementNerma/Jumpy" "jumpy-linux-x86_64.zip" "jumpy" ;;
+        ripgrep)  dlghbin BurntSushi/ripgrep "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz" "ripgrep-*/rg" ;;
+        scout)    dlghbin jhbabon/scout "scout-linux" "-" "scout" ;;
+        tokei)    dlghbin XAMPPRocky/tokei "tokei-x86_64-unknown-linux-musl.tar.gz" "tokei" ;;
+        starship) dlghbin starship/starship "starship-x86_64-unknown-linux-gnu.tar.gz" "starship" ;;
+        trasher)  dlghbin "ClementNerma/Trasher" "trasher-linux-x86_64.zip" "trasher" ;;
+        kopia)    dlghbin kopia/kopia "kopia-.*-linux-x64.tar.gz" "kopia-*/kopia" ;;
+        ytdl)     dlghbin "ClementNerma/ytdl" "ytdl-linux-x86_64-musl.zip" "ytdl" ;;
+        ytdlp)    dlghbin "yt-dlp/yt-dlp" "yt-dlp" "-" ;;
+        micro)    dlghbin "zyedidia/micro" "micro-.*-linux64.tar.gz" "micro-*/micro"
+                  ensure_config_file "$HOME/.config/micro/bindings.json" '{ "CtrlN": "AddTab", "CtrlW": "Quit", "CtrlD": "SpawnMultiCursor" }' ;;
+        ncdu)
+            # TODO: Find a way to not hardcode NCDU's version and link here
+            dl "https://dev.yorhel.nl/download/ncdu-2.0-linux-x86_64.tar.gz" "$INSTALLER_TMPDIR/ncdu.tar.gz" &&
+            tar zxf "$INSTALLER_TMPDIR/ncdu.tar.gz" -C "$ADF_BIN_DIR" ;;
 
         *)
             echoerr "Unknown component: $1"

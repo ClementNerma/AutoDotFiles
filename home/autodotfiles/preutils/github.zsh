@@ -66,16 +66,6 @@ function dlghbin() {
 		return 3
 	fi
 
-	if [[ -z $4 ]]; then
-		echoerr "Please provide a binary name."
-		return 4
-	fi
-
-	if [[ ! $2 = *.zip ]] && [[ ! $2 = *.tar.gz ]] && [[ ! $2 = *.tgz ]]; then
-		echoerr "Please provide an explicit file extension in the asset pattern."
-		return 5
-	fi
-
 	local dldir="$TEMPDIR"
 
 	if [[ -n $INSTALLER_TMPDIR ]]; then
@@ -83,35 +73,46 @@ function dlghbin() {
 	fi
 
 	local file="$dldir/dlbin-$4-$(humandate)"
-	local exdir="$dldir/dlbin-$4-$(humandate)-extract"
-
+	
 	echoinfo "> (1/4) Download release from GitHub..."
 
 	dlghrelease "$1" "$2" "$file" || return 10
 
 	echoinfo "> (2/4) Extracting archive..."
 
+	local exdir="$dldir/dlbin-$4-$(humandate)-extract"
+	mkdir "$exdir"
+
 	if [[ $2 = *.zip ]]; then
 		# Cannot test for exit code as 'unzip' will return a non-zero code if the value is valid but with extra bytes
-		unzip "$file" -d "$exdir"
+		unzip "$2" -d "$exdir"
 	elif [[ $2 = *.tar.gz ]] || [[ $2 = *.tgz ]]; then
-		mkdir "$exdir"
-
-		tar zxf "$file" -C "$exdir" || return 12
-	else
-		echoerr "Internal error: unhandled file extension in pattern \z[yellow]°$2\z[]°"
-		return 13
+		tar zxf "$2" -C "$exdir" || return 12
+	elif [[ $3 != "-" ]]; then
+		echoerr "Unknown archive format provided: \z[yellow]°$2\z[]°"
+		return 10
 	fi
 
 	echoinfo "> (3/4) Moving final binary..."
 
-	mv "$exdir/"${~3} "$ADF_BIN_DIR/$4" || return 14
+	if [[ $3 = "-" ]]; then
+		local to_move="$file"
+		local target_name=${4:-$(basename "$2")}
+	elif [[ -z $4 ]]; then
+		echoerr "Please provide a target filename!"
+		return 10
+	else
+		local expanded=("$exdir/"${~3})
+		local to_move=${expanded[1]}
+		local target_name=$4
+	fi
 
-	chmod +x "$ADF_BIN_DIR/$4"
+	mv "$to_move" "$ADF_BIN_DIR/$target_name" || return 14
+	chmod +x "$ADF_BIN_DIR/$target_name"
 
 	echoinfo "> (4/4) Cleaning up..."
 	
-	command rm "$file"
+	[[ -f $file ]] && command rm "$file"
 	command rm -rf "$exdir"
 }
 
