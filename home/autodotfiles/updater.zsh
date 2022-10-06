@@ -80,7 +80,7 @@ function zerupdate() {
 
 # Download latest version and update
 function zerupdate_online() {
-	local tmpdir=$(mktemp -d)
+	local tmpdir="$(mktemp -d)/repo"
 
 	# Download the update from GitHub
 	ghdl "ClementNerma/AutoDotFiles" "$tmpdir" || return 10
