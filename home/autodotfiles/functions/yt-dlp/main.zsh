@@ -64,7 +64,7 @@ function ytdl() {
 		local thumbnail_params=("--embed-thumbnail")
 
 		if [[ $1 == "https://www.youtube.com/"* || $1 == "https://music.youtube.com/"* ]]; then
-			local thumbnail_params+=("--merge-output-format" "mkv")
+			thumbnail_params+=("--merge-output-format" "mkv")
 		fi
 	fi
 
