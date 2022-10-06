@@ -239,3 +239,31 @@ function adf_view_ids_clean() {
     mkdir "$ADF_VIEW_IDENTIFIERS_DIR"
     return
 }
+
+function adf_view_resume() {
+    if [[ -z $1 ]]; then
+        echoerr "Please provide a view name."
+        return 1
+    fi
+
+    if [[ -z $2 ]]; then
+        echoerr "Please provide a file number."
+        return 2
+    fi
+
+    local view_dir="$ADF_VIEWS_DIR/$1"
+
+    if [[ ! -d $view_dir ]]; then
+        echoerr "Provided view name does not exist."
+        return 10
+    fi
+
+    local target_file=$(command ls -1 "$view_dir" | grep "^r$(printf "%05d" "$2")-")
+
+    if [[ -z $target_file ]]; then
+        echoerr "No file was found with this number."
+        return 11
+    fi
+
+    ( cd "$view_dir" && nohup "$(adf_view_software "$1")" "$target_file" > /dev/null 2>&1 & )
+}
