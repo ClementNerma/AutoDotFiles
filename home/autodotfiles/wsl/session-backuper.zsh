@@ -119,6 +119,12 @@ function adf_restore_session() {
         # and 'ls' does not allow listing only directories
         grep -v "\..*" |
 
+        # Exclude nochange directories
+        grep -v "\\.nochange" |
+
+        # Ensure the directory as a checksum in it
+        grep "[0-9]" |
+
         # Sort by name - as the directories' names start with a fixed-length timestamp, this will sort the directories by ascending date
         sort |
 
