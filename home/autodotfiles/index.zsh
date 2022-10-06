@@ -1,3 +1,5 @@
+#!/usr/bin/zsh
+
 #
 # This file is the main loader of AutoDotFiles
 # It is loaded during the execution of ~/.zshrc
