@@ -158,6 +158,8 @@ function zeruninstall() {
 		command rm -rf "$HOME/$item"
 	done < "$ADF_FILES_LIST"
 
+	command rm -rf "$ADF_ASSETS_DIR"
+
 	echosuccess "AutoDotFiles was successfully installed!"
 	echosuccess "To restore it, just type '\z[yellow]°zerrestore\z[]°'."
 	echosuccess ""
