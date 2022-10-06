@@ -109,8 +109,8 @@ fi
 source "$ADF_DIR/backups/full.zsh"
 source "$ADF_DIR/backups/rclone.zsh"
 
-# Load the obfuscator
-source "$ADF_DIR/obfuscator.zsh"
+# # Load the obfuscator
+# source "$ADF_DIR/obfuscator.zsh"
 
 # Run the installer
 export ADF_INSTALLER_ABORTED=0
