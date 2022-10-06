@@ -31,6 +31,9 @@ alias gp="git push"
 # Custom commit command
 alias gm="gitcommit"
 
+# Software: 'ytdl'
+alias ytsync="ytdl sync"
+
 # Set the default editor
 export EDITOR="micro"
 alias nano="$EDITOR"
