@@ -47,7 +47,7 @@ function ytdl() {
 		local download_to="${YTDL_OUTPUT_DIR%/}"
 
 		if [[ $download_to != "." ]] && [[ $download_to != $PWD ]]; then
-			echoinfo "Downloading to provided directory: \z[magenta]°$download_to\z[]°"
+			echoinfo "> Downloading to provided directory: \z[cyan]°$download_to\z[]°"
 		fi
 	fi
 
