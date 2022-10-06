@@ -213,9 +213,11 @@ function nodejs() {
     echoinfo ">\n> Installing Node.js & NPM...\n>"
     volta install node@latest
 
-    echoinfo ">\n> Installing Yarn...\n>"
-    volta install yarn
+    echoinfo ">\n> Installing Yarn & PNPM...\n>"
+    volta install yarn pnpm
+
     yarn -v # Just to be sure Yarn was installed correctly
+    pnpm -v # Just to be sure PNPM was installed correctly
 }
 
 function ntpdate() {
