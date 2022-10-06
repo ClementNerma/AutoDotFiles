@@ -201,7 +201,7 @@ function __adf_install_component() {
             pnpm -v > /dev/null # Just to be sure PNPM was installed correctly
         ;;
 
-        utils)    sudo apt install -yqqq pv htop net-tools ;;
+        utils)    sudo apt install -yqqq htop net-tools ;;
         ntpdate)  sudo apt install -yqqq ntpdate ;;
         p7zip)    sudo apt install -yqqq p7zip-full ;;
         fzf)      command rm -rf ~/.fzf && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && bash ~/.fzf/install --all ;;
