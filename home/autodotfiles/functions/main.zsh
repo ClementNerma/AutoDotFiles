@@ -196,10 +196,6 @@ function rm() {
 	trasher rm --move-ext-filesystems "$@"
 }
 
-function rmperma() {
-	trasher rm --permanently "$@"
-}
-
 function unrm() {
 	trasher unrm --move-ext-filesystems "$@"
 }
