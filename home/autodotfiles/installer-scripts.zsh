@@ -138,7 +138,7 @@ function micro() {
     mv micro $ADF_BIN_DIR
 
     if [[ ! -d $HOME/.config/micro ]]; then
-        mkdir $HOME/.config/micro
+        mkdir -p $HOME/.config/micro
         echo '{ "CtrlN": "AddTab", "CtrlW": "Quit", "CtrlD": "SpawnMultiCursor" }' | jq > $HOME/.config/micro/bindings.json
     fi
 }
