@@ -96,15 +96,7 @@ function echoc() {
 
     local echo_args=()
 
-    local rest_args=("${@:2}")
-
-    if (( ${#rest_args} > 0 )); then
-        printf "$output" "${rest_args[@]}"
-    elif (( $ADF_NO_NEWLINE )); then
-        echo -n "$output"
-    else
-        echo "$output"
-    fi
+    printf "$output\n"
 }
 
 function echoerr() {
