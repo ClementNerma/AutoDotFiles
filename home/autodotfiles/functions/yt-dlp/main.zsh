@@ -40,7 +40,10 @@ function ytdl() {
 
 	if [[ ! -z $YTDL_OUTPUT_DIR ]]; then
 		local download_to="${YTDL_OUTPUT_DIR%/}"
-		echoinfo "Downloading to provided directory: \z[magenta]°$download_to\z[]°"
+
+		if [[ $download_to != "." ]] && [[ $download_to != $(pwd) ]]; then
+			echoinfo "Downloading to provided directory: \z[magenta]°$download_to\z[]°"
+		fi
 	fi
 
 	# Check if download must be performed in a temporary directory
