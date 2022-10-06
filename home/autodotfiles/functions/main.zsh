@@ -366,6 +366,12 @@ function progress_bar_detailed() {
 	progress_bar "$1" $2 $3 $4 "$suffix$6"
 }
 
+# Display a message while a progress bar is still in place
+# Usage: same as 'echoc'
+function progress_bar_print() {
+	ADF_REPLACE_UPDATABLE_LINE=1 echoc "$@"
+}
+
 # Estimate remaining time
 # Usage: <start date (from $(date +%s%N))> <current> <max>
 function compute_eta() {

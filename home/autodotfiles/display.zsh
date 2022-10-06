@@ -39,6 +39,7 @@ function _report_echoc_error() {
 # ADF_NO_NEWLINE=1     => don't display a newline symbol
 # ADF_CLEAN_EOL=1      => clean with space characters up to the end of the line (based on `tput cols` value)
 # ADF_UPDATABLE_LINE=1 => clear the line instantly everytime we're writing on it (requires to print a line to overwrite beforehand)
+# ADF_REPLACE_UPDATABLE_LINE=1 => same as "ADF_UPDATABLE_LINE" but print a newline symbol after
 function echoc() {
     if (( $ADF_FULLY_SILENT )); then
         return
@@ -103,11 +104,11 @@ function echoc() {
         return 1
     fi
 
-    if (( $ADF_UPDATABLE_LINE )); then
+    if (( $ADF_UPDATABLE_LINE )) || (( $ADF_REPLACE_UPDATABLE_LINE )); then
         local output="\r$output"
     fi
 
-    if (( $ADF_CLEAN_EOL )) || (( $ADF_UPDATABLE_LINE )); then
+    if (( $ADF_CLEAN_EOL )) || (( $ADF_UPDATABLE_LINE )) || (( $ADF_REPLACE_UPDATABLE_LINE )); then
         local term_width=$(tput cols)
         local remaining=$((term_width - len))
 

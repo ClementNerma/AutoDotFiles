@@ -77,7 +77,7 @@ function ytsync() {
         # This is the fastest checking method I've found, even faster than building a list of files beforehand
         # and checking if the file is in the array!
         if [[ -z $(find . -name "*-${video_id}.*") ]]; then
-            echoinfo "\r\z[gray]°$(printf "%${max_spaces}s" $i) / $count\z[]° \z[magenta]°[$video_id]\z[]° \z[yellow]°${video_title}\z[]°"
+            progress_bar_print "\z[gray]°$(printf "%${max_spaces}s" $i) / $count\z[]° \z[magenta]°[$video_id]\z[]° \z[yellow]°${video_title}\z[]°"
             download_list+=("$video_url")
             download_names+=("$video_title")
             download_ies+=("$video_ie")
