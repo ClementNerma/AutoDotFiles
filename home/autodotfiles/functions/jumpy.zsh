@@ -14,81 +14,8 @@ function z() {
     fi
 }
 
-# Open a file or directory with the file explorer from a 'fd' search
-function openfd() {
-    local results=$(fd "$@")
-    local count=$(echo "$results" | wc -l)
-
-    if [[ -z $results ]]; then
-        echoerr "No result found for this search."
-        return 1
-    fi
-
-    if [[ $count = 1 ]]; then
-        open "$results"
-        return
-    fi
-
-    local selected=$(echo "$results" | scout)
-
-    if [[ -z $selected ]]; then
-        return 1
-    fi
-
-    open "$selected"
-}
-
-# Open a file or directory with the file explorer from a 'jumpy' search
-function openz() {
-    local result=$(jumpy query "$1" 2>/dev/null)
-
-    if [[ -z $result ]]; then
-        echoerr "No result found by Jumpy."
-      return 1
-    fi
-
-    open "$result"
-}
-
-# Open a file or directory with the file explorer from a 'jumpy' interactive search
-function openzi() {
-    local list=$(jumpy list)
-    local selected=$(scout <<< "$list")
-
-    if [[ -z $selected ]]; then
-        return 1
-    fi
-
-    jumpy inc "$selected"
-    open "$selected"
-}
-
-# Open a file or directory with the file explorer from a 'jumpy' + 'fd' search
-function openfz() {
-    if [[ -z $1 ]]; then
-        echoerr "Please provide a search for Jumpy."
-        return 1
-    fi
-
-    local result=$(jumpy query "$1" 2>/dev/null)
-
-    if [[ -z $result ]]; then
-        echoerr "No result found by Jumpy."
-        return 1
-    fi
-  
-    cd "$result"
-    openfd
-}
-
 # Aliases to exit after open commands
 function opene() { open "$@" && exit }
-function openze() { openz "$@" && exit }
-function openfde() { openfd "$@" && exit }
-function openfze() { openfz "$@" && exit }
-
-function openl() { open "$(latest)" }
-function openle() { opene "$(latest)" }
 
 # Add a list of directories to Jumpy's index
 # All directories one level under the provided list will be indexed as well
