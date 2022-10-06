@@ -13,6 +13,7 @@ function adf_install() {
         return 1
     fi
 
+    local only_install="$1"
     local skip_if_installed=$(($2))
 
     local scripts=$(cat "$ADF_INSTALLER_SCRIPTS")
@@ -151,6 +152,10 @@ function adf_install() {
             continue
         fi
 
+        if [[ $only_install != "*" ]] && [[ $only_install != $func_name ]]; then
+            continue
+        fi
+
         if (( $already_installed )) && [[ $version_cmd != "-" ]]; then
             local prev_version=$( (eval "$version_cmd") | tr '\n' ' ' )
             to_install_previous_version+=("$prev_version")
@@ -206,7 +211,7 @@ function adf_install() {
         local infos_suffix="\z[gray]°- ${to_install_names[i]}\z[]°"
 
         if (( ${to_install_already_installed[i]} )); then
-            infos_suffix+=" \z[yellow]°[update]\z[]°"
+            infos_suffix+=" \z[magenta]°[update]\z[]°"
         fi
 
         echoinfo " * \z[cyan]°(${to_install_env[i]})\z[]°$env_spacing\z[$color]°${to_install_functions[i]}\z[]°$func_spacing$infos_suffix"
@@ -294,8 +299,8 @@ function adf_install() {
         echosuccess ""
 
         if (( ${to_install_already_installed[i]} )); then
-            if [[ $previous_ver != "-" ]]; then
-                echosuccess "Successfully updated from version \z[yellow]°$previous_ver\z[]° to version \z[yellow]°$new_installed_ver\z[]°!"
+            if [[ ${to_install_previous_version[i]} != "-" ]]; then
+                echosuccess "Successfully updated from version \z[yellow]°${to_install_previous_version[i]}\z[]° to version \z[yellow]°$new_installed_ver\z[]°!"
             else
                 echosuccess "Successfully updated to version \z[yellow]°$new_installed_ver\z[]°!"
             fi
