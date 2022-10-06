@@ -16,18 +16,14 @@ fish_style_pwd_dir_length=30
 format="[$symbol$branch(:$remote_branch)]($style) "
 
 [git_status]
-style="bold green"
+style="bold yellow"
 conflicted="[!](red)"
-staged="[+](yellow)"
-deleted=""
-renamed=""
-untracked=""
 
 [cmd_duration]
 format="[($duration)](yellow)"
 
-[fill]
-symbol=" "
+# [fill]
+# symbol=" "
 
 # [time]
 # disabled=false
