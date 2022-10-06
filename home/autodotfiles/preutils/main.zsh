@@ -64,6 +64,26 @@ function mvbak() {
 	export LAST_MVBAK_PATH="$renpath"
 }
 
+# Move an item if it exists
+function mvoldbak() {
+	if [[ ! -d $1 ]]; then return; fi
+
+	echowarn "\!/ A previous version of \z[green]°$1\z[]° was found."
+
+	mvbak "$1" || return 10
+
+	echowarn "==> Moved it to \z[magenta]°$LAST_MVBAK_PATH\z[]°."
+	echowarn ""
+}
+
+# Create a file if it does not exist
+function ensure_config_file() {
+	if [[ ! -f "$1" ]]; then
+		mkdir -p "$(dirname "$1")"
+		echo "$2" > "$1"
+	fi
+}
+
 # Obfuscate a content
 function adf_obf_encode() {
 	if [[ -z $1 ]]; then
