@@ -3,21 +3,21 @@
 # https://borgbackup.readthedocs.io/en/stable/usage/create.html
 # for details.
 location:
-    exclude_patterns:
-        - "*/desktop.ini"
-        - "*/*.tmp"
-        - "*/.rustc_info.json"
-        - "*/.git"
-        - "*/node_modules"
-        - "*/pnpm-store"
-        - "*/common/temp"
-        - "*/.rush/temp"
-        - "*/vendor"
-        - "*/build"
-        - "*/dist"
-        - "re:^/.+/target/debug"
-        - "re:^/.+/target/release"
-        - "re:^/.+/target/wasm32-unknown-unknown"
+  exclude_patterns:
+    - "*/desktop.ini"
+    - "*/*.tmp"
+    - "*/.rustc_info.json"
+    - "*/.git"
+    - "*/node_modules"
+    - "*/pnpm-store"
+    - "*/common/temp"
+    - "*/.rush/temp"
+    - "*/vendor"
+    - "*/build"
+    - "*/dist"
+    - "re:^/.+/target/debug"
+    - "re:^/.+/target/release"
+    - "re:^/.+/target/wasm32-unknown-unknown"
 
 # Retention policy for how many backups to keep in each category. See
 # https://borgbackup.readthedocs.io/en/stable/usage/prune.html for
@@ -25,11 +25,11 @@ location:
 # to work. To skip pruning entirely, run "borgmatic create" or "check"
 # without the "prune" action. See borgmatic documentation for details.
 retention:
-    # Keep all archives within this time interval.
-    keep_within: 1M
+  # Keep all archives within this time interval.
+  keep_within: 1m
 
-    # Number of monthly archives to keep.
-    keep_monthly: 6
+  # Number of monthly archives to keep.
+  keep_monthly: 6
 
-    # Number of yearly archives to keep.
-    keep_yearly: 2
+  # Number of yearly archives to keep.
+  keep_yearly: 2
