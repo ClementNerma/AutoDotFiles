@@ -158,8 +158,6 @@ function ytsync() {
             
             passive_confirm 5 || return
         fi
-
-        progress_bar_detailed "Instant progress: " $di $count 0 $download_started
         printf "\n\n"
     done
 
