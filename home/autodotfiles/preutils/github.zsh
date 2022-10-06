@@ -125,8 +125,6 @@ function dlghbin() {
 	command rm -rf "$exdir"
 }
 
-
-
 # Download the latest version of the source code from a GitHub repository
 # Arguments: "<repo author>/<repo name>" "<download location>"
 function ghdl() {
