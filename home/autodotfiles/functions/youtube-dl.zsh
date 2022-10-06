@@ -30,7 +30,7 @@ function ytdl() {
 	local download_to=$(pwd)
 
 	if [[ -z "$YTDL_LIMIT_BANDWIDTH" ]]; then
-		local YTDL_LIMIT_BANDWIDTH="$ADF_YTDL_DEFAUT_LIMIT_BANDWIDTH"
+		local YTDL_LIMIT_BANDWIDTH="$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH"
 	fi
 
 	if [[ ! -z "$YTDL_LIMIT_BANDWIDTH" && ! $YTDL_LIMIT_BANDWIDTH = *"K" && ! $YTDL_LIMIT_BANDWIDTH = *"M" ]]; then

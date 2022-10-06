@@ -139,7 +139,7 @@ function ytsync() {
     fi
 
     local errors=0
-    local bandwidth_limit="$ADF_YTDL_SYNC_LIMIT_BANDWIDTH"
+    local bandwidth_limit="$ADF_CONF_YTDL_SYNC_LIMIT_BANDWIDTH"
 
     if [[ ! -z $SLOWSYNC ]]; then
         if [[ $SLOWSYNC = "1" ]]; then
@@ -228,7 +228,7 @@ function ytrepairres() {
                 echoinfo "Previous file size: \z[yellow]°$(filesize "$entry")\z[]° for \z[magenta]°$(basename "$entry")\z[]°."
                 echoinfo "URL: \z[gray]°$url\z[]°"
 
-                if ! (( $YTDL_REPAIR_SIMULATE )) && ! YTDL_LIMIT_BANDWIDTH="$ADF_YTDL_SYNC_LIMIT_BANDWIDTH" ytdl "$url"; then
+                if ! (( $YTDL_REPAIR_SIMULATE )) && ! YTDL_LIMIT_BANDWIDTH="$ADF_CONF_YTDL_SYNC_LIMIT_BANDWIDTH" ytdl "$url"; then
                     errors=$((errors+1))
                     echoerr "Failed to download video. Waiting 3 seconds now."
                     sleep 3
