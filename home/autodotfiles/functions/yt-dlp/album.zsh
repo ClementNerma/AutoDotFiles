@@ -107,7 +107,7 @@ function __ytdlalbumthumbnail() {
     rm "$id4cover_file"
 }
 
-export ADF_YTDL_COOKIES_PROFILE_DIR="$ADF_DATA_DIR/ytdl-cookie-profiles"
+export ADF_YTDL_COOKIES_PROFILE_DIR="$ADF_DATA_DIR/ytdl/profiles"
 
 if [[ ! -d $ADF_YTDL_COOKIES_PROFILE_DIR ]]; then
     mkdir -p "$ADF_YTDL_COOKIES_PROFILE_DIR"

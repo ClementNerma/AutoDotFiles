@@ -367,22 +367,22 @@ function rclone() {
     dlghbin "rclone/rclone" "rclone-.*-windows-amd64.zip" "-" "rclone-*/rclone.exe" "rclone.exe"
 }
 
-function ytsync_cache_builder() {
-    # NAME: YTSync Cache Builder
+function ytdl() {
+    # NAME: YTDL
     # PRIORITY: 1
     # ENV: all
-    # VERSION: ytsync-cache-builder -V
+    # VERSION: ytdl -V
     # NEEDS_APT_UPDATE: no
 
     if (( $ADF_IS_ARM64 )); then
-        ghdl "ClementNerma/ytsync-cache-builder" "$INSTALLER_TMPDIR/ytsync-cache-builder"
-        cargo build --release --manifest-path="$INSTALLER_TMPDIR/ytsync-cache-builder/Cargo.toml"
-        mv "$INSTALLER_TMPDIR/ytsync-cache-builder/target/release/ytsync-cache-builder" "$ADF_BIN_DIR/ytsync-cache-builder"
-        command rm -rf "$INSTALLER_TMPDIR/ytsync-cache-builder"
+        ghdl "ClementNerma/ytdl" "$INSTALLER_TMPDIR/ytdl"
+        cargo build --release --manifest-path="$INSTALLER_TMPDIR/ytdl/Cargo.toml"
+        mv "$INSTALLER_TMPDIR/ytdl/target/release/ytdl" "$ADF_BIN_DIR/ytdl"
+        command rm -rf "$INSTALLER_TMPDIR/ytdl"
         return
     fi
 
-    dlghbin "ClementNerma/ytsync-cache-builder" "ytsync-cache-builder-linux-x86_64.zip" "-" "ytsync-cache-builder" "ytsync-cache-builder"
+    dlghbin "ClementNerma/ytdl" "ytdl-debug-linux-x86_64-musl.zip" "-" "ytdl" "ytdl"
 }
 
 # =============== OPTIONAL =============== #
