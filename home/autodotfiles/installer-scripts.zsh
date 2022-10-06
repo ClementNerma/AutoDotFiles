@@ -209,7 +209,7 @@ function p7zip() {
     # PRIORITY: 1
     # ENV: all
     # VERSION: 7z | grep "Version"
-    # NEEDS_APT_UPDATE: no
+    # NEEDS_APT_UPDATE: yes
 
     sudo apt install -yqqq p7zip-full
 }
