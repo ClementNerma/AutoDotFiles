@@ -216,7 +216,7 @@ function adf_restore_session() {
     echoverb "Opening ${#files_to_open} files..."
    
     for i in {1..${#files_to_open}}; do
-    	(nohup "${softwares[i]}" "${files_to_open[i]}" > /dev/null 2>&1 &)
+    	runback "${softwares[i]}" "${files_to_open[i]}"
 		opened=$((opened+1))
     done
 

@@ -1,4 +1,9 @@
 
+# Run a command in background
+function runback() {
+	(nohup "$@" > "${NOHUP_FILE:-/dev/null}" 2>&1 &)
+}
+
 # Arguments: "<url>" "<download location>"
 function dl() {
 	if [[ -z $1 ]]; then
