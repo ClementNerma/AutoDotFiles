@@ -36,16 +36,17 @@ function _report_echoc_error() {
     >&2 echo "${ADF_FORMAT_RED}=========================================================${ADF_FORMAT_RESET}"
 }
 
-# ADF_NO_NEWLINE=1     => don't display a newline symbol
-# ADF_CLEAN_EOL=1      => clean with space characters up to the end of the line (based on `tput cols` value)
-# ADF_UPDATABLE_LINE=1 => clear the line instantly everytime we're writing on it (requires to print a line to overwrite beforehand)
+# ADF_CLEAN_EOL=1              => clean with space characters up to the end of the line (based on `tput cols` value)
+# ADF_UPDATABLE_LINE=1         => clear the line instantly everytime we're writing on it (requires to print a line to overwrite beforehand)
 # ADF_REPLACE_UPDATABLE_LINE=1 => same as "ADF_UPDATABLE_LINE" but print a newline symbol after
 function echoc() {
     if (( $ADF_FULLY_SILENT )); then
         return
     fi
 
-    local text="$1"
+    local text="${@: -1}"
+    shift -p
+
     local output=""
     local colors_history=()
     local i=0
@@ -99,9 +100,15 @@ function echoc() {
         local i=$((i+4+${#color}))
     done
 
+    local echo_args=("$@")
+
     if [[ ${#colors_history[@]} != 0 ]]; then
         _report_echoc_error "Unterminated color groups: $colors_history" "$text" $((${#text}+1)) 1
         return 1
+    fi
+
+    if (( $ADF_UPDATABLE_LINE )); then
+        echo_args+=("-n")
     fi
 
     if (( $ADF_UPDATABLE_LINE )) || (( $ADF_REPLACE_UPDATABLE_LINE )); then
@@ -121,48 +128,26 @@ function echoc() {
         fi
     fi
 
-    if (( $ADF_DISPLAY_TO_STDERR )); then
-        if [[ $# > 1 ]]; then
-            if (( $ADF_DISPLAY_NO_NEWLINE )) || (( $ADF_UPDATABLE_LINE )); then
-                >&2 printf "$output" "${@:2}"
-            else
-                >&2 printf "$output\n" "${@:2}"
-            fi
-        else
-            if (( $ADF_DISPLAY_NO_NEWLINE )) || (( $ADF_UPDATABLE_LINE )); then
-                >&2 echo -n "$output"
-            else
-                >&2 echo "$output"
-            fi
-        fi
-    else
-        if [[ $# > 1 ]]; then
-            if (( $ADF_DISPLAY_NO_NEWLINE )) || (( $ADF_UPDATABLE_LINE )); then
-                printf "$output" "${@:2}"
-            else
-                printf "$output\n" "${@:2}"
-            fi
-        else
-            if (( $ADF_DISPLAY_NO_NEWLINE )) || (( $ADF_UPDATABLE_LINE )); then
-                echo -n "$output"
-            else
-                echo "$output"
-            fi
-        fi
-    fi
+    echo "${echo_args[@]}" "$output"
 }
 
 function echoerr() {
-    ADF_DISPLAY_TO_STDERR=1 echoc "\z[red]°ERROR: $1\z[]°" "${@:2}"
+    local message="\z[red]°ERROR: ${@: -1}\z[]°"
+    shift -p
+    >&2 echoc "$@" "$message"
 }
 
 # Equivalent to 'echoerr', but without prefix ('np' = no prefix)
 function echoerrnp() {
-    ADF_DISPLAY_TO_STDERR=1 echoc "\z[red]°$1\z[]°" "${@:2}"
+    local message="\z[red]°${@: -1}\z[]°"
+    shift -p
+    >&2 echoc "$@" "$message"
 }
 
 function echowarn() {
-	ADF_DISPLAY_TO_STDERR=1 echoc "\z[yellow]°$1\z[]°" "${@:2}"
+    local message="\z[yellow]°${@: -1}\z[]°"
+    shift -p
+	>&2 echoc "$@" "$message"
 }
 
 function echosuccess() {
@@ -170,7 +155,9 @@ function echosuccess() {
         return
     fi
 
-    echoc "\z[green]°$1\z[]°" "${@:2}"
+    local message="\z[green]°$1\z[]°"
+    shift -p
+    echoc "$@" "$message"
 }
 
 function echoinfo() {
@@ -178,7 +165,9 @@ function echoinfo() {
         return
     fi
 
-    echoc "\z[blue]°$1\z[]°" "${@:2}"
+    local message="\z[blue]°${@: -1}\z[]°"
+    shift -p
+    echoc "$@" "$message"
 }
 
 function echodata() {
@@ -186,7 +175,9 @@ function echodata() {
         return
     fi
 
-	echoc "\z[cyan]°$1\z[]°" "${@:2}"
+    local message="\z[cyan]°${@: -1}\z[]°"
+    shift -p
+	echoc "$@" "$message"
 }
 
 function echoverb() {
@@ -194,5 +185,7 @@ function echoverb() {
         return
     fi
 
-	echoc "\z[gray]°[Verbose]\z[]° \z[magenta]°$1\z[]°" "${@:2}"
+    local message="\z[gray]°[Verbose]\z[]° \z[magenta]°${@: -1}\z[]°"
+    shift -p
+	echoc "$@" "$message"
 }

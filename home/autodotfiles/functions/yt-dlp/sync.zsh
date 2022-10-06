@@ -260,7 +260,7 @@ function ytsync_build_cache() {
         echoinfo "Checking availibility of \z[yellow]°${#check_list_ids}\z[]° videos..."
 
         for i in {1..${#check_list_ids}}; do
-            ADF_DISPLAY_NO_NEWLINE=1 echoinfo "| Checking video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#check_list_ids}\z[]° \z[gray]°(${check_list_ids[i]})\z[]°..."
+            echoinfo -n "| Checking video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#check_list_ids}\z[]° \z[gray]°(${check_list_ids[i]})\z[]°..."
 
             if ! yt-dlp "${check_list_urls[i]}" --get-url > /dev/null 2>&1; then
                 echoc " \z[red]°ERROR\z[]°"
