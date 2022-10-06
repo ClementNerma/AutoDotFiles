@@ -373,3 +373,11 @@ function pnpm() {
 	[[ -f yarn.lock ]] && { echoerr "A lockfile from \z[cyan]°Yarn\z[]° is already present!"; return 1 }
 	command pnpm "$@"
 }
+
+# # VSCode opener
+# function code() {
+# 	local path=${1:-.}
+# 	local workspace=$($path/*.code-workspace(N))
+
+# 	command code "${workspace[0]:-$path}"
+# }
