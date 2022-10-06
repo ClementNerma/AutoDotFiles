@@ -120,7 +120,6 @@ alias reload="source ${(%):-%x}"
 # Ensure main directories are defined
 if [[ -z $HOMEDIR ]]; then echoerr "Directory variable \z[green]°\$HOMEDIR\z[]° is not defined!"; fi
 if [[ -z $TEMPDIR ]]; then echoerr "Directory variable \z[green]°\$TEMPDIR\z[]° is not defined!"; fi
-if [[ -z $PLOCALDIR ]]; then echoerr "Directory variable \z[green]°\$PLOCALDIR\z[]° is not defined!"; fi
 if [[ -z $TRASHDIR ]]; then echoerr "Directory variable \z[green]°\$TRASHDIR\z[]° is not defined!"; fi
 if [[ -z $DLDIR ]]; then echoerr "Directory variable \z[green]°\$DLDIR\z[]° is not defined!"; fi
 if [[ -z $SOFTWAREDIR ]]; then echoerr "Directory variable \z[green]°\$SOFTWAREDIR\z[]° is not defined!"; fi
@@ -130,14 +129,13 @@ if [[ -z $LOCBAKDIR ]]; then echoerr "Directory variable \z[green]°\$LOCBAKDIR\
 
 if [[ -n $HOMEDIR && ! -d $HOMEDIR ]]; then echoerr "Home directory at location \z[yellow]°$HOMEDIR\z[]° does not exist!"; fi
 
-if [[ -z $HOMEDIR || -z $PLOCALDIR || ! -d $HOMEDIR || -z $DLDIR || -z $PROJDIR || -z $WORKDIR || -z $TEMPDIR || -z $SOFTWAREDIR || -z $TRASHDIR || -z $LOCBAKDIR ]]; then
+if [[ -z $HOMEDIR || ! -d $HOMEDIR || -z $DLDIR || -z $PROJDIR || -z $WORKDIR || -z $TEMPDIR || -z $SOFTWAREDIR || -z $TRASHDIR || -z $LOCBAKDIR ]]; then
 	read "?Press <Enter> to exit, or <Ctrl+C> to get a without-AutoDotFiles ZSH prompt ('zerupdate' command will be available) "
 	exit
 fi
 
 # Ensure these directories exist
 if [[ ! -d $TEMPDIR ]]; then mkdir -p "$TEMPDIR"; fi
-if [[ ! -d $PLOCALDIR ]]; then mkdir -p "$PLOCALDIR"; fi
 if [[ ! -d $DLDIR ]]; then mkdir -p "$DLDIR"; fi
 if [[ ! -d $TRASHDIR ]]; then mkdir -p "$TRASHDIR"; fi
 if [[ ! -d $PROJDIR ]]; then mkdir -p "$PROJDIR"; fi

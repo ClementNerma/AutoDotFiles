@@ -25,7 +25,6 @@ export TEMPDIR="$HOME/.tempdata"
 export DLDIR="$HOMEDIR/Downloads"
 export SOFTWAREDIR="$HOMEDIR/Logiciels"
 export LOCBAKDIR="$HOMEDIR/Sauvegardes/ADF"
-export PLOCALDIR="$HOMEDIR/AppData/Local/AutoDotFilesLocalDirectory"
 
 # Main data are located in WSL's own filesystem
 export PROJDIR="$HOME/Projets"
