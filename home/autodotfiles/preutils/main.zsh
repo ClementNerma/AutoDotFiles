@@ -38,7 +38,9 @@ function passive_confirm() {
 		read -sk -t 5 __adf_passive_confirm_answer
 		trap SIGINT
 
-		if [[ ! -z $__adf__passive_confirm_answer ]] || (( $__adf__passive_confirm_aborted )) ; then
+		if [[ ! -z $__adf__passive_confirm_answer ]] || (( $__adf__passive_confirm_aborted )) ||
+		   [[ $__adf__passive_confirm_aborted -eq 0 && -z $__adf__passive_confirm_answer ]]
+		then
 			break
 		fi
 
