@@ -44,7 +44,7 @@ function ytrepairres() {
         fi
 
         if (( $width < 1920 )); then
-            if [[ $entry =~ ^[^\/]+\-([a-zA-Z0-9_\-]+)\.([^\.]+)$ ]]; then
+            if [[ $entry =~ ^.+\-([a-zA-Z0-9_\-]+)\.([^\.]+)$ ]]; then
                 local url="$1${match[1]}"
 
                 echoverb "Checking formats for $url..."
