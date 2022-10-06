@@ -184,7 +184,7 @@ function mkcd() {
 
 # Software: Trasher
 function trasher() {
-	sudo trasher --create-trash-dir --trash-dir "$TRASHDIR" "$@"
+	sudo "$ADF_BIN_DIR/trasher" --create-trash-dir --trash-dir "$TRASHDIR" "$@"
 }
 
 function rm() {

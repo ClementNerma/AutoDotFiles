@@ -107,6 +107,90 @@ function ghdl() {
 	echosuccess "Done!"
 }
 
+# Download a .tar.gz from GitHub releases and extract a single file to the binaries directory
+# Usage: dlbin <github repo name> <asset pattern for AMD64> <asset pattern for ARM64> <file to extract> <binary name>
+function dlghbin() {
+	if [[ -z $1 ]]; then
+		echoerr "Please provide a GitHub repository name."
+		return 1
+	fi
+
+	if [[ -z $2 ]]; then
+		echoerr "Please provide an asset pattern."
+		return 2
+	fi
+
+	if [[ -z $3 ]]; then
+		echoerr "Please provide an extraction pattern for AMD64."
+		return 3
+	fi
+
+	if [[ -z $4 ]]; then
+		echoerr "Please provide an extraction pattern for ARM64."
+		return 4
+	fi
+
+	if [[ -z $5 ]]; then
+		echoerr "Please provide a binary name."
+		return 4
+	fi
+
+	if [[ ! $2 = *.zip ]] && [[ ! $2 = *.tar.gz ]] && [[ ! $2 = *.tgz ]]; then
+		echoerr "Please provide an explicit file extension in the asset pattern."
+		return 5
+	fi
+
+	local dldir="$TEMPDIR"
+
+	if [[ ! -z $INSTALLER_TMPDIR ]]; then
+		local dldir="$INSTALLER_TMPDIR"
+	fi
+
+	local file="$dldir/dlbin-$5-$(humandate)"
+	local exdir="$dldir/dlbin-$5-$(humandate)-extract"
+
+	local asset_pattern="$2"
+
+	if [[ $(dpkg --print-architecture) = "arm64" ]]; then
+		local asset_pattern="$3"
+	fi
+
+	echoinfo "> (1/4) Download release from GitHub..."
+
+	if ! dlghrelease "$1" "$2" "$file"; then
+		return 10
+	fi
+
+	echoinfo "> (2/4) Extracting archive..."
+
+	if [[ $2 = *.zip ]]; then
+		# Cannot test for exit code as 'unzip' will return a non-zero code if the value is valid but with extra bytes
+		unzip "$file" -d "$exdir"
+	elif [[ $2 = *.tar.gz ]] || [[ $2 = *.tgz ]]; then
+		mkdir "$exdir"
+
+		if ! tar zxf "$file" -C "$exdir"; then
+			return 12
+		fi
+	else
+		echoerr "Internal error: unhandled file extension in pattern \z[yellow]°$2\z[]°"
+		return 13
+	fi
+
+	echoinfo "> (3/4) Moving final binary..."
+
+	if ! mv "$exdir/"${~4} "$ADF_BIN_DIR/$5"; then
+		return 14
+	fi
+
+	chmod +x "$ADF_BIN_DIR/$5"
+
+	echoinfo "> (4/4) Cleaning up..."
+	
+	command rm "$file"
+	command rm -rf "$exdir"
+}
+
 # Ask for an input with a simple prompt
 function prompt() {
 	local input=""
