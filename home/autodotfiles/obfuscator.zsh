@@ -195,7 +195,7 @@ function adf_obf_transform() {
         fi
 
         if [[ -z $OBF_NO_SHIFT ]]; then
-            if (( i % 3 >= ${#input} % 3 )) || (( i % 4 = ${#input} % 4 )); then
+            if (( i % 3 >= ${#input} % 3 )) || (( i % 4 == ${#input} % 4 )); then
                 local shift=$((floor((exp(i) + ${#input}) % 100)))
                 local index=$((index + (${shift%.} * shift_multiplier)))
             fi
