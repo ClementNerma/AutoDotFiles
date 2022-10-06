@@ -35,10 +35,7 @@ export TRASHDIR="$HOME/.trasher"
 function open() {
   local topath=${1:-$PWD}
 
-  if [[ ! -f $topath && ! -d $topath && ! -L $topath ]]; then
-    echoerr "Target path \z[yellow]°$topath\z[]° was not found!"
-    return 1
-  fi
+  [[ ! -f $topath && ! -d $topath && ! -L $topath ]] && { echoerr "Target path \z[yellow]°$topath\z[]° was not found!"; return 1 }
 
   ( cd "$(dirname "$topath")" && explorer.exe "$(basename "$topath")" )
   return 0

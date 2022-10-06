@@ -1,15 +1,8 @@
 
 # Arguments: "<url>" "<download location>"
 function dl() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide an URL to download from."
-		return 1
-	fi
-
-	if [[ -z $2 ]]; then
-		echoerr "Please provide a download location."
-		return 2
-	fi
+	[[ -z $1 ]] && { echoerr "Please provide an URL to download from."; return 1 }
+	[[ -z $2 ]] && { echoerr "Please provide a download location."; return 2 }
 
 	curl -L "$1" -o "$2"
 }
@@ -53,10 +46,7 @@ function humandate() {
 function mvbak() {
 	local itempath="${1%/}"
 
-	if [[ ! -f $itempath && ! -d $itempath ]]; then
-		echoerr "Provided path was not found: \z[green]°$itempath\z[]°"
-		return 1
-	fi
+	[[ ! -f $itempath && ! -d $itempath ]] && { echoerr "Provided path was not found: \z[green]°$itempath\z[]°"; return 1 }
 
 	local renpath="$itempath-$(humandate)"
 
@@ -86,10 +76,7 @@ function ensure_config_file() {
 
 # Obfuscate a content
 function adf_obf_encode() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a content to encode."
-		return 1
-	fi
+	[[ -z $1 ]] && { echoerr "Please provide a content to encode."; return 1 }
 
 	local content="$1"
 
@@ -102,10 +89,7 @@ function adf_obf_encode() {
 
 # De-obfuscate a content
 function adf_obf_decode() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a content to decode."
-		return 1
-	fi
+	[[ -z $1 ]] && { echoerr "Please provide a content to decode."; return 1 }
 
 	local content="$1"
 

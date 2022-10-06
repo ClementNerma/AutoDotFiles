@@ -7,10 +7,7 @@ function dlghrelease() {
 		return 10
 	fi
 
-	if ! release_urls=($(echo -E "$api_response" | jq -r '.assets[].browser_download_url')); then
-		echoerr "Failed to parse JSON response: $release_urls"
-		return 11
-	fi
+	release_urls=($(echo -E "$api_response" | jq -r '.assets[].browser_download_url')) || { echoerr "Failed to parse JSON response: $release_urls"; return 11 }
 
 	if [[ -z $release_urls ]]; then
 		echoerr "Failed to get release URLs from GitHub API."
@@ -40,10 +37,7 @@ function dlghrelease() {
 		fi
 	done
 
-	if [[ -z $found ]]; then
-		echoerr "Failed to find an URL matching in repository \z[yellow]°$1\z[]° (pattern \z[cyan]°$2\z[]°)"
-		return 12
-	fi
+	[[ -z $found ]] && { echoerr "Failed to find an URL matching in repository \z[yellow]°$1\z[]° (pattern \z[cyan]°$2\z[]°)"; return 12 }
 
     dl "$found" "$3"
 }
@@ -106,7 +100,7 @@ function ghdl() {
 	local repo_url="$1"
 
 	if [[ $repo_url = "https://"* ]]; then
-		if [[ $repo_url != "https://github.com/"* ]]; then
+		if ! [[ $repo_url != "https://github.com/"* ]]; then
 			echoerr "Invalid GitHub repository URL: \z[yellow]°$repo_url\z[]°"
 			return 1
 		fi
@@ -129,28 +123,19 @@ function ghdl() {
 
 	echosuccess "Cloning from repository: \z[yellow]°$repoauthor/$reponame\z[]°..."
 
-	if [[ -d $outdir ]]; then
-		echoerr "> Directory \z[magenta]°$outdir\z[]° already exists!"
-		return 1
-	fi
+	[[ -d $outdir ]] && { echoerr "> Directory \z[magenta]°$outdir\z[]° already exists!"; return 1 }
 
 	echoinfo "> Fetching default branch..."
 	local branch=$(curl -s -S "https://api.github.com/repos/$repoauthor/$reponame" | jq -r ".default_branch")
 
-	if [[ $branch = "null" ]]; then
-		echoerr "> Failed to determine default branch!"
-		return 1
-	fi
+	[[ $branch != "null" ]] || { echoerr "> Failed to determine default branch!"; return 1 }
 
 	local filename="$reponame-$(humandate).zip"
 	echoinfo "> Fetching archive for branch \z[yellow]°$branch\z[]° to \z[magenta]°$filename\z[]°..."
 	
 	local zipurl="https://codeload.github.com/$repoauthor/$reponame/zip/$branch"
 
-	if ! dl "$zipurl" "$filename"; then
-		echoerr "> Failed to fetch archive from URL: \z[yellow]°$zipurl\z[]°!"
-		return 1
-	fi
+	dl "$zipurl" "$filename" || { echoerr "> Failed to fetch archive from URL: \z[yellow]°$zipurl\z[]°!"; return 1 }
 
 	echoinfo "> Extracting archive to directory \z[yellow]°$outdir\z[]°..."
 	unzip -q "$filename"

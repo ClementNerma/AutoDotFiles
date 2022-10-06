@@ -12,10 +12,7 @@
 # You may also set "ADF_DEOBFUSCATE_PASSPHRASE"
 # As well as "ADF_MIRROR_BACKUP" to duplicate it to another location
 function adf_local_backup() {
-    if [[ -z $ADF_LOCBAK_PASSPHRASE ]]; then
-        echoerr "Please provide a \z[yellow]°\$ADF_LOCBAK_PASSPHRASE\z[]° variable."
-        return 1
-    fi
+    [[ -z $ADF_LOCBAK_PASSPHRASE ]] && { echoerr "Please provide a \z[yellow]°\$ADF_LOCBAK_PASSPHRASE\z[]° variable."; return 1 }
 
     if [[ -n $ADF_MIRROR_BACKUP && ! -d $ADF_MIRROR_BACKUP ]]; then
         echoerr "The provided mirror backup directory does not exist!"
@@ -27,20 +24,14 @@ function adf_local_backup() {
         passphrase=$(adf_obf_decode "$passphrase") || return 2
     fi
 
-    if [[ -z $passphrase ]]; then
-        echoerr "The encryption passphrase cannot be empty!"
-        return 1
-    fi
+    [[ -z $passphrase ]] && { echoerr "The encryption passphrase cannot be empty!"; return 1 }
 
     if [[ -n $ADF_BACKUP_PREPARATION_SCRIPT ]]; then
         echoinfo " "
         echoinfo "(1/5) Running the preparation script..."
         echoinfo " "
 
-        if ! $ADF_BACKUP_PREPARATION_SCRIPT; then
-            echoerr "Local backup preparation script exited with a non-zero code."
-            return 99
-        fi
+        $ADF_BACKUP_PREPARATION_SCRIPT || { echoerr "Local backup preparation script exited with a non-zero code."; return 99 }
     else
         echowarn " "
         echowarn "(1/5) No preparation script to run, skipping this step."
@@ -82,20 +73,14 @@ function adf_local_backup() {
     echoinfo "(4/5) Moving the final archive..."
     echoinfo " "
 
-    if ! mv "$tmpfile" "$outfile"; then
-        echoerr "Command \z[yellow]°mv\z[]° failed."
-        return 5
-    fi
+    mv "$tmpfile" "$outfile" || { echoerr "Command \z[yellow]°mv\z[]° failed."; return 5 }
 
     if [[ -n $ADF_MIRROR_BACKUP ]]; then
         echoinfo " "
         echoinfo "(5/5) Mirroring the backup..."
         echoinfo " "
 
-        if ! cp "$outfile" "$ADF_MIRROR_BACKUP/$(basename "$outfile")"; then
-            echoerr "Command \z[yellow]°cp\z[]° failed."
-            return 6
-        fi
+        cp "$outfile" "$ADF_MIRROR_BACKUP/$(basename "$outfile")" || { echoerr "Command \z[yellow]°cp\z[]° failed."; return 6 }
     else
         echowarn " "
         echowarn "(5/5) WARNING: No mirroring to perform, skipping this type."
@@ -108,10 +93,7 @@ function adf_local_backup() {
 function adf_build_files_list() {
     local plain_output=0
 
-    if [[ ! -f $1 ]]; then
-        echoerr "List file not found while building files list"
-        return 1
-    fi
+    [[ -f $1 ]] || { echoerr "List file not found while building files list"; return 1 }
 
     local listfile="$1"
     shift

@@ -59,10 +59,7 @@ function edit() {
 
 # Link a WSL port with a Windows port
 function wslport() {
-  if [[ -z $1 ]]; then
-    echoerr "please specify a port (syntax: wslport <wsl port> [<windows port>]"
-    return 1
-  fi
+  [[ -z $1 ]] && { echoerr "please specify a port (syntax: wslport <wsl port> [<windows port>]"; return 1 }
 
   win "Start-Process powershell -ArgumentList '-Command netsh interface portproxy add v4tov4 listenport=${2:-$1} listenaddress=0.0.0.0 connectport=$1 connectaddress=172.18.28.x ; pause' -Verb RunAs"
 }

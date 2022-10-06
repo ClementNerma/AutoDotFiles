@@ -31,10 +31,7 @@ function make7z() {
 
 # Merge multiple ZIPs together
 function merge_zips() {
-	if (( $# < 3 )); then
-		echoerr "Please provide at least two ZIPs as well as an output file."
-		return 1
-	fi
+	(( $# < 3 )) && { echoerr "Please provide at least two ZIPs as well as an output file."; return 1 }
 
 	local outfile="${@: -1}"
 
@@ -133,10 +130,7 @@ function timer_start() {
 }
 
 function timer_elapsed() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a timer value."
-		return 1
-	fi
+	[[ -z $1 ]] && { echoerr "Please provide a timer value."; return 1 }
 
 	local started=$(($1))
 	local now=$(now)
@@ -170,10 +164,7 @@ function opene() {
 
 
 function z() {
-    if [[ -z $1 ]]; then
-        echoerr "Please provide a query."
-        return 1
-    fi
+    [[ -z $1 ]] && { echoerr "Please provide a query."; return 1 }
 
     local result=$(jumpy query "$1" --checked --after "$PWD")
 

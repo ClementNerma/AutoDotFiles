@@ -26,12 +26,9 @@ function zerbackup() {
 function zerupdate() {
 	local update_path=${${1:-$ADF_UPDATE_PATH}:-$PROJDIR/AutoDotFiles}
 
-	if [[ ! -d $update_path ]]; then
-		echoerr "Update directory \z[magenta]°$update_path\z[]° was not found, please provide one."
-		return 1
-	fi
-	
-	if [[ ! -d $update_path ]] || [[ ! -f $update_path/installer.bash ]] || [[ ! -f $update_path/home/.zshrc ]]; then
+	[[ -d $update_path ]] || { echoerr "Update directory \z[magenta]°$update_path\z[]° was not found, please provide one."; return 1 }
+
+	if [[ ! -d $update_path ]] ||  [[ ! -f $update_path/installer.bash ]] || [[ ! -f $update_path/home/.zshrc ]]; then
 		echoerr "Could not find \z[yellow]°AutoDotFiles\z[]° files at path \z[magenta]°$update_path\z[]°"
 		return 1
 	fi

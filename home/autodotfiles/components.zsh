@@ -8,17 +8,11 @@ export ADF_INSTALLED_LIST="$ADF_ASSETS_DIR/installed-components.txt"
 # ADF_SKIP_INSTALLED=1 => skip already-installed components
 # ADF_FORCE_INSTALL=1 => indicate to the component it's installing for the first time instead of updating
 function adf_install() {
-    if [[ -z $1 ]]; then
-        echoerr "Please provide a component to install (* = everything)"
-        return 1
-    fi
+    [[ -z $1 ]] && { echoerr "Please provide a component to install (* = everything)"; return 1 }
 
     local only_install=("$@")
 
-    if [[ $only_install != "*" ]] && ! (( $ADF_INSTALLABLE_COMPONENTS[(Ie)$only_install] )); then
-        echoerr "Component \z[yellow]°$only_install\z[]° was not found."
-        return 20
-    fi
+    [[ $only_install != "*" ]] && ! (( $ADF_INSTALLABLE_COMPONENTS[(Ie)$only_install] )) && { echoerr "Component \z[yellow]°$only_install\z[]° was not found."; return 20 }
 
     local skip_if_installed=$(($ADF_SKIP_INSTALLED))
 
@@ -64,10 +58,7 @@ function adf_install() {
     echowarn ""
 
     # Required trick to avoid getting the whole parent script to stop when getting a SIGINT (Ctrl+C)
-    if ! confirm; then
-        echoerr "Aborted due to user cancel."
-        return 30
-    fi
+    confirm || { echoerr "Aborted due to user cancel."; return 30 }
 
     export BASE_INSTALLER_TMPDIR=$(mktemp -d)
 
@@ -110,10 +101,7 @@ function adf_install() {
         echosuccess ""
     done
 
-    if (( $failed )); then
-        echoerr "Failed to install \z[yellow]°$failed\z[]° component(s)!"
-        return 89
-    fi
+    (( $failed )) && { echoerr "Failed to install \z[yellow]°$failed\z[]° component(s)!"; return 89 }
 
     command rm -rf "$BASE_INSTALLER_TMPDIR"
 }
