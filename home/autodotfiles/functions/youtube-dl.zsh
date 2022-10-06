@@ -226,20 +226,12 @@ function ytdlclean() {
 	rm "$ADF_CONF_YTDL_TEMP_DL_DIR_PATH"
 }
 
-function ytdlpar() {
-	YTDL_FORCE_PARALLEL=1 ytdl "$@"
-}
-
 function ytdlresume() {
 	YTDL_TEMP_DIR="$1" ytdl "${@:2}"
 }
 
 function ytdlhere() {
 	YTDL_TEMP_DIR="." ytdl "$@"
-}
-
-function ytdlhistory() {
-	command cat "$ADF_CONF_YTDL_HISTORY_FILE"
 }
 
 function ytdlaria() {
