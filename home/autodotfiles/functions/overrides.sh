@@ -73,8 +73,8 @@ function code() {
 	local to_open=${workspace[1]:-$dir}
 
 	if command -v code-insiders > /dev/null; then
-		code-insiders "$to_open"
+		code-insiders "$to_open" "${@:2}"
 	else
-		command code "$to_open"
+		command code "$to_open" "${@:2}"
 	fi
 }
