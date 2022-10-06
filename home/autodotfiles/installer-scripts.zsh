@@ -288,7 +288,7 @@ function zoxide() {
     # VERSION: zoxide -V
     # NEEDS_APT_UPDATE: no
 
-    dlghbin ajeetdsouza/zoxide "zoxide-x86_64-unknown-linux-musl.tar.gz" "zoxide-aarch64-unknown-linux-musl.tar.gz" "zoxide-*/zoxide" "zoxide"
+    dlghbin ajeetdsouza/zoxide "zoxide-v.*-x86_64-unknown-linux-musl.tar.gz" "zoxide-v.*-aarch64-unknown-linux-musl.tar.gz" "zoxide-*/zoxide" "zoxide"
 }
 
 function borg_borgmatic() {
