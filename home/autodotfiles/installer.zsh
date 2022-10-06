@@ -143,7 +143,11 @@ function adf_install() {
             local last_priority=$priority
         fi
 
-        if ! (( $for_this_pc )) || ! (( $for_this_env )); then
+        if ! (( $for_this_env )); then
+            continue
+        fi
+
+        if ! (( $for_this_pc )) && ! (( ${only_install[(Ie)$func_name]} )); then
             continue
         fi
 
