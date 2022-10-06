@@ -546,63 +546,23 @@ typeset -A ADF_YS_DOMAINS_USE_LOCKFILE
 # Register a domain to use with 'ytsync'
 # Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <builtindate | repairdate> <bandwidth limit> [<use lockfile>] [<cookie profile>]
 function ytsync_register() {
-    if [[ -z $1 ]]; then
-        echoerr "Please provide an IE key."
-        return 1
-    fi
-    
-    if [[ -z $2 ]]; then
-        echoerr "Please provide a URL prefix"
-        return 2
-    fi
+    typeset -A __args_declaration=(
+        [required_positional]=2
+        [optional_positional]=2
+        [required_args]="bandwidth-limit"
+        [optional_args]="always-check, repair-date, use-lockfile, cookie-profile"
+    )
 
-    if [[ -z $3 ]]; then
-        echoerr "Please provide a checking mode."
-        return 3
-    fi
+    adf_args_parser
 
-    if [[ -z $4 ]]; then
-        echoerr "Please provide a date repair mode."
-        return 4
-    fi
+    local ie_key=${rest[1]}
 
-    if [[ -z $5 ]]; then
-        echoerr "Please provide a bandwidth limit."
-        return 5
-    fi
-
-    ADF_YS_DOMAINS_IE_URLS[$1]="$2"
-
-    if [[ $3 = "nocheck" ]]; then
-        ADF_YS_DOMAINS_CHECKING_MODE[$1]=0
-    elif [[ $3 = "alwayscheck" ]]; then
-        ADF_YS_DOMAINS_CHECKING_MODE[$1]=1
-    else
-        echoerr "Invalid checking mode provided for IE key \z[yellow]°$1\z[]°: \z[gray]°$3\z[]°"
-        return 5
-    fi
-
-    if [[ $4 = "builtindate" ]]; then
-        ADF_YS_DOMAINS_REPAIR_DATE_MODE[$1]=0
-    elif [[ $4 = "repairdate" ]]; then
-        ADF_YS_DOMAINS_REPAIR_DATE_MODE[$1]=1
-    else
-        echoerr "Invalid repair date mode provided for IE key \z[yellow]°$1\z[]°: \z[gray]°$3\z[]°"
-        return 5
-    fi
-
-    ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$1]="$5"
-
-    if [[ $6 = "1" ]]; then
-        ADF_YS_DOMAINS_USE_LOCKFILE[$1]=1
-    elif [[ ! -z $6 ]] && [[ $6 != "1" ]]; then
-        echoerr "Invalid value provided for lockfile status, must be either 0 or 1."
-        return 6
-    fi
-
-    if [[ ! -z $7 ]]; then
-        ADF_YS_DOMAINS_PROFILE[$1]="$7"
-    fi
+    ADF_YS_DOMAINS_IE_URLS[$ie_key]=${rest[2]}
+    ADF_YS_DOMAINS_CHECKING_MODE[$ie_key]=${arguments[always-check]:-0}
+    ADF_YS_DOMAINS_REPAIR_DATE_MODE[$ie_key]=${arguments[repair-date]:-0}
+    ADF_YS_DOMAINS_USE_LOCKFILE[$ie_key]=${arguments[use-lockfile]:-0}
+    ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$ie_key]=${arguments[bandwidth-limit]}
+    ADF_YS_DOMAINS_PROFILE[$ie_key]=${arguments[cookie-profile]}
 }
 
 # Remove a lockfile
