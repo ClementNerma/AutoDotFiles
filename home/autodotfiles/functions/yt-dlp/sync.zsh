@@ -436,7 +436,6 @@ function ytsync_build_cache() {
         local longest_list_path=0
 
         for entry in $check_list_paths; do
-            echo ">${entry} | ${#entry} | ${longest_list_path}<"
             if [[ $entry != "." ]] && (( ${#entry} > $longest_list_path )); then
                 local longest_list_path=${#entry}
             fi
