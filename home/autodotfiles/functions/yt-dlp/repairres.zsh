@@ -4,21 +4,17 @@
 #  which doesn't always get the best quality unfortunately (only the highest bitrate, which is sometimes not the best resolution nor picture quality).
 # By re-downloading these files, they keep the same filename and creation date, but in higher quality if they are still available.
 function ytrepairres() {
-    local loc="."
-
     if ! (( $YTDL_REPAIR_SIMULATE )) && [[ -z $1 ]]; then
         echoerr "Please provide a download URL prefix."
         return 1
     fi
 
-    if [[ ! -z $2 ]]; then
-        if [[ ! -d $2 ]]; then
-            echoerr "Provided path is not a directory."
-            return 2
-        fi
-
-        local loc="$2"
+    if [[ -z $2 ]]; then
+        echoerr "Please provide a bandwidth limit."
+        return 2
     fi
+
+    local bw_limit=$2
 
     local total=0
     local success=0
@@ -26,7 +22,7 @@ function ytrepairres() {
 
     local prev_cwd=$(pwd)
 
-    IFS=$'\n' local entries=($(find "$loc" -type f))
+    IFS=$'\n' local entries=($(find . -type f))
     local i=0
 
     for entry in $entries; do
@@ -56,7 +52,7 @@ function ytrepairres() {
                 echoinfo "Previous file size: \z[yellow]°$(filesize "$entry")\z[]° for \z[magenta]°$(basename "$entry")\z[]°."
                 echoinfo "URL: \z[gray]°$url\z[]°"
 
-                if ! (( $YTDL_REPAIR_SIMULATE )) && ! YTDL_LIMIT_BANDWIDTH="$ADF_CONF_YTDL_REPAIRRES_LIMIT_BANDWIDTH" ytdl "$url"; then
+                if ! (( $YTDL_REPAIR_SIMULATE )) && ! YTDL_LIMIT_BANDWIDTH="$2" ytdl "$url"; then
                     local errors=$((errors+1))
                     echoerr "Failed to download video. Waiting 3 seconds now."
                     sleep 3
