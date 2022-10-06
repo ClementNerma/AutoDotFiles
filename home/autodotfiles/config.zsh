@@ -10,9 +10,6 @@ export ADF_CONF_MAIN_PERSONAL_COMPUTER=0
 # Path to the restoration script
 export ADF_CONF_RESTORATION_SCRIPT="/usr/local/bin/zerrestore"
 
-# Minimum parallel downloads that have to occur in parallel to enable the temporary path feature
-export ADF_CONF_YTDL_TEMP_DL_DIR_THRESOLD=0
-
 # Temporary path (must be on a VERY FAST storage) where Youtube-DL downloaded files are put
 # They are moved after the download has been finished, to avoid problems with parallel downloads
 export ADF_CONF_YTDL_TEMP_DL_DIR_PATH="/tmp/ytdl-videos"
