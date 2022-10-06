@@ -3,6 +3,12 @@
 This repository contains an automatic setup program I've made to setup my whole environment on any computer.  
 It is meant for personal usage only, but as it's a relatively complex setup I make it public so anyone can check how it works.
 
+## One-line install
+
+```bash
+curl -L https://github.com/ClementNerma/AutoDotFiles/raw/main/installer.bash | bash /dev/stdin -- --online
+```
+
 ## Goal
 
 The goal of this project is to install with a simple single command my whole environment - aliases, software configuration, tools, packages - with a one-line update process with a simple rollback method in case something goes wrong.
