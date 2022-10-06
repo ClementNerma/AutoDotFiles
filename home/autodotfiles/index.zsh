@@ -43,8 +43,8 @@ if [[ $ADF_ARCHITECTURE = "amd64" ]]; then
 	export ADF_IS_AMD64=1
 	export ADF_IS_ARM64=0
 elif [[ $ADF_ARCHITECTURE = "arm64" ]]; then
-	export ADF_IS_AMD64=1
-	export ADF_IS_ARM64=0
+	export ADF_IS_AMD64=0
+	export ADF_IS_ARM64=1
 else
 	echo "ERROR: Running on unknown architecture: $ADF_ARCHITECTURE"
 	export ADF_IS_AMD64=0
