@@ -2,59 +2,6 @@
 # This file defines global functions and aliases
 #
 
-# Synchronize a directory
-function rsync_dir() {
-	if [[ $SUDO_RSYNC = "true" ]]; then
-		echowarn "WARNING: Using rsync in SUDO mode."
-	fi
-
-	local started=0
-	local failed=0
-
-	echoinfo "Starting transfer..."
-	while [[ $started -eq 0 || $failed -eq 1 ]]
-	do
-	    started=1
-	    failed=0
-
-		if [[ $SUDO_RSYNC = "true" ]]; then
-			sudo rsync --archive --verbose --partial --progress "$1" "$2" ${@:3}
-		else
-			rsync --archive --verbose --partial --progress "$1" "$2" ${@:3}
-		fi
-	
-		if [[ $? -ne 0 ]]
-		then
-			echoerr "Transfer failed. Retrying in 5 seconds..."
-			sleep 5s
-			failed=1
-		fi
-	done
-
-	echosuccess "Done."
-}
-
-# Copy a project to another directory without its dependencies and temporary files
-function cp_proj_nodeps() {
-	if [[ ! -d "$1" ]]; then
-		echoerr "Source does not exist!"
-		return 1
-	fi
-
-	if [[ -f "$2" || -d "$2" ]]; then
-		echoerr "Target already exists!"
-		return 1
-	fi
-
-	rsync --exclude '*.tmp' --exclude '.rustc_info.json' \
-		  --exclude 'node_modules/' --exclude 'pnpm-store/' --exclude 'common/temp/' --exclude '.rush/temp/' \
-		  --exclude 'build/' --exclude 'dist/' \
-		  --exclude 'target/debug/' --exclude 'target/release/' --exclude 'target/wasm32-unknown-unknown/' --exclude 'target/doc/' \
-		  --exclude 'target/.rustc_info.json' --exclude 'target/.rustdoc_fingerprint.json' \
-		  --archive --partial --progress \
-		  --delete --delete-excluded "${@:3}" "$1/" "$2"
-}
-
 # Backup a project
 function bakproj() {
 	if [[ -z "$1" ]]; then
