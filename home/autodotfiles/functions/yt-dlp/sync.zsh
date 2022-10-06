@@ -263,13 +263,17 @@ function ytsync_build_cache() {
         fi
 
         local url=$(command cat "${playlist_url_files[i]}")
-        local sub_json=$(yt-dlp -J --flat-playlist -i "$url")
+        
+        if ! sub_json=$(yt-dlp -J --flat-playlist -i "$url"); then
+            echoerr "Failed to fetch playlist content!"
+            return 11
+        fi
 
         if ! sub_json=$(echo -E "$sub_json" |
             jq -c '[.entries[] | {ie_key, id, title, url} | .path = $path]' --arg path "$(dirname "${playlist_url_files[i]}")"
         ); then
             echoerr "Failed to parse JSON response!"
-            return 1
+            return 12
         fi
 
         local sub_total=$(echo -E "$sub_json" | jq 'length')
@@ -277,7 +281,7 @@ function ytsync_build_cache() {
 
         if ! json=$(echo -E "[ $json, $sub_json ]" | jq '.[0,1]' | jq -s 'add'); then
             echoerr "Failed to merge JSONs together!"
-            return 2
+            return 13
         fi
     done
 
