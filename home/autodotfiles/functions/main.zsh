@@ -65,7 +65,8 @@ function bakproj() {
 	local target="$2"
 
 	if [[ -z "$target" ]]; then
-		local target="$(dirname "$1")/$(basename "$1")-$(humandate)"
+		local input_path=$(realpath "$1")
+		local target="$(dirname "$input_path")/$(basename "$input_path")-$(humandate)"
 	fi
 
 	if [[ ! -d "$1" ]]; then

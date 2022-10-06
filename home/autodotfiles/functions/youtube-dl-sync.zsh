@@ -48,13 +48,21 @@ function ytsync() {
         local started=$(timer_start)
         local json=$(youtube-dl -J --get-filename -i "$url" "${@:2}" 2>/dev/null | pv -l -W -s "$((count+1))" | tail -n1)
         
+        local fallible_json_path="$TEMPDIR/ytsync-fallible-$(humandate).json"
+        echoverb "Writing JSON data to temporary file \z[magenta]°$fallible\z[]°..."
+        echo -E "$json" > "$fallible_json_path"
+
         echoinfo "Videos list was retrieved in \z[yellow]°$(timer_end $started)\z[]°."
 
         echoinfo "Checking and mapping JSON..."
 
-        local json=$(echo -E "$json" | jq -c '[.entries[] | {id, title, _type, upload_date, webpage_url}]')
+        if ! json=$(echo -E "$json" | jq -c '[.entries[] | {id, title, _type, upload_date, webpage_url}]'); then
+            echoerr "Failed to parse JSON, dumped invalid content in file \z[magenta]°$fallible_json_path\z[]°."
+            return 1
+        fi
 
         echoinfo "JSON is ready."
+        command rm "$fallible_json_path"
     fi
 
     echoinfo "Checking JSON data..."
