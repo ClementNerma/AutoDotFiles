@@ -344,7 +344,7 @@ function ytsync_build_cache() {
         local ie_url="${ADF_YS_DOMAINS_IE_URLS[$video_ie]}"
 
         if [[ -z $ie_url ]]; then
-            echoerr "Found unregistered IE: \z[yellow]°$video_ie\z[]°"
+            echoerr "Found unregistered IE: \z[yellow]°$video_ie\z[]° in video \z[cyan]°$video_url\z[]° at path \z[magenta]°$video_path\z[]°"
             return 20
         fi
         
