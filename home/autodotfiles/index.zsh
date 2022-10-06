@@ -176,9 +176,6 @@ source "$ADF_DIR/software.zsh"
 # Load platform-specific scripts
 source "$ADF_ENV_DIR/script.zsh"
 
-# Ensure the 'psymlink' function is defined
-if ! typeset -f psymlink > /dev/null; then echowarn "WARNING: contractual 'psymlink' command is not defined."; fi
-
 # Load the local script
 source "$ADF_USER_DIR/script.zsh"
 

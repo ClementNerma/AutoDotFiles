@@ -116,43 +116,6 @@ function process_windows() {
        '| Out-String -Stream -Width 1000000000'
 }
 
-# Platform-dependant symbolic link creation
-function psymlink() {
-  if [[ -z $1 ]]; then
-    echoerr "Please provide the target's path."
-    return 1
-  fi
-
-  if [[ -z $2 ]]; then
-    echoerr "Please provide the link's path."
-    return 2
-  fi
-
-  if [[ -f $2 || -d $2 || -L $2 ]]; then
-    echoerr "Link already exists."
-    return 10
-  fi
-
-  if ! touch "$2"; then
-    echoerr "Failed to create a temporary file at the link's location."
-    return 11
-  fi
-
-  local link_path=$(realpath "$2")
-  local wsl_path=$(wslpath -w "$2")
-
-  if ! command rm "$2"; then
-    cehoerr "Failed to delete the temporary file created at the link's location."
-    return 12
-  fi
-
-  if [[ $(realpath "$1") =~ ^\/mnt\/ ]] || [[ $link_path =~ ^\/mnt\/ ]]; then
-    ( cd /mnt/c && wincmd mklink "$wsl_path" "$(wslpath -w "$1")" ">" NUL )
-  else
-    ln -s "$1" "$2"
-  fi
-}
-
 # Fix for 'fd' (otherwise always getting error '[fd error]: Could not retrieve current directory (has it been deleted?).')
 function fd() {
   cd "$PWD" && command fd "$@"
