@@ -475,7 +475,7 @@ function ytsync_wait_lockfile() {
         fi
 
         echo "$(pwd)" > "$lockfile"
-        echowarn "\n>> Writting current path to lockfile"
+        echowarn ">> Writing current path to lockfile\n"
 
         if [[ $(command cat "$lockfile") != "$(pwd)" ]]; then
             echoerr "Internal error: inconsistency in the lockfile."

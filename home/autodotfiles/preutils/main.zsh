@@ -19,7 +19,7 @@ function prompt() {
 
 # Ask for confirmation
 function confirm() {
-	read 'answer?'
+	read -s 'answer?'
 	
 	if [[ ! -z $answer && $answer != "y" && $answer != "Y" ]]; then
 		return 1
