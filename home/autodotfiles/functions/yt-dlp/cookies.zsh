@@ -17,7 +17,7 @@ function ytdlcookies() {
             echodata "B. Delete a preset with 'ytdlcookies rm <your preset name>"
             echodata "C. List all existing presets with 'ytdlcookies list'"
             echodata ""
-            echodata "Sub-commands: \z[yellow]°create renew rm use get-path display\z[]°"
+            echodata "Sub-commands: \z[yellow]°create renew rm use use-raw get-path display\z[]°"
             return 99
             ;;
 
@@ -129,6 +129,15 @@ END
             fi
 
             ytdl "${@:3}" --cookies "$converted_cookies_path"
+            ;;
+
+        use-raw)
+            if [[ ! -f $converted_cookies_path ]]; then
+                echoerr "Preset was not found (provide ':list' to see them all)"
+                return 1
+            fi
+
+            yt-dlp "${@:3}" --cookies "$converted_cookies_path"
             ;;
 
 

@@ -9,7 +9,7 @@ export ADF_YTDL_DEFAULT_BEST_FORMAT="bestvideo*[height>2160]+bestaudio/best[heig
 # * YTDL_ITEM_CMD        => run a command for each root item when download is finished
 # * YTDL_LIMIT_BANDWIDTH => limit download bandwidth
 # * YTDL_COOKIE_PRESET   => load a cookie preset using "ytdlcookies"
-# * YTDL_ALWAYS_THUMB=1  => if thumbnail cannot be embedded, write it alongside the output file
+# * YTDL_NO_THUMBNAIL    => don't download the thumbnail
 function ytdl() {
 	local prev_cwd=$(pwd)
 	local tempdir=""
@@ -58,10 +58,14 @@ function ytdl() {
 	cd "$tempdir"
 
 	# Store the command in an history
-	if [[ $1 == "https://www.youtube.com/"* || $1 == "https://music.youtube.com/"* ]]; then
-		local thumbnail_params=("--merge-output-format" "mkv")
-	else
+	if (( $YTDL_NO_THUMBNAIL )); then
 		local thumbnail_params=()
+	else
+		local thumbnail_params=("--embed-thumbnail")
+
+		if [[ $1 == "https://www.youtube.com/"* || $1 == "https://music.youtube.com/"* ]]; then
+			local thumbnail_params+=("--merge-output-format" "mkv")
+		fi
 	fi
 
 	if [[ ! -z $cookie_file ]]; then
@@ -74,7 +78,6 @@ function ytdl() {
 	if ! yt-dlp \
 			--format "${YTDL_FORMAT:-$ADF_YTDL_DEFAULT_BEST_FORMAT}" \
 			--add-metadata \
-			--embed-thumbnail \
 			"${thumbnail_params[@]}" \
 			--limit-rate ${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH} $cookie_param $cookie_file \
 			--abort-on-unavailable-fragment \
