@@ -80,7 +80,7 @@ if [[ $1 != "--offline" ]]; then
 	bash "$INSTALL_FROM/installer.bash" --offline
 
 	# Exit installer now
-	return
+	exit
 fi
 
 if [ ! -d "$INSTALL_FROM/home" ] || [ ! -d "$INSTALL_FROM/home/autodotfiles" ]; then
