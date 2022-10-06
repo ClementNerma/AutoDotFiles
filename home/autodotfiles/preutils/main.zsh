@@ -85,6 +85,11 @@ function now() {
 	printf ${${EPOCHREALTIME//.}:0:19}
 }
 
+# Required for CRON jobs
+if [[ -z $EPOCHREALTIME ]]; then
+	zmodload zsh/datetime 
+fi
+
 function humandate() {
 	date '+%Y_%m_%d-%Hh_%Mm_%Ss'
 }
