@@ -40,8 +40,10 @@ function _report_echoc_error() {
 # ADF_UPDATABLE_LINE=1         => clear the line instantly everytime we're writing on it (requires to print a line to overwrite beforehand)
 # ADF_REPLACE_UPDATABLE_LINE=1 => same as "ADF_UPDATABLE_LINE" but print a newline symbol after
 # ADF_NEVER_CUT_LINE=1         => don't cut an updatable line if it's longer than the terminal's width
+# ADF_SILENT=1                 => disable all messages, except those from `echowarn` and `echoerr`
+# ADF_FULLY_SILENT=1           => disable all messages
 function echoc() {
-    if (( $ADF_FULLY_SILENT )); then
+    if (( $ADF_SILENT )) || (( $ADF_FULLY_SILENT )); then
         return
     fi
 
@@ -155,40 +157,28 @@ function echoerr() {
 function echoerrnp() {
     local message="\z[red]°${@: -1}\z[]°"
     shift -p
-    >&2 echoc "$@" "$message"
+    >&2 ADF_SILENT=0 echoc "$@" "$message"
 }
 
 function echowarn() {
     local message="\z[yellow]°${@: -1}\z[]°"
     shift -p
-	>&2 echoc "$@" "$message"
+	>&2 ADF_SILENT=0 echoc "$@" "$message"
 }
 
 function echosuccess() {
-    if (( $ADF_SILENT )); then
-        return
-    fi
-
     local message="\z[green]°$1\z[]°"
     shift -p
     echoc "$@" "$message"
 }
 
 function echoinfo() {
-    if (( $ADF_SILENT )); then
-        return
-    fi
-
     local message="\z[blue]°${@: -1}\z[]°"
     shift -p
     echoc "$@" "$message"
 }
 
 function echodata() {
-    if (( $ADF_SILENT )); then
-        return
-    fi
-
     local message="\z[cyan]°${@: -1}\z[]°"
     shift -p
 	echoc "$@" "$message"
