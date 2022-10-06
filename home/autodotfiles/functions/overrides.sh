@@ -22,13 +22,10 @@ function git() {
 
 # Make a commit with Git
 function gitcommit() {
-    if (( ${#1} > 72 )); then
-        echowarn "Maximum recommanded message length is \z[cyan]°72\z[]° characters but provided one is \z[cyan]°${#1}\z[]° long."
+    local first_line=$(printf '%s' $1 | head -n1)
 
-        if [[ $1 != *"\n"* ]]; then
-            echoerr "Rejecting the commit message, you can use a newline symbol to skip this limitation."
-            return 1
-        fi
+    if (( ${#first_line} > 72 )); then
+        echowarn "Maximum recommanded message length is \z[cyan]°72\z[]° characters but provided one is \z[cyan]°${#1}\z[]° long."
     fi
 
     git commit -m "$1" "${@:2}"
