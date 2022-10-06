@@ -160,11 +160,13 @@ function howlong() {
 
 # Create a directory and go into it
 function mkcd() {
-	if [[ ! -d $1 ]]; then
-		mkdir -p "$1"
+	local name="$@"
+
+	if [[ ! -d $name ]]; then
+		mkdir -p "$name"
 	fi
 
-	cd "$1"
+	cd "$name"
 }
 
 # Get most recent item in current directory
