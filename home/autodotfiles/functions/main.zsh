@@ -219,29 +219,87 @@ function timer_start() {
 	date +%s%N
 }
 
-function timer_end() {
+function timer_elapsed() {
 	if [[ -z "$1" ]]; then
 		echoerr "Please provide a timer value."
 		return 1
 	fi
 
 	local started=$(($1))
-	local finished=$(($(date +%s%N)))
-	local elapsed=$(((finished - started) / 1000000))
+	local now=$(($(date +%s%N)))
+	local elapsed=$((now - started))
 
-	local elapsed_s=$((elapsed / 1000))
-	local D=$((elapsed_s/60/60/24))
-	local H=$((elapsed_s/60/60%24))
-	local M=$((elapsed_s/60%60))
-	local S=$((elapsed_s%60))
+	printf '%s' $elapsed
+}
+
+function timer_show() {
+	if [[ -z "$1" ]]; then
+		echoerr "Please provide a timer value."
+		return 1
+	fi
+
+	local elapsed=$(timer_elapsed "$1")
+	humanduration_ms $((elapsed / 1000000))
+}
+
+function timer_show_seconds() {
+	if [[ -z "$1" ]]; then
+		echoerr "Please provide a timer value."
+		return 1
+	fi
+
+	local elapsed=$(timer_elapsed "$1")
+	humanduration $((elapsed / 1000000000))
+}
+
+function timer_end() {
+	if [[ -z "$1" ]]; then
+		echoerr "Please provide a timer value."
+		return 1
+	fi
+
+	timer_show "$1"
+	unset "ADF_TIMERS[$1]"
+}
+
+function humanduration() {
+	if [[ -z $1 ]]; then
+		echoerr "Please provide a duration in milliseconds."
+		return 1
+	fi
+
+	local duration_s=$(($1))
+
+	local D=$((duration_s/60/60/24))
+	local H=$((duration_s/60/60%24))
+	local M=$((duration_s/60%60))
+	local S=$((duration_s%60))
+	if [ $D != 0 ]; then printf "${D}d "; fi
+	if [ $H != 0 ]; then printf "${H}h "; fi
+	if [ $M != 0 ]; then printf "${M}m "; fi
+
+	printf "${S}s"
+}
+
+function humanduration_ms() {
+	if [[ -z $1 ]]; then
+		echoerr "Please provide a duration in milliseconds."
+		return 1
+	fi
+
+	local duration=$(($1))
+
+	local duration_s=$((duration / 1000))
+	local D=$((duration_s/60/60/24))
+	local H=$((duration_s/60/60%24))
+	local M=$((duration_s/60%60))
+	local S=$((duration_s%60))
 	if [ $D != 0 ]; then printf "${D}d "; fi
 	if [ $H != 0 ]; then printf "${H}h "; fi
 	if [ $M != 0 ]; then printf "${M}m "; fi
 	
-	local elapsed_ms=$((elapsed % 1000))
-	printf "${S}.%03ds" $elapsed_ms
-
-	unset "ADF_TIMERS[$1]"
+	local duration_ms=$((duration % 1000))
+	printf "${S}.%03ds" $duration_ms
 }
 
 function filesize() {
@@ -269,4 +327,66 @@ function humansize() {
 	else
 		numfmt --to=iec-i --suffix=B --format="%.2f" "$1"
 	fi
+}
+
+# Display a progressbar
+# Usage: <prefix> <current value> <maximum> <width> <suffix>
+function progress_bar() {
+	local current=$(($2))
+	local max=$(($3))
+	local width=$(($4))
+	
+	# This formula is used to round the result to the nearest instead of doing a floor()
+	local progress_bar=$((current * width / max))
+
+	if (( $progress_bar )); then
+		local filled=$(printf '█%.0s' {1..$progress_bar})
+	else
+		local filled=""
+	fi
+
+	if (( $progress_bar < $width )); then
+		local remaining=$(printf '█%.0s' {1..$((width - progress_bar))})
+	else
+		local remaining=""
+	fi
+
+	ADF_UPDATABLE_LINE=1 echoc "$1\z[white]°$filled\z[]°\z[gray]°$remaining\z[]°$5"
+
+	if [[ $current -eq $max ]]; then
+		echo ""
+	fi
+}
+
+# Display a progressbar with full informations
+# Usage: <prefix> <current value> <maximum> <width> <started> <suffix>
+function progress_bar_detailed() {
+	local progress=$(((100 * $2) / $3))
+	local suffix=" $progress % ($2 / $3) | ETA: $(compute_eta $5 $2 $3) | Elapsed: $(timer_show_seconds $5)"
+	progress_bar "$1" $2 $3 $4 "$suffix$6"
+}
+
+# Estimate remaining time
+# Usage: <start date (from $(date +%s%N))> <current> <max>
+function compute_eta() {
+	local started=$(($1))
+	local progress=$(($2))
+	local maximum=$(($3))
+
+	if ! (( $2 )); then
+		printf "%s" "<computing...>"
+		return
+	elif [[ $2 -eq $3 ]]; then
+		printf "%s" "<complete>"
+		return
+	fi
+
+	local now=$(date +%s%N)
+	local elapsed=$((now - started))
+	local remaining=$((maximum - progress))
+
+	local eta_nanos=$((elapsed * remaining / progress))
+	local eta_s=$((eta_nanos / 1000 / 1000 / 1000))
+
+	humanduration $eta_s
 }
