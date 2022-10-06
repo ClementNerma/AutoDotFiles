@@ -76,21 +76,33 @@ function rclone_mirror() {
     if [[ $noitem -eq 0 ]]; then
         if [[ -z $size ]] && [[ -z $total ]]; then
             echoerr "Failed to get both the total transfer size and the number of items to transfer."
+            echoerr "Original output:"
+            echowarn "$rclone_list"
+            echoerr "Aborting transfer."
             return 6
         fi
 
         if [[ -z $size ]]; then
             echoerr "Failed to get the total transfer size."
+            echoerr "Original output:"
+            echowarn "$rclone_list"
+            echoerr "Aborting transfer."
             return 7
         fi
         
         if [[ -z $total ]]; then
             echoerr "Failed to get the total number of items to transfer."
+            echoerr "Original output:"
+            echowarn "$rclone_list"
+            echoerr "Aborting transfer."
             return 8
         fi
 
         if [[ ${#items} -ne $total ]]; then
             echoerr "Found \z[yellow]°${#items}\z[]°, but expected a total of \z[yellow]°$total\z[]° items to transfer!"
+            echoerr "Original output:"
+            echowarn "$rclone_list"
+            echoerr "Aborting transfer."
             return 9
         fi
     fi
