@@ -21,7 +21,6 @@ function adf_install() {
     fi
 
     local to_install=()
-    local longest_name=0
 
     for component in $ADF_INSTALLABLE_COMPONENTS; do
         if grep -Fxq "$component" "$ADF_INSTALLED_LIST"; then
@@ -35,10 +34,6 @@ function adf_install() {
         fi
 
         to_install+=("$component")
-
-        if (( ${#component} > $longest_name )); then
-            local longest_name=${#component}
-        fi
     done
 
     if [[ ${#to_install} -eq 0 ]]; then
@@ -50,7 +45,7 @@ function adf_install() {
     echoinfo ""
 
     for name in $to_install; do
-        echoinfo " * \z[yellow]°$name\z[]°$(printf " %.0s" {1..$((longest_name + 1 - ${#name}))})"
+        echoinfo " * \z[yellow]°$name\z[]°"
     done
 
     echowarn ""
@@ -63,7 +58,6 @@ function adf_install() {
     export BASE_INSTALLER_TMPDIR=$(mktemp -d)
 
     local failed=0
-    local successes=()
 
     for name in $to_install; do
         echoinfo ">"
@@ -88,9 +82,6 @@ function adf_install() {
 
         echosuccess ""
 
-        local f_name="\z[yellow]°${to_install_names[i]}\z[]°"
-        local register_success=1
-
         if (( ${to_install_already_installed[i]} )); then
             echosuccess "Successfully updated component \z[yellow]°$name\z[]°!"
         else
@@ -109,7 +100,6 @@ function adf_install() {
 function adf_update() {
     adf_install "${1:-*}"
 }
-
 
 export ADF_INSTALLABLE_COMPONENTS=(
     prerequisites
@@ -210,9 +200,9 @@ function __adf_install_component() {
         micro)    dlghbin "zyedidia/micro" "micro-.*-linux64.tar.gz" "micro-*/micro"
                   ensure_config_file "$HOME/.config/micro/bindings.json" '{ "CtrlN": "AddTab", "CtrlW": "Quit", "CtrlD": "SpawnMultiCursor" }' ;;
         ncdu)
-            # TODO: Find a way to not hardcode NCDU's version and link here
-            dl "https://dev.yorhel.nl/download/ncdu-2.1.2-linux-x86_64.tar.gz" "$INSTALLER_TMPDIR/ncdu.tar.gz" &&
-            tar zxf "$INSTALLER_TMPDIR/ncdu.tar.gz" -C "$ADF_BIN_DIR" ;;
+                  # TODO: Find a way to not hardcode NCDU's version and link here
+                  dl "https://dev.yorhel.nl/download/ncdu-2.1.2-linux-x86_64.tar.gz" "$INSTALLER_TMPDIR/ncdu.tar.gz" &&
+                  tar zxf "$INSTALLER_TMPDIR/ncdu.tar.gz" -C "$ADF_BIN_DIR" ;;
 
         *)
             echoerr "Unknown component: $1"
