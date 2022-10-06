@@ -35,3 +35,6 @@ export ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH="1G"
 
 # Update path for 'zerupdate'
 export ADF_UPDATE_PATH=""
+
+# Key filename for Git
+export ADF_GIT_SSH_PRIVATE_KEY_FILENAME="id_rsa"

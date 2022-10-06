@@ -30,6 +30,26 @@ alias gp="git push"
 alias gpb="git push --set-upstream origin \$(git rev-parse --abbrev-ref HEAD)"
 alias gop="git reflog expire --expire=now --all && git gc --prune=now && git repack -a -d --depth=250 --window=250"
 
+function git() {
+    local current=$PWD
+    local key_file=0
+
+    while [[ $current != "/" ]]; do
+        if [[ -f "$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME" ]]; then
+            local key_file=1
+            break
+        fi
+
+        local current=$(dirname "$current")
+    done
+
+    if (( $key_file )); then
+        GIT_SSH_COMMAND="ssh -i '$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME'" command git "$@"
+    else
+        command git "$@"
+    fi
+}
+
 # Custom commit command
 alias gm="gitcommit"
 
