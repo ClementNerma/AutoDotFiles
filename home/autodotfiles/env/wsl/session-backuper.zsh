@@ -13,17 +13,17 @@ function adf_backup_session() {
         adf_backup_software_session "$outdir" "$software" "$(_adf_bss_get_key "$software" "process_name")" "$(_adf_bss_get_key "$software" "window_format")"
     done
 
+    # Prepare the final directory
+    # In case of fail above, the final directoy will simply not have a checksum, but will remain on the disk
+    local cksum=$(cksumdir "$outdir")
+    local finaldir="$outdir-$cksum"
+
     # Ignore empty values
     if [[ -z $(command ls -A "$outdir") ]]; then
       echosuccess "Nothing to backup!"
       mv "$outdir" "$finaldir.empty"
       return
     fi
-
-    # Prepare the final directory
-    # In case of fail above, the final directoy will simply not have a checksum, but will remain on the disk
-    local cksum=$(cksumdir "$outdir")
-    local finaldir="$outdir-$cksum"
 
     if [[ -f $ADF_LAST_SESSION_BACKUP_CKSUM_FILE ]] && [[ $cksum -eq $(cat $ADF_LAST_SESSION_BACKUP_CKSUM_FILE) ]]; then
         local finaldir="$finaldir.nochange"
