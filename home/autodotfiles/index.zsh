@@ -183,11 +183,7 @@ function gostartupdir() {
 	local cwd=$(pwd)
 
 	if [[ "$cwd" = "$HOME" || "$cwd" = "$HOMEDIR" ]] || [[ ! -f "$ALTERNATE_HOMEDIR" && "$cwd" = "$ALTERNATE_HOMEDIR" ]]; then
-		if [ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]; then
-			goproj
-		else
-			godl
-		fi
+		goproj
 	fi
 }
 
