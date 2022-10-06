@@ -55,7 +55,7 @@ function open() {
 }
 
 # Open a file or directory with a specific search
-function opensearch() {
+function opens() {
   local topath="$1"
   local search="$2"
 
