@@ -94,6 +94,7 @@ function ytsync() {
     local forecast_lock=0
 
     local di=0
+    local blocked_at=-1
 
     while (( $di <= $count )); do
         local di=$(($di + 1))
@@ -178,6 +179,13 @@ function ytsync() {
                     ADF_UPDATABLE_LINE=1 echowarn ">> Waiting before retry... \z[cyan]°$waiting_for\z[]°"
                     sleep 1
                 done
+
+                if [[ $blocked_at = $di ]]; then
+                    echoerr "Failed twice on this video, skipping it."
+                    continue
+                fi
+
+                local blocked_at=$di
 
                 local di=$(($di - 1))
                 continue
