@@ -125,7 +125,7 @@ function rclone_mirror() {
 
     if (( ${#tomove} )); then
         while IFS= read -r item; do
-            echoinfo "> Going to move from: \z[magenta]°$item\z[]°"
+            echowarn "> Going to move: \z[magenta]°$item\z[]°"
         done <<< $(printf '%s\n' "${tomove[@]}" | sort -n)
         echo ""
     fi
