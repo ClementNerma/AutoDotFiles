@@ -36,24 +36,29 @@ function bakproj() {
 		return 2
 	fi
 
-	local files=$(printf "%s" "$files" | grep "\S")
+	local files=$(printf "%s" "$files" | grep "\S" | sort)
 	
 	if [[ -z $files ]]; then
 		echoerr "Directory is empty."
 		return 3
 	fi
 
+	local count=$(printf "%s" "$files" | wc -l)
+
 	mkdir "$target"
 
+	local i=0
+
 	while IFS= read -r file; do
+		local i=$((i+1))
 		local relative="$(realpath --relative-to="$1" "$file")"
 		local dest="$target/$relative"
 
-		echoinfo "Copying: \z[magenta]°$relative\z[]°..."
-		
+		progress_bar "Copying: " $i $count 100 " \z[magenta]°$relative\z[]°"
+
 		mkdir -p "$(dirname "$dest")"
 		cp "$file" "$dest"
-	done <<< $(printf "%s\n" "$files" | sort)
+	done <<< "$files"
 
 	echosuccess "Done!"
 }
