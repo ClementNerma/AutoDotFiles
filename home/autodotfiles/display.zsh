@@ -56,7 +56,7 @@ function echoc() {
     while (( i < ${#text} )); do
         local i=$((i+1))
 
-        if [[ $text[$i,$i+2] != "\z[" ]]; then
+        if [[ $text[$i] != "\\" ]] || [[ $text[$i,$i+2] != "\z[" ]]; then
             output+="${text[$i]}"
             rawtext+="${text[$i]}"
             continue
