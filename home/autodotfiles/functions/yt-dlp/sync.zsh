@@ -41,6 +41,10 @@ function ytsync() {
         if ! ytsync_build_cache; then
             return 10
         fi
+
+        if [[ ! -f $ADF_YS_CACHE ]]; then
+            return
+        fi
     fi
 
     # === Parse and validate the cache === #
