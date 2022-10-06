@@ -76,36 +76,6 @@ function mvbak() {
 	export LAST_MVBAK_PATH="$renpath"
 }
 
-# Compute the 32-bit checksum of a flat directory (= only files)
-# Checksum will only be the same if the directory's filenames and content are equal
-# Files order and timestamps are not taken into consideration
-function cksumdir() {
-	if [[ -f $1 && -n $ADF_ALLOW_CKSUM_FILE ]]; then
-		cksumfile "$1"
-		return
-	fi
-
-	if [[ ! -d $1 ]]; then
-		echoerr "Input directory not found at path: \z[yellow]°$1\z[]°"
-		return 1
-	fi
-
-	local checksums=""
-
-	for item in "$1/"*; do
-		local checksum=""
-		local filenamesum=$(basename "$item" | cksum)
-
-		if checksum=$(ADF_ALLOW_CKSUM_FILE=1 cksumdir "$item"); then
-			checksums+="$filenamesum$checksum"
-		else
-			return 2
-		fi
-	done
-
-	cksumstr "$checksums"
-}
-
 # Display the checksum of a file
 function cksumfile() {
 	cksum < "$1" | cut -d ' ' -f 1
