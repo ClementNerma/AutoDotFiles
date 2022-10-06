@@ -92,7 +92,7 @@ if [[ ! -f $ADF_CONF_RESTORATION_SCRIPT || $ADF_JUST_INSTALLED = 1 ]]; then
 fi
 
 # Load the backuper
-source "$ADF_DIR/backuper.zsh"
+source "$ADF_DIR/backups/full.zsh"
 
 # Load the obfuscator
 source "$ADF_DIR/obfuscator.zsh"
