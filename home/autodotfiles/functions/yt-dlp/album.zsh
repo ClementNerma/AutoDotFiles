@@ -41,10 +41,12 @@ function ytdlalbum() {
         local thumbnail_args=" --no-id4cover"
     fi
 
-    YTDL_FORMAT="bestaudio" YTDL_OUTPUT_DIR="$YTDL_ALBUM_OUTPUT_DIR" YTDL_ITEM_CMD=("$thumbnail_cmd" "${YTDL_ALBUM_ITEM_CMD[@]}") YTDL_NO_THUMBNAIL=1 \
-    ytdlcookies use "$YTDL_ALBUM_PROFILE" "$@" \
-        -o "$dir_format/%(playlist_index)s.%(release_year)s.%(id)s. %(track)s.%(ext)s" \
-        --exec "zsh $ADF_EXTERNAL_DIR/ytdl-ytmusic-tagger.zsh$thumbnail_args"
+    YTDL_FORMAT="bestaudio" \
+    YTDL_OUTPUT_DIR="$YTDL_ALBUM_OUTPUT_DIR" \
+    YTDL_ITEM_CMD=("$thumbnail_cmd" "${YTDL_ALBUM_ITEM_CMD[@]}") \
+    YTDL_NO_THUMBNAIL=1 \
+    YTDL_FILENAMING="$dir_format/%(playlist_index)s.%(release_year)s.%(id)s. %(track)s.%(ext)s" \
+        ytdlcookies use "$YTDL_ALBUM_PROFILE" "$@" --exec "zsh $ADF_EXTERNAL_DIR/ytdl-ytmusic-tagger.zsh$thumbnail_args"
 }
 
 # Download a playlist from Youtube Music
