@@ -175,7 +175,12 @@ function cksumdir() {
 		fi
 	done
 
-	echo "$checksums" | cksum | cut -d ' ' -f 1
+	cksumstr "$checksums"
+}
+
+# Display the checksum of a string
+function cksumstr() {
+	echo "$1" | cksum | cut -d ' ' -f 1
 }
 
 # Check if a command exists
