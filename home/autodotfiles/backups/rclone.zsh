@@ -131,7 +131,7 @@ function rclone_mirror() {
             fi
         
             echoerr "RClone failed: \z[yellow]°$error_msg\z[]°"
-            echoerr "Original output: >\z[yellow]°$rclone_list\z[]°<"
+            echoerr "Original output: >\z[yellow]°$rclone_output\z[]°<"
 
             return 9
         fi
