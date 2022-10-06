@@ -171,7 +171,7 @@ function rclone_mirror() {
         echo ""
     fi
 
-    echoinfo "Built items list in \z[gray]°$(timer_end "$started")\z[]°."
+    echoinfo "Built items list in \z[gray]°$(timer_elapsed "$started")\z[]°."
     echoinfo "Found \z[yellow]°${#items}\z[]° item(s) to transfer, \z[yellow]°${#tomove}\z[]° to move, \z[yellow]°${#toupdatemodtime}\z[]° to update modtime of and \z[yellow]°${#todelete}\z[]° to delete for a total of \z[yellow]°$size\z[]°."
 
     if [[ ${#items} -eq 0 && ${#toupdatemodtime} -eq 0 && ${#todelete} -eq 0 && ${#tomove} -eq 0 ]]; then

@@ -344,7 +344,7 @@ function adf_install() {
         return 89
     fi
 
-    echosuccess "All components were installed or updated successfully in \z[yellow]°$(timer_end "$started")\z[]°!\n"
+    echosuccess "All components were installed or updated successfully in \z[yellow]°$(timer_elapsed "$started")\z[]°!\n"
 
     if (( ${#successes} > 1 )); then
         for success in $successes; do

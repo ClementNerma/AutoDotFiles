@@ -47,16 +47,6 @@ function timer_elapsed_seconds() {
 	humanduration $((elapsed / 1000000000))
 }
 
-function timer_end() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a timer value."
-		return 1
-	fi
-
-	timer_elapsed "$1"
-	unset "ADF_TIMERS[$1]"
-}
-
 function humanduration() {
 	if [[ -z $1 ]]; then
 		echoerr "Please provide a duration in milliseconds."

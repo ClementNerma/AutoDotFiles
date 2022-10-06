@@ -313,7 +313,7 @@ function ytsync_build_cache() {
         fi
     done
 
-    echoinfo "Videos list was retrieved in \z[yellow]°$(timer_end $started)\z[]°."
+    echoinfo "Videos list was retrieved in \z[yellow]°$(timer_elapsed $started)\z[]°."
 
     echoverb "Checking and mapping JSON..."
 
