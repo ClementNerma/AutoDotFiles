@@ -8,8 +8,3 @@ alias zerl="nano ${(%):-%x} && source ${(%):-%x}"
 
 # Startup directory
 export ADF_STARTUP_DIR="$PROJDIR"
-
-# Items to put in ADF's local backups
-#export ADF_BACKUPS_CONTENT=()
-
-# Put your own commands here
