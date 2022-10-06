@@ -186,6 +186,16 @@ function nodejs() {
     yarn -v # Just to be sure Yarn was installed correctly
 }
 
+function ntpdate() {
+    # NAME: ntpdate
+    # PRIORITY: 1
+    # ENV: wsl
+    # VERSION: -
+    # NEEDS_APT_UPDATE: yes
+
+    sudo apt install -yqqq ntpdate
+}
+
 function p7zip() {
     # NAME: 7-Zip
     # PRIORITY: 1
