@@ -75,7 +75,6 @@ export ADF_FILES_LIST="$HOME/.autodotfiles-files-list.txt"
 # Load the default configuration file
 source "$ADF_DIR/config.zsh"
 
-
 # Load display functions
 source "$ADF_DIR/display.zsh"
 
@@ -176,13 +175,14 @@ fi
 
 # Filter the commands to put in the history
 function zshaddhistory() {
-  emulate -L zsh
-  if zer_filter_history "$1" ; then
-      print -sr -- "${1%%$'\n'}"
-      fc -p
-  else
-      return 1
-  fi
+    emulate -L zsh
+
+	if [[ "$1" == "open"* || "$1" == "z "* ]]; then
+		return 1
+	fi
+
+	print -sr -- "${1%%$'\n'}"
+	fc -p
 }
 
 # Go to the a specific folder on startup, except if the shell has been started in a custom directory
