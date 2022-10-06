@@ -74,14 +74,15 @@ function ytsync() {
 
         # This is the fastest checking method I've found, even faster than building a list of files beforehand
         # and checking if the file is in the array!
-        if [[ -z $(find . -name "*-${video_id}.*") ]]; then
+        # We don't check for videos existence if the data was read from cache as the files were already checked during its creation
+        if ! (( $read_from_cache )) || [[ -z $(find . -name "*-${video_id}.*") ]]; then
             progress_bar_print "\z[gray]°$(printf "%${max_spaces}s" $i) / $count\z[]° \z[magenta]°[$video_id]\z[]° \z[yellow]°${video_title}\z[]°"
             download_list+=("$video_url")
             download_names+=("$video_title")
             download_ies+=("$video_ie")
             download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$video_ie]}")
         else
-            progress_bar_detailed "Checking videos: " $i $count 0 $started
+            progress_bar_detailed "Checking videos from cache: " $i $count 0 $started
         fi
     done
 
@@ -202,7 +203,11 @@ function ytsync_build_cache() {
     local cache_content=""
     local total=0
 
+    local started=$(timer_start)
+
     for i in {1..$count}; do
+        progress_bar_detailed "Checking videos: " $i $count 0 $started
+
         # IE = extractor name
         local ie_url="${ADF_YS_DOMAINS_IE_URLS[${video_ies[i]}]}"
 
