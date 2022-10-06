@@ -169,6 +169,9 @@ hash -d Downloads="$DLDIR"
 hash -d Temp="$TEMPDIR"
 hash -d Software="$SOFTWAREDIR"
 
+# Load software
+source "$ADF_DIR/software.zsh"
+
 # Load platform-specific scripts
 source "$ADF_ENV_DIR/script.zsh"
 
