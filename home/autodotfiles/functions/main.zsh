@@ -54,7 +54,7 @@ function bakproj() {
 		local relative="$(realpath --relative-to="$1" "$file")"
 		local dest="$target/$relative"
 
-		progress_bar "Copying: " $i $count 100 " \z[magenta]°$relative\z[]°"
+		CLEAR_COMPLETE_SUFFIX=1 progress_bar "Copying: " $i $count 100 " \z[magenta]°$relative\z[]°"
 
 		mkdir -p "$(dirname "$dest")"
 		cp "$file" "$dest"
@@ -361,7 +361,13 @@ function progress_bar() {
 		local remaining=""
 	fi
 
-	ADF_UPDATABLE_LINE=1 echoc "$1\z[white]°$filled\z[]°\z[gray]°$remaining\z[]°$5"
+	local suffix="$5"
+
+	if (( $CLEAR_COMPLETE_SUFFIX )) && [[ $current -eq $max ]]; then
+		local suffix=""
+	fi
+
+	ADF_UPDATABLE_LINE=1 echoc "$1\z[white]°$filled\z[]°\z[gray]°$remaining\z[]°$suffix"
 
 	if [[ $current -eq $max ]]; then
 		echo ""
