@@ -346,3 +346,10 @@ function cw() {
 	local args="$@"
 	cargo watch -x "run -- $args"
 }
+
+# Run a command each time a Cargo project is modified, in release mode
+# NOTE: Requires 'cargo-watch' to be installed (otherwise: 'cargo install cargo-watch')
+function cwr() {
+	local args="$@"
+	cargo watch -x "run --release -- $args"
+}
