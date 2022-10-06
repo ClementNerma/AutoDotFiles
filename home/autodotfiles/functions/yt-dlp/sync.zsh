@@ -104,6 +104,8 @@ function ytsync() {
         local video_title=$(echo -E "$entry" | jq -r ".title")
         local video_url=$(echo -E "$entry" | jq -r ".url")
 
+        local next_video_ie=$(echo -E "$cache" | jq -r ".[$((di))].ie_key")
+
         if [[ -z $video_ie ]] || [[ -z $video_dir ]] || [[ -z $video_id ]] || [[ -z $video_title ]] || [[ -z $video_url ]]; then
             echoerr "Invalid cache content: entry n°\z[yellow]°$i\z[]° has some missing data."
             return 11
@@ -169,12 +171,11 @@ function ytsync() {
         fi
 
         if (( $needlockfile )) && (( $di < $count )); then
-            # TODO: fix this
-            # if [[ ${download_ies[i+1]} = ${download_ies[i]} ]]; then
-            #     local forecast_lock=1
-            # else
+            if [[ $next_video_ie = $video_ie ]]; then
+                local forecast_lock=1
+            else
                 command rm "$lockfile"
-            # fi
+            fi
         fi
 
         progress_bar_detailed "Instant progress: " $di $count 0 $download_started
