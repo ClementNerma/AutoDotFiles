@@ -91,8 +91,9 @@ if [[ ! -f $ADF_CONF_RESTORATION_SCRIPT || $ADF_JUST_INSTALLED = 1 ]]; then
 	zerupdate_restoration_script
 fi
 
-# Load the backuper
+# Load the backupers
 source "$ADF_DIR/backups/full.zsh"
+source "$ADF_DIR/backups/rclone.zsh"
 
 # Load the obfuscator
 source "$ADF_DIR/obfuscator.zsh"
