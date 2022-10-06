@@ -76,9 +76,7 @@ function echoc() {
         local format_varname="$ADF_PREFIX_FORMAT${add_color:u}"
         local i=$((i+4+${#color}))
         
-        # if ! (( $NO_COLOR )); then
-        #     output+="${(P)format_varname}"
-        # fi
+        output+="${(P)format_varname}"
     done
 
     if [[ ${#colors_history[@]} != 0 ]]; then
