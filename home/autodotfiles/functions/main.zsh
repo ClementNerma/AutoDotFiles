@@ -4,7 +4,7 @@
 
 # Backup the current project
 function bakthis() {
-	local target="../$(basename "$PWD")-$(humandate)"
+	local target="../_bak-$(basename "$PWD")-$(humandate)"
 	mkdir "$target"
 	fd --hidden --type 'directory' --search-path "." | xargs -I {} mkdir "$target/{}"
 	fd --hidden --type 'file' --search-path "." | xargs -I {} cp "{}" "$target/{}"
