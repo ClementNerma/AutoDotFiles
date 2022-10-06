@@ -160,7 +160,7 @@ function ytsync() {
             ytsync_wait_lockfile
         fi
 
-        local cookie_profile=${ADF_YS_DOMAINS_PROFILE[$global_ie]}
+        local cookie_profile=${ADF_YS_DOMAINS_PROFILE[$video_ie]}
         local cookie_msg=""
 
         if [[ ! -z $cookie_profile ]]; then
@@ -170,7 +170,7 @@ function ytsync() {
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
         echoinfo "| Video from \z[cyan]°$video_ie\z[]° at \z[green]°${download_list[i]}\z[]°$cookie_msg"
 
-        if ! YTDL_ALWAYS_THUMB=1 YTDL_FILENAMING="$filenaming" YTDL_COOKIE_Profile="$cookie_profile" \
+        if ! YTDL_ALWAYS_THUMB=1 YTDL_FILENAMING="$filenaming" YTDL_COOKIE_PROFILE="$cookie_profile" \
              YTDL_LIMIT_BANDWIDTH="${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[i]}}" \
              YTDL_OUTPUT_DIR="${download_paths[i]}" \
              ytdl "${download_list[i]}" --write-sub --sub-lang fr,en \
