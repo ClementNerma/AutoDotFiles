@@ -69,6 +69,12 @@ function pnpm() {
 # VSCode opener
 function code() {
 	local dir=${1:-.}
+
+    if [[ ! -d $dir ]]; then
+        echoerr "Provided directory does not exist."
+        return 1
+    fi
+
 	local workspace=($dir/*.code-workspace(N))
 	local to_open=${workspace[1]:-$dir}
 
