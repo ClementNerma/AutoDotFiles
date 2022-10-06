@@ -101,7 +101,7 @@ function _adf_cron_logged() {
         command rm "$failure_file"
     fi
 
-    echoinfo "[ADF:CRON] Finished running task at \z[yellow]°$ended\z[]° in \z[yellow]°$(timer_elapsed "$elapsed")\z[]°, $exitcodemsg."
+    echoinfo "[ADF:CRON] Finished running task at \z[yellow]°$ended\z[]° in \z[yellow]°$elapsed\z[]°, $exitcodemsg."
     echoinfo " "
     echoinfo " "
 
