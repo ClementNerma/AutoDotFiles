@@ -69,7 +69,9 @@ source "$ADF_LOCAL_DIR/config.zsh"
 source "$ADF_DIR/display.zsh"
 
 # Load common utilities usable by the installer
-source "$ADF_DIR/preutils.zsh"
+for script in "$ADF_DIR/preutils/"**/*; do
+	source "$script"
+done
 
 # Load the updater
 source "$ADF_DIR/updater.zsh"
@@ -151,11 +153,8 @@ if ! typeset -f opens > /dev/null; then echowarn "WARNING: contractual 'opens' c
 source "$ADF_DIR/config-aliases.zsh"
 
 # Set path to the functions directory
-export ADF_FUNCTIONS_DIR="$ADF_DIR/functions"
-
-# Load functions
-for function_file in "$ADF_FUNCTIONS_DIR/"**/*; do
-	source "$function_file"
+for script in "$ADF_DIR/functions/"**/*; do
+	source "$script"
 done
 
 # Dir hashes

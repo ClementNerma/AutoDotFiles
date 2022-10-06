@@ -68,16 +68,6 @@ function bakthis() {
 	bakproj "$(pwd)" "$(dirname "$(pwd)")/$(basename "$(pwd)")-$(humandate)"
 }
 
-# Run a Cargo project located in the projects directory
-function cargext() {
-	cargo run "--manifest-path=$PROJDIR/$1/Cargo.toml" -- ${@:2}
-}
-
-# Run a Cargo project located in the projects directory in release mode
-function cargextr() {
-	cargo run "--manifest-path=$PROJDIR/$1/Cargo.toml" --release -- ${@:2}
-}
-
 # Rename a Git branch
 function gitrename() {
     local old_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -95,40 +85,6 @@ function rmprogress() {
 	fi
 	
 	rm -rv "$1" | pv -l -s $( du -a "$1" | wc -l ) > /dev/null
-}
-
-# Move a folder's content with progress
-function mvprogress() {
-	if [[ ! -d $1 ]]; then
-		echoerr "Please provide a source directory."
-		return 1
-	fi
-	
-	if [[ ! -d $2 ]]; then
-		echoerr "Please provide a target directory."
-		return 2
-	fi
-
-	local files_count="$(command ls "$1" -1A | wc -l)"
-	local counter=0
-
-	for item in "$1"/*(N)
-	do
-		counter=$((counter+1))
-		echoinfo "> Moving item $counter / $files_count: \z[magenta]°$(basename "${item%/}")\z[]°..."
-
-		local tomove="${item%/}"
-
-		if [[ -d $item ]]; then
-			item="$item/"
-		fi
-
-		if ! sudo mv "$item" "$2"
-		then
-			echoerr "Failed to move a file!"
-			return 1
-		fi
-	done
 }
 
 # Archive a file or directory into a .7z file
@@ -190,46 +146,6 @@ function debir() {
 	dl "$1" "$debpath"
 	debi "$debpath"
 	command rm "$debpath"
-}
-
-function humanduration() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a duration in milliseconds."
-		return 1
-	fi
-
-	local duration_s=$(($1))
-
-	local D=$((duration_s/60/60/24))
-	local H=$((duration_s/60/60%24))
-	local M=$((duration_s/60%60))
-	local S=$((duration_s%60))
-	if [ $D != 0 ]; then printf "${D}d "; fi
-	if [ $H != 0 ]; then printf "${H}h "; fi
-	if [ $M != 0 ]; then printf "${M}m "; fi
-
-	printf "${S}s"
-}
-
-function humanduration_ms() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a duration in milliseconds."
-		return 1
-	fi
-
-	local duration=$(($1))
-
-	local duration_s=$((duration / 1000))
-	local D=$((duration_s/60/60/24))
-	local H=$((duration_s/60/60%24))
-	local M=$((duration_s/60%60))
-	local S=$((duration_s%60))
-	if [ $D != 0 ]; then printf "${D}d "; fi
-	if [ $H != 0 ]; then printf "${H}h "; fi
-	if [ $M != 0 ]; then printf "${M}m "; fi
-	
-	local duration_ms=$((duration % 1000))
-	printf "${S}.%03ds" $duration_ms
 }
 
 function filesize() {
