@@ -92,6 +92,7 @@ function opene() { open "$@" && exit }
 function openze() { openz "$@" && exit }
 function openfde() { openfd "$@" && exit }
 function openfze() { openfz "$@" && exit }
+function opense() { opens "$@" ; exit }
 function opensze() { opensz "$@" ; exit }
 
 # Add a list of directories to Zoxide's index

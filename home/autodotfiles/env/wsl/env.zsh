@@ -47,23 +47,10 @@ function open() {
 
 # Open a file or directory with a specific search
 function opens() {
-  local topath="$1"
-  local search="$2"
-
-  if [[ -z $topath ]]; then
-    echoerr "Please provide a path."
-    return 1
-  fi
-
-  if [[ -z $search ]]; then
+  if [[ -z $1 ]]; then
     echoerr "Please provide a search."
     return 2
   fi
 
-  if [[ ! -d $topath && ! -L $topath ]]; then
-    echoerr "target path \z[yellow]°$topath\z[]° was not found!"
-    return 3
-  fi
-
-  explorer.exe "search-ms:displayname=Search Results&crumb=System.Generic.String%3A$search&crumb=location:$(wslpath -w "$topath")"
+  explorer.exe "search-ms:displayname=$1 - Search Results&crumb=System.Generic.String%3A$1&crumb=location:$(wslpath -w "$PWD")"
 }
