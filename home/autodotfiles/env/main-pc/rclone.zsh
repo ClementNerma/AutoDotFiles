@@ -91,49 +91,33 @@ function rclone_mirror() {
 
     if [[ $noitem -eq 0 ]]; then
         local error_msg=""
-        local exit_code=0
 
         if [[ -z $size ]] && [[ -z $total ]]; then
             local error_msg="Failed to get both the total transfer size and the number of items to transfer."
-            local exit_code=6
-        fi
 
-        if [[ -z $size ]]; then
+        elif [[ -z $size ]]; then
             local error_msg="Failed to get the total transfer size."
-            local exit_code=7
-        fi
         
-        if [[ -z $total ]]; then
+        elif [[ -z $total ]]; then
             local error_msg="Failed to get the total number of items to transfer."
-            local exit_code=8
-        fi
-
-        if [[ ${#items} -ne $total ]]; then
+        
+        elif [[ ${#items} -ne $total ]]; then
             local error_msg="Found \z[yellow]°${#items}\z[]°, but expected a total of \z[yellow]°$total\z[]° items to transfer!"
-            local exit_code=9
-        fi
-
-        if (( ${#tomove} )) && [[ -z $renamed ]]; then
+        
+        elif (( ${#tomove} )) && [[ -z $renamed ]]; then
             local error_msg="Got a list of files to move but did not get their total count."
-            local exit_code=10
-        fi
-
-        if [[ ! -z $renamed ]] && [[ ${#tomove} -ne $renamed ]]; then
+        
+        elif [[ ! -z $renamed ]] && [[ ${#tomove} -ne $renamed ]]; then
             local error_msg="Found \z[yellow]°${#tomove}\z[]° items to move, but expected \z[yellow]°$renamed\z[]°!"
-            local exit_code=11
-        fi
-
-        if (( ${#todelete} )) && [[ -z $deleted ]]; then
+        
+        elif (( ${#todelete} )) && [[ -z $deleted ]]; then
             local error_msg="Got a list of files to delete but did not get their total count."
-            local exit_code=12
-        fi
-
-        if [[ ! -z $deleted ]] && [[ ${#todelete} -ne $deleted ]]; then
+        
+        elif [[ ! -z $deleted ]] && [[ ${#todelete} -ne $deleted ]]; then
             local error_msg="Found \z[yellow]°${#todelete}\z[]° items to delete, but expected \z[yellow]°$deleted\z[]°!"
-            local exit_code=13
         fi
 
-        if (( $exit_code )); then
+        if (( $error_msg )); then
             if (( ${#unparsed} )); then
                 for line in $unparsed; do
                     echoerr "> Unparsed: >$line<"
@@ -146,7 +130,7 @@ function rclone_mirror() {
             echowarn "$rclone_list"
             echoerr "Aborting transfer."
 
-            return $exit_code
+            return 9
         fi
     fi
 
