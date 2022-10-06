@@ -153,18 +153,7 @@ function howlong() {
 	if [[ ! -z $2 ]]; then printf ' %s' "${@:2}"; fi
 	printf '" completed in ' "$@"
 
-	local elapsed_s=$((elapsed / 1000))
-	local D=$((elapsed_s/60/60/24))
-	local H=$((elapsed_s/60/60%24))
-	local M=$((elapsed_s/60%60))
-	local S=$((elapsed_s%60))
-	if [ $D != 0 ]; then printf "${D}d "; fi
-	if [ $H != 0 ]; then printf "${H}h "; fi
-	if [ $M != 0 ]; then printf "${M}m "; fi
-	
-	local elapsed_ms=$((elapsed % 1000))
-	printf "${S}.%03ds" $elapsed_ms
-
+	humanduration_ms $elapsed
 	printf "\n"
 }
 
