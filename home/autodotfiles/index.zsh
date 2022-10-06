@@ -169,12 +169,12 @@ for script in "$ADF_DIR/functions/"**/*; do
 done
 
 # Dir hashes
-hash -d Home=$HOMEDIR
-hash -d Projects=$PROJDIR
-hash -d Work=$WORKDIR
-hash -d Downloads=$DLDIR
-hash -d Temp=$TEMPDIR
-hash -d Software=$SOFTWAREDIR
+hash -d Home="$HOMEDIR"
+hash -d Projects="$PROJDIR"
+hash -d Work="$WORKDIR"
+hash -d Downloads="$DLDIR"
+hash -d Temp="$TEMPDIR"
+hash -d Software="$SOFTWAREDIR"
 
 # Load platform-specific scripts
 source "$ADF_ENV_DIR/script.zsh"
