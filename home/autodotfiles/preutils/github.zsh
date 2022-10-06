@@ -105,7 +105,7 @@ function dlghbin() {
 
 	echoinfo "> (3/4) Moving final binary..."
 
-	mv "$exdir/"${~4} "$ADF_BIN_DIR/$4" || return 14
+	mv "$exdir/"${~3} "$ADF_BIN_DIR/$4" || return 14
 
 	chmod +x "$ADF_BIN_DIR/$4"
 
