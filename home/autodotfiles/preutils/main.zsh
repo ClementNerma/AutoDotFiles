@@ -148,3 +148,27 @@ function hashstr() {
 function commandexists() {
 	command -v "$1" > /dev/null 2>&1
 }
+
+# Pad start with spaces
+function padspaces() {
+	local len=$(echo -n "$1" | wc -c)
+	local rem=$(($2 - len))
+
+	if (( $rem > 0 )); then
+		printf ' %.0s' {1..$rem}
+	fi
+
+	printf '%s' "$1"
+}
+
+# Pad end with spaces
+function padendspaces() {
+	local len=$(echo -n "$1" | wc -c)
+	local rem=$(($2 - len))
+
+	printf '%s' "$1"
+
+	if (( $rem > 0 )); then
+		printf ' %.0s' {1..$rem}
+	fi
+}
