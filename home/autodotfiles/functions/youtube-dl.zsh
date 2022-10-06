@@ -1,14 +1,15 @@
 # Software: Youtube-DL
-export YTDL_PARALLEL_DOWNLOADS=0
+
+export ADF_YTDL_DEFAULT_BEST_FORMAT="bestvideo*[height>2160]+bestaudio/best[height>2160]/bestvideo*[height=2160]+bestaudio/best[height=2160]/bestvideo*[height>1440]+bestaudio/best[height>1440]/bestvideo*[height=1440]+bestaudio/best[height=1440]/bestvideo*[height>1080]+bestaudio/best[height>1080]/bestvideo*[height=1080]+bestaudio/best[height=1080]/bestvideo*[height>720]+bestaudio/best[height>720]/bestvideo*[height=720]+bestaudio/best[height=720]/bestvideo*[height>480]+bestaudio/best[height>480]/bestvideo*[height=480]+bestaudio/best[height=480]/bestvideo*[height>320]+bestaudio/best[height>320]/bestvideo*[height=320]+bestaudio/best[height=320]/bestvideo*[height>240]+bestaudio/best[height>240]/bestvideo*[height=240]+bestaudio/best[height=240]/bestvideo*[height>144]+bestaudio/best[height>144]/bestvideo*[height=144]+bestaudio/best[height=144]/bestvideo+bestaudio/best"
 
 # Overriding variables:
-# * YTDL_AUDIO_ONLY=1     => only download the audio track
-# * YTDL_TEMP_DIR=...     => download in the specified temporary directory before moving it to the final one
-# * YTDL_OUTPUT_DIR=...   => download to the specified directory (default: the current working directory)
-# * YTDL_ITEM_CMD=...     => run a command for each root item when download is finished
-# * YTDL_ALWAYS_THUMB=1   => if thumbnail cannot be embedded, write it alongside the output file
-# * YTDL_LIMIT_BANDWIDTH  => limit download bandwidth
-# * YTDL_COOKIE_PRESET    => load a cookie preset using "ytdlcookies"
+# * YTDL_FORMAT          => use a custom format
+# * YTDL_TEMP_DIR        => download in the specified temporary directory before moving it to the final one
+# * YTDL_OUTPUT_DIR      => download to the specified directory (default: the current working directory)
+# * YTDL_ITEM_CMD        => run a command for each root item when download is finished
+# * YTDL_LIMIT_BANDWIDTH => limit download bandwidth
+# * YTDL_COOKIE_PRESET   => load a cookie preset using "ytdlcookies"
+# * YTDL_ALWAYS_THUMB=1  => if thumbnail cannot be embedded, write it alongside the output file
 function ytdl() {
 	local prev_cwd=$(pwd)
 	local tempdir=""
@@ -71,12 +72,6 @@ function ytdl() {
 		local thumbnail_params="--embed-thumbnail"
 	fi
 
-	if (( $YTDL_AUDIO_ONLY )); then
-		local quality_format="bestaudio"
-	else
-		local quality_format="bestvideo*[height>2160]+bestaudio/best[height>2160]/bestvideo*[height=2160]+bestaudio/best[height=2160]/bestvideo*[height>1440]+bestaudio/best[height>1440]/bestvideo*[height=1440]+bestaudio/best[height=1440]/bestvideo*[height>1080]+bestaudio/best[height>1080]/bestvideo*[height=1080]+bestaudio/best[height=1080]/bestvideo*[height>720]+bestaudio/best[height>720]/bestvideo*[height=720]+bestaudio/best[height=720]/bestvideo*[height>480]+bestaudio/best[height>480]/bestvideo*[height=480]+bestaudio/best[height=480]/bestvideo*[height>320]+bestaudio/best[height>320]/bestvideo*[height=320]+bestaudio/best[height=320]/bestvideo*[height>240]+bestaudio/best[height>240]/bestvideo*[height=240]+bestaudio/best[height=240]/bestvideo*[height>144]+bestaudio/best[height>144]/bestvideo*[height=144]+bestaudio/best[height=144]/bestvideo+bestaudio/best"
-	fi
-
 	if [[ ! -z $cookie_file ]]; then
 		local cookie_param="--cookies"
 	else
@@ -85,7 +80,7 @@ function ytdl() {
 
 	# Perform the download
 	if ! yt-dlp \
-			--format "$quality_format" \
+			--format "${YTDL_FORMAT:-$ADF_YTDL_DEFAULT_BEST_FORMAT}" \
 			--add-metadata \
 			$thumbnail_params \
 			--limit-rate ${YTDL_LIMIT_BANDWIDTH:-1G} $cookie_param $cookie_file \

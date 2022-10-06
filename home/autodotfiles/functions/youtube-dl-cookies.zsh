@@ -208,7 +208,7 @@ function ytdlalbum() {
         local thumbnail_args=" --no-id4cover"
     fi
 
-    YTDL_AUDIO_ONLY=1 YTDL_OUTPUT_DIR="$YTDL_ALBUM_OUTPUT_DIR" YTDL_ITEM_CMD=("$thumbnail_cmd" "${YTDL_ALBUM_ITEM_CMD[@]}") \
+    YTDL_FORMAT="bestaudio" YTDL_OUTPUT_DIR="$YTDL_ALBUM_OUTPUT_DIR" YTDL_ITEM_CMD=("$thumbnail_cmd" "${YTDL_ALBUM_ITEM_CMD[@]}") \
     ytdlcookies use "$YTDL_ALBUM_PRESET" "$@" \
         -o "$dir_format/%(playlist_index)s.%(release_year)s.%(id)s. %(track)s.%(ext)s" \
         --exec "zsh $ADF_EXTERNAL_DIR/ytdl-ytmusic-tagger.zsh$thumbnail_args"
