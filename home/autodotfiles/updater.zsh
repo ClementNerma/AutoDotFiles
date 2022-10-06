@@ -79,6 +79,7 @@ function zerupdate() {
 
 	# Save the new files list
 	command ls -1A "$update_path/home" > "$ADF_FILES_LIST"
+	command echo "$ADF_ASSETS_DIR" >> "$ADF_FILES_LIST"
 
 	# Restore user scripts
 	cp -R "$ADF_LAST_BACKUP_DIR/autodotfiles-user/"* "$ADF_USER_DIR"
