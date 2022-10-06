@@ -4,47 +4,11 @@
 
 # Backup the current project
 function bakthis() {
-	local source=$PWD
-	local target="$PWD-$(humandate)"
-
-	if [[ -n $3 ]]; then
-		local target="$target.$3"
-	fi
-
-	local files=""
-	
-	if ! files=$(fd --threads=1 --hidden --one-file-system --type 'file' --search-path "$source" --absolute-path); then
-		echoerr "Command \z[yellow]°fd\z[]° failed."
-		return 2
-	fi
-
-	local files=$(printf "%s" "$files" | grep "\S" | sort)
-	local count=$(wc -l <<< "$files")
-
+	local target="../$(basename "$PWD")-$(humandate)"
 	mkdir "$target"
-
-	local i=0
-
-	while IFS= read -r file; do
-		local i=$((i+1))
-		local relative="$(realpath --relative-to="$source" "$file")"
-		local dest="$target/$relative"
-
-		echo -n "\rCopying files: $i / $count ($(( 100 * $i / $count )) %)..."
-
-		local file_dir=$(dirname "$dest")
-
-		if [[ ! -d $file_dir ]]; then
-			mkdir -p "$file_dir"
-		fi
-
-		cp "$file" "$dest"
-	done <<< "$files"
-
-	echo ""
-
-	echosuccess "Done in \z[magenta]°$target\z[]°"
-	export LAST_BAKPROJ_DIR="$target"
+	fd --hidden --type 'directory' --search-path "." | xargs -I {} mkdir "$target/{}"
+	fd --hidden --type 'file' --search-path "." | xargs -I {} cp "{}" "$target/{}"
+	echosuccess "Done!"
 }
 
 # Rename a Git branch
