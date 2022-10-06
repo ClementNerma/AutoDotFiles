@@ -4,7 +4,7 @@ if cat /etc/issue | grep "Ubuntu" > /dev/null; then
     return
 fi
 
-sudo apt install -yqqq python3 python3-dev python-virtualenv
+sudo apt install -yqqq python3 python3-dev python-virtualenv python-is-python3
 dl https://bootstrap.pypa.io/get-pip.py "$INSTALLER_TMPDIR/get-pip.py"
 export PATH="$HOME/.local/bin:$PATH"
 python3 "$INSTALLER_TMPDIR/get-pip.py"
