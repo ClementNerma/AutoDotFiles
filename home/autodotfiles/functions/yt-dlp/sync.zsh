@@ -204,9 +204,15 @@ function ytsync_build_cache() {
     local total=0
 
     local started=$(timer_start)
+    local last_pb=$(timer_start)
 
     for i in {1..$count}; do
-        progress_bar_detailed "Checking videos: " $i $count 0 $started
+        local elapsed=$(timer_elapsed "$last_pb")
+
+        if (( elapsed / 200000000 )) || [[ $i -eq $count ]]; then # 200 milliseconds
+            local last_pb=$(timer_start)
+            progress_bar_detailed "Checking videos: " $i $count 0 $started
+        fi
 
         # IE = extractor name
         local ie_url="${ADF_YS_DOMAINS_IE_URLS[${video_ies[i]}]}"
