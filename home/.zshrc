@@ -23,10 +23,7 @@ unsetopt BANG_HIST
 set +H
 
 # Prezto configuration version
-_prezto_config_version="1"
-_prezto_version_file="$HOME/.adf-prezto-config-version"
-
-if [[ ! -f $_prezto_version_file ]]; then
+if [[ ! -f $HOME/.zpreztorc ]]; then
 	echo "Setting up Prezto configuration files..."
 
 	setopt EXTENDED_GLOB
@@ -34,15 +31,11 @@ if [[ ! -f $_prezto_version_file ]]; then
 	for rcfile in "$HOME"/.zprezto/runcoms/^README.md(.N); do
 		ln -s "$rcfile" "$HOME/.${rcfile:t}"
 	done
-
-	echo "0" > "$_prezto_version_file"
 fi
 
-if [[ $(command cat "$_prezto_version_file") != $_prezto_config_version ]]; then
+if ! cmp "$HOME/.zpreztorc" "$HOME/.prezto.zsh" > /dev/null; then
 	echo "Updating Prezto configuration..."
-
 	command cat "$HOME/.prezto.zsh" > "$HOME/.zpreztorc"
-	echo "$_prezto_config_version" > "$_prezto_version_file"
 fi
 
 # Load Prezto
