@@ -26,3 +26,6 @@ export ADF_CONF_CRON_LOGS_DIR="$ADF_ASSETS_DIR/cron-logs"
 # Default bandwidth limit for the 'ytdl' function
 # Can be overriden with the YTDL_LIMIT_BANDWIDTH variable
 export ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH="1G"
+
+# Update path for 'zerupdate'
+export ADF_UPDATE_PATH=""

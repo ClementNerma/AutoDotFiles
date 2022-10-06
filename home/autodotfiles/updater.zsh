@@ -35,15 +35,16 @@ function zerupdate() {
 	if [[ ! -z $1 ]]; then
 		echoverb "Updating from provided path: \z[magenta]°$1\z[]°"
 		local update_path="$1"
+	elif [[ -z $ADF_UPDATE_PATH ]]; then
+		echoverb "Updating from configured path: \z[magenta]°$ADF_UPDATE_PATH\z[]°"
+		local update_path="$ADF_UPDATE_PATH"
+	elf [[ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]]; then
+		local update_path="$PROJDIR/AutoDotFiles"
 	else
-		if [[ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]]; then
-			local update_path="$PROJDIR/AutoDotFiles"
-		else
-			echoerr "Please provide a path to update ZSH (default path is only available for main computer)"
-			return 1
-		fi
+		echoerr "Please provide a path to update ZSH (default path is only available for main computer)"
+		return 1
 	fi
-
+	
 	if [[ ! -d $update_path ]] || [[ ! -f $update_path/installer.bash ]] || [[ ! -f $update_path/home/.zshrc ]]; then
 		echoerr "Could not find \z[yellow]°AutoDotFiles\z[]° files at path \z[magenta]°$update_path\z[]°"
 		return 1
