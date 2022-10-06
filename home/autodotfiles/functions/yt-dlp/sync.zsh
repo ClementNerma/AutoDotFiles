@@ -185,8 +185,7 @@ function ytsync() {
         echoinfo "| Downloading video \z[yellow]°${di}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[di]}\z[]°..."
         echoinfo "| Video from \z[cyan]°$video_ie\z[]° at \z[green]°${download_list[di]}\z[]°$cookie_msg"
 
-        if ! YTDL_ALWAYS_THUMB=1 \
-             YTDL_FILENAMING="$filenaming" \
+        if ! YTDL_FILENAMING="$filenaming" \
              YTDL_COOKIE_PROFILE="$cookie_profile" \
              YTDL_REPAIR_DATE="$repair_date" \
              YTDL_LIMIT_BANDWIDTH="${YTSYNC_OVERRIDE_BANDWIDTH_LIMIT:-${YTDL_LIMIT_BANDWIDTH:-${download_bandwidth_limits[di]}}}" \
