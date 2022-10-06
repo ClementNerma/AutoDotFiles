@@ -3,6 +3,7 @@ export ADF_YS_CACHE=".ytdlsync-cache"
 export ADF_YS_FILENAMING=".ytdlsync-filenaming"
 export ADF_YS_FORMAT=".ytdlsync-quality"
 export ADF_YS_BLACKLIST=".ytdlsync-blacklist"
+export ADF_YS_CUSTOM_BLACKLIST=".ytdlsync-custom-blacklist"
 export ADF_YS_LOCKFILES_DIR="$ADF_ASSETS_DIR/ytsync-lockfiles"
 
 if [[ ! -d $ADF_YS_LOCKFILES_DIR ]]; then
@@ -456,6 +457,14 @@ function ytsync_build_cache() {
             if [[ -f $playlist_blacklist ]] && grep -q "$blacklist_pattern" "$playlist_blacklist"; then
                 # echoinfo "\z[gray]°$(NO_COLOR=1 echoinfo "$checking_msg BLACKLISTED")\z[]°"
                 echoinfo "\z[gray]°$checking_msg BLACKLISTED\z[]°"
+                continue
+            fi
+
+            local playlist_custom_blacklist="${check_list_paths[i]}/$ADF_YS_CUSTOM_BLACKLIST"
+
+            if [[ -f $playlist_custom_blacklist ]] && grep -q "$blacklist_pattern" "$playlist_custom_blacklist"; then
+                # echoinfo "\z[gray]°$(NO_COLOR=1 echoinfo "$checking_msg BLACKLISTED")\z[]°"
+                echoinfo "\z[gray]°$checking_msg\z[]° \z[yellow]°MANUALLY BLACKLISTED\z[]°"
                 continue
             fi
 
