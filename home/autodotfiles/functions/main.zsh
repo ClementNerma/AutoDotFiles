@@ -192,54 +192,6 @@ function debir() {
 	command rm "$debpath"
 }
 
-# Start a timer
-function timer_start() {
-	date +%s%N
-}
-
-function timer_elapsed() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a timer value."
-		return 1
-	fi
-
-	local started=$(($1))
-	local now=$(($(date +%s%N)))
-	local elapsed=$((now - started))
-
-	printf '%s' $elapsed
-}
-
-function timer_show() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a timer value."
-		return 1
-	fi
-
-	local elapsed=$(timer_elapsed "$1")
-	humanduration_ms $((elapsed / 1000000))
-}
-
-function timer_show_seconds() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a timer value."
-		return 1
-	fi
-
-	local elapsed=$(timer_elapsed "$1")
-	humanduration $((elapsed / 1000000000))
-}
-
-function timer_end() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a timer value."
-		return 1
-	fi
-
-	timer_show "$1"
-	unset "ADF_TIMERS[$1]"
-}
-
 function humanduration() {
 	if [[ -z $1 ]]; then
 		echoerr "Please provide a duration in milliseconds."
