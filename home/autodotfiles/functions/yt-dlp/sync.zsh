@@ -432,12 +432,21 @@ function ytsync_build_cache() {
         echoinfo "Checking availability of \z[yellow]°${#check_list_ids}\z[]° videos..."
 
         local max_spaces=$(echo -n "${#check_list_ids}" | wc -c)
+        
+        local longest_list_path=0
 
+        for entry in $check_list_paths; do
+            echo ">${entry} | ${#entry} | ${longest_list_path}<"
+            if [[ $entry != "." ]] && (( ${#entry} > $longest_list_path )); then
+                local longest_list_path=${#entry}
+            fi
+        done
+        
         for i in {1..${#check_list_ids}}; do
             if [[ ${check_list_paths[i]} = "." ]]; then
                 local path_display=""
             else
-                local path_display="\z[cyan]°${check_list_paths[i]}\z[]° "
+                local path_display="\z[cyan]°$(printf "%-${longest_list_path}s" "${check_list_paths[i]}")\z[]° "
             fi
 
             local blacklist_pattern="${check_list_ies[i]}/${check_list_ids[i]}"
