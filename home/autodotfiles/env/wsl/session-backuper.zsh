@@ -2,36 +2,55 @@
 # Checksum of the last session backup folder
 export ADF_LAST_SESSION_BACKUP_CKSUM_FILE="$ADF_CONF_WSL_BACKUP_SESSION_DIR/last-session-backup-cksum.txt"
 
+export ADF_SESSION_UPDATE_START_LINE_MARKER="@-- UPDATE:"
+export ADF_SESSION_UPDATE_END_LINE_MARKER="@-- /UPDATE"
+
+# Ensure directory exists
+if [[ ! -d $ADF_CONF_WSL_BACKUP_SESSION_DIR ]]; then
+    mkdir -p "$ADF_CONF_WSL_BACKUP_SESSION_DIR"
+fi
+
 # Backup the session
 # Works by enumerating the windows of the said softwares' processes, and filtering them through PowerShell and ZSH
 function adf_backup_session() {
-    local outdir="$ADF_CONF_WSL_BACKUP_SESSION_DIR/$(humandate)"
-    mkdir -p "$outdir"
+    local tmpfile="$TEMPDIR/adf-backup-session-$(humandate).txt"
+    touch "$tmpfile"
 
     # Iterate over all software profiles
     for software in $( _adf_bss_entries ); do
-        adf_backup_software_session "$outdir" "$software" "$(_adf_bss_get_key "$software" "process_name")" "$(_adf_bss_get_key "$software" "window_format")"
+        adf_backup_software_session "$tmpfile" "$software" "$(_adf_bss_get_key "$software" "process_name")" "$(_adf_bss_get_key "$software" "window_format")"
     done
 
-    # Prepare the final directory
-    # In case of fail above, the final directoy will simply not have a checksum, but will remain on the disk
-    local cksum=$(cksumdir "$outdir")
-    local finaldir="$outdir-$cksum"
+    local now=$(humandate)
+
+    local content=$(command cat "$tmpfile")
+    local cksum=$(cksumfile "$tmpfile")
+    command rm "$tmpfile"
+
+    local outfile="$ADF_CONF_WSL_BACKUP_SESSION_DIR/$(date +%F).txt"
+    [[ -f $outfile ]]; local first_in_day=$?
 
     # Ignore empty values
-    if [[ -z $(command ls -A "$outdir") ]]; then
+    if [[ -z $content ]]; then
       echosuccess "Nothing to backup!"
-      mv "$outdir" "$finaldir.empty"
+      echo "@-- EMPTY | $now" >> "$outfile"
+
+      if [[ -f $ADF_LAST_SESSION_BACKUP_CKSUM_FILE ]]; then
+        command rm "$ADF_LAST_SESSION_BACKUP_CKSUM_FILE"
+      fi
+
       return
     fi
 
-    if [[ -f $ADF_LAST_SESSION_BACKUP_CKSUM_FILE ]] && [[ $cksum -eq $(cat $ADF_LAST_SESSION_BACKUP_CKSUM_FILE) ]]; then
-        local finaldir="$finaldir.nochange"
+    if ! (( $first_in_day )) && [[ -f $ADF_LAST_SESSION_BACKUP_CKSUM_FILE ]] && [[ $cksum -eq $(cat $ADF_LAST_SESSION_BACKUP_CKSUM_FILE) ]]; then
         echowarn "Nothing changed since previous backup."
-        mv "$outdir" "$finaldir"
-        command rm "$finaldir/"*.txt
+        echo "@-- NOCHANGE | $now" >> "$outfile"
     else
-        mv "$outdir" "$finaldir"
+        echo "$ADF_SESSION_UPDATE_START_LINE_MARKER $cksum | $now" >> "$outfile"
+        echo "$content" >> "$outfile"
+        echo "$ADF_SESSION_UPDATE_END_LINE_MARKER" >> "$outfile"
+
+        echo "" >> "$outfile"
         echo -n "$cksum" > "$ADF_LAST_SESSION_BACKUP_CKSUM_FILE"
         echo -n "$finaldir"
     fi
@@ -64,9 +83,9 @@ function adf_backup_software_session() {
         # Note that accents may cause regex even like (.*) to fail
         if [[ ! $window =~ $4 ]]; then
             echowarn "WARNING: Invalid window format for software \z[cyan]°$3\z[]°: \z[magenta]°$window\z[]°"
-            echo "##INVALID##:$window" >> "$1/$2.txt"
+            echo "$2: ##INVALID##:$window" >> "$1"
         else
-	        echo "${match[1]}" >> "$1/$2.txt"
+	        echo "$2: ${match[1]}" >> "$1"
         fi
     done <<< "$windows"
 }
@@ -106,58 +125,42 @@ function adf_restore_session() {
       local filter="\-$CKSUM$"
     fi
 
-    # Get the last backup's directory name, taking into account the provided filter (if any)
-    local last_backup=$(
-        # List all items in the session backup directory
-        command ls -1A "$ADF_CONF_WSL_BACKUP_SESSION_DIR" |
+    local files=$(command ls -1A "$ADF_CONF_WSL_BACKUP_SESSION_DIR" | grep "^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\.txt$" | sort -r)
+    local session_file=""
+    local content=""
 
-        # Apply the provided filter (will have no effect if the filter is empty)
-        grep "$filter" |
+    for file in $files; do
+        local file_path="$ADF_CONF_WSL_BACKUP_SESSION_DIR/$file"
 
-        # Exclude files based on if the item's name as an extension or not
-        # Simplest method as we only have a name and not an absolute path,
-        # and 'ls' does not allow listing only directories
-        grep -v "\..*" |
+        if ! grep -q "$ADF_SESSION_UPDATE_START_LINE_MARKER" "$file_path"; then continue; fi
 
-        # Exclude nochange directories
-        grep -v "\\.nochange" |
+        local session_file="$file"
+        local start_line=$(grep -n "$ADF_SESSION_UPDATE_START_LINE_MARKER" "$file_path" | tail -1 | cut -f1 -d':')
+        local end_line=$(grep -n "$ADF_SESSION_UPDATE_END_LINE_MARKER" "$file_path" | tail -1 | cut -f1 -d':')
 
-        # Ensure the directory as a checksum in it
-        grep "[0-9]" |
+        local content=$(command cat "$file_path" | tail +$((start_line + 2)) | head -n$(($end_line - $start_line - 2)))
+    done
 
-        # Sort by name - as the directories' names start with a fixed-length timestamp, this will sort the directories by ascending date
-        sort |
+    if [[ -z $session_file ]]; then
+        echoerr "No session to restore."
+        return 10
+    fi
 
-        # Get the last item, which means the most recent backup
-        tail -n1
-    )
+    echoinfo "Restoring session from session file \z[magenta]°$session_file\z[]°..."
 
-    echoinfo "Restoring session from directory: \z[yellow]°$last_backup\z[]°..."
+    local content=$(dos2unix <<< "$content")
 
-    # Look for failures
+    # Treat all software one by one
+    local softwares=()
+    local files_to_open=()
     local failed=0
 
-    # Iterate over the list of software to restore
-    for list_file in "$ADF_CONF_WSL_BACKUP_SESSION_DIR/$last_backup/"*; do
-        # Only restore the provided software, if any
-		if [[ ! -z $1 && "$(basename "$list_file")" != "$1.txt" ]]; then
-		    echowarn "> Skipping software file \z[magenta]°$(basename "$list_file")\z[]° as asked."
-		    continue
-		fi
-
-        local filename="$(basename "$list_file")"
-
-        if [[ ! $filename =~ ^(.*)\.txt$ ]]; then
-            echoerr "Unknown session software file: \z[yellow]°$list_file\z[]°"
-            local failed=1
-            continue
+    while IFS= read -r line; do
+        if ! [[ $line =~ ^([a-zA-Z0-9_\-]+):[[:space:]](.*)$ ]]; then
+            echoerr "Invalid line: \z[yellow]°$line\z[]°"
         fi
 
-        local software="${match[1]}"
-
-        echoinfo "> Restoring program session for software \z[cyan]°$software\z[]°..."
-
-        # (Try to) restore this software's session
+        local software=${match[1]}
         
         if ! _adf_bss_has_entry "$software"; then
             echoerr "Unknown software \z[cyan]°$software\z[]°"
@@ -165,47 +168,24 @@ function adf_restore_session() {
             continue
         fi
 
-        adf_restore_session_softlist "$software" "$list_file" "$(_adf_bss_get_key "$software" "executable")" $(_adf_bss_get_array_lines "$software" "lookup_dirs")
-    done
+        if [[ ! -z $1 && $software != $1 ]]; then
+            continue
+        fi
 
-    # End
-    if (( $failed )); then
-        echoerr "Some errors occurred, please look at output above."
-        return 1
-    else
-        echosuccess "Done."
-    fi
-}
+        local software_brackets="\z[cyan]°[$1]\z[]°"
 
-# Restore a software's session from a list of items
-# Arguments: <software name> <list file> <executable path> <...lookup directories>
-function adf_restore_session_softlist() {
-    # Solve PowerShell-related encoding problems (CRLF)
-    local files=$(dos2unix < "$2")
-
-    # List of found files to open (see reason below)
-    local toopen=()
-
-    # Number of failures
-    local failed=0
-
-    # Pre-formatted software file name
-    local software_brackets="\z[cyan]°[$1]\z[]°"
-
-    # Iterate over the list of items to restore
-    while IFS=$'\n' read -r file; do
         # Trim the file's name
-        local trimmed_file="$(echo "$file" | sed 's/ *$//g')"
+        local file="$(echo "${match[2]}" | sed 's/ *$//g')"
 
         # Handle items tagged as invalids
-        if [[ $trimmed_file = "##INVALID##:"* ]]; then
-        	echoerrnp ">> Software $software_brackets: invalid item found in backup: \z[yellow]°${trimmed_file:12}\z[]°"
+        if [[ $file = "##INVALID##:"* ]]; then
+        	echoerrnp ">> Software $software_brackets: invalid item found in backup: \z[yellow]°${file:12}\z[]°"
         	failed=$((failed+1))
         	continue
     	fi
 
         # Find the item to open
-        local item=$(adf_find_session_item "$trimmed_file" "${@:4}")
+        local item=$(adf_find_session_item "$file" $(_adf_bss_get_array_lines "$software" "lookup_dirs"))
 
         # If the item is not found, increase the failures counter
         if [[ -z $item ]]; then
@@ -215,23 +195,28 @@ function adf_restore_session_softlist() {
 	    	echoinfo ">> Software $software_brackets: found \z[yellow]°$item\z[]°"
 
             if [[ -z $RESTORATION_DRY_RUN ]]; then
-                toopen+=("$(wslpath -w "$item")")
+                softwares+=("$(_adf_bss_get_key "$software" "executable")")
+                files_to_open+=("$(wslpath -w "$item")")
             fi
         fi
-    done <<< "$files"
+    done <<< "$content"
 
     # HACK: Launching the software pieces directly in the loop above would make it break
     #       This is a known bug amongst most shells
     local opened=0
 
-    for item in ${toopen[@]}; do
-		(nohup "$3" "$item" > /dev/null 2>&1 &)
+    echoverb "Opening ${#files_to_open} files..."
+    
+    for i in {1..${#softwares}}; do
+		(nohup "${softwares[i]}" "${files_to_open[i]}" > /dev/null 2>&1 &)
 		opened=$((opened+1))
     done
 
+    echoverb "Done."
+
     # Ensure all files to restore have been successfully opened
-    if [[ $opened != ${#toopen} ]]; then
-		echoerr "Only \z[yellow]°$opened\z[]° files were successfully opened ; \z[yellow]°${#toopen}\z[]° were expected."
+    if [[ $opened != ${#files_to_open} ]]; then
+		echoerr "Only \z[yellow]°$opened\z[]° files were successfully opened ; \z[yellow]°${#files_to_open}\z[]° were expected."
 		return 1
     fi
 
@@ -248,6 +233,8 @@ function adf_find_session_item() {
         return 1
     fi
 
+    echoverb "Looking for $1..."
+
     # Iterate over the list of lookup directories
     for dir in "${@:2}"; do
         # Assertion to avoid problems if the provided directory does not exist
@@ -261,6 +248,7 @@ function adf_find_session_item() {
             # If an item exists with the filename we're looking for...
 		    if [[ -f $candidate/$1 || -d $candidate/$1 ]]; then
                 # Success, display it and return
+                echoverb "Found at: $candidate/$1"
                 echo -n "$candidate/$1"
                 return
             fi
