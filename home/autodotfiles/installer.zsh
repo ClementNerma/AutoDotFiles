@@ -4,6 +4,7 @@
 
 export ADF_INSTALLED_LIST="$ADF_ASSETS_DIR/installed-components.txt"
 export ADF_INSTALLER_HASH_FILE="$ADF_ASSETS_DIR/installer-checksum.txt"
+export ADF_INSTALLER_MAIN_PC_CHECKED_MARKER="$ADF_ASSETS_DIR/installer-checked-for-main-pc.txt"
 export ADF_INSTALLER_SCRIPTS="$ADF_DIR/installer-scripts.zsh"
 
 # Usage: <component name ("*" for everything)> <1 to skip if component already installed>
@@ -21,7 +22,9 @@ function adf_install() {
     local cksum=$(cksumstr "$scripts")
 
     if (( $skip_if_installed )) && [[ -f $ADF_INSTALLER_HASH_FILE ]] && [[ $(cat "$ADF_INSTALLER_HASH_FILE") = $cksum ]]; then
-        return
+        if ! (( $ADF_CONF_MAIN_PERSONAL_COMPUTER )) || [[ -f $ADF_INSTALLER_MAIN_PC_CHECKED_MARKER ]]; then
+            return
+        fi
     fi
 
     if [[ ! -f $ADF_INSTALLED_LIST ]]; then
@@ -333,6 +336,10 @@ function adf_install() {
 
     if (( $skip_if_installed )); then
         printf '%s' "$cksum" > "$ADF_INSTALLER_HASH_FILE"
+
+        if (( $ADF_CONF_MAIN_PERSONAL_COMPUTER )) && [[ ! -f $ADF_INSTALLER_MAIN_PC_CHECKED_MARKER ]]; then
+            touch "$ADF_INSTALLER_MAIN_PC_CHECKED_MARKER"
+        fi
     fi
 }
 

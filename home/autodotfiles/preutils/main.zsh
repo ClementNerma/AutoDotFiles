@@ -68,7 +68,7 @@ function passive_confirm() {
 			return 1
 		fi
 		
-		if [[ $___pc_answer = '$\n' ]]; then
+		if [[ $___pc_answer = $'\n' ]]; then
 			return
 		fi
 
@@ -76,7 +76,7 @@ function passive_confirm() {
 			return
 		fi
 
-		echowarn "Unrecognized key (\z[blue]°<Enter>\z[]° to continue, \z[blue]°<Ctrl+D>\z[]° to abort, \z[blue]°<P>\z[]° to pause)"
+		echowarn "Unrecognized key (\z[blue]°<Enter>\z[]° to continue, \z[blue]°<Ctrl+C>\z[]° then \z[blue]°<Ctrl+D>\z[]° to abort, \z[blue]°<P>\z[]° to pause)"
 	done
 }
 
