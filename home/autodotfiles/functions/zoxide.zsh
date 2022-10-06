@@ -95,6 +95,9 @@ function openfze() { openfz "$@" && exit }
 function opense() { opens "$@" ; exit }
 function opensze() { opensz "$@" ; exit }
 
+function openl() { open "$(latest)" }
+function openle() { opene "$(latest)" }
+
 # Add a list of directories to Zoxide's index
 # All directories one level under the provided list will be indexed as well
 function zoxide_populate_with() {

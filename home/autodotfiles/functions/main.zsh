@@ -167,6 +167,11 @@ function mkcd() {
 	cd "$1"
 }
 
+# Get most recent item in current directory
+function latest() {
+	command ls -Art | tail -n 1
+}
+
 # Software: Trasher
 function trasher() {
 	sudo "$ADF_BIN_DIR/trasher" --create-trash-dir --trash-dir "$TRASHDIR" "$@"
