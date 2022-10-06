@@ -117,6 +117,7 @@ function ytsync() {
 
     # === Download videos === #
 
+    local download_started=$(timer_start)
     local errors=0
 
     for i in {1..${#download_list}}; do
@@ -134,6 +135,9 @@ function ytsync() {
             echowarn "Waiting 5 seconds before next video..."
             sleep 5
         fi
+
+        progress_bar_detailed "Instant progress: " $i ${#download_list} 0 $download_started
+        printf "\n\n"
     done
 
     if [[ $errors -eq 0 ]]; then
