@@ -93,7 +93,11 @@ function ytsync() {
     local errors=0
     local forecast_lock=0
 
-    for di in {1..$count}; do
+    local di=0
+
+    while (( $di <= $count )); do
+        local di=$(($di + 1))
+
         local entry=$(echo -E "$cache" | jq -r ".[$((di - 1))]")
 
         local video_ie=$(echo -E "$entry" | jq -r ".ie_key")
@@ -142,6 +146,8 @@ function ytsync() {
             continue
         fi
 
+        local ytdl_out_file="$TEMPDIR/ytdl-err-$(date +%s%N).log"
+
         echoinfo "| Downloading video \z[yellow]°$di\z[]° / \z[yellow]°$count\z[]°: \z[magenta]°$video_title\z[]°..."
         echoinfo "| Video from \z[cyan]°$video_ie\z[]° at \z[green]°$video_url\z[]°$cookie_msg"
 
@@ -153,8 +159,30 @@ function ytsync() {
              YTDL_FORMAT="$format" \
              YTDL_FILENAMING_PREFIX="${ADF_YS_DOMAINS_FILENAME_PREFIX[$video_ie]}" \
              ytdl "$video_url" --write-sub --sub-lang fr,en \
-             --match-filter "!is_live"
+             --match-filter "!is_live" \
+             1>&1 2>&2 1>"$ytdl_out_file"
         then
+            local ytdl_err=$(cat "$ytdl_out_file")
+            command rm "$ytdl_out_file"
+
+            if [[ $ytdl_err = *"HTTP Error 429: Too Many Requests."* ]]; then
+                echowarn "Failed due to too many requests being made to server."
+                echowarn ""
+
+                local waiting=$((10 * 60))
+
+                while (( $waiting > 0 )); do
+                    local waiting=$((waiting - 1))
+                    local waiting_for=$(humanduration "$waiting")
+
+                    ADF_UPDATABLE_LINE=1 echowarn ">> Waiting before retry... \z[cyan]°$waiting_for\z[]°"
+                    sleep 1
+                done
+
+                local di=(($di - 1))
+                continue
+            fi
+
             local errors=$((errors+1))
             echowarn "Waiting 5s before the next video..."
             
@@ -167,6 +195,8 @@ function ytsync() {
                 return
             fi
         fi
+
+        command rm "$tmp_err_file"
 
         if (( $needlockfile )) && (( $di < $count )); then
             if [[ $next_video_ie = $video_ie ]]; then
