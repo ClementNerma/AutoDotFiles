@@ -17,16 +17,16 @@ function _report_echoc_error() {
     local cursor=""
 
     for i in {1..$(($3-1))}; do
-        local cursor="$cursor "
+        cursor+=" "
     done
 
     local carets=""
 
     for i in {1..$4}; do
-        local carets="$carets^"
+        carets+="^"
     done
 
-    local cursor="$cursor${ADF_FORMAT_BLUE}$carets${ADF_FORMAT_RESET}"
+    local cursor+="${ADF_FORMAT_BLUE}$carets${ADF_FORMAT_RESET}"
 
     >&2 echo "${ADF_FORMAT_RED}====================== echoc error ======================${ADF_FORMAT_RESET}"
     >&2 echo "${ADF_FORMAT_RED}| $1${ADF_FORMAT_RESET}"
@@ -120,11 +120,11 @@ function echoc() {
         local remaining=$((COLUMNS - len))
 
         if (( $remaining )); then
-            local output="$output$(printf ' %.0s' {1..$remaining})"
+            output+=$(printf ' %.0s' {1..$remaining})
         fi
 
         if (( $remaining > 1 )); then
-            local output="$output$(printf '\b%.0s' {1..$((remaining-1))})"
+            output+=$(printf '\b%.0s' {1..$((remaining-1))})
         fi
     fi
 
