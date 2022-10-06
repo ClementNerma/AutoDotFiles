@@ -168,3 +168,6 @@ export DISPLAY=":0"
 
 # Mount storage devices on startup (this typically takes 50~100 ms)
 mount_wsl_drives
+
+# Fix socket connection
+source "$ADF_ENV_DIR/fix-socket-connection.zsh"
