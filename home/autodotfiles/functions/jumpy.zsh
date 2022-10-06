@@ -29,7 +29,7 @@ function openfd() {
         return
     fi
 
-    local selected=$(echo "$results" | fzf)
+    local selected=$(echo "$results" | scout)
 
     if [[ -z $selected ]]; then
         return 1
@@ -53,7 +53,7 @@ function openz() {
 # Open a file or directory with the file explorer from a 'jumpy' interactive search
 function openzi() {
     local list=$(jumpy list)
-    local selected=$(fzf <<< "$list")
+    local selected=$(scout <<< "$list")
 
     if [[ -z $selected ]]; then
         return 1

@@ -24,8 +24,8 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 
-# Integration for FZF
-source ~/.fzf.zsh
+# # Integration for FZF
+# source ~/.fzf.zsh
 
 # # Integration for Zoxide
 # export _ZO_DATA_DIR="$ADF_ASSETS_DIR/zoxide"

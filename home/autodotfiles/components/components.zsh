@@ -116,22 +116,6 @@ function fd() {
     dlghbin sharkdp/fd "fd-.*-x86_64-unknown-linux-musl.tar.gz" "fd-.*-arm-unknown-linux-musleabihf.tar.gz" "fd-*/fd" fd
 }
 
-function fzf() {
-    # NAME: fzf
-    # PRIORITY: 1
-    # ENV: all
-    # VERSION: fzf --version
-    # NEEDS_APT_UPDATE: no
-
-    if [[ -d ~/.fzf ]]; then
-        mvbak ~/.fzf
-    fi
-
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    chmod +x ~/.fzf/install
-    ~/.fzf/install --all
-}
-
 function jumpy() {
     # NAME: Jumpy
     # PRIORITY: 1
@@ -256,6 +240,17 @@ function ripgrep() {
     # NEEDS_APT_UPDATE: no
 
     dlghbin BurntSushi/ripgrep "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz" "ripgrep-.*-arm-unknown-linux-gnueabihf.tar.gz" "ripgrep-*/rg" "rg"
+}
+
+function scout() {
+    # NAME: Scout
+    # PRIORITY: 1
+    # ENV: all
+    # VERSION: scout -V
+    # NEEDS_APT_UPDATE: no
+
+    dlghrelease jhbabon/scout scout-linux "$ADF_BIN_DIR/scout"
+    chmod +x "$ADF_BIN_DIR/scout"
 }
 
 function sd() {
@@ -423,6 +418,24 @@ function borgmatic() {
 
     pip3 install --user --upgrade "borgmatic"
 }
+
+# =============== REMOVED =============== #
+
+# function fzf() {
+#     # NAME: fzf
+#     # PRIORITY: 1
+#     # ENV: all
+#     # VERSION: fzf --version
+#     # NEEDS_APT_UPDATE: no
+
+#     if [[ -d ~/.fzf ]]; then
+#         mvbak ~/.fzf
+#     fi
+
+#     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+#     chmod +x ~/.fzf/install
+#     ~/.fzf/install --all
+# }
 
 # function zoxide() {
 #     # NAME: Zoxide
