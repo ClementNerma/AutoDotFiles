@@ -99,15 +99,31 @@ function echoc() {
 
     if (( $ADF_DISPLAY_TO_STDERR )); then
         if [[ $# > 1 ]]; then
-            >&2 printf "$ADF_DISPLAY_PREFIXMSG$output\n" "${@:2}"
+            if (( $ADF_DISPLAY_NO_NEWLINE )); then
+                >&2 printf "$ADF_DISPLAY_PREFIXMSG$output" "${@:2}"
+            else
+                >&2 printf "$ADF_DISPLAY_PREFIXMSG$output\n" "${@:2}"
+            fi
         else
-            >&2 echo "$ADF_DISPLAY_PREFIXMSG$output"
+            if (( $ADF_DISPLAY_NO_NEWLINE )); then
+                >&2 echo -n "$ADF_DISPLAY_PREFIXMSG$output"
+            else
+                >&2 echo "$ADF_DISPLAY_PREFIXMSG$output"
+            fi
         fi
     else
         if [[ $# > 1 ]]; then
-            printf "$ADF_DISPLAY_PREFIXMSG$output\n" "${@:2}"
+            if (( $ADF_DISPLAY_NO_NEWLINE )); then
+                printf "$ADF_DISPLAY_PREFIXMSG$output" "${@:2}"
+            else
+                printf "$ADF_DISPLAY_PREFIXMSG$output\n" "${@:2}"
+            fi
         else
-            echo "$ADF_DISPLAY_PREFIXMSG$output"
+            if (( $ADF_DISPLAY_NO_NEWLINE )); then
+                echo -n "$ADF_DISPLAY_PREFIXMSG$output"
+            else
+                echo "$ADF_DISPLAY_PREFIXMSG$output"
+            fi
         fi
     fi
 }
