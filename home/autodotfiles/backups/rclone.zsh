@@ -166,7 +166,7 @@ function rclone_mirror() {
 
     if (( ${#unparsed} )); then
         for line in $unparsed; do
-            echoerr "> Unparsed: $line"
+            echoerr "> Unparsed: >\z[yellow]°$line\z[]°<"
         done
         echo ""
     fi
