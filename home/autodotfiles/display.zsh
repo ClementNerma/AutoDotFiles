@@ -135,7 +135,7 @@ function echof() {
         formatted+=$(repeat $((remaining - 1)) printf '\b')
     fi
 
-    echo -n "${@:1:-2}" "$formatted"
+    echo "${@:1:-2}" "$formatted"
 }
 
 function echoerr() {
