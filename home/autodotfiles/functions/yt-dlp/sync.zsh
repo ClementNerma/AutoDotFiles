@@ -44,10 +44,10 @@ function ytsync() {
         --url-filename "$ADF_YS_URL_FILE" \
         --cache-filename "$ADF_YS_CACHE" \
         --auto-blacklist-filename "$ADF_YS_BLACKLIST" \
-        --manual-blacklist-filename "$ADF_YS_CUSTOM_BLACKLIST" \
-        --known-ie-keys "${(kj:;:)ADF_YS_DOMAINS_IE_URLS}" \
-        --always-check "${(kj:;:)ADF_YS_DOMAINS_TO_CHECK}" \
-        --display-list
+        --custom-blacklist-filename "$ADF_YS_CUSTOM_BLACKLIST" \
+        --known-ie-keys "${(kj:,:)ADF_YS_DOMAINS_IE_URLS}" \
+        --always-check-ie-keys "${(kj:,:)ADF_YS_DOMAINS_TO_CHECK}" \
+        --display-colored-list
     ; then
         return 10
     fi
@@ -62,7 +62,13 @@ function ytsync() {
 
     IFS=$'\n' local entries=($(command cat "$ADF_YS_CACHE"))
 
-    local cache=$(cat "$ADF_YS_CACHE" | jq -r)
+    local cache=$(cat "$ADF_YS_CACHE" | jq -r ".entries")
+
+    if [[ $cache = "null" ]]; then
+        echoerr "Invalid cache: no entries property!"
+        return 11
+    fi
+
     local count=$(echo -E "$cache" | jq -r ". | length")
 
     if [[ $count -eq 0 ]]; then
@@ -96,10 +102,10 @@ function ytsync() {
     local forecast_lock=0
 
     for di in {1..$count}; do
-        local entry=$(echo -E "$cache" | jq -r ".[$((i - 1))]")
+        local entry=$(echo -E "$cache" | jq -r ".[$((di - 1))]")
 
         local video_ie=$(echo -E "$entry" | jq -r ".ie_key")
-        local video_dir=$(echo -E "$entry" | jq -r ".syncDir")
+        local video_dir=$(echo -E "$entry" | jq -r ".sync_dir")
         local video_id=$(echo -E "$entry" | jq -r ".id")
         local video_title=$(echo -E "$entry" | jq -r ".title")
         local video_url=$(echo -E "$entry" | jq -r ".url")
