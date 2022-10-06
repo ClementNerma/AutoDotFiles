@@ -96,7 +96,7 @@ function ytsync() {
     local di=0
     local blocked_at=-1
 
-    while (( $di <= $count )); do
+    while (( $di < $count )); do
         local di=$(($di + 1))
 
         local entry=$(echo -E "$cache" | jq -r ".[$((di - 1))]")
