@@ -129,7 +129,7 @@ function zerupdate_restoration_script() {
 		command rm "$UNINSTALLED_FILE"
 	fi
 
-	sudo cp "$ADF_DIR/restore.zsh" "$ADF_CONF_RESTORATION_SCRIPT"
+	sudo cp "$ADF_EXTERNAL_DIR/restore.zsh" "$ADF_CONF_RESTORATION_SCRIPT"
 	sudo chmod +x "$ADF_CONF_RESTORATION_SCRIPT"
 }
 
