@@ -7,16 +7,17 @@ export ADF_INSTALLER_HASH_FILE="$ADF_ASSETS_DIR/installer-checksum.txt"
 export ADF_INSTALLER_MAIN_PC_CHECKED_MARKER="$ADF_ASSETS_DIR/installer-checked-for-main-pc.txt"
 export ADF_INSTALLER_SCRIPTS="$ADF_DIR/installer-scripts.zsh"
 
-# Usage: <component name ("*" for everything)> <1 to skip if component already installed>
-# ADF_FORCE_INSTALL=1 => indicate to the component it's installing for the first time instead of
+# Usage: <component name (not specified = everything)>
+# ADF_SKIP_INSTALLED=1 => skip already-installed components
+# ADF_FORCE_INSTALL=1 => indicate to the component it's installing for the first time instead of updating
 function adf_install() {
     if [[ -z $1 ]]; then
         echoerr "Please provide a component to install (* = everything)"
         return 1
     fi
 
-    local only_install="$1"
-    local skip_if_installed=$(($2))
+    local only_install=("$@")
+    local skip_if_installed=$(($ADF_SKIP_INSTALL))
 
     local scripts=$(cat "$ADF_INSTALLER_SCRIPTS")
     local cksum=$(cksumstr "$scripts")
@@ -156,7 +157,7 @@ function adf_install() {
             continue
         fi
 
-        if [[ $only_install != $func_name ]] && [[ $only_install != "*" || $priority -eq 0 ]]; then
+        if ! (( ${only_install[(Ie)$func_name]} )) && [[ ${#only_install} -ne 0 || $priority -eq 0 ]]; then
             continue
         fi
 
@@ -343,6 +344,6 @@ function adf_install() {
     fi
 }
 
-if ! adf_install "*" 1; then
+if ! ADF_SKIP_INSTALLED=1 adf_install "*"; then
     export ADF_INSTALLER_ABORTED=1
 fi
