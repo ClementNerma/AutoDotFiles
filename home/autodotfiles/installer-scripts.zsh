@@ -249,7 +249,7 @@ function ytdlp() {
     # NAME: YT-DLP
     # PRIORITY: 1
     # ENV: all
-    # VERSION: -
+    # VERSION: yt-dlp --version
     # NEEDS_APT_UPDATE: no
 
     dl "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp" "$ADF_BIN_DIR/yt-dlp"
