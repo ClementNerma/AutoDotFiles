@@ -62,6 +62,7 @@ function ytrepairdate() {
 
         if [[ ! ${entries[i]} =~ ^.+\-([a-zA-Z0-9_\-]+)\.([^\.]+)$ ]]; then
             echoinfo "| Skipping file: \z[magenta]°$entry\z[]° (failed to extract ID)"
+            continue
         fi
 
         local video_id=${match[1]}
