@@ -175,7 +175,7 @@ function adf_view_open() {
     local cwd=$(pwd)
     cd "$view_dir"
 
-    "$(adf_view_software "$1")" "$first_file"
+    (nohup "$(adf_view_software "$1")" "$first_file" > /dev/null 2>&1 &)
     cd "$cwd"
 }
 
