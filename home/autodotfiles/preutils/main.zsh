@@ -98,7 +98,7 @@ function mvbak() {
 		return 1
 	fi
 
-	local renpath="$itempath.bak-$(humandate)"
+	local renpath="$itempath-$(humandate)"
 
 	mv "$itempath" "$renpath"
 	export LAST_MVBAK_PATH="$renpath"
