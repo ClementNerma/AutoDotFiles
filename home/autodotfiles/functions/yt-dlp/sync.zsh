@@ -137,12 +137,16 @@ function ytsync() {
 
     local download_started=$(timer_start)
     local errors=0
+    local forecast_lock=0
 
     for i in {1..${#download_list}}; do
         local video_ie=${download_ies[i]}
         local lockfile="$ADF_YS_LOCKFILES_DIR/$video_ie.lock"
+        local needlockfile=${ADF_YS_DOMAINS_USE_LOCKFILE[$video_ie]}
 
-        if (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$video_ie]} )); then
+        if ! (( $forecast_lock )) && (( $needlockfile )); then
+            local forecast_lock=0
+
             while true; do
                 if [[ -f $lockfile ]]; then
                     local started_waiting=$(timer_start)
@@ -195,14 +199,17 @@ function ytsync() {
             fi
         fi
 
+        if (( $needlockfile )); then
+            if [[ ${download_ies[i+1]} = ${download_ies[i]} ]]; then
+                local forecast_lock=1
+            else
+                command rm "$lockfile"
+            fi
+        fi
+
         progress_bar_detailed "Instant progress: " $i ${#download_list} 0 $download_started
         printf "\n\n"
     done
-
-    if (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$ie]} )); then
-        echowarn ">> Removing lockfile..."
-        rm "$lockfile"
-    fi
 
     if [[ $errors -eq 0 ]]; then
         echosuccess "Done!"
@@ -255,7 +262,6 @@ function ytsync_build_cache() {
         fi
 
         progress_bar_detailed "Getting playlists content: " $i ${#playlist_url_files} 0 $fetching_started " | $sub_total new videos ($total total)"
-        printf "\n"
     done
 
     echoinfo "Videos list was retrieved in \z[yellow]°$(timer_end $started)\z[]°."
@@ -290,6 +296,7 @@ function ytsync_build_cache() {
 
     local download_list=()
 
+    local check_list_paths=()
     local check_list_ies=()
     local check_list_ids=()
     local check_list_titles=()
@@ -314,21 +321,23 @@ function ytsync_build_cache() {
 
         if (( elapsed / 200000000 )) || [[ $i -eq $count ]]; then # 200 milliseconds
             local last_pb=$(timer_start)
-            progress_bar_detailed "Checking videos: " $i $count 0 $started
+            progress_bar_detailed "Checking videos on disk: " $i $count 0 $started
         fi
 
-        # IE = extractor name
-        local ie_url="${ADF_YS_DOMAINS_IE_URLS[${video_ies[i]}]}"
-
-        if [[ -z $ie_url ]]; then
-            echoerr "Found unregistered IE: \z[yellow]°${video_ies[i]}\z[]°"
-            return 20
-        fi
-
+        # Get video's attributes
         local video_path=${video_paths[i]}
         local video_id=${video_ids[i]}
+        local video_ie=${video_ies[i]}
         local video_title=${video_titles[i]}
         local video_url=${video_urls[i]}
+
+        # IE = extractor name
+        local ie_url="${ADF_YS_DOMAINS_IE_URLS[$video_ie]}"
+
+        if [[ -z $ie_url ]]; then
+            echoerr "Found unregistered IE: \z[yellow]°$video_ie\z[]°"
+            return 20
+        fi
         
         # Some extractors won't give us the video identifier with "--flat-playlist"
         # So we get it using the video's URL thanks to the user-registered extractors
@@ -358,7 +367,8 @@ function ytsync_build_cache() {
         # Add the video to the checklist if the domain is marked as requiring a check for each video
         # (e.g. videos with paywalls etc.)
         if (( ${ADF_YS_DOMAINS_CHECKING_MODE[${video_ies[i]}]} )); then
-            check_list_ies+=("${video_ies[i]}")
+            check_list_paths+=("$video_path")
+            check_list_ies+=("$video_ie")
             check_list_ids+=("$video_id")
             check_list_titles+=("$video_title")
             check_list_urls+=("$video_url")
@@ -370,10 +380,18 @@ function ytsync_build_cache() {
 
     # Check videos if required
     if [[ ${#check_list_ids} -ne 0 ]]; then
-        echoinfo "Checking availibility of \z[yellow]°${#check_list_ids}\z[]° videos..."
+        echoinfo "Checking availability of \z[yellow]°${#check_list_ids}\z[]° videos..."
+
+        local max_spaces=$(echo -n "${#check_list_ids}" | wc -c)
 
         for i in {1..${#check_list_ids}}; do
-            echoinfo -n "| Checking video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#check_list_ids}\z[]° \z[gray]°(${check_list_ids[i]})\z[]°..."
+            if [[ ${check_list_paths[i]} = "." ]]; then
+                local path_display=""
+            else
+                local path_display="\z[cyan]°${check_list_paths[i]}\z[]° "
+            fi
+
+            echoinfo -n "| Checking video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#check_list_ids}\z[]° $path_display\z[gray]°(${check_list_ids[i]})\z[]°..."
 
             if ! yt-dlp "${check_list_urls[i]}" --get-url > /dev/null 2>&1; then
                 echoc " \z[red]°ERROR\z[]°"
@@ -383,7 +401,7 @@ function ytsync_build_cache() {
                 echoc " \z[green]°OK\z[]°"
             fi
 
-            cache_content+="${check_list_ies[i]}\n${check_list_ids[i]}\n${check_list_titles[i]}\n${check_list_urls[i]}\n\n"
+            cache_content+="${check_list_ies[i]}\n${check_list_paths[i]}\n${check_list_ids[i]}\n${check_list_titles[i]}\n${check_list_urls[i]}\n\n"
             local total=$((total+1))
         done
     fi
