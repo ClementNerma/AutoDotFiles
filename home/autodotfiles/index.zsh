@@ -75,8 +75,6 @@ export ADF_FILES_LIST="$HOME/.autodotfiles-files-list.txt"
 # Load the default configuration file
 source "$ADF_DIR/config.zsh"
 
-# Load the local configuration file
-source "$ADF_USER_DIR/config.zsh"
 
 # Load display functions
 source "$ADF_DIR/display.zsh"
