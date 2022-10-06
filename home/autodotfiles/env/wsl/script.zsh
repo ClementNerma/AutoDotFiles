@@ -39,24 +39,6 @@ function wincmd2text() {
   "$WIN_CMD_PATH" /C "$@" | tr -d "\r"
 }
 
-# Make an alias to a Windows command
-# e.g. "winalias mycmd" will allow to use "mycmd" by running PowerShell transparently
-function winalias() {
-  for name in "$@"; do
-    alias "${name}=win ${name}";
-  done
-}
-
-# Run a Cargo project located in the projects directory, on Windows
-function cargextw() {
-	win cargo run "--manifest-path=C:\\Users\\$WINUSER\\Projets\\$1\\Cargo.toml" -- ${@:2}
-}
-
-# Run a Cargo project located in the projects directory in release mode, on Windows
-function cargextwr() {
-	win cargo run "--manifest-path=C:\\Users\\$WINUSER\\Projets\\$1\\Cargo.toml" --release -- ${@:2}
-}
-
 # Remount a drive in WSL
 function remount() {
 	sudo umount /mnt/${1:l} 2> /dev/null
@@ -74,8 +56,6 @@ function wslclocksync() {
 
 # Mount drives in WSL, including removable ones
 function mount_wsl_drives() {
-  local found_c=0
-
   for drive in /mnt/*
   do
     local letter=${drive:s/\/mnt\//}
