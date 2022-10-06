@@ -17,33 +17,6 @@ function z() {
 # Aliases to exit after open commands
 function opene() { open "$@" && exit }
 
-# Add a list of directories to Jumpy's index
-# All directories one level under the provided list will be indexed as well
-function jumpy_populate_with() {
-    echoinfo "Building directories list..."
-
-    local fd_args=()
-
-    for dir in $@; do
-        fd_args+=("--search-path" "$dir")
-    done
-
-    if ! fd_list=$(fd ${fd_args[@]} --type d --max-depth ${MAX_DEPTH:-1}); then
-        echoerr "Command \z[cyan]°fd\z[]° failed (see output above)."
-        return 10
-    fi
-
-    IFS=$'\n' local directories=($(echo -E "$fd_list"))
-
-    echoinfo "Found \z[yellow]°${#directories}\z[]° directories to populate Jumpy with."
-
-    for dir in $directories; do
-        jumpy add "$dir"
-    done
-
-    echosuccess "Successfully populated Jumpy."
-}
-
 function jumpy_handler() {
     if (( $__JUMPY_DONT_REGISTER )); then
         return
