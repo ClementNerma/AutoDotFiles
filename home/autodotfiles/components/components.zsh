@@ -375,16 +375,6 @@ function kopia() {
     dlghbin kopia/kopia "kopia-.*-linux-x64.tar.gz" "kopia-.*-linux-arm64.tar.gz" "kopia-*/kopia" kopia
 }
 
-function rclone() {
-    # NAME: RClone (Windows)
-    # PRIORITY: 1
-    # ENV: wsl
-    # VERSION: rclone.exe -V | sed -n 1p
-    # NEEDS_APT_UPDATE: no
-    
-    dlghbin "rclone/rclone" "rclone-.*-windows-amd64.zip" "-" "rclone-*/rclone.exe" "rclone.exe"
-}
-
 function ytdl() {
     # NAME: YTDL
     # PRIORITY: 1
@@ -455,6 +445,16 @@ function borgmatic() {
 }
 
 # =============== REMOVED =============== #
+
+# function rclone() {
+#     # NAME: RClone (Windows)
+#     # PRIORITY: 1
+#     # ENV: wsl
+#     # VERSION: rclone.exe -V | sed -n 1p
+#     # NEEDS_APT_UPDATE: no
+    
+#     dlghbin "rclone/rclone" "rclone-.*-windows-amd64.zip" "-" "rclone-*/rclone.exe" "rclone.exe"
+# }
 
 # function zoxide() {
 #     # NAME: Zoxide

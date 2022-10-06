@@ -112,7 +112,6 @@ fi
 
 # Load the backupers
 source "$ADF_DIR/backups/full.zsh"
-source "$ADF_DIR/backups/rclone.zsh"
 
 # Run the installer
 export ADF_INSTALLER_ABORTED=0
