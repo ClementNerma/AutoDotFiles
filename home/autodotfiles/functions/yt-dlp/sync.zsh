@@ -544,7 +544,6 @@ typeset -A ADF_YS_DOMAINS_PROFILE
 typeset -A ADF_YS_DOMAINS_USE_LOCKFILE
 
 # Register a domain to use with 'ytsync'
-# Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <builtindate | repairdate> <bandwidth limit> [<use lockfile>] [<cookie profile>]
 function ytsync_register() {
     typeset -A __args_declaration=(
         [required_positional]=2
