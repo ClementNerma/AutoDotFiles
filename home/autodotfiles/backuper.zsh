@@ -229,7 +229,7 @@ function adf_borgmatic_backup() {
         fi
     done
 
-    if ! borg info "$1" > /dev/null; then
+    if ! withborgpass borg info "$1" > /dev/null; then
         echoerr "Provided directory is not a Borg repository, or passphrase is invalid (see above)!"
         return 11
     fi
@@ -241,7 +241,7 @@ function adf_borgmatic_backup() {
 
     echoinfo "Backing up using Borgmatic..."
 
-    if ! borgmatic --config "$ADF_BORGMATIC_CONFIG_FILE" --override location.repositories="[$1]" location.source_directories="[$borg_dirs_list]" \
+    if ! withborgpass borgmatic --config "$ADF_BORGMATIC_CONFIG_FILE" --override location.repositories="[$1]" location.source_directories="[$borg_dirs_list]" \
         --progress --stats --files; then
         echoerr "Failed to back up (see above)."
         return 20
