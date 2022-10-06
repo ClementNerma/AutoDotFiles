@@ -83,8 +83,7 @@ if [ ! -d "$INSTALL_FROM/home" ] || [ ! -d "$INSTALL_FROM/home/autodotfiles" ]; 
 fi
 
 if [ -d ~/autodotfiles ]; then
-	echo -e "\e[33m\!/ A previous version of \e[32mAutoDotFiles \e[33mwas detected ==> backing it up to \e[32m~/autodotfiles.$AUTO_INSTALLER_STARTED_AT\e[33m...\e[0m"
-	mv ~/autodotfiles ~/autodotfiles.$AUTO_INSTALLER_STARTED_AT
+	_fail 89 "\!/ A previous version of \e[32mAutoDotFiles \e[91mwas detected, cannot continue (please run 'zeruninstall' first)"
 fi
 
 if [ -f ~/.zshrc ]; then
