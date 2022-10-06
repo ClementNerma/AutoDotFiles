@@ -116,6 +116,22 @@ function fd() {
     dlghbin sharkdp/fd "fd-.*-x86_64-unknown-linux-musl.tar.gz" "fd-.*-arm-unknown-linux-musleabihf.tar.gz" "fd-*/fd" fd
 }
 
+function fzf() {
+    # NAME: fzf
+    # PRIORITY: 1
+    # ENV: all
+    # VERSION: fzf --version
+    # NEEDS_APT_UPDATE: no
+
+    if [[ -d ~/.fzf ]]; then
+        mvbak ~/.fzf
+    fi
+
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    chmod +x ~/.fzf/install
+    ~/.fzf/install --all
+}
+
 function jumpy() {
     # NAME: Jumpy
     # PRIORITY: 1
@@ -421,22 +437,6 @@ function borgmatic() {
 }
 
 # =============== REMOVED =============== #
-
-# function fzf() {
-#     # NAME: fzf
-#     # PRIORITY: 1
-#     # ENV: all
-#     # VERSION: fzf --version
-#     # NEEDS_APT_UPDATE: no
-
-#     if [[ -d ~/.fzf ]]; then
-#         mvbak ~/.fzf
-#     fi
-
-#     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-#     chmod +x ~/.fzf/install
-#     ~/.fzf/install --all
-# }
 
 # function zoxide() {
 #     # NAME: Zoxide

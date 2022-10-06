@@ -23,3 +23,6 @@ if command -v starship > /dev/null; then
 else
     echowarn "Starship does not seem to be installed yet."
 fi
+
+# Integration for FZF
+source ~/.fzf.zsh
