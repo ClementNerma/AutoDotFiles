@@ -43,7 +43,7 @@ function wincmd2text() {
 function remount() {
 	sudo umount /mnt/${1:l} 2> /dev/null
 	sudo mkdir /mnt/${1:l} 2> /dev/null
-	sudo mount -t drvfs "${1:u}:" /mnt/${1:l}
+	sudo mount -t drvfs "${1:u}:" /mnt/${1:l} -o uid=$UID,gid=$GID
 }
 
 # Get IP of host Windows system (can be used to access its ports)
