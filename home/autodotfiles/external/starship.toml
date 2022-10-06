@@ -21,7 +21,7 @@ conflicted=" [!](bold underline red) "
 diverged=" [⇕](bold underline red) "
 
 [cmd_duration]
-format="[($duration)](yellow)"
+format="[($duration)](yellow) "
 
 [fill]
 symbol=" "
