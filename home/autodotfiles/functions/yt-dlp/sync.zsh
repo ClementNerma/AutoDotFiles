@@ -163,10 +163,10 @@ function ytsync() {
              --match-filter "!is_live" \
              1>&1 2>&2 1>"$ytdl_out_file"
         then
-            local ytdl_err=$(cat "$ytdl_out_file")
+            local ytdl_output=$(cat "$ytdl_out_file")
             command rm "$ytdl_out_file"
 
-            if [[ $ytdl_err = *"HTTP Error 429: Too Many Requests."* ]]; then
+            if [[ $ytdl_output = *"HTTP Error 429: Too Many Requests."* ]]; then
                 echowarn "Failed due to too many requests being made to server."
                 echowarn ""
 
