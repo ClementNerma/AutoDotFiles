@@ -74,7 +74,7 @@ function ytsync() {
             download_ies+=("$video_ie")
             download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$video_ie]}")
         else
-            echoinfo "$beginning Skipping \z[yellow]°${video_title}\z[]° (already downloaded)"
+            echoverb "$beginning Skipping \z[yellow]°${video_title}\z[]° (already downloaded)"
         fi
     done
 
