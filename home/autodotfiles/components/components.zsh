@@ -136,7 +136,7 @@ function jumpy() {
     # VERSION: jumpy -V
     # NEEDS_APT_UPDATE: no
 
-    if [[ $(dpkg --print-architecture) = "arm64" ]]; then
+    if (( $ADF_IS_ARM64 )); then
         ghdl "ClementNerma/Jumpy" "$INSTALLER_TMPDIR/jumpy"
         cargo build --release --manifest-path="$INSTALLER_TMPDIR/jumpy/Cargo.toml"
         mv "$INSTALLER_TMPDIR/jumpy/target/release/jumpy" "$ADF_BIN_DIR/jumpy"
@@ -278,7 +278,7 @@ function trasher() {
     # VERSION: trasher -V
     # NEEDS_APT_UPDATE: no
 
-    if [[ $(dpkg --print-architecture) = "arm64" ]]; then
+    if (( $ADF_IS_ARM64 )); then
         ghdl "ClementNerma/Trasher" "$INSTALLER_TMPDIR/trasher"
         cargo build --release --manifest-path="$INSTALLER_TMPDIR/trasher/Cargo.toml"
         mv "$INSTALLER_TMPDIR/trasher/target/release/trasher" "$ADF_BIN_DIR/trasher"
@@ -332,7 +332,7 @@ function ytsync_cache_builder() {
     # VERSION: ytsync-cache-builder -V
     # NEEDS_APT_UPDATE: no
 
-    if [[ $(dpkg --print-architecture) = "arm64" ]]; then
+    if (( $ADF_IS_ARM64 )); then
         ghdl "ClementNerma/ytsync-cache-builder" "$INSTALLER_TMPDIR/ytsync-cache-builder"
         cargo build --release --manifest-path="$INSTALLER_TMPDIR/ytsync-cache-builder/Cargo.toml"
         mv "$INSTALLER_TMPDIR/ytsync-cache-builder/target/release/ytsync-cache-builder" "$ADF_BIN_DIR/ytsync-cache-builder"

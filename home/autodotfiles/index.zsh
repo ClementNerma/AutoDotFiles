@@ -37,6 +37,20 @@ else
 	export ADF_JUST_INSTALLED=0
 fi
 
+export ADF_ARCHITECTURE=$(dpkg --print-architecture)
+
+if [[ $ADF_ARCHITECTURE = "amd64" ]]; then
+	export ADF_IS_AMD64=1
+	export ADF_IS_ARM64=0
+elif if [[ $ADF_ARCHITECTURE = "arm64" ]]; then
+	export ADF_IS_AMD64=1
+	export ADF_IS_ARM64=0
+else
+	echo "ERROR: Running on unknown architecture: $ADF_ARCHITECTURE"
+	export ADF_IS_AMD64=0
+	export ADF_IS_ARM64=0
+fi
+
 # Set path to the main script of AutoDotFiles
 export ADF_ENTRYPOINT="${(%):-%x}"
 

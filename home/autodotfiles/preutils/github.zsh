@@ -85,7 +85,7 @@ function dlghbin() {
 
 	local asset_pattern="$2"
 
-	if [[ $(dpkg --print-architecture) = "arm64" ]]; then
+	if (( $ADF_IS_ARM64 )); then
 		local asset_pattern="$3"
 
 		if [[ $asset_pattern = "-" ]]; then
