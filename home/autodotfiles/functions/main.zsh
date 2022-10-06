@@ -339,3 +339,10 @@ function charbytecode() {
 		printf '%x\n' "'${input[i]}'"
 	done
 }
+
+# Run a command each time a Cargo project is modified
+# NOTE: Requires 'cargo-watch' to be installed (otherwise: 'cargo install cargo-watch')
+function cw() {
+	local args="$@"
+	cargo watch -x "run -- $args"
+}
