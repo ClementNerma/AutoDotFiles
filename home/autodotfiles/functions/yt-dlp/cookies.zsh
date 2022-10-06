@@ -12,10 +12,12 @@ function ytdlcookies() {
             echoinfo "4. Paste the copied table (Ctrl+V) in the editor"
             echoinfo "5. Save and exit (Ctrl+S & Ctrl+X)"
             echoinfo "6. Use it with 'ytdlcookies use <your preset name> <ytdl arguments>"
-            echoinfo
+            echoinfo ""
             echodata "A. Renew expired cookies with 'ytdlcookies renew <your preset name>' (then steps from 4.)"
             echodata "B. Delete a preset with 'ytdlcookies rm <your preset name>"
             echodata "C. List all existing presets with 'ytdlcookies list'"
+            echodata ""
+            echodata "Sub-commands: \z[yellow]°create renew rm use use-raw get-path display\z[]°"
             return 99
             ;;
 
