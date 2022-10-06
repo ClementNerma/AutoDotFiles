@@ -296,3 +296,15 @@ function rclone() {
     
     dlghbin "rclone/rclone" "rclone-.*-windows-amd64.zip" "-" "rclone-*/rclone.exe" "rclone.exe"
 }
+
+# =============== OPTIONAL =============== #
+
+function imagemagick() {
+    # NAME: ImageMagick
+    # PRIORITY: 0
+    # ENV: all
+    # VERSION: convert --version
+    # NEEDS_APT_UPDATE: yes
+
+    sudo apt install imagemagick
+}
