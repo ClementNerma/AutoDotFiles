@@ -157,7 +157,7 @@ function adf_install() {
             continue
         fi
 
-        if ! (( ${only_install[(Ie)$func_name]} )) && [[ ${#only_install} -ne 0 || $priority -eq 0 ]]; then
+        if ! (( ${only_install[(Ie)$func_name]} )) && [[ $only_install != "*" || $priority -eq 0 ]]; then
             continue
         fi
 
