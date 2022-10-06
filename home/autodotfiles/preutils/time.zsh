@@ -27,7 +27,7 @@ function timer_elapsed_raw_seconds() {
 	printf '%s' $((elapsed / 1000000000))
 }
 
-function timer_show() {
+function timer_elapsed() {
 	if [[ -z $1 ]]; then
 		echoerr "Please provide a timer value."
 		return 1
@@ -37,7 +37,7 @@ function timer_show() {
 	humanduration_ms $((elapsed / 1000000))
 }
 
-function timer_show_seconds() {
+function timer_elapsed_seconds() {
 	if [[ -z $1 ]]; then
 		echoerr "Please provide a timer value."
 		return 1
@@ -53,7 +53,7 @@ function timer_end() {
 		return 1
 	fi
 
-	timer_show "$1"
+	timer_elapsed "$1"
 	unset "ADF_TIMERS[$1]"
 }
 

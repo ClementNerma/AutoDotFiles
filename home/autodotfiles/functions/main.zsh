@@ -284,7 +284,7 @@ function progress_bar_detailed() {
 	fi
 
 	local progress=$(((100 * $2) / $3))
-	local suffix=" $progress % ($2 / $3) | ETA: $(compute_eta $2 $3 $5) | Elapsed: $(timer_show_seconds $5)"
+	local suffix=" $progress % ($2 / $3) | ETA: $(compute_eta $2 $3 $5) | Elapsed: $(timer_elapsed_seconds $5)"
 
 	if [[ ! -z $6 ]]; then
 		suffix+=$(echoc "$6")

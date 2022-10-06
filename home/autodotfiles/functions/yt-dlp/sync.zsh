@@ -499,7 +499,7 @@ function ytsync_wait_lockfile() {
 
             while [[ -f $lockfile ]]; do
                 local pending=$(command cat "$lockfile")
-                local waiting_for=$(timer_show_seconds "$started_waiting")
+                local waiting_for=$(timer_elapsed_seconds "$started_waiting")
 
                 ADF_UPDATABLE_LINE=1 echowarn ">> Waiting for lockfile removal (download pending at \z[magenta]°$pending\z[]°)... \z[cyan]°$waiting_for\z[]°"
                 
