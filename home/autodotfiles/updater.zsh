@@ -38,16 +38,18 @@ function zerupdate() {
 	elif [[ -n $ADF_UPDATE_PATH ]]; then
 		echoverb "Updating from configured path: \z[magenta]°$ADF_UPDATE_PATH\z[]°"
 		local update_path="$ADF_UPDATE_PATH"
-	elif [[ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]]; then
+	else
 		if [[ -z $PROJDIR ]]; then
 			echoerr "Tried to update from projects directory, but \$PROJDIR is not defined."
 			return 1
 		fi
 
 		local update_path="$PROJDIR/AutoDotFiles"
-	else
-		echoerr "Please provide a path to update ZSH (default path is only available for main computer)"
-		return 1
+
+		if [[ -d $update_path ]]; then
+			echoerr "Update directory \z[magenta]°$update_path\z[]° was not found, please provide one."
+			return 1
+		fi
 	fi
 	
 	if [[ ! -d $update_path ]] || [[ ! -f $update_path/installer.bash ]] || [[ ! -f $update_path/home/.zshrc ]]; then

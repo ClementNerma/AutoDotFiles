@@ -3,10 +3,6 @@
 # Its content can be overriden by the `local/config.zsh` file
 #
 
-# Is this my main computer?
-# Set to '1' if it is
-export ADF_CONF_MAIN_PERSONAL_COMPUTER=0
-
 # Path to the restoration script
 export ADF_CONF_RESTORATION_SCRIPT="/usr/local/bin/zerrestore"
 
