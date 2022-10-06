@@ -46,7 +46,7 @@ function zerupdate() {
 
 		local update_path="$PROJDIR/AutoDotFiles"
 
-		if [[ -d $update_path ]]; then
+		if [[ ! -d $update_path ]]; then
 			echoerr "Update directory \z[magenta]°$update_path\z[]° was not found, please provide one."
 			return 1
 		fi
