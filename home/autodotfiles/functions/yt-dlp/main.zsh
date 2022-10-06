@@ -13,15 +13,16 @@ export ADF_YTDL_DEFAULT_FILENAMING="%(title)s-%(id)s.%(ext)s"
 # Overriding variables:
 # (NOTE: when updating this list, update "_ytdl_build_resume_cmdline" as well)
 #
-# * YTDL_FORMAT          => use a custom format
-# * YTDL_TEMP_DIR        => download in the specified temporary directory before moving it to the final one
-# * YTDL_OUTPUT_DIR      => download to the specified directory (default: the current working directory)
-# * YTDL_FILENAMING      => use specific filenaming for output files
-# * YTDL_ITEM_CMD        => run a command for each root item when download is finished
-# * YTDL_LIMIT_BANDWIDTH => limit download bandwidth
-# * YTDL_COOKIE_PROFILE  => load a cookie profile using "ytdlcookies"
-# * YTDL_REPAIR_DATE     => repair date of all videos after download
-# * YTDL_NO_THUMBNAIL    => don't download the thumbnail
+# * YTDL_FORMAT            => use a custom format
+# * YTDL_TEMP_DIR          => download in the specified temporary directory before moving it to the final one
+# * YTDL_OUTPUT_DIR        => download to the specified directory (default: the current working directory)
+# * YTDL_FILENAMING        => use specific filenaming for output files
+# * YTDL_FILENAMING_PREFIX => use a custom filenaming prefix
+# * YTDL_ITEM_CMD          => run a command for each root item when download is finished
+# * YTDL_LIMIT_BANDWIDTH   => limit download bandwidth
+# * YTDL_COOKIE_PROFILE    => load a cookie profile using "ytdlcookies"
+# * YTDL_REPAIR_DATE       => repair date of all videos after download
+# * YTDL_NO_THUMBNAIL      => don't download the thumbnail
 function ytdl() {
 	local tempdir=""
 	
@@ -105,7 +106,7 @@ function ytdl() {
 		--limit-rate "${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH}"
 		--abort-on-unavailable-fragment
 		--compat-options abort-on-error
-		-o "$tempdir/${YTDL_FILENAMING:-$ADF_YTDL_DEFAULT_FILENAMING}"
+		-o "$tempdir/${YTDL_FILENAMING_PREFIX}${YTDL_FILENAMING:-$ADF_YTDL_DEFAULT_FILENAMING}"
 		"${thumbnail_params[@]}"
 		"${cookie_params[@]}"
 		"$@"
