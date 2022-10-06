@@ -102,35 +102,45 @@ function echoc() {
     fi
 
     if (( $ADF_UPDATABLE_LINE )) || (( $ADF_REPLACE_UPDATABLE_LINE )); then
-        local output="\r$output"
+        echof "${echo_args[@]}" "\r$output" "$rawtext"
+    else
+        echo "${echo_args[@]}" "$output"
+    fi
+}
+
+# Fill a line with a message (can't overflow)
+# Usage: echof [<...arguments for 'echo'>] <formatted message> <raw message>
+function echof() {
+    if (( $# < 2 )); then
+        echoerr "Please provide the formatted message as well as the raw message."
+        return 1
     fi
 
-    local overflowing=0
+    local formatted=${@: -2:1}
+    local rawtext=${@: -1}
 
-    if (( $ADF_CLEAN_EOL )) || (( $ADF_UPDATABLE_LINE )) || (( $ADF_REPLACE_UPDATABLE_LINE )); then
-        local len=$(wc -L <<< "$rawtext")
+    local len=$(wc -L <<< "$rawtext")
+    local remaining=$((COLUMNS - len))
 
-        # Avoid overflows
-        if ! (( $ADF_REPLACE_UPDATABLE_LINE )) && ! (( $ADF_NEVER_CUT_LINE )) && (( len > COLUMNS )); then
-            local overflowing=1
-        else
-            local remaining=$((COLUMNS - len))
-
-            if (( $remaining )); then
-                output+=$(printf ' %.0s' {1..$remaining})
-            fi
-
-            if (( $remaining > 1 )); then
-                output+=$(printf '\b%.0s' {1..$((remaining-1))})
-            fi
-        fi
+    if (( $remaining < 0 )); then
+        tput rmam
+        echo -n "$formatted"
+        tput smam
+        return
     fi
 
-    if (( overflowing )); then tput rmam; fi
+    if ! (( $remaining )); then
+        echo -n "${@:1:-2}" "$formatted"
+        return
+    fi
 
-    echo "${echo_args[@]}" "$output"
+    formatted+=$(repeat $remaining printf ' ')
 
-    if (( overflowing )); then tput smam; fi
+    if (( $remaining > 1 )); then
+        formatted+=$(repeat $((remaining - 1)) printf '\b')
+    fi
+
+    echo -n "${@:1:-2}" "$formatted"
 }
 
 function echoerr() {
