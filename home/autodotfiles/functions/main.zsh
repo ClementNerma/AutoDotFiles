@@ -144,3 +144,22 @@ function z() {
         export __JUMPY_DONT_REGISTER=0
     fi
 }
+
+function pomsky() {
+	if ! _pomsky_regex=$(command pomsky "$1"); then
+		return 1
+	fi
+
+	if [[ -z $2 ]]; then
+		rg -i "$_pomsky_regex"
+		return
+	fi
+
+	while read _input_line; do
+		if ! _tr_line=$(sd --flags m "$_pomsky_regex" "$2" <<< "$_input_line"); then
+			return 1
+		fi
+
+		printf '%s\n' "$_tr_line"
+	done
+}
