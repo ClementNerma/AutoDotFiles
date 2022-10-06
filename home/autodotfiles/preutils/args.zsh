@@ -68,7 +68,7 @@ function ___parse_arguments() {
                     return 10
                 fi
 
-                if [[ -n ${argument[$___pc]} ]]; then
+                if [[ -n ${arguments[$___pc]} ]]; then
                     echoerr "Cannot redefine argument: \z[yellow]°-$___pc\z[]°"
                     return 11
                 fi
@@ -84,7 +84,7 @@ function ___parse_arguments() {
                         return 10
                     fi
 
-                    if [[ -n ${argument[${match[1]}]} ]]; then
+                    if [[ -n ${arguments[${match[1]}]} ]]; then
                         echoerr "Cannot redefine argument: \z[yellow]°--${match[1]}\z[]°"
                         return 11
                     fi
@@ -100,7 +100,7 @@ function ___parse_arguments() {
                         return 10
                     fi
 
-                    if [[ -n ${argument[${match[1]}]} ]]; then
+                    if [[ -n ${arguments[${match[1]}]} ]]; then
                         echoerr "Cannot redefine argument: \z[yellow]°-${match[1]}\z[]°"
                         return 11
                     fi
@@ -115,7 +115,7 @@ function ___parse_arguments() {
                             return 10
                         fi
 
-                        if [[ -n ${argument[${arg:$i:1}]} ]]; then
+                        if [[ -n ${arguments[${arg:$i:1}]} ]]; then
                             echoerr "Cannot redefine argument: \z[yellow]°-${arg:$i:1}\z[]°"
                             return 11
                         fi
@@ -130,7 +130,7 @@ function ___parse_arguments() {
                 return 10
             fi
 
-            if [[ -n ${argument[$___pc]} ]]; then
+            if [[ -n ${arguments[$___pc]} ]]; then
                 echoerr "Cannot redefine argument: \z[yellow]°-(-)$___pc\z[]°"
                 return 11
             fi
@@ -148,7 +148,7 @@ function ___parse_arguments() {
             return 10
         fi
 
-        if [[ -n ${argument[$___pc]} ]]; then
+        if [[ -n ${arguments[$___pc]} ]]; then
             echoerr "Cannot redefine argument: \z[yellow]°-(-)$___pc\z[]°"
             return 11
         fi
