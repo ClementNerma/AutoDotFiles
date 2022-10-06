@@ -26,3 +26,6 @@ fi
 
 # Integration for FZF
 source ~/.fzf.zsh
+
+# Ensure Crony is started
+crony daemon-start --ignore-started
