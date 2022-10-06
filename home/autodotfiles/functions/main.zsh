@@ -26,6 +26,10 @@ function bakproj() {
 		return 4
 	fi
 
+	if [[ ! -z $3 ]]; then
+		local target="$target.$3"
+	fi
+
 	local files=""
 	
 	if ! files=$(fd --threads=1 --hidden --one-file-system --type 'file' --search-path "$1" --absolute-path); then
@@ -63,7 +67,7 @@ function bakproj() {
 
 # Backup the current project
 function bakthis() {
-	bakproj "$PWD" "$PWD-$(humandate)"
+	bakproj "$PWD" "$PWD-$(humandate)" "$1"
 }
 
 # Make an archive out of a project directory
