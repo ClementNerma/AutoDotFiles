@@ -1,9 +1,10 @@
 export ADF_YS_URL_FILE=".ytdlsync-url"
-export ADF_YS_CACHE=".ytdlsync-cache"
-export ADF_YS_FILENAMING=".ytdlsync-filenaming"
-export ADF_YS_FORMAT=".ytdlsync-quality"
-export ADF_YS_BLACKLIST=".ytdlsync-blacklist"
-export ADF_YS_CUSTOM_BLACKLIST=".ytdlsync-custom-blacklist"
+export ADF_YS_CACHE_FILE=".ytdlsync-cache"
+export ADF_YS_FILENAMING_FILE=".ytdlsync-filenaming"
+export ADF_YS_FORMAT_FILE=".ytdlsync-quality"
+export ADF_YS_AUTO_BLACKLIST_FILE=".ytdlsync-blacklist"
+export ADF_YS_CUSTOM_BLACKLIST_FILE=".ytdlsync-custom-blacklist"
+
 export ADF_YS_LOCKFILES_DIR="$ADF_ASSETS_DIR/ytsync-lockfiles"
 
 if [[ ! -d $ADF_YS_LOCKFILES_DIR ]]; then
@@ -32,7 +33,7 @@ function ytsync() {
             shift
 
             echowarn "Writing provided filenaming \z[cyan]°$filenaming\z[]° to local filenaming file."
-            echo "$filenaming" > "$ADF_YS_FILENAMING"
+            echo "$filenaming" > "$ADF_YS_FILENAMING_FILE"
         else
             local filenaming=""
         fi
@@ -42,9 +43,9 @@ function ytsync() {
     if ! zer_ytsync_build_cache \
         --sync-dir "$PWD" \
         --url-filename "$ADF_YS_URL_FILE" \
-        --cache-filename "$ADF_YS_CACHE" \
-        --auto-blacklist-filename "$ADF_YS_BLACKLIST" \
-        --custom-blacklist-filename "$ADF_YS_CUSTOM_BLACKLIST" \
+        --cache-filename "$ADF_YS_CACHE_FILE" \
+        --auto-blacklist-filename "$ADF_YS_AUTO_BLACKLIST_FILE" \
+        --custom-blacklist-filename "$ADF_YS_CUSTOM_BLACKLIST_FILE" \
         --known-ie-keys "${(kj:,:)ADF_YS_DOMAINS_IE_URLS}" \
         --always-check-ie-keys "${(kj:,:)ADF_YS_DOMAINS_TO_CHECK}" \
         --display-colored-list
@@ -54,15 +55,15 @@ function ytsync() {
 
     local format=""
 
-    if [[ -f $ADF_YS_FORMAT ]]; then
-        local format=$(command cat "$ADF_YS_FORMAT")
+    if [[ -f $ADF_YS_FORMAT_FILE ]]; then
+        local format=$(command cat "$ADF_YS_FORMAT_FILE")
     fi
 
     # === Parse and validate the cache === #
 
-    IFS=$'\n' local entries=($(command cat "$ADF_YS_CACHE"))
+    IFS=$'\n' local entries=($(command cat "$ADF_YS_CACHE_FILE"))
 
-    local cache=$(cat "$ADF_YS_CACHE" | jq -r ".entries")
+    local cache=$(cat "$ADF_YS_CACHE_FILE" | jq -r ".entries")
 
     if [[ $cache = "null" ]]; then
         echoerr "Invalid cache: no entries property!"
@@ -73,7 +74,7 @@ function ytsync() {
 
     if [[ $count -eq 0 ]]; then
         echosuccess "Nothing to download!"
-        rm "$ADF_YS_CACHE"
+        rm "$ADF_YS_CACHE_FILE"
         return
     fi
 
@@ -85,7 +86,7 @@ function ytsync() {
 
     if ! (( ${count} )); then
         echosuccess "No video to download!"
-        rm "$ADF_YS_CACHE"
+        rm "$ADF_YS_CACHE_FILE"
         return
     fi
 
@@ -194,7 +195,7 @@ function ytsync() {
 
     if [[ $errors -eq 0 ]]; then
         echosuccess "Done!"
-        rm "$ADF_YS_CACHE"
+        rm "$ADF_YS_CACHE_FILE"
     else
         echoerr "Failed to download \z[yellow]°$errors\z[]° video(s)."
         return 5
