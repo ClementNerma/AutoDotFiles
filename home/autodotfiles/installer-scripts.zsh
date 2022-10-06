@@ -316,7 +316,7 @@ function borg() {
     # PRIORITY: 1
     # ENV: main-pc/all
     # VERSION: borg -V
-    # NEEDS_APT_UPDATE: yes
+    # NEEDS_APT_UPDATE: no
 
     if ! (( $COMPONENT_UPDATING )); then
         echoinfo "> Installing dependencies..."
@@ -325,7 +325,8 @@ function borg() {
         echoinfo "> Now installing Borg..."
     fi
 
-    sudo pip3 install --upgrade "borgbackup[fuse]"
+    dlghrelease borgbackup/borg "borg-linux64$" "$ADF_BIN_DIR/borg"
+    chmod +x "$ADF_BIN_DIR/borg"
 }
 
 function borgmatic() {
