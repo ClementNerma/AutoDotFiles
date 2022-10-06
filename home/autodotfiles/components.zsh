@@ -6,7 +6,6 @@ export ADF_INSTALLED_LIST="$ADF_ASSETS_DIR/installed-components.txt"
 
 # Usage: <component name (not specified = everything)>
 # ADF_SKIP_INSTALLED=1 => skip already-installed components
-# ADF_FORCE_INSTALL=1 => indicate to the component it's installing for the first time instead of updating
 function adf_install() {
     [[ -z $1 ]] && { echoerr "Please provide a component to install (* = everything)"; return 1 }
 
@@ -68,9 +67,9 @@ function adf_install() {
         export INSTALLER_TMPDIR="$BASE_INSTALLER_TMPDIR/$func_name"
         mkdir -p "$INSTALLER_TMPDIR"
 
-        export COMPONENT_UPDATING=${to_install_already_installed[i]}
-
-        if (( $ADF_FORCE_INSTALL )); then
+        if grep -Fxq "$component" "$ADF_INSTALLED_LIST"; then
+            export COMPONENT_UPDATING=1
+        else
             export COMPONENT_UPDATING=0
         fi
 
