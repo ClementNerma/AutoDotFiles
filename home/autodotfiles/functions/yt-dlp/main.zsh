@@ -37,6 +37,7 @@ function ytdl() {
 		echoverb "> Using profile \z[yellow]°$YTDL_COOKIE_PROFILE\z[]°..."
 
 		if ! cookie_file=$(ytdlcookies get-path "$YTDL_COOKIE_PROFILE"); then
+			echoerr "Unknown cookie profile provided"
 			return 2
 		fi
 	fi
