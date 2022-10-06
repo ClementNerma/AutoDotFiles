@@ -8,6 +8,14 @@
 # Load required ZSH modules
 zmodload zsh/mathfunc
 
+# Determine if ADF is launching for the first time in this terminal
+# or if it's reloading
+if [[ -z $ADF_RELOADING ]]; then
+	export ADF_RELOADING=0
+else
+	export ADF_RELOADING=1
+fi
+
 # Determine if current environment is WSL
 if grep -q microsoft /proc/version; then
 	command rm -rf "$ADF_DIR/linux"
@@ -206,4 +214,6 @@ if [[ $1 == "--just-run" && ! -z $2 ]]; then
 	if (( $ADF_JUST_RUN_RET )); then
 		return $ADF_JUST_RUN_RET
 	fi
+elif (( $ADF_CHECK_CRON_FAILURES_STARTUP )) && ! (( $ADF_RELOADING )); then
+	adf_check_crons
 fi

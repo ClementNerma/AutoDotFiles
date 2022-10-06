@@ -23,6 +23,12 @@ export ADF_CONF_WSL_BACKUP_SESSION_COMPILATION="$ADF_CONF_WSL_BACKUP_SESSION_DIR
 # CRON tasks' logs directory
 export ADF_CONF_CRON_LOGS_DIR="$ADF_ASSETS_DIR/cron-logs"
 
+# CRON failures empty files
+export ADF_CONF_CRON_FAILURE_DIR="$ADF_CONF_CRON_LOGS_DIR/failures"
+
+# Check CRON failures at startup
+export ADF_CHECK_CRON_FAILURES_STARTUP=1
+
 # Default bandwidth limit for the 'ytdl' function
 # Can be overriden with the YTDL_LIMIT_BANDWIDTH variable
 export ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH="1G"

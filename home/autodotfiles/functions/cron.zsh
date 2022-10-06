@@ -86,14 +86,20 @@ function _adf_cron_logged() {
     "${@:2}"
 
     local ret=$?
+    local ended=$(date +"%m-%d-%Y %T")
+
+    local failure_file="$ADF_CONF_CRON_FAILURE_DIR/$1"
 
     local exitcodemsg="command ended successfully (exit code 0)"
 
     if (( $ret )); then
         local exitcodemsg="\z[red]°command failed with exit code \z[yellow]°$ret\z[]°\z[]°"
+        printf "%s" "$ended" > "$failure_file"
+    elif [[ -f $failure_file ]]; then
+        command rm "$failure_file"
     fi
 
-    echoinfo "[ADF:CRON] Finished running task \z[yellow]°$1\z[]° at \z[magenta]°$(humandate)\z[]°, $exitcodemsg."
+    echoinfo "[ADF:CRON] Finished running task \z[yellow]°$ended\z[]° at \z[magenta]°$(humandate)\z[]°, $exitcodemsg."
     echoinfo " "
     echoinfo " "
 
@@ -127,3 +133,13 @@ function adf_cron_logs() {
 if [[ ! -d $ADF_CONF_CRON_LOGS_DIR ]]; then
     mkdir -p "$ADF_CONF_CRON_LOGS_DIR"
 fi
+
+if [[ ! -d $ADF_CONF_CRON_FAILURE_DIR ]]; then
+    mkdir -p "$ADF_CONF_CRON_FAILURE_DIR"
+fi
+
+function adf_check_crons() {
+    for failure in "$ADF_CONF_CRON_FAILURE_DIR/"*(N); do
+        echoerr "* Job \z[yellow]°$(basename "$failure")\z[]° failed at \z[blue]°$(command cat "$failure")\z[]°"
+    done
+}
