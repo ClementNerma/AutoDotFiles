@@ -146,7 +146,7 @@ function z() {
 }
 
 function pss() {
-	ps -u \
+	ps -ux \
     | pomsky \
         "Start :user(![s]+) [s]+ :pid(![s]+) [s]+ :cpu(![s]+) [s]+ :mem(![s]+) [s]+ :vsz(![s]+) [s]+ :rss(![s]+) [s]+ :tty(![s]+) [s]+ :stat(![s]+) [s]+ :start(![s]+) [s]+ :time(![s]+) [s]+ :command(![Zl]+)" \
         '$pid   $command'
@@ -170,7 +170,7 @@ function find_pid() {
 		return 1
 	fi
 
-	printf '%s' "$entry" | pomsky "$parse_pid_result" '$pid'
+	printf '%s' "${pids[1]}" | pomsky "$parse_pid_result" '$pid'
 }
 
 function pomsky() {
