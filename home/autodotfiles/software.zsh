@@ -28,4 +28,4 @@ fi
 source ~/.fzf.zsh
 
 # Ensure Crony is started
-crony daemon-start --ignore-started
+crony start --ignore-started
