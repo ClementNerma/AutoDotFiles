@@ -154,9 +154,15 @@ function micro() {
     # VERSION: micro --version
     # NEEDS_APT_UPDATE: no
 
+    local current=$PWD
+
+    cd "$INSTALLER_TMPDIR"
+    
     curl https://getmic.ro | bash
     chmod +x micro
     mv micro $ADF_BIN_DIR
+
+    cd "$PWD"
 
     if ! (( $COMPONENT_UPDATING )) && [[ ! -d $HOME/.config/micro ]]; then
         mkdir -p $HOME/.config/micro
