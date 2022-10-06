@@ -262,12 +262,14 @@ function ytdlp() {
     echoinfo "> Downloading dependencies for PhantomJS..."
     sudo apt install -yqqq chrpath libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev
 
-    # TODO: Find a way to not hardcode the version here
-    echoinfo "> Downloading PhantomJS..."
-    dl "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2" "$INSTALLER_TMPDIR/phantomjs.tar.bz2"
-    tar -xf "$INSTALLER_TMPDIR/phantomjs.tar.bz2" -C "$INSTALLER_TMPDIR"
-    mv "$INSTALLER_TMPDIR/phantomjs-"*"/bin/phantomjs" "$ADF_BIN_DIR/phantomjs"
-    chmod +x "$ADF_BIN_DIR/phantomjs"
+    # REMOVED as it makes yt-dlp buggy in many situations (wrong format selection, wrong playlists fetching, etc.)
+    #
+    # # TODO: Find a way to not hardcode the version here
+    # echoinfo "> Downloading PhantomJS..."
+    # dl "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2" "$INSTALLER_TMPDIR/phantomjs.tar.bz2"
+    # tar -xf "$INSTALLER_TMPDIR/phantomjs.tar.bz2" -C "$INSTALLER_TMPDIR"
+    # mv "$INSTALLER_TMPDIR/phantomjs-"*"/bin/phantomjs" "$ADF_BIN_DIR/phantomjs"
+    # chmod +x "$ADF_BIN_DIR/phantomjs"
 }
 
 function zoxide() {
