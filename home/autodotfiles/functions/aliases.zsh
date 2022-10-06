@@ -25,6 +25,7 @@ alias gd="git diff"
 alias gs="git status"
 alias gr="git reset"
 alias gl="git log"
+alias glo="git log --oneline"
 alias gc="git checkout"
 alias gp="git push"
 
