@@ -157,16 +157,6 @@ function howlong() {
 	printf "\n"
 }
 
-# Go to a directory located in the projects directory
-function p() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a project to go to."
-		return 1
-	else
-		cd "$PROJDIR/$1"
-	fi
-}
-
 # Create a directory and go into it
 function mkcd() {
 	if [[ ! -d $1 ]]; then
