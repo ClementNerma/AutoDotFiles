@@ -52,7 +52,7 @@ function ytsync() {
 
         echoinfo "Checking and mapping JSON..."
 
-        local json=$(echo -E "$json" | jq -c '[.entries[] | {id, title, upload_date, webpage_url}]')
+        local json=$(echo -E "$json" | jq -c '[.entries[] | {id, title, _type, upload_date, webpage_url}]')
 
         echoinfo "JSON is ready."
     fi
@@ -79,6 +79,16 @@ function ytsync() {
     for i in {1..$count}; do
         local index=$((i-1))
         local videojson=$(echo -E "$json" | jq ".[$index]")
+
+        local entry_type=$(echo -E "$videojson" | jq "._type" -r)
+
+        if [[ $entry_type = "playlist" ]]; then
+            echoerr "Found playlist entry: \z[yellow]°$(echo -E "$videojson" | jq ".title" -r)\z[]°"
+            return 10
+        elif [[ $entry_type != "video" ]]; then
+            echoerr "Found unknown entry type \z[blue]°$entry_type\z[]°: \z[yellow]°$(echo -E "$videojson" | jq ".title" -r)\z[]°"
+            return 11
+        fi
 
         local videoid=$(echo -E "$videojson" | jq ".id" -r)
 
