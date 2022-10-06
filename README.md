@@ -6,7 +6,7 @@ It is meant for personal usage only, but as it's a relatively complex setup I ma
 ## One-line install
 
 ```bash
-curl -L https://github.com/ClementNerma/AutoDotFiles/raw/main/installer.bash | bash /dev/stdin -- --online
+curl -L https://git.io/autodotfiles | bash
 ```
 
 ## Goal
