@@ -206,40 +206,6 @@ function ytsync_register() {
     ADF_YS_DOMAINS_RATE_LIMITED[$ie_key]=${arguments[rate-limited]}
 }
 
-# Remove a lockfile
-function ytsync_unlock() {
-    if [[ -z $1 ]]; then
-        echoerr "Please provide an IE."
-        return 1
-    fi
-
-    if [[ -z ${ADF_YS_DOMAINS_IE_VIDEOS_URL_REGEX[$1]} ]]; then
-        echoerr "Unknown IE provided."
-        return 2
-    fi
-
-    if ! (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$1]} )); then
-        echoerr "This IE does not use lockfiles."
-        return 3
-    fi
-
-    local lockfile="$ADF_YS_LOCKFILES_DIR/$1.lock"
-
-    if [[ -f $lockfile ]]; then
-        rm "$lockfile"
-        echowarn "Lockfile forcefully removed."
-    else
-        echowarn "This IE was not locked."
-    fi
-}
-
-# Remove all lockfiles
-function ytsync_unlock_all() {
-    for lockfile in "$ADF_YS_LOCKFILES_DIR/"*.lock(N); do
-        command rm "$lockfile"
-    done
-}
-
 function ytsync_cache_builder_config() {
     local config=$(
         echo -E "{}" \
