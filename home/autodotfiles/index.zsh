@@ -136,7 +136,7 @@ if [[ -z $PROJDIR ]]; then echoerr "Directory variable \z[green]째\$PROJDIR\z[]�
 if [[ -z $WORKDIR ]]; then echoerr "Directory variable \z[green]째\$WORKDIR\z[]째 is not defined!"; fi
 if [[ -z $LOCBAKDIR ]]; then echoerr "Directory variable \z[green]째\$LOCBAKDIR\z[]째 is not defined!"; fi
 
-if [[ ! -z $HOMEDIR && ! -d $HOMEDIR ]]; then echoerr "Home directory at location \z[yellow]째$HOMEDIR\z[]째 does not exist!"; fi
+if [[ -n $HOMEDIR && ! -d $HOMEDIR ]]; then echoerr "Home directory at location \z[yellow]째$HOMEDIR\z[]째 does not exist!"; fi
 
 if [[ -z $HOMEDIR || -z $PLOCALDIR || ! -d $HOMEDIR || -z $DLDIR || -z $PROJDIR || -z $WORKDIR || -z $TEMPDIR || -z $SOFTWAREDIR || -z $TRASHDIR || -z $LOCBAKDIR ]]; then
 	read "?Press <Enter> to exit, or <Ctrl+C> to get a without-AutoDotFiles ZSH prompt ('zerupdate' command will be available) "
@@ -214,7 +214,7 @@ function gostartupdir() {
 gostartupdir
 
 # Run a command and exit if required
-if [[ $1 == "--just-run" && ! -z $2 ]]; then
+if [[ $1 == "--just-run" && -n $2 ]]; then
 	${@:2}
 	ADF_JUST_RUN_RET=$? 
 	if (( $ADF_JUST_RUN_RET )); then

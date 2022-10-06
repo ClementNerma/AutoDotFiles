@@ -26,7 +26,7 @@ function bakproj() {
 		return 4
 	fi
 
-	if [[ ! -z $3 ]]; then
+	if [[ -n $3 ]]; then
 		local target="$target.$3"
 	fi
 
@@ -74,7 +74,7 @@ function bakthis() {
 # Make an archive out of a project directory
 function bakproj7z() {
 	if [[ -z $1 ]]; then echoerr "Please provide a source directory."; return 1; fi
-	if [[ ! -z $2 ]] && [[ ! -d $2 ]]; then echoerr "Provided target directory does not exist."; return 2; fi
+	if [[ -n $2 ]] && [[ ! -d $2 ]]; then echoerr "Provided target directory does not exist."; return 2; fi
 
 	local target="$TEMPDIR/$(basename "$1")"
 
@@ -129,7 +129,7 @@ function rmprogress() {
 function make7z() {
 	if [[ -z $1 ]]; then echoerr "Please provide an item to archive."; return 1; fi
 	if [[ ! -e $1 ]]; then echoerr "Provided input item does not exist."; return 10; fi
-	if [[ ! -z $2 ]] && [[ ! -d $2 ]]; then echoerr "Provided output directory does not exist."; return 11; fi
+	if [[ -n $2 ]] && [[ ! -d $2 ]]; then echoerr "Provided output directory does not exist."; return 11; fi
 
 	local dest="${2:-$PWD}/$(basename "$1")-$(humandate).7z"
 	local cwd=$PWD
@@ -152,7 +152,7 @@ function howlong() {
 
 	printf 'Command "'
 	printf '%s' "${@[1]}"
-	if [[ ! -z $2 ]]; then printf ' %s' "${@:2}"; fi
+	if [[ -n $2 ]]; then printf ' %s' "${@:2}"; fi
 	printf '" completed in ' "$@"
 
 	humanduration_ms $elapsed
@@ -294,7 +294,7 @@ function progress_bar_detailed() {
 	local progress=$(((100 * $2) / $3))
 	local suffix=" $progress % ($2 / $3) | ETA: $(compute_eta $2 $3 $5) | Elapsed: $(timer_elapsed_seconds $5)"
 
-	if [[ ! -z $6 ]]; then
+	if [[ -n $6 ]]; then
 		suffix+=$(echoc "$6")
 	fi
 

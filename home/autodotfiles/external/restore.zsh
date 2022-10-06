@@ -5,7 +5,7 @@
 
 last_backup="$1"
 
-if [[ ! -z $last_backup ]]; then
+if [[ -n $last_backup ]]; then
     echo "Restoring from provided backup path: $last_backup"
 else
     last_backup_filepath="$HOME/.uninstalled-autodotfiles.txt"

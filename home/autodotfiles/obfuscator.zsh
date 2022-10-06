@@ -169,7 +169,7 @@ function adf_obf_transform() {
         local input="$raw_input"
     fi
 
-    if [[ -z $input && ! -z $OBF_NO_CHECKSUM ]]; then
+    if [[ -z $input && -n $OBF_NO_CHECKSUM ]]; then
         echoerr "Input cannot be empty as it should contain its own checksum."
         return 1
     fi

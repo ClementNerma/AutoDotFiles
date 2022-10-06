@@ -36,7 +36,7 @@ function prompt() {
 function confirm() {
 	read -s 'answer?'
 	
-	if [[ ! -z $answer && $answer != "y" && $answer != "Y" ]]; then
+	if [[ -n $answer && $answer != "y" && $answer != "Y" ]]; then
 		return 1
 	fi
 }
@@ -132,7 +132,7 @@ function mvbak() {
 # Checksum will only be the same if the directory's filenames and content are equal
 # Files order and timestamps are not taken into consideration
 function cksumdir() {
-	if [[ -f $1 && ! -z $ADF_ALLOW_CKSUM_FILE ]]; then
+	if [[ -f $1 && -n $ADF_ALLOW_CKSUM_FILE ]]; then
 		cksumfile "$1"
 		return
 	fi

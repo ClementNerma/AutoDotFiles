@@ -16,7 +16,7 @@ fi
 function ytsync() {
     # === Determine the sync. URL and build the list of videos === #
 
-    if [[ ! -z $1 ]]; then
+    if [[ -n $1 ]]; then
         if [[ -f $ADF_YS_URL_FILE ]]; then
             echoerr "An URL was provided but an URL file already exists."
             return 1
@@ -27,7 +27,7 @@ function ytsync() {
         echowarn "Writing provided URL to local directory file."
         echo "$url" > "$ADF_YS_URL_FILE"
 
-        if [[ ! -z $2 ]]; then
+        if [[ -n $2 ]]; then
             local filenaming="$2"
             shift
 
@@ -172,7 +172,7 @@ function ytsync() {
         local cookie_profile=${ADF_YS_DOMAINS_PROFILE[$video_ie]}
         local cookie_msg=""
 
-        if [[ ! -z $cookie_profile ]]; then
+        if [[ -n $cookie_profile ]]; then
             local cookie_msg=" (with cookie profile \z[yellow]°$cookie_profile\z[]°)"
         fi
 
@@ -407,11 +407,11 @@ function ytsync_build_cache() {
         fi
 
         # Don't download videos that are already present on the disk
-        if ! (( $empty_dir )) && [[ ! -z $(find "$video_path" -name "*-${video_id}.*") ]]; then
+        if ! (( $empty_dir )) && [[ -n $(find "$video_path" -name "*-${video_id}.*") ]]; then
             continue
         fi
 
-        if [[ ! -z $video_id && $video_id != "null" ]]; then
+        if [[ -n $video_id && $video_id != "null" ]]; then
             local video_url=${ie_url}${video_id}
         fi
 
@@ -474,7 +474,7 @@ function ytsync_build_cache() {
             local cookie_profile=${ADF_YS_DOMAINS_PROFILE[${check_list_ies[i]}]}
             local cookie_params=()
 
-            if [[ ! -z $cookie_profile ]]; then
+            if [[ -n $cookie_profile ]]; then
                 if ! cookie_file=$(ytdlcookies get-path "$cookie_profile"); then
                     echoerr "Failed to find cookie profile named \z[yellow]°$cookie_profile\z[]°"
                     return 23

@@ -121,7 +121,7 @@ function adf_backup_session_compile() {
 function adf_restore_session() {
     local filter=""
 
-    if [[ ! -z $CKSUM ]]; then
+    if [[ -n $CKSUM ]]; then
       local filter="\-$CKSUM$"
     fi
 
@@ -171,7 +171,7 @@ function adf_restore_session() {
             continue
         fi
 
-        if [[ ! -z $1 && $software != $1 ]]; then
+        if [[ -n $1 && $software != $1 ]]; then
             continue
         fi
 

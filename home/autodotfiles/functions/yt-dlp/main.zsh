@@ -29,14 +29,14 @@ function ytdl() {
 	
 	local download_to=$PWD
 
-	if [[ ! -z $YTDL_LIMIT_BANDWIDTH && ! $YTDL_LIMIT_BANDWIDTH = *"K" && ! $YTDL_LIMIT_BANDWIDTH = *"M" ]]; then
+	if [[ -n $YTDL_LIMIT_BANDWIDTH && ! $YTDL_LIMIT_BANDWIDTH = *"K" && ! $YTDL_LIMIT_BANDWIDTH = *"M" ]]; then
 		echoerr "Invalid bandwidth limit provided."
 		return 1
 	fi
 
 	local cookie_file=""
 
-	if [[ ! -z $YTDL_COOKIE_PROFILE ]]; then
+	if [[ -n $YTDL_COOKIE_PROFILE ]]; then
 		echoverb "> Using profile \z[yellow]°$YTDL_COOKIE_PROFILE\z[]°..."
 
 		if ! cookie_file=$(ytdlcookies get-path "$YTDL_COOKIE_PROFILE"); then
@@ -45,7 +45,7 @@ function ytdl() {
 		fi
 	fi
 
-	if [[ ! -z $YTDL_OUTPUT_DIR ]]; then
+	if [[ -n $YTDL_OUTPUT_DIR ]]; then
 		local download_to="${YTDL_OUTPUT_DIR%/}"
 	fi
 
@@ -69,7 +69,7 @@ function ytdl() {
 	fi
 
 	if [[ "$(realpath "$PWD")" == "$(realpath "$tempdir")" ]]; then
-		if [[ ! -z $YTDL_REPAIR_DATE ]]; then
+		if [[ -n $YTDL_REPAIR_DATE ]]; then
 			echoerr "Cannot repair date in non-temporary directory."
 			return 3
 		fi
@@ -81,7 +81,7 @@ function ytdl() {
 		echoinfo "> Then moving to selected final directory : \z[yellow]°$download_to_display\z[]°"
 	fi
 
-	if [[ ! -z $YTDL_REPAIR_DATE ]] && [[ -z ${ADF_YS_DOMAINS_IE_URLS[$YTDL_REPAIR_DATE]} ]]; then
+	if [[ -n $YTDL_REPAIR_DATE ]] && [[ -z ${ADF_YS_DOMAINS_IE_URLS[$YTDL_REPAIR_DATE]} ]]; then
 		echoerr "Unknown profile provided for date repairing."
 		return 4
 	fi
@@ -103,7 +103,7 @@ function ytdl() {
 		local metadata_params=("--add-metadata")
 	fi
 
-	if [[ ! -z $cookie_file ]]; then
+	if [[ -n $cookie_file ]]; then
 		local cookie_params=("--cookies" "$cookie_file")
 	else
 		local cookie_params=()
@@ -132,7 +132,7 @@ function ytdl() {
 	fi
 
 	# Repair date
-	if [[ ! -z $YTDL_REPAIR_DATE ]]; then
+	if [[ -n $YTDL_REPAIR_DATE ]]; then
 		echoinfo "> Repairing date as requested"
 
 		if ! ADF_NO_VERBOSE=1 ytrepairdate "$YTDL_REPAIR_DATE" "$tempdir"; then
@@ -151,11 +151,11 @@ function ytdl() {
 	local files_count="$(command ls "$tempdir" -1A | wc -l)"
 	local counter=0
 
-	if [[ ! -z $YTDL_ITEM_CMD ]]; then
+	if [[ -n $YTDL_ITEM_CMD ]]; then
 		local command_count=0
 		
 		for cmd in ${YTDL_ITEM_CMD[@]}; do
-			if [[ ! -z $cmd ]]; then
+			if [[ -n $cmd ]]; then
 				command_count=$((command_count + 1))
 			fi
 		done
@@ -227,7 +227,7 @@ function _ytdl_build_resume_cmdline() {
 	local setvars=()
 
 	for varname in $ytdl_resume_vars; do
-		if [[ ! -z ${(P)varname} ]]; then
+		if [[ -n ${(P)varname} ]]; then
 			if [[ $varname != "YTDL_FORMAT" ]]; then
 				setvars+=("$varname='${(P)varname}'")
 				continue

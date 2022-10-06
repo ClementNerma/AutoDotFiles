@@ -22,7 +22,7 @@ function dlghrelease() {
 
 	for url in $release_urls; do
 		if [[ $url =~ $2 ]]; then
-			if [[ ! -z $found ]]; then
+			if [[ -n $found ]]; then
 				echoerr "Found multiple URLs matching the provided pattern:"
 				echoerr "* \z[yellow]°$found\z[]°"
 				echoerr "* \z[yellow]°$url\z[]°"
@@ -76,7 +76,7 @@ function dlghbin() {
 
 	local dldir="$TEMPDIR"
 
-	if [[ ! -z $INSTALLER_TMPDIR ]]; then
+	if [[ -n $INSTALLER_TMPDIR ]]; then
 		local dldir="$INSTALLER_TMPDIR"
 	fi
 
@@ -151,7 +151,7 @@ function ghdl() {
 	local reponame=$(echo "$repo_url" | cut -d'/' -f5)
 	local outdir="$reponame"
 
-	if [[ ! -z $2 ]]; then
+	if [[ -n $2 ]]; then
 		outdir="$2"
 	fi
 	

@@ -62,13 +62,13 @@ function ___parse_arguments() {
         fi
 
         if [[ ${arg[1]} = "-" ]]; then
-            if [[ ! -z $___pc ]]; then
+            if [[ -n $___pc ]]; then
                 if ! (( ${__required_args[(Ie)$___pc]} )) && ! (( ${__optional_args[(Ie)$___pc]} )); then
                     echoerr "Unknown argument: \z[yellow]°-$___pc\z[]°"
                     return 10
                 fi
 
-                if [[ ! -z ${argument[$___pc]} ]]; then
+                if [[ -n ${argument[$___pc]} ]]; then
                     echoerr "Cannot redefine argument: \z[yellow]°-$___pc\z[]°"
                     return 11
                 fi
@@ -84,7 +84,7 @@ function ___parse_arguments() {
                         return 10
                     fi
 
-                    if [[ ! -z ${argument[${match[1]}]} ]]; then
+                    if [[ -n ${argument[${match[1]}]} ]]; then
                         echoerr "Cannot redefine argument: \z[yellow]°--${match[1]}\z[]°"
                         return 11
                     fi
@@ -100,7 +100,7 @@ function ___parse_arguments() {
                         return 10
                     fi
 
-                    if [[ ! -z ${argument[${match[1]}]} ]]; then
+                    if [[ -n ${argument[${match[1]}]} ]]; then
                         echoerr "Cannot redefine argument: \z[yellow]°-${match[1]}\z[]°"
                         return 11
                     fi
@@ -115,7 +115,7 @@ function ___parse_arguments() {
                             return 10
                         fi
 
-                        if [[ ! -z ${argument[${arg:$i:1}]} ]]; then
+                        if [[ -n ${argument[${arg:$i:1}]} ]]; then
                             echoerr "Cannot redefine argument: \z[yellow]°-${arg:$i:1}\z[]°"
                             return 11
                         fi
@@ -124,13 +124,13 @@ function ___parse_arguments() {
                     done
                 fi
             fi
-        elif [[ ! -z $___pc ]]; then
+        elif [[ -n $___pc ]]; then
             if ! (( ${__required_args[(Ie)$___pc]} )) && ! (( ${__optional_args[(Ie)$___pc]} )); then
                 echoerr "Unknown argument: \z[yellow]°-(-)$___pc\z[]°"
                 return 10
             fi
 
-            if [[ ! -z ${argument[$___pc]} ]]; then
+            if [[ -n ${argument[$___pc]} ]]; then
                 echoerr "Cannot redefine argument: \z[yellow]°-(-)$___pc\z[]°"
                 return 11
             fi
@@ -142,13 +142,13 @@ function ___parse_arguments() {
         fi
     done
 
-    if [[ ! -z $___pc ]]; then
+    if [[ -n $___pc ]]; then
         if ! (( ${__required_args[(Ie)$___pc]} )) && ! (( ${__optional_args[(Ie)$___pc]} )); then
             echoerr "Unknown argument: \z[yellow]°-(-)$___pc\z[]°"
             return 10
         fi
 
-        if [[ ! -z ${argument[$___pc]} ]]; then
+        if [[ -n ${argument[$___pc]} ]]; then
             echoerr "Cannot redefine argument: \z[yellow]°-(-)$___pc\z[]°"
             return 11
         fi

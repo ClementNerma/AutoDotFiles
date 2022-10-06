@@ -26,7 +26,7 @@ function ytrepairdate() {
     local cookie_profile=${ADF_YS_DOMAINS_PROFILE[$1]}
     local cookie_params=()
 
-    if [[ ! -z $cookie_profile ]]; then
+    if [[ -n $cookie_profile ]]; then
         local cookie_params=("--cookies" "$(ytdlcookies get-path "$cookie_profile")")
     fi
 

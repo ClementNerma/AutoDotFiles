@@ -173,7 +173,7 @@ function adf_view_open() {
 
     if [[ $2 = "--randomize" ]]; then
         adf_view_randomize "$1"
-    elif [[ ! -z $2 ]]; then
+    elif [[ -n $2 ]]; then
         echoerr "The only allowed parameter is \z[yellow]°--randomize\z[]°"
         return 2
     fi

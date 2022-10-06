@@ -14,7 +14,7 @@
 #
 # To create a non-compressed archive, set the "ADF_BACKUP_NO_COMPRESS" variable to 1 or provide a "--no-compress" argument.
 function adf_local_backup() {
-    if [[ ! -z $1 && $1 != "--no-compress" ]]; then
+    if [[ -n $1 && $1 != "--no-compress" ]]; then
         echoerr "Invalid argument provided (must be \z[yellow]°--no-compress\[]° or nothing)"
         return 9
     fi
@@ -24,7 +24,7 @@ function adf_local_backup() {
         return 1
     fi
 
-    if [[ ! -z $ADF_MIRROR_BACKUP && ! -d $ADF_MIRROR_BACKUP ]]; then
+    if [[ -n $ADF_MIRROR_BACKUP && ! -d $ADF_MIRROR_BACKUP ]]; then
         echoerr "The provided mirro backup directory does not exist!"
     fi
     
@@ -41,7 +41,7 @@ function adf_local_backup() {
         return 1
     fi
 
-    if [[ ! -z $ADF_BACKUP_PREPARATION_SCRIPT ]]; then
+    if [[ -n $ADF_BACKUP_PREPARATION_SCRIPT ]]; then
         echoinfo " "
         echoinfo "(1/5) Running the preparation script..."
         echoinfo " "
@@ -109,7 +109,7 @@ function adf_local_backup() {
         return 5
     fi
 
-    if [[ ! -z $ADF_MIRROR_BACKUP ]]; then
+    if [[ -n $ADF_MIRROR_BACKUP ]]; then
         echoinfo " "
         echoinfo "(5/5) Mirroring the backup..."
         echoinfo " "

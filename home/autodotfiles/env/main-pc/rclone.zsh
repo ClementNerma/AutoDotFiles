@@ -69,7 +69,7 @@ function rclone_mirror() {
         elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9\\.]+[[:space:]][KMGTiBytes]+),[[:space:]]100%,([[:space:]]0[[:space:]]B/s,)? ]]; then
             local size="${match[1]}"
             
-            if [[ ! -z ${match[2]} ]]; then
+            if [[ -n ${match[2]} ]]; then
                 local total=0
             fi
         elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9]+),[[:space:]]100%$ ]]; then
@@ -107,13 +107,13 @@ function rclone_mirror() {
         elif (( ${#tomove} )) && [[ -z $renamed ]]; then
             local error_msg="Got a list of files to move but did not get their total count."
         
-        elif [[ ! -z $renamed ]] && [[ ${#tomove} -ne $renamed ]]; then
+        elif [[ -n $renamed ]] && [[ ${#tomove} -ne $renamed ]]; then
             local error_msg="Found \z[yellow]°${#tomove}\z[]° items to move, but expected \z[yellow]°$renamed\z[]°!"
         
         elif (( ${#todelete} )) && [[ -z $deleted ]]; then
             local error_msg="Got a list of files to delete but did not get their total count."
         
-        elif [[ ! -z $deleted ]] && [[ ${#todelete} -ne $deleted ]]; then
+        elif [[ -n $deleted ]] && [[ ${#todelete} -ne $deleted ]]; then
             local error_msg="Found \z[yellow]°${#todelete}\z[]° items to delete, but expected \z[yellow]°$deleted\z[]°!"
         fi
 
@@ -188,7 +188,7 @@ function rclone_mirror() {
 
     read "answer?"
 
-    if [[ ! -z $answer && $answer != "y" && $answer != "Y" ]]; then
+    if [[ -n $answer && $answer != "y" && $answer != "Y" ]]; then
         return 2
     fi
     

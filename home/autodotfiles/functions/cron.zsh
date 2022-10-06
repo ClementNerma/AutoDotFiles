@@ -27,7 +27,7 @@ function adf_cron_add_uq_raw() {
         return 3
     fi
 
-    if [[ ! -z $4 && $4 != "--head" ]]; then
+    if [[ -n $4 && $4 != "--head" ]]; then
         echoerr "Fourth argument must be \z[yellow]°--head\z[]° or empty."
         return 4
     fi

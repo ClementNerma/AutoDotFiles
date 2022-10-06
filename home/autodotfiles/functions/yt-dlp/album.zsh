@@ -29,7 +29,7 @@ function ytdlalbum() {
 
     local dir_format="%(artist)s - %(release_year)s - %(album)s$id_suffix"
 
-    if [[ ! -z $YTDL_DIR_FORMAT ]]; then
+    if [[ -n $YTDL_DIR_FORMAT ]]; then
         local dir_format="$YTDL_DIR_FORMAT"
     fi
 

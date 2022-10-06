@@ -65,7 +65,7 @@ function echoc() {
 
         local segment_len=$((${#color}+5))
 
-        if [[ ! -z $color && -z ${(P)format_test_varname} ]]; then
+        if [[ -n $color && -z ${(P)format_test_varname} ]]; then
             _report_echoc_error "Unknown color ${ADF_FORMAT_YELLOW}$color" "$text" $((i-1)) $segment_len
             return 1
         fi
