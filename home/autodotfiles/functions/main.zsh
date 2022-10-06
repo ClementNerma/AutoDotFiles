@@ -323,3 +323,12 @@ function compute_eta() {
 
 	humanduration $eta_s
 }
+
+# Get character bytecode
+function charbytecode() {
+	local input="$1"
+
+	for i in {1..${#input}}; do
+		printf '%x\n' "'${input[i]}'"
+	done
+}
