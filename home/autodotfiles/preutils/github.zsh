@@ -87,6 +87,11 @@ function dlghbin() {
 
 	if [[ $(dpkg --print-architecture) = "arm64" ]]; then
 		local asset_pattern="$3"
+
+		if [[ $asset_pattern = "-" ]]; then
+			echoerr "Component does not have an ARM64 version!"
+			return 30
+		fi
 	fi
 
 	echoinfo "> (1/4) Download release from GitHub..."
