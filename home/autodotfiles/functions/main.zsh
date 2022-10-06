@@ -43,7 +43,7 @@ function bakproj() {
 		return 3
 	fi
 
-	local count=$(printf "%s" "$files" | wc -l)
+	local count=$(wc -l <<< "$files")
 
 	mkdir "$target"
 
