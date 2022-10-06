@@ -16,7 +16,7 @@ function ytrepairdate() {
         local check_dir=$2
     fi
 
-    local url_prefix=${ADF_YS_DOMAINS_IE_URLS[$1]}
+    local url_prefix=${ADF_YS_DOMAINS_IE_VIDEOS_URL_PREFIX[$1]}
 
     if [[ -z $url_prefix ]]; then
         echoerr "Unknown cookie profile provided."

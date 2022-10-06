@@ -40,9 +40,9 @@ function ytsync() {
     fi
 
     local cache_builder_config=$(ytsync_cache_builder_config)
-
+    
     # TODO: install as a global package, put it in the installer scripts, and call it from here
-    if ! zer_ytsync_build_cache --config "$cache_builder_config" --sync-dir "$PWD" --display-colored-list; then
+    if ! TERM_WIDTH=$COLUMNS zer_ytsync_build_cache --config "$cache_builder_config" --sync-dir "$PWD" --display-colored-list; then
         return 10
     fi
 
@@ -231,8 +231,9 @@ function ytsync_wait_lockfile() {
 }
 
 # URL mapper for IDs in playlists
-typeset -A ADF_YS_DOMAINS_IE_PLATFORM_URL_PREFIX
-typeset -A ADF_YS_DOMAINS_IE_VIDEO_URI_PREFIX
+typeset -A ADF_YS_DOMAINS_IE_PLAYLISTS_URL_REGEX
+typeset -A ADF_YS_DOMAINS_IE_VIDEOS_URL_REGEX
+typeset -A ADF_YS_DOMAINS_IE_VIDEOS_URL_PREFIX
 typeset -A ADF_YS_DOMAINS_CHECKING_MODE
 typeset -A ADF_YS_DOMAINS_REPAIR_DATE_MODE
 typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
@@ -244,9 +245,9 @@ typeset -A ADF_YS_DOMAINS_RATE_LIMITED
 # Register a domain to use with 'ytsync'
 function ytsync_register() {
     typeset -A __args_declaration=(
-        [required_positional]=3
-        [optional_positional]=3
-        [required_args]="bandwidth-limit"
+        [required_positional]=1
+        [optional_positional]=1
+        [required_args]="playlists-url-regex, videos-url-regex, videos-url-prefix, bandwidth-limit"
         [optional_args]="always-check, repair-date, use-lockfile, cookie-profile, filename-prefix, rate-limited"
     )
 
@@ -254,8 +255,9 @@ function ytsync_register() {
 
     local ie_key=${rest[1]}
 
-    ADF_YS_DOMAINS_IE_PLATFORM_URL_PREFIX[$ie_key]=${rest[2]}
-    ADF_YS_DOMAINS_IE_VIDEO_URI_PREFIX[$ie_key]=${rest[3]}
+    ADF_YS_DOMAINS_IE_PLAYLISTS_URL_REGEX[$ie_key]=${arguments[playlists-url-regex]}
+    ADF_YS_DOMAINS_IE_VIDEOS_URL_REGEX[$ie_key]=${arguments[videos-url-regex]}
+    ADF_YS_DOMAINS_IE_VIDEOS_URL_PREFIX[$ie_key]=${arguments[videos-url-prefix]}
     ADF_YS_DOMAINS_CHECKING_MODE[$ie_key]=${arguments[always-check]:-0}
     ADF_YS_DOMAINS_REPAIR_DATE_MODE[$ie_key]=${arguments[repair-date]:-0}
     ADF_YS_DOMAINS_USE_LOCKFILE[$ie_key]=${arguments[use-lockfile]:-0}
@@ -272,7 +274,7 @@ function ytsync_unlock() {
         return 1
     fi
 
-    if [[ -z ${ADF_YS_DOMAINS_IE_VIDEO_URI_PREFIX[$1]} ]]; then
+    if [[ -z ${ADF_YS_DOMAINS_IE_VIDEOS_URL_REGEX[$1]} ]]; then
         echoerr "Unknown IE provided."
         return 2
     fi
@@ -309,7 +311,7 @@ function ytsync_cache_builder_config() {
         | jq ".platforms = {}"
     )
 
-    for id in ${(k)ADF_YS_DOMAINS_IE_VIDEO_URI_PREFIX}; do
+    for id in ${(k)ADF_YS_DOMAINS_IE_VIDEOS_URL_REGEX}; do
         if (( ${ADF_YS_DOMAINS_CHECKING_MODE[$id]} )); then
             local checking_mode="true"
         else
@@ -324,8 +326,8 @@ function ytsync_cache_builder_config() {
 
         local platform_config=$(
             echo -E "{}" \
-            | jq ".platform_url_prefix = \$value" --arg value "${ADF_YS_DOMAINS_IE_PLATFORM_URL_PREFIX[$id]}" \
-            | jq ".videos_uri_prefix = \$value" --arg value "${ADF_YS_DOMAINS_IE_VIDEO_URI_PREFIX[$id]}" \
+            | jq ".playlists_url_regex = \$value" --arg value "${ADF_YS_DOMAINS_IE_PLAYLISTS_URL_REGEX[$id]}" \
+            | jq ".videos_url_regex = \$value" --arg value "${ADF_YS_DOMAINS_IE_VIDEOS_URL_REGEX[$id]}" \
             | jq ".needs_checking = \$value" --argjson value "$checking_mode" \
             | jq ".rate_limited = \$value" --argjson value "$rate_limited"
         )
