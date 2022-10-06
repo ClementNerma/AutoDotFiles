@@ -35,6 +35,17 @@ function openz() {
   open "$result"
 }
 
+# Open a file or directory with the file explorer from a 'zoxide' interactive search
+function openzi() {
+  local result=$(zoxide query -i "$1")
+
+  if [[ -z $result ]]; then
+    return 1
+  fi
+
+  openz "$result"
+}
+
 # Open a file or directory with the file explorer from a 'zoxide' + 'fd' search
 function openfz() {
   if [[ -z $1 ]]; then
