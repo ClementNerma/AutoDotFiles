@@ -235,9 +235,7 @@ function adf_view_id() {
 function adf_view_ids_clean() {
     echowarn "Do you REALLY want to delete all saved identifiers?"
  
-    read 'answer?'
-
-    if [[ ! -z $answer && $answer != "y" && $answer != "Y" ]]; then
+    if ! confirm; then
         return 10
     fi
 

@@ -37,13 +37,14 @@ function openz() {
 
 # Open a file or directory with the file explorer from a 'zoxide' interactive search
 function openzi() {
-  local result=$(zoxide query -i "$1")
+  local list=$(zoxide query --list)
+  local selected=$(fzf <<< "$list")
 
-  if [[ -z $result ]]; then
+  if [[ -z $selected ]]; then
     return 1
   fi
 
-  openz "$result"
+  open "$selected"
 }
 
 # Open a file or directory with the file explorer from a 'zoxide' + 'fd' search

@@ -79,9 +79,7 @@ function adf_sync_files() {
     
     echoinfo "Do you want to continue (Y/n)?"
 
-    read 'answer?'
-
-    if [[ ! -z $answer && $answer != "y" && $answer != "Y" ]]; then
+    if ! confirm; then
         return 10
     fi
 

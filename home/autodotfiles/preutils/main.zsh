@@ -17,6 +17,15 @@ function prompt() {
 	echo "$input"
 }
 
+# Ask for confirmation
+function confirm() {
+	read 'answer?'
+	
+	if [[ ! -z $answer && $answer != "y" && $answer != "Y" ]]; then
+		return 1
+	fi
+}
+
 # Faster replacement for "date +%s%N"
 function now() {
 	printf ${${EPOCHREALTIME//.}:0:19}
