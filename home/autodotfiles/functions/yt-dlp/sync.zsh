@@ -7,6 +7,9 @@ if [[ ! -d $ADF_YS_LOCKFILES_DIR ]]; then
     mkdir "$ADF_YS_LOCKFILES_DIR"
 fi
 
+# To set up a playlist to synchronize: ytsync <url>
+# To set up with a specific filenaming: ytsync <url> <filenaming>
+# To set up with a specific profile: ytsync "withprofile[<profile> with_ie <alternative_ie>]:<url>"
 function ytsync() {
     # === Determine the sync. URL and build the list of videos === #
 
@@ -246,17 +249,36 @@ function ytsync_build_cache() {
         fi
 
         local url=$(command cat "${playlist_url_files[i]}")
+        local cookie_params=()
+        local ie_mapper=""
+
+        if [[ $url =~ ^withprofile\\[([a-zA-Z0-9_]+)[[:space:]]with_ie[[:space:]]([a-zA-Z0-9_]+)\\]:(.*)$ ]]; then
+            local url=${match[3]}
+            local alternative_ie=${match[2]}
+            local ie_mapper='| .ie_key = $alternative_ie'
+
+            echoverb "> Using profile \z[yellow]°${match[1]}\z[]°..."
+
+            if ! cookie_file=$(ytdlcookies get-path "${match[1]}"); then
+                echoerr "Failed to find cookie profile named \z[yellow]°${match[1]}\z[]°"
+                return 11
+            fi
+
+            local cookie_params=("--cookies" "$cookie_file")
+        fi
         
-        if ! sub_json=$(yt-dlp -J --flat-playlist -i "$url"); then
+        if ! sub_json=$(yt-dlp -J --flat-playlist ${cookie_params[@]} -i "$url"); then
             echoerr "Failed to fetch playlist content!"
-            return 11
+            return 12
         fi
 
         if ! sub_json=$(echo -E "$sub_json" |
-            jq -c '[.entries[] | {ie_key, id, title, url} | .path = $path]' --arg path "$(dirname "${playlist_url_files[i]}")"
+            jq -c "[.entries[] | {ie_key, id, title, url} | .path = \$path $ie_mapper]" \
+                --arg path "$(dirname "${playlist_url_files[i]}")" \
+                --arg alternative_ie "$alternative_ie"
         ); then
             echoerr "Failed to parse JSON response!"
-            return 12
+            return 13
         fi
 
         local sub_total=$(echo -E "$sub_json" | jq 'length')
@@ -264,7 +286,7 @@ function ytsync_build_cache() {
 
         if ! json=$(echo -E "[ $json, $sub_json ]" | jq '.[0,1]' | jq -s 'add'); then
             echoerr "Failed to merge JSONs together!"
-            return 13
+            return 14
         fi
     done
 
@@ -397,7 +419,19 @@ function ytsync_build_cache() {
 
             echoinfo -n "| Checking video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#check_list_ids}\z[]° $path_display\z[gray]°(${check_list_ids[i]})\z[]°..."
 
-            if ! yt-dlp "${check_list_urls[i]}" --get-url > /dev/null 2>&1; then
+            local cookie_profile=${ADF_YS_DOMAINS_PROFILE[${check_list_ies[i]}]}
+            local cookie_params=()
+
+            if [[ ! -z $cookie_profile ]]; then
+                if ! cookie_file=$(ytdlcookies get-path "$cookie_profile"); then
+                    echoerr "Failed to find cookie profile named \z[yellow]°$cookie_profile\z[]°"
+                    return 23
+                fi
+
+                local cookie_params=("--cookies" "$cookie_file")
+            fi
+
+            if ! yt-dlp ${cookie_params[@]} "${check_list_urls[i]}" --get-url > /dev/null 2>&1; then
                 echoc " \z[red]°ERROR\z[]°"
                 echoverb "| > Video \z[magenta]°${check_list_titles[i]}\z[]° is unavailable, skipping it."
                 continue
