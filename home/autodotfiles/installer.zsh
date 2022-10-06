@@ -7,6 +7,7 @@ export ADF_INSTALLER_HASH_FILE="$ADF_ASSETS_DIR/installer-checksum.txt"
 export ADF_INSTALLER_SCRIPTS="$ADF_DIR/installer-scripts.zsh"
 
 # Usage: <component name ("*" for everything)> <1 to skip if component already installed>
+# ADF_FORCE_INSTALL=1 => indicate to the component it's installing for the first time instead of
 function adf_install() {
     if [[ -z $1 ]]; then
         echoerr "Please provide a component to install (* = everything)"
@@ -267,6 +268,10 @@ function adf_install() {
         mkdir -p "$INSTALLER_TMPDIR"
 
         export COMPONENT_UPDATING=${to_install_already_installed[i]}
+
+        if (( $ADF_FORCE_INSTALL )); then
+            export COMPONENT_UPDATING=0
+        fi
 
         if ! $func_name; then
             local failed=$((failed+1))
