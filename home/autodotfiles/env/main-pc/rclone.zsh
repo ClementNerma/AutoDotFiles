@@ -35,6 +35,7 @@ function rclone_mirror() {
     local items_size=()
     local todelete=()
     local tomove=()
+    local unparsed=()
     local total=""
     local size=""
     local noitem=0
@@ -68,7 +69,7 @@ function rclone_mirror() {
         elif [[ $line =~ ^Checks:[[:space:]]+[0-9]+[[:space:]]/[[:space:]][0-9]+,[[:space:]]100%$ ]]; then
         elif [[ $line =~ ^Elapsed[[:space:]]time:[[:space:]]+[0-9\\.smhd]+$ ]]; then
         else
-            printf '%s\n' "$line"
+            unparsed+=("$line")
         fi
     done <<< "$rclone_list"
 
@@ -113,6 +114,10 @@ function rclone_mirror() {
             echowarn "> Going to delete: \z[magenta]°$item\z[]°"
         done <<< $(printf '%s\n' "${todelete[@]}" | sort -n)
     fi
+
+    for line in $unparsed; do
+        echoerr "> Unparsed: $line"
+    done
 
     echoinfo "Built items list in \z[gray]°$(timer_end "$started")\z[]°."
     echoinfo "Found \z[yellow]°${#items}\z[]° item(s) to transfer, \z[yellow]°${#tomove}\z[]° to move and \z[yellow]°${#todelete}\z[]° to delete for a total of \z[yellow]°$size\z[]°."
