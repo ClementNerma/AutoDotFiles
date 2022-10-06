@@ -163,11 +163,29 @@ function fd() {
 #   source "$ADF_ENV_DIR/session-backuper.zsh"
 # fi
 
+# Fix external connection for e.g. Explorer, VSCode, etc.
+function fix_socket_connection() {
+  local interop_pid=$$
+
+  while true ; do
+    [[ -e /run/WSL/${interop_pid}_interop ]] && break
+    local pid=$(ps -p ${interop_pid:-$$} -o ppid=;)
+    local interop_pid=${pid// /}
+    [[ ${interop_pid} = 1 ]] && break
+  done
+
+  if [[ ${interop_pid} = 1 ]] ; then
+      echo "Failed to find a parent process with a working interop socket.  Interop is broken."
+  else
+      export WSL_INTEROP=/run/WSL/${interop_pid}_interop
+  fi
+}
+
 # Enable screen provider on Windows
 export DISPLAY=":0"
 
+# Fix socket connection
+fix_socket_connection
+
 # Mount storage devices on startup (this typically takes 50~100 ms)
 mount_wsl_drives
-
-# Fix socket connection
-source "$ADF_ENV_DIR/fix-socket-connection.zsh"
