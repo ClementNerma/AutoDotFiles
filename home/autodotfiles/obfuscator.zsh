@@ -185,7 +185,7 @@ function adf_obf_transform() {
     for i in {1..${#input}}; do
         local char=${input[i]}
 
-        >&2 echoverb "Character: \z[cyan]°>$char< \z[green]°(0x$(printf '%x\n' "'$char'"))\z[]°\z[]°"
+        echoverb "Character: \z[cyan]°>$char< \z[green]°(0x$(printf '%x\n' "'$char'"))\z[]°\z[]°"
 
         local index=${base_alphabet[(ie)$char]}
 
@@ -203,7 +203,7 @@ function adf_obf_transform() {
 
         local outchar="${converted_alphabet[$index+192]}"
 
-        >&2 echoverb "Converted to: \z[yellow]°>$outchar<\z[]° \z[green]°(0x$(printf '%x\n' "'$outchar'"))\z[]°"
+        echoverb "Converted to: \z[yellow]°>$outchar<\z[]° \z[green]°(0x$(printf '%x\n' "'$outchar'"))\z[]°"
 
         out+=("$outchar")
     done

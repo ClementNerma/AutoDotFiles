@@ -190,5 +190,5 @@ function echoverb() {
 
     local message="\z[gray]°[Verbose]\z[]° \z[magenta]°${@: -1}\z[]°"
     shift -p
-	echoc "$@" "$message"
+	>&2 echoc "$@" "$message"
 }
