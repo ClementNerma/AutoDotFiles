@@ -316,7 +316,7 @@ function adf_register_session_backup() {
     fi
 
     if [[ ! -f $4 ]]; then
-        echoerr "Provided software path was not found at path: \z[yellow]°$3\z[]°"
+        echoerr "Provided software path was not found at path: \z[yellow]°$4\z[]°"
         return 7
     fi
 
