@@ -2,29 +2,10 @@
 # This file defines global functions and aliases
 #
 
-# Backup a project
-function bakproj() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide a source directory."
-		return 1
-	fi
-
-	local target="$2"
-
-	if [[ -z $target ]]; then
-		local input_path=$(realpath "$1")
-		local target="$(dirname "$input_path")/$(basename "$input_path")-$(humandate)"
-	fi
-
-	if [[ ! -d $1 ]]; then
-		echoerr "Source does not exist!"
-		return 3
-	fi
-
-	if [[ -f $target || -d $target ]]; then
-		echoerr "Target already exists!"
-		return 4
-	fi
+# Backup the current project
+function bakthis() {
+	local source=$PWD
+	local target="$PWD-$(humandate)"
 
 	if [[ -n $3 ]]; then
 		local target="$target.$3"
@@ -32,33 +13,31 @@ function bakproj() {
 
 	local files=""
 	
-	if ! files=$(fd --threads=1 --hidden --one-file-system --type 'file' --search-path "$1" --absolute-path); then
+	if ! files=$(fd --threads=1 --hidden --one-file-system --type 'file' --search-path "$source" --absolute-path); then
 		echoerr "Command \z[yellow]°fd\z[]° failed."
 		return 2
 	fi
 
 	local files=$(printf "%s" "$files" | grep "\S" | sort)
-	
-	if [[ -z $files ]]; then
-		echoerr "Directory is empty."
-		return 3
-	fi
-
 	local count=$(wc -l <<< "$files")
 
 	mkdir "$target"
 
 	local i=0
-	local started=$(timer_start)
 
 	while IFS= read -r file; do
 		local i=$((i+1))
-		local relative="$(realpath --relative-to="$1" "$file")"
+		local relative="$(realpath --relative-to="$source" "$file")"
 		local dest="$target/$relative"
 
 		echo -n "\rCopying files: $i / $count ($(( 100 * $i / $count )) %)..."
 
-		mkdir -p "$(dirname "$dest")"
+		local file_dir=$(dirname "$dest")
+
+		if [[ ! -d $file_dir ]]; then
+			mkdir -p "$file_dir"
+		fi
+
 		cp "$file" "$dest"
 	done <<< "$files"
 
@@ -66,11 +45,6 @@ function bakproj() {
 
 	echosuccess "Done in \z[magenta]°$target\z[]°"
 	export LAST_BAKPROJ_DIR="$target"
-}
-
-# Backup the current project
-function bakthis() {
-	bakproj "$PWD" "$PWD-$(humandate)" "$1"
 }
 
 # Rename a Git branch
