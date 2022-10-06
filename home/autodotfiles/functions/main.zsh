@@ -143,6 +143,39 @@ function make7z() {
 	export __LAST_MADE_7Z="$dest"
 }
 
+# Merge multiple ZIPs together
+function merge_zips() {
+	if (( $# < 3 )); then
+		echoerr "Please provide at least two ZIPs as well as an output file."
+		return 1
+	fi
+
+	local outfile="${@: -1}"
+
+	if [[ $outfile = "-" ]]; then
+		local outfile="$(dirname "$1").zip"
+	fi
+
+	if [[ -f $outfile ]] || [[ -d $outfile ]]; then
+		echoerr "Output file already exists!"
+		return 10
+	fi
+
+	local tmpdir=".zipmerge-$(date +%s%N)"
+	mkdir "$tmpdir"
+
+	for file in "${@:1:${#}-1}"; do
+		unzip -q "$file" -d "$tmpdir/${file/.zip/}"
+	done
+
+	# NOTE: No compression
+	7z a -mx=0 "$outfile" "$tmpdir"
+
+	command rm -rf "$tmpdir"
+
+	echosuccess "Done!"
+}
+
 # Measure time a command takes to complete
 function howlong() {
 	local started=$(now)
