@@ -47,12 +47,9 @@ function zerupdate() {
 	ADF_SILENT=1 zerbackup
 	
 	# Remove old files
-	while read item
-	do
+	while read item; do
 		# Security (should never happen, this check is here just in case)
-		if [[ -z $item ]]; then
-			continue
-		fi
+		if [[ -z $item ]]; then continue; fi
 
 		command rm -rf "$HOME/$(basename "$item")"
 	done < "$ADF_FILES_LIST"
@@ -79,7 +76,7 @@ function zerupdate() {
 	source "$ADF_DIR/index.zsh"
 
 	# Reload current directory (fix for 'fd')
-	cd "$PWD"
+	cd "."
 
 	# Done!
 	echosuccess "Environment successfully updated!"
