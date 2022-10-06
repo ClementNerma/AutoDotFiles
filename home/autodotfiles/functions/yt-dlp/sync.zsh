@@ -148,19 +148,27 @@ function ytsync() {
     local lockfile="$ADF_YS_LOCKFILES_DIR/$ie.lock"
 
     if (( ${ADF_YS_DOMAINS_USE_LOCKFILE[$ie]} )); then
-        if [[ -f $lockfile ]]; then
-            local started_waiting=$(timer_start)
+        while true; do
+            if [[ -f $lockfile ]]; then
+                local started_waiting=$(timer_start)
 
-            while [[ -f $lockfile ]]; do
-                local pending=$(command cat "$lockfile")
-                local waiting_for=$(timer_show_seconds "$started_waiting")
-                ADF_UPDATABLE_LINE=1 echowarn ">> Waiting for lockfile removal (download pending at \z[magenta]°$pending\z[]°)... \z[cyan]°$waiting_for\z[]°"
-                sleep 1
-            done
-        fi
+                while [[ -f $lockfile ]]; do
+                    local pending=$(command cat "$lockfile")
+                    local waiting_for=$(timer_show_seconds "$started_waiting")
+                    ADF_UPDATABLE_LINE=1 echowarn ">> Waiting for lockfile removal (download pending at \z[magenta]°$pending\z[]°)... \z[cyan]°$waiting_for\z[]°"
+                    sleep 1
+                done
+            fi
 
-        echo "$(pwd)" > "$lockfile"
-        echowarn "\n>> Writting current path to lockfile"
+            echo "$(pwd)" > "$lockfile"
+            echowarn "\n>> Writting current path to lockfile"
+
+            if [[ $(command cat "$lockfile") != "$(pwd)" ]]; then
+                echoerr "Internal error: inconsistency in the lockfile."
+            else
+                break
+            fi
+        done
     fi
 
     local download_started=$(timer_start)
