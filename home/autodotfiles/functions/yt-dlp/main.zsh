@@ -1,5 +1,6 @@
 # Software: Youtube-DL
 
+# (NOTE: when updating this list, update "_ytdl_uncomplex_format" as well)
 export ADF_YTDL_BEST_FORMAT_SUB_HD="bestvideo*[height>480]+bestaudio/best[height>480]/bestvideo*[height=480]+bestaudio/best[height=480]/bestvideo*[height>320]+bestaudio/best[height>320]/bestvideo*[height=320]+bestaudio/best[height=320]/bestvideo*[height>240]+bestaudio/best[height>240]/bestvideo*[height=240]+bestaudio/best[height=240]/bestvideo*[height>144]+bestaudio/best[height>144]/bestvideo*[height=144]+bestaudio/best[height=144]/bestvideo+bestaudio/best"
 export ADF_YTDL_BEST_FORMAT_720P="bestvideo*[height>720][height<1080]+bestaudio/best[height>720][height<1080]/bestvideo*[height=720]+bestaudio/best[height=720]/$ADF_YTDL_BEST_FORMAT_SUB_HD"
 export ADF_YTDL_BEST_FORMAT_1080P="bestvideo*[height>1080][height<1440]+bestaudio/best[height>1080][height<1440]/bestvideo*[height=1080]+bestaudio/best[height=1080]/$ADF_YTDL_BEST_FORMAT_720P"
@@ -188,7 +189,18 @@ function _ytdl_build_resume_cmdline() {
 
 	for varname in $ytdl_resume_vars; do
 		if [[ ! -z ${(P)varname} ]]; then
-			setvars+=("$varname='${(P)varname}'")
+			if [[ $varname != "YTDL_FORMAT" ]]; then
+				setvars+=("$varname='${(P)varname}'")
+				continue
+			fi
+
+			local uncomplexed=$(_ytdl_uncomplex_format "${(P)varname}")
+
+			if [[ $uncomplexed =~ ^\\$ ]]; then
+				setvars+=("$varname=\"$uncomplexed\"")
+			else
+				setvars+=("$varname='$uncomplexed'")
+			fi
 		fi
 	done
 
@@ -207,6 +219,26 @@ function _ytdl_build_resume_cmdline() {
 	else
 		printf '%s' "${(j: :)setvars} ytdlresume ${(j: :)args}"
 	fi
+}
+
+function _ytdl_uncomplex_format() {
+	local candidates=(
+		"ADF_YTDL_BEST_FORMAT_SUB_HD"
+		"ADF_YTDL_BEST_FORMAT_720P"
+		"ADF_YTDL_BEST_FORMAT_1080P"
+		"ADF_YTDL_BEST_FORMAT_1440P"
+		"ADF_YTDL_BEST_FORMAT_2160P"
+		"ADF_YTDL_DEFAULT_BEST_FORMAT"
+	)
+
+	for candidate in $candidates; do
+		if [[ $1 = ${(P)candidate} ]]; then
+			printf '%s' "\$$candidate"
+			return
+		fi
+	done
+
+	printf '%s' "$1"
 }
 
 function ytdlresume() {
