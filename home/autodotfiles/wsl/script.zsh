@@ -194,7 +194,7 @@ function psymlink() {
   if [[ $(realpath "$1") =~ ^\/mnt\/ ]] || [[ $link_path =~ ^\/mnt\/ ]]; then
     local cwd=$(pwd)
     cd /mnt/c
-    wincmd mklink "$wsl_path" "$(wslpath -w "$1")"
+    wincmd mklink "$wsl_path" "$(wslpath -w "$1")" ">" NUL
     cd "$cwd"
   else
     ln -s "$1" "$2"
