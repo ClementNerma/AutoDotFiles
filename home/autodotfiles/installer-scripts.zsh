@@ -316,11 +316,14 @@ function borg() {
     # ENV: main-pc/all
     # VERSION: borg -V
     # NEEDS_APT_UPDATE: yes
-    
-    echoinfo "> Installing dependencies..."
-    sudo apt install libacl1-dev libacl1 libacl1-dev liblz4-dev libzstd1 libzstd-dev liblz4-1 libb2-1 libb2-dev -y
 
-    echoinfo "> Installing Borg..."
+    if ! (( $COMPONENT_UPDATING )); then
+        echoinfo "> Installing dependencies..."
+        sudo apt install libacl1-dev libacl1 libacl1-dev liblz4-dev libzstd1 libzstd-dev liblz4-1 libb2-1 libb2-dev -y
+
+        echoinfo "> Now installing Borg..."
+    fi
+
     sudo pip3 install --upgrade "borgbackup[fuse]"
 }
 
