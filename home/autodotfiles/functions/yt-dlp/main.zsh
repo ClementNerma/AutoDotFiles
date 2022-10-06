@@ -46,10 +46,13 @@ function ytdl() {
 
 	if [[ ! -z $YTDL_OUTPUT_DIR ]]; then
 		local download_to="${YTDL_OUTPUT_DIR%/}"
+	fi
 
-		if [[ $download_to != "." ]] && [[ $download_to != $PWD ]]; then
-			echoinfo "> Downloading to provided directory: \z[cyan]°$download_to\z[]°"
-		fi
+	if [[ $download_to != "." ]] && [[ $download_to != $PWD ]]; then
+		local download_to_display=$download_to
+		echoinfo "> Downloading to provided directory: \z[cyan]°$download_to\z[]°"
+	else
+		local download_to_display="\z[magenta]°. => \z[]°$(basename "$PWD")"
 	fi
 
 	# Check if download must be performed in a temporary directory
@@ -74,6 +77,7 @@ function ytdl() {
 	else
 		local is_tempdir_cwd=0
 		echoinfo "> Downloading first to temporary directory: \z[magenta]°$tempdir\z[]°"
+		echoinfo "> Then moving to selected final directory : \z[yellow]°$download_to_display\z[]°"
 	fi
 
 	if [[ ! -z $YTDL_REPAIR_DATE ]] && [[ -z ${ADF_YS_DOMAINS_IE_URLS[$YTDL_REPAIR_DATE]} ]]; then
