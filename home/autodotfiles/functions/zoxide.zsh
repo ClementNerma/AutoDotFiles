@@ -97,18 +97,26 @@ function opensze() { opensz "$@" ; exit }
 # Add a list of directories to Zoxide's index
 # All directories one level under the provided list will be indexed as well
 function zoxide_populate_with() {
-    for dir in "$@"; do
-    	echoverb "> Populating Zoxide index with: \z[yellow]°$dir\z[]°"
+    echoinfo "Building directories list..."
 
-        if [[ ! -d $dir ]]; then
-            echoerr "Directory not found: \z[yellow]°$dir\z[]°"
-            continue
-        fi
+    local fd_args=()
 
-        zoxide add "$dir"
-
-        for item in "$dir"; do
-            [[ -d $item ]] && zoxide add "$item"
-        done
+    for dir in $@; do
+        fd_args+=("--search-path" "$dir")
     done
+
+    if ! fd_list=$(fd ${fd_args[@]} --type d --hidden --max-depth 1); then
+        echoerr "Command \z[cyan]°fd\z[]° failed (see output above)."
+        return 10
+    fi
+
+    IFS=$'\n' local directories=($(echo -E "$fd_list"))
+
+    echoinfo "Found \z[yellow]°${#directories}\z[]° directories to populate Zoxide with."
+
+    for dir in $directories; do
+        zoxide add "$dir"
+    done
+
+    echosuccess "Successfully populated Zoxide."
 }
