@@ -131,10 +131,10 @@ source "$ADF_USER_DIR/env.zsh"
 # Allow fast reloading of this file after changes
 alias reload="source ${(%):-%x}"
 
-# Load the script for the main computer (if applies)
-if [ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]; then
-	source "$ADF_DIR/main-pc.zsh"
-fi
+# # Load the script for the main computer (if applies)
+# if [ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]; then
+# 	source "$ADF_DIR/main-pc.zsh"
+# fi
 
 # Ensure main directories are defined
 if [[ -z $HOMEDIR ]]; then echoerr "Directory variable \z[green]°\$HOMEDIR\z[]° is not defined!"; fi
