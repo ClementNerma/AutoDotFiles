@@ -65,7 +65,7 @@ function passive_confirm() {
 			return
 		fi
 
-		echowarn "Unrecognized key (<Enter> to continue, <Ctrl+D> to abort, <P> to pause)"
+		echowarn "Unrecognized key (\z[blue]°<Enter>\z[]° to continue, \z[blue]°<Ctrl+D>\z[]° to abort, \z[blue]°<P>\z[]° to pause)"
 	done
 }
 

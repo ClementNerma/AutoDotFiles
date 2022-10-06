@@ -191,7 +191,7 @@ function ytsync() {
              --match-filter "!is_live"
         then
             local errors=$((errors+1))
-            echowarn "Waiting 5 seconds before next video..."
+            echowarn "Waiting before the next video..."
             
             if ! passive_confirm; then
                 if (( $needlockfile )); then
