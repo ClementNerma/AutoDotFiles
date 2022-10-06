@@ -382,7 +382,7 @@ function ytdl() {
         return
     fi
 
-    dlghbin "ClementNerma/ytdl" "ytdl-debug-linux-x86_64-musl.zip" "-" "ytdl" "ytdl"
+    dlghbin "ClementNerma/ytdl" "ytdl-linux-x86_64-musl.zip" "-" "ytdl" "ytdl"
 }
 
 # =============== OPTIONAL =============== #
