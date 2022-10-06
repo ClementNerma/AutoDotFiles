@@ -4,24 +4,24 @@
 
 # Backup a project
 function bakproj() {
-	if [[ -z "$1" ]]; then
+	if [[ -z $1 ]]; then
 		echoerr "Please provide a source directory."
 		return 1
 	fi
 
 	local target="$2"
 
-	if [[ -z "$target" ]]; then
+	if [[ -z $target ]]; then
 		local input_path=$(realpath "$1")
 		local target="$(dirname "$input_path")/$(basename "$input_path")-$(humandate)"
 	fi
 
-	if [[ ! -d "$1" ]]; then
+	if [[ ! -d $1 ]]; then
 		echoerr "Source does not exist!"
 		return 3
 	fi
 
-	if [[ -f "$target" || -d "$target" ]]; then
+	if [[ -f $target || -d $target ]]; then
 		echoerr "Target already exists!"
 		return 4
 	fi
@@ -38,7 +38,7 @@ function bakproj() {
 
 	local files=$(printf "%s" "$files" | grep "\S")
 	
-	if [[ -z "$files" ]]; then
+	if [[ -z $files ]]; then
 		echoerr "Directory is empty."
 		return 3
 	fi
@@ -84,7 +84,7 @@ function gitrename() {
 
 # A simple 'rm' with progress
 function rmprogress() {
-	if [[ -z "$1" ]]; then
+	if [[ -z $1 ]]; then
 		echoerr "Missing operand for 'rmprogress'"
 		return 1
 	fi
@@ -114,7 +114,7 @@ function mvprogress() {
 
 		local tomove="${item%/}"
 
-		if [[ -d "$item" ]]; then
+		if [[ -d $item ]]; then
 			item="$item/"
 		fi
 
@@ -165,7 +165,7 @@ function howlong() {
 
 # Go to a directory located in the projects directory
 function p() {
-	if [[ -z "$1" ]]; then
+	if [[ -z $1 ]]; then
 		echoerr "Please provide a project to go to."
 		return 1
 	else
@@ -175,7 +175,7 @@ function p() {
 
 # Create a directory and go into it
 function mkcd() {
-	if [[ ! -d "$1" ]]; then
+	if [[ ! -d $1 ]]; then
 		mkdir -p "$1"
 	fi
 
@@ -220,7 +220,7 @@ function timer_start() {
 }
 
 function timer_elapsed() {
-	if [[ -z "$1" ]]; then
+	if [[ -z $1 ]]; then
 		echoerr "Please provide a timer value."
 		return 1
 	fi
@@ -233,7 +233,7 @@ function timer_elapsed() {
 }
 
 function timer_show() {
-	if [[ -z "$1" ]]; then
+	if [[ -z $1 ]]; then
 		echoerr "Please provide a timer value."
 		return 1
 	fi
@@ -243,7 +243,7 @@ function timer_show() {
 }
 
 function timer_show_seconds() {
-	if [[ -z "$1" ]]; then
+	if [[ -z $1 ]]; then
 		echoerr "Please provide a timer value."
 		return 1
 	fi
@@ -253,7 +253,7 @@ function timer_show_seconds() {
 }
 
 function timer_end() {
-	if [[ -z "$1" ]]; then
+	if [[ -z $1 ]]; then
 		echoerr "Please provide a timer value."
 		return 1
 	fi
@@ -303,7 +303,7 @@ function humanduration_ms() {
 }
 
 function filesize() {
-	if [[ ! -f "$1" ]]; then
+	if [[ ! -f $1 ]]; then
 		echoerr "Path \z[magenta]°$1\z[]° is not a file!"
 		return 1
 	fi
@@ -312,7 +312,7 @@ function filesize() {
 }
 
 function humansize() {
-	if [[ -z "$1" ]]; then
+	if [[ -z $1 ]]; then
 		echoerr "Please provide an integer size."
 		return 1
 	fi

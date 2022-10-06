@@ -81,7 +81,7 @@ source ~/.fzf.zsh
 export _ZO_DATA_DIR="$ADF_THISCOMP_DIR/zoxide"
 ZOXIDE_LOAD_FILE="$ADF_THISCOMP_DIR/zoxide.zsh"
 
-if [[ ! -f "$ZOXIDE_LOAD_FILE" ]]; then
+if [[ ! -f $ZOXIDE_LOAD_FILE ]]; then
 	zoxide init zsh > "$ZOXIDE_LOAD_FILE"
 fi
 

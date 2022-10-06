@@ -4,7 +4,7 @@ function openfd() {
   local results=$(fd "$@")
   local count=$(echo "$results" | wc -l)
 
-  if [[ -z "$results" ]]; then
+  if [[ -z $results ]]; then
       echoerr "No result found for this search."
       return 1
   fi
@@ -16,7 +16,7 @@ function openfd() {
 
   local selected=$(echo "$results" | fzf)
 
-  if [[ -z "$selected" ]]; then
+  if [[ -z $selected ]]; then
     return 1
   fi
 
@@ -27,7 +27,7 @@ function openfd() {
 function openz() {
   local result=$(zoxide query "$1" 2>/dev/null)
 
-  if [[ -z "$result" ]]; then
+  if [[ -z $result ]]; then
     echoerr "No result found by Zoxide."
     return 1
   fi
@@ -37,14 +37,14 @@ function openz() {
 
 # Open a file or directory on Windows from a 'zoxide' + 'fd' search
 function openfz() {
-  if [[ -z "$1" ]]; then
+  if [[ -z $1 ]]; then
     echoerr "Please provide a search for Zoxide."
     return 1
   fi
 
   local result=$(zoxide query "$1" 2>/dev/null)
 
-  if [[ -z "$result" ]]; then
+  if [[ -z $result ]]; then
     echoerr "No result found by Zoxide."
     return 1
   fi

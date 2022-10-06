@@ -6,13 +6,13 @@
 function ytrepairres() {
     local loc="."
 
-    if ! (( $YTDL_REPAIR_SIMULATE )) && [[ -z "$1" ]]; then
+    if ! (( $YTDL_REPAIR_SIMULATE )) && [[ -z $1 ]]; then
         echoerr "Please provide a download URL prefix."
         return 1
     fi
 
-    if [[ ! -z "$2" ]]; then
-        if [[ ! -d "$2" ]]; then
+    if [[ ! -z $2 ]]; then
+        if [[ ! -d $2 ]]; then
             echoerr "Provided path is not a directory."
             return 2
         fi
@@ -31,7 +31,7 @@ function ytrepairres() {
     for entry in *; do
         echoverb "Analyzing: $entry..."
 
-        if [[ -d "$entry" ]]; then
+        if [[ -d $entry ]]; then
             YTDL_REPAIR_SUBROUTINE=1 ytrepairres "$1" "$entry"
             continue
         fi

@@ -14,7 +14,7 @@
 #
 # To create a non-compressed archive, set the "ADF_BACKUP_NO_COMPRESS" variable to 1 or provide a "--no-compress" argument.
 function adf_local_backup() {
-    if [[ ! -z "$1" && $1 != "--no-compress" ]]; then
+    if [[ ! -z $1 && $1 != "--no-compress" ]]; then
         echoerr "Invalid argument provided (must be \z[yellow]°--no-compress\[]° or nothing)"
         return 9
     fi
@@ -177,7 +177,7 @@ function adf_build_files_list() {
 
         local files=$(printf "%s" "$files" | grep "\S")
 
-        if [[ -z "$files" ]]; then
+        if [[ -z $files ]]; then
             echowarn ">  WARNING: No matching found for this item!"
         elif [[ $listfile = "--raw" ]]; then
             printf "%s\n" "$files"
@@ -188,17 +188,17 @@ function adf_build_files_list() {
 }
 
 function adf_borgmatic_backup() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide a Borg repository path."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a list of items to backup (as many as you want)"
         return 1
     fi
 
-    if [[ ! -d "$1" ]]; then
+    if [[ ! -d $1 ]]; then
         echoerr "Provided Borg repository was not found."
         return 10
     fi
@@ -209,13 +209,13 @@ function adf_borgmatic_backup() {
 
     for i in {2..$#}; do
         # Ignore empty arguments but don't make them fail the whole command
-        if [[ -z "${@[i]}" ]]; then
+        if [[ -z ${@[i]} ]]; then
             continue
         fi
 
-        if [[ -d "${@[i]}" ]]; then
+        if [[ -d ${@[i]} ]]; then
             echoinfo "| Source \z[yellow]°directory\z[]° n°$((i-1)): \z[magenta]°$(dirname "${@[i]}")/\z[]°\z[yellow]°$(basename "${@[i]}")\z[]°"
-        elif [[ -f "${@[i]}" ]]; then
+        elif [[ -f ${@[i]} ]]; then
             echoinfo "| Source \z[yellow]°file\z[]° n°$((i-1)): \z[magenta]°$(dirname "${@[i]}")/\z[]°\z[yellow]°$(basename "${@[i]}")\z[]°"
         else
             echoerr "Provided source item \z[magenta]°${@[i]}\z[]° was not found."
@@ -234,7 +234,7 @@ function adf_borgmatic_backup() {
         return 11
     fi
 
-    if [[ ! -f "$ADF_BORGMATIC_CONFIG_FILE" ]]; then
+    if [[ ! -f $ADF_BORGMATIC_CONFIG_FILE ]]; then
         echoerr "Borgmatic base configuration file was not found at path \z[magenta]°$ADF_BORGMATIC_CONFIG_FILE\z[]°"
         return 12
     fi
@@ -253,6 +253,6 @@ function adf_borgmatic_backup() {
 # Path to the Borgmatic base configuration file
 export ADF_BORGMATIC_CONFIG_FILE="$ADF_DIR/external/borgmatic-conf.yml"
 
-if [[ ! -f "$ADF_BORGMATIC_CONFIG_FILE" ]]; then
+if [[ ! -f $ADF_BORGMATIC_CONFIG_FILE ]]; then
     echowarn "WARNING: Borgmatic base configuration file was not found at path \z[magenta]°$ADF_BORGMATIC_CONFIG_FILE\z[]°"
 fi

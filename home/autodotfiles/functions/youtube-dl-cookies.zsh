@@ -1,5 +1,5 @@
 function ytdlcookies() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an action to perform ('help' to get some help)."
         return 1
     fi
@@ -59,7 +59,7 @@ END
 
     case "$1" in
         create)
-            if [[ -d "$preset_path" ]]; then
+            if [[ -d $preset_path ]]; then
                 echoerr "Cannot create preset as it already exists."
                 return 1
             fi
@@ -84,7 +84,7 @@ END
 
 
         renew)
-            if [[ ! -d "$preset_path" ]]; then
+            if [[ ! -d $preset_path ]]; then
                 echoerr "Cannot create preset as it does not exist."
                 return 1
             fi
@@ -110,7 +110,7 @@ END
             ;;
 
         rm)
-            if [[ ! -d "$preset_path" ]]; then
+            if [[ ! -d $preset_path ]]; then
                 echoerr "Preset was not found (provide ':list' to see them all)"
                 return 1
             fi
@@ -121,7 +121,7 @@ END
             ;;
 
         use)
-            if [[ ! -f "$converted_cookies_path" ]]; then
+            if [[ ! -f $converted_cookies_path ]]; then
                 echoerr "Preset was not found (provide ':list' to see them all)"
                 return 1
             fi
@@ -130,7 +130,7 @@ END
             ;;
 
         use-raw)
-            if [[ ! -f "$converted_cookies_path" ]]; then
+            if [[ ! -f $converted_cookies_path ]]; then
                 echoerr "Preset was not found (provide ':list' to see them all)"
                 return 1
             fi
@@ -140,7 +140,7 @@ END
 
 
         get-path)
-            if [[ ! -f "$converted_cookies_path" ]]; then
+            if [[ ! -f $converted_cookies_path ]]; then
                 echoerr "Preset was not found (provide ':list' to see them all)"
                 return 1
             fi
@@ -150,7 +150,7 @@ END
 
 
         display)
-            if [[ ! -f "$converted_cookies_path" ]]; then
+            if [[ ! -f $converted_cookies_path ]]; then
                 echoerr "Preset was not found (provide ':list' to see them all)"
                 return 1
             fi
@@ -173,12 +173,12 @@ END
 # Thumbnails downloading can be skipped by setting "$YTDL_SKIP_THUMBNAIL"
 # Custom Youtube-DL folder can be set with "$YTDL_DIR_FORMAT"
 function ytdlalbum() {
-    if [[ -z "$YTDL_ALBUM_PRESET" ]]; then
+    if [[ -z $YTDL_ALBUM_PRESET ]]; then
         echoerr "Please provide a cookies preset in variable \$YTDL_ALBUM_PRESET. To list them, type: \z[magenta]°ytdlcookies list\z[]°"
         return 1
     fi
 
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an album URL to download."
         return 1
     fi
@@ -196,7 +196,7 @@ function ytdlalbum() {
 
     local dir_format="%(artist)s - %(release_year)s - %(album)s$id_suffix"
 
-    if [[ ! -z "$YTDL_DIR_FORMAT" ]]; then
+    if [[ ! -z $YTDL_DIR_FORMAT ]]; then
         local dir_format="$YTDL_DIR_FORMAT"
     fi
 
@@ -221,26 +221,26 @@ function ytdlplaylist() {
 
 # (Internal) Download a thumbnail (requires tagging)
 function __ytdlalbumthumbnail() {
-    if [[ -z "$1" || -z "$YTDL_ALBUM_PRESET" ]]; then
+    if [[ -z $1 || -z $YTDL_ALBUM_PRESET ]]; then
         echoerr "Either preset, directory or both were not provided."
         return 1
     fi
 
-    if [[ ! -d "$1" ]]; then
+    if [[ ! -d $1 ]]; then
         echoerr "Input directory \z[magenta]°$1\z[]° does not exist."
         return 1
     fi
 
     local id4cover_file="$1/__id4cover.txt"
 
-    if [[ ! -f "$id4cover_file" ]]; then
+    if [[ ! -f $id4cover_file ]]; then
         echoerr "Cannot download thumbnail (missing identification file \z[magenta]°$id4cover_file\z[]°)"
         return 1
     fi
 
     local id=$(cat "$id4cover_file")
 
-    if [[ -z "$id" ]]; then
+    if [[ -z $id ]]; then
         echoerr "Cannot download thumbnail (identifier is empty)"
         return 1
     fi
@@ -274,7 +274,7 @@ function __ytdlalbumthumbnail() {
 
 export ADF_YTDL_COOKIES_PRESETS_DIR="$ADF_DATA_DIR/ytdl-cookies-presets"
 
-if [[ ! -d "$ADF_YTDL_COOKIES_PRESETS_DIR" ]]; then
+if [[ ! -d $ADF_YTDL_COOKIES_PRESETS_DIR ]]; then
     mkdir -p "$ADF_YTDL_COOKIES_PRESETS_DIR"
 fi
 

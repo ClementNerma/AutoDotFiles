@@ -19,7 +19,7 @@ else
 	export ENV_NAME_STR="linux"
 fi
 
-if [[ -f "$HOME/.autodotfiles-just-installed" ]]; then
+if [[ -f $HOME/.autodotfiles-just-installed ]]; then
 	export ADF_JUST_INSTALLED=1
 	export ADF_JUST_UPDATED=1
 	command rm "$HOME/.autodotfiles-just-installed"
@@ -49,9 +49,9 @@ export ADF_BIN_DIR="$ADF_THISCOMP_DIR/bin"
 export PATH="$ADF_BIN_DIR:$PATH"
 
 # Create base directories
-if [[ ! -d "$ADF_DATA_DIR" ]]; then mkdir "$ADF_DATA_DIR"; fi
-if [[ ! -d "$ADF_THISCOMP_DIR" ]]; then mkdir "$ADF_THISCOMP_DIR"; fi
-if [[ ! -d "$ADF_BIN_DIR" ]]; then mkdir "$ADF_BIN_DIR"; fi
+if [[ ! -d $ADF_DATA_DIR ]]; then mkdir "$ADF_DATA_DIR"; fi
+if [[ ! -d $ADF_THISCOMP_DIR ]]; then mkdir "$ADF_THISCOMP_DIR"; fi
+if [[ ! -d $ADF_BIN_DIR ]]; then mkdir "$ADF_BIN_DIR"; fi
 
 # Set path to the external scripts directory
 export ADF_EXTERNAL_DIR="$ADF_DIR/external"
@@ -75,7 +75,7 @@ source "$ADF_DIR/preutils.zsh"
 source "$ADF_DIR/updater.zsh"
 
 # Ensure the restoration script is in place
-if [[ ! -f "$ADF_CONF_RESTORATION_SCRIPT" || $ADF_JUST_INSTALLED = 1 ]]; then
+if [[ ! -f $ADF_CONF_RESTORATION_SCRIPT || $ADF_JUST_INSTALLED = 1 ]]; then
 	zerupdate_restoration_script
 fi
 
@@ -128,7 +128,7 @@ if [[ -z $PROJDIR ]]; then echoerr "Directory variable \z[green]째\$PROJDIR\z[]�
 if [[ -z $WORKDIR ]]; then echoerr "Directory variable \z[green]째\$WORKDIR\z[]째 is not defined!"; fi
 if [[ -z $LOCBAKDIR ]]; then echoerr "Directory variable \z[green]째\$LOCBAKDIR\z[]째 is not defined!"; fi
 
-if [[ ! -z "$HOMEDIR" && ! -d "$HOMEDIR" ]]; then echoerr "Home directory at location \z[yellow]째$HOMEDIR\z[]째 does not exist!"; fi
+if [[ ! -z $HOMEDIR && ! -d $HOMEDIR ]]; then echoerr "Home directory at location \z[yellow]째$HOMEDIR\z[]째 does not exist!"; fi
 
 if [[ -z $HOMEDIR || -z $PLOCALDIR || ! -d $HOMEDIR || -z $DLDIR || -z $PROJDIR || -z $WORKDIR || -z $TEMPDIR || -z $SOFTWAREDIR || -z $TRASHDIR || -z $LOCBAKDIR ]]; then
 	read "?Press <Enter> to exit, or <Ctrl+C> to get a without-AutoDotFiles ZSH prompt ('zerupdate' command will be available) "

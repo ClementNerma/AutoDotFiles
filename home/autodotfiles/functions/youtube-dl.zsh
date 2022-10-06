@@ -16,11 +16,11 @@ function ytdl() {
 	
 	local download_to=$(pwd)
 
-	if [[ -z "$YTDL_LIMIT_BANDWIDTH" ]]; then
+	if [[ -z $YTDL_LIMIT_BANDWIDTH ]]; then
 		local YTDL_LIMIT_BANDWIDTH="$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH"
 	fi
 
-	if [[ ! -z "$YTDL_LIMIT_BANDWIDTH" && ! $YTDL_LIMIT_BANDWIDTH = *"K" && ! $YTDL_LIMIT_BANDWIDTH = *"M" ]]; then
+	if [[ ! -z $YTDL_LIMIT_BANDWIDTH && ! $YTDL_LIMIT_BANDWIDTH = *"K" && ! $YTDL_LIMIT_BANDWIDTH = *"M" ]]; then
 		echoerr "Invalid bandwidth limit provided."
 		return 1
 	fi
@@ -35,7 +35,7 @@ function ytdl() {
 		fi
 	fi
 
-	if [[ ! -z "$YTDL_OUTPUT_DIR" ]]; then
+	if [[ ! -z $YTDL_OUTPUT_DIR ]]; then
 		local download_to="${YTDL_OUTPUT_DIR%/}"
 		echoinfo "Downloading to custom directory: \z[magenta]°$download_to\z[]°"
 	fi
@@ -43,9 +43,9 @@ function ytdl() {
 	# Check if download must be performed in a temporary directory
 	local tempdir="$ADF_CONF_YTDL_TEMP_DL_DIR_PATH/$(humandate)-$(date +%N)"
 
-	if [[ -z "$YTDL_TEMP_DIR" ]]; then
+	if [[ -z $YTDL_TEMP_DIR ]]; then
 		mkdir -p "$tempdir"
-	elif [[ ! -d "$YTDL_TEMP_DIR" ]]; then
+	elif [[ ! -d $YTDL_TEMP_DIR ]]; then
 		echoerr "Resume path is not a directory!"
 		return 1
 	else
@@ -106,11 +106,11 @@ function ytdl() {
 	local files_count="$(command ls "$tempdir" -1A | wc -l)"
 	local counter=0
 
-	if [[ ! -z "$YTDL_ITEM_CMD" ]]; then
+	if [[ ! -z $YTDL_ITEM_CMD ]]; then
 		local command_count=0
 		
 		for cmd in ${YTDL_ITEM_CMD[@]}; do
-			if [[ ! -z "$cmd" ]]; then
+			if [[ ! -z $cmd ]]; then
 				command_count=$((command_count + 1))
 			fi
 		done
@@ -118,7 +118,7 @@ function ytdl() {
 		echoinfo "> Running custom commands ($command_count) on downloaded items..."
 
 		for cmd in ${YTDL_ITEM_CMD[@]}; do
-			if [[ -z "$cmd" ]]; then
+			if [[ -z $cmd ]]; then
 				continue
 			fi
 
@@ -142,7 +142,7 @@ function ytdl() {
 
 	echoinfo "> Moving [$files_count] files to output directory: \z[magenta]°$download_to\z[]°..."
 
-	if [[ ! -d "$download_to" ]]; then
+	if [[ ! -d $download_to ]]; then
 		mkdir -p "$download_to"
 	fi
 
@@ -153,7 +153,7 @@ function ytdl() {
 
 		local tomove="${item%/}"
 
-		if [[ -d "$item" ]]; then
+		if [[ -d $item ]]; then
 			local item="$item/"
 		fi
 

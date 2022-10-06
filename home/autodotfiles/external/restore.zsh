@@ -5,12 +5,12 @@
 
 last_backup="$1"
 
-if [[ ! -z "$last_backup" ]]; then
+if [[ ! -z $last_backup ]]; then
     echo "Restoring from provided backup path: $last_backup"
 else
     last_backup_filepath="$HOME/.uninstalled-autodotfiles.txt"
 
-    if [[ ! -f "$last_backup_filepath" ]]; then
+    if [[ ! -f $last_backup_filepath ]]; then
         echo "ERROR: backup file path not found at: $last_backup_filepath"
         return 1
     fi
@@ -20,7 +20,7 @@ else
     echo "Restoring from memorized backup path: $last_backup"
 fi
 
-if [[ ! -d "$last_backup" ]]; then
+if [[ ! -d $last_backup ]]; then
     echo "ERROR: Backup path does not exist or is not a directory!"
     return 1
 fi
@@ -43,7 +43,7 @@ for item in "$last_backup/"*; do
 
     orig_item="$HOME/$(basename "$item")"
 
-    if [[ -f "$orig_item" || -d "$orig_item" ]]; then
+    if [[ -f $orig_item || -d $orig_item ]]; then
         echo ">> Backing up: $orig_item"
         command mv "$orig_item" "$ADF_RESTORATION_OVERWRITTEN_FILES/"
     fi

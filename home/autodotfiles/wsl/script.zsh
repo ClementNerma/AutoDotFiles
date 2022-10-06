@@ -10,8 +10,8 @@ export WIN_POWERSHELL_PATH=${$(command -v "powershell.exe"):-"/mnt/c/Windows/Sys
 export WIN_CMD_PATH=${$(command -v "cmd.exe"):-"/mnt/c/Windows/system32/cmd.exe"}
 
 # Ensure these two exists
-if [[ ! -f "$WIN_POWERSHELL_PATH" ]]; then echoerr "PowerShell executable was not found at path \z[yellow]°$WIN_POWERSHELL_PATH\z[]°!"; fi
-if [[ ! -f "$WIN_CMD_PATH" ]]; then echoerr "CMD executable was not found at path \z[yellow]°$WIN_CMD_PATH\z[]°!"; fi
+if [[ ! -f $WIN_POWERSHELL_PATH ]]; then echoerr "PowerShell executable was not found at path \z[yellow]°$WIN_POWERSHELL_PATH\z[]°!"; fi
+if [[ ! -f $WIN_CMD_PATH ]]; then echoerr "CMD executable was not found at path \z[yellow]°$WIN_CMD_PATH\z[]°!"; fi
 
 # Alternate default entry directory that may occur sometimes
 export ALTERNATE_HOMEDIR="/mnt/c/WINDOWS/system32"
@@ -70,7 +70,7 @@ export WSL_HOST_IP=$(awk '/nameserver/ { print $2 }' /etc/resolv.conf)
 # Integration of some Windows tools
 if [[ $ADF_CONF_PROJECT_DIRS_IN_WSL_FS = 0 ]]; then
   function code() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
       command code
     else
       local from=$(pwd)
@@ -123,12 +123,12 @@ function edit() {
 
 # Link a WSL port with a Windows port
 function wslport() {
-  if [[ -z "$1" ]]; then
+  if [[ -z $1 ]]; then
     echoerr "please specify a port (syntax: wslport <wsl port> [<windows port>]"
     return 1
   fi
 
-  if [[ ! -z "$2" ]]; then
+  if [[ ! -z $2 ]]; then
     local linked="$2"
   else
     local linked="$1"
@@ -149,7 +149,7 @@ function clipstr() {
 
 # Get the list of all open windows for a given process name
 function process_windows() {
-  if [[ -z "$1" ]]; then
+  if [[ -z $1 ]]; then
     echoerr "Please provide a process name to check."
     return 1
   fi
@@ -163,17 +163,17 @@ function process_windows() {
 
 # Platform-dependant symbolic link creation
 function psymlink() {
-  if [[ -z "$1" ]]; then
+  if [[ -z $1 ]]; then
     echoerr "Please provide the target's path."
     return 1
   fi
 
-  if [[ -z "$2" ]]; then
+  if [[ -z $2 ]]; then
     echoerr "Please provide the link's path."
     return 2
   fi
 
-  if [[ -f "$2" || -d "$2" || -L "$2" ]]; then
+  if [[ -f $2 || -d $2 || -L $2 ]]; then
     echoerr "Link already exists."
     return 10
   fi

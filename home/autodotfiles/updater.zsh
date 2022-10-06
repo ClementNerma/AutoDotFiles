@@ -13,11 +13,11 @@ function zerbackup() {
 	while read item
 	do
 		# Security (should never happen, this check is here just in case)
-		if [[ -z "$item" ]]; then
+		if [[ -z $item ]]; then
 			continue
 		fi
 
-		if [[ -f "$old_env_loc/$item" || -d "$old_env_loc/$item" ]]; then
+		if [[ -f $old_env_loc/$item || -d $old_env_loc/$item ]]; then
 			cp -R "$old_env_loc/$item" "$old_env_backup_dir/$item"
 		fi
 	done < "$ADF_FILES_LIST"
@@ -32,7 +32,7 @@ function zerbackup() {
 
 # Update to latest version
 function zerupdate() {
-	if [[ ! -z "$1" ]]; then
+	if [[ ! -z $1 ]]; then
 		echosuccess "Updating from provided path: \z[magenta]°$1\z[]°"
 		local update_path="$1"
 	else
@@ -44,7 +44,7 @@ function zerupdate() {
 		fi
 	fi
 
-	if [[ ! -d "$update_path" ]] || [[ ! -f "$update_path/auto-install.bash" ]] || [[ ! -f "$update_path/home/.zshrc" ]]; then
+	if [[ ! -d $update_path ]] || [[ ! -f $update_path/auto-install.bash ]] || [[ ! -f $update_path/home/.zshrc ]]; then
 		echoerr "Could not find \z[yellow]°AutoDotFiles\z[]° files at path \z[magenta]°$update_path\z[]°"
 		return 1
 	fi
@@ -65,7 +65,7 @@ function zerupdate() {
 	while read item
 	do
 		# Security (should never happen, this check is here just in case)
-		if [[ -z "$item" ]]; then
+		if [[ -z $item ]]; then
 			continue
 		fi
 
@@ -141,7 +141,7 @@ function zeruninstall() {
 	while read item
 	do
 		# Security (should never happen, this check is here just in case)
-		if [[ -z "$item" ]]; then
+		if [[ -z $item ]]; then
 			continue
 		fi
 

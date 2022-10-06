@@ -6,7 +6,7 @@
 # Get Windows username (cached for better performance)
 export ADF_WSL_USERNAME_CACHE_FILE="$ADF_THISCOMP_DIR/.wsl-username"
 
-if [[ ! -f "$ADF_WSL_USERNAME_CACHE_FILE" ]]; then
+if [[ ! -f $ADF_WSL_USERNAME_CACHE_FILE ]]; then
   export WINUSER=$(powershell.exe -command '$env:UserName' | tr -d "\r")
   printf "$WINUSER" > "$ADF_WSL_USERNAME_CACHE_FILE"
 else
@@ -14,7 +14,7 @@ else
 fi
 
 # Fail if username couldn't be get
-if [[ -z "$WINUSER" ]]
+if [[ -z $WINUSER ]]
 then
   echoerr "Failed to get username from command-line (see error above)"
   return
@@ -42,11 +42,11 @@ fi
 function open() {
   local topath="$1"
 
-  if [[ -z "$topath" ]]; then
+  if [[ -z $topath ]]; then
     local topath=$(pwd)
   fi
 
-  if [[ ! -f "$topath" && ! -d "$topath" && ! -L "$topath" ]]; then
+  if [[ ! -f $topath && ! -d $topath && ! -L $topath ]]; then
     echoerr "target path \z[yellow]°$topath\z[]° was not found!"
     return 1
   fi
@@ -65,17 +65,17 @@ function opensearch() {
   local topath="$1"
   local search="$2"
 
-  if [[ -z "$topath" ]]; then
+  if [[ -z $topath ]]; then
     echoerr "Please provide a path."
     return 1
   fi
 
-  if [[ -z "$search" ]]; then
+  if [[ -z $search ]]; then
     echoerr "Please provide a search."
     return 2
   fi
 
-  if [[ ! -d "$topath" && ! -L "$topath" ]]; then
+  if [[ ! -d $topath && ! -L $topath ]]; then
     echoerr "target path \z[yellow]°$topath\z[]° was not found!"
     return 3
   fi

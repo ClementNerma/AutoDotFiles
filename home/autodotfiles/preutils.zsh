@@ -1,7 +1,7 @@
 
 # Arguments: "<url>" "<download location>"
 function dl() {
-    if [[ ! -z "$2" ]]; then
+    if [[ ! -z $2 ]]; then
         wget -q --show-progress -O "$2" "$1" "${@:3}"
     else
         wget -q --show-progress "$@"
@@ -9,7 +9,7 @@ function dl() {
 }
 
 function sudodl() {
-    if [[ ! -z "$2" ]]; then
+    if [[ ! -z $2 ]]; then
         sudo wget -q --show-progress -O "$2" "$1" "${@:3}"
     else
         sudo wget -q --show-progress "$@"
@@ -64,7 +64,7 @@ function ghdl() {
 	local reponame=$(echo "$repo_url" | cut -d'/' -f5)
 	local outdir="$reponame"
 
-	if [[ ! -z "$2" ]]; then
+	if [[ ! -z $2 ]]; then
 		outdir="$2"
 	fi
 	
@@ -72,7 +72,7 @@ function ghdl() {
 
 	echosuccess "Cloning from repository: \z[yellow]°$repoauthor/$reponame\z[]°..."
 
-	if [[ -d "$outdir" ]]; then
+	if [[ -d $outdir ]]; then
 		echoerr "> Directory \z[magenta]°$outdir\z[]° already exists!"
 		return 1
 	fi
@@ -100,7 +100,7 @@ function ghdl() {
 	command rm "$filename"
 	mv "$reponame-$branch" "$outdir"
 
-	if [[ -z "$2" ]]; then
+	if [[ -z $2 ]]; then
 		cd "$outdir"
 	fi
 
@@ -212,7 +212,7 @@ function humandate() {
 function mvbak() {
 	local itempath="${1%/}"
 
-	if [[ ! -f "$itempath" && ! -d "$itempath" ]]; then
+	if [[ ! -f $itempath && ! -d $itempath ]]; then
 		echoerr "Provided path was not found: \z[green]°$itempath\z[]°"
 		return 1
 	fi
@@ -227,12 +227,12 @@ function mvbak() {
 # Checksum will only be the same if the directory's filenames and content are equal
 # Files order and timestamps are not taken into consideration
 function cksumdir() {
-	if [[ -f "$1" && ! -z "$ADF_ALLOW_CKSUM_FILE" ]]; then
+	if [[ -f $1 && ! -z $ADF_ALLOW_CKSUM_FILE ]]; then
 		command cat "$1" | cksum
 		return
 	fi
 
-	if [[ ! -d "$1" ]]; then
+	if [[ ! -d $1 ]]; then
 		echoerr "Input directory not found at path: \z[yellow]°$1\z[]°"
 		return 1
 	fi

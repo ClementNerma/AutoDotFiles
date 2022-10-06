@@ -142,7 +142,7 @@ function ytsync() {
 # Build cache for 'ytsync' (download videos and write them into the cache file)
 # The goal is to make a cache which is both human-readable and super-fast to parse
 function ytsync_build_cache() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide a URL to build the cache from."
         return 1
     fi
@@ -288,22 +288,22 @@ typeset -A ADF_YS_DOMAINS_PRESET
 # Register a domain to use with 'ytsync'
 # Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <bandwidth limit> [<cookie preset>]
 function ytsync_register() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an IE key."
         return 1
     fi
     
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a URL prefix"
         return 2
     fi
 
-    if [[ -z "$3" ]]; then
+    if [[ -z $3 ]]; then
         echoerr "Please provide a checking mode."
         return 3
     fi
 
-    if [[ -z "$4" ]]; then
+    if [[ -z $4 ]]; then
         echoerr "Please provide a bandwidth limit."
         return 4
     fi
@@ -321,7 +321,7 @@ function ytsync_register() {
 
     ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$1]="$4"
 
-    if [[ ! -z "$5" ]]; then
+    if [[ ! -z $5 ]]; then
         ADF_YS_DOMAINS_PRESET[$1]="$5"
     fi
 }

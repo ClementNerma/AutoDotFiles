@@ -13,12 +13,12 @@ function _adf_bss_entries() {
 }
 
 function _adf_bss_has_entry() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an entry to check."
         return 1
     fi
 
-    if [[ -z "${ADF_SESSION_BACKUPER_SW[$1/.exists]}" ]]; then
+    if [[ -z ${ADF_SESSION_BACKUPER_SW[$1/.exists]} ]]; then
         return 2
     fi
 }
@@ -30,49 +30,49 @@ function _adf_bss_has_entry_key() {
 }
 
 function _adf_bss_has_plain_entry_key() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an entry to check."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a data key to check."
         return 2
     fi
 
-    if [[ -z "${ADF_SESSION_BACKUPER_SW[$1/$2/.plain]}" ]]; then
+    if [[ -z ${ADF_SESSION_BACKUPER_SW[$1/$2/.plain]} ]]; then
         return 9
     fi
 }
 
 function _adf_bss_has_array_entry_key() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an array entry to check."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a data key to check."
         return 2
     fi
 
-    if [[ -z "${ADF_SESSION_BACKUPER_SW[$1/$2/.length]}" ]]; then
+    if [[ -z ${ADF_SESSION_BACKUPER_SW[$1/$2/.length]} ]]; then
         return 9
     fi
 }
 
 function _adf_bss_set() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an entry to set."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a data key to set."
         return 2
     fi
 
-    if [[ -z "$3" ]]; then
+    if [[ -z $3 ]]; then
         echoerr "Please provide a value to assign."
         return 3
     fi
@@ -92,17 +92,17 @@ function _adf_bss_set() {
 }
 
 function _adf_bss_set_array() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an array entry to set."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a data key to set."
         return 1
     fi
 
-    if [[ -z "$3" ]]; then
+    if [[ -z $3 ]]; then
         echoerr "Please provide a value to assign."
         return 2
     fi
@@ -129,12 +129,12 @@ function _adf_bss_set_array() {
 }
 
 function _adf_bss_get_key() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an array entry to get."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a data key to get."
         return 1
     fi
@@ -153,12 +153,12 @@ function _adf_bss_get_key() {
 }
 
 function _adf_bss_get_array_length() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an entry to get."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a data key to get."
         return 2
     fi
@@ -177,17 +177,17 @@ function _adf_bss_get_array_length() {
 }
 
 function _adf_bss_get_array_index() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an entry to get."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a data key to get."
         return 2
     fi
 
-    if [[ -z "$3" ]]; then
+    if [[ -z $3 ]]; then
         echoerr "Please provide an index to get."
         return 3
     fi
@@ -211,12 +211,12 @@ function _adf_bss_get_array_index() {
 }
 
 function _adf_bss_get_array_lines() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an entry to get."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a data key to get."
         return 2
     fi
@@ -239,7 +239,7 @@ function _adf_bss_get_array_lines() {
 }
 
 function _adf_bss_delete_entry() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide an entry to get."
         return 1
     fi

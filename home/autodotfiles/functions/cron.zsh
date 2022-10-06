@@ -1,7 +1,7 @@
 
 # Check if there is a line in the cronfile containing the provided string
 function adf_cron_contains() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide a content to look for."
         return 1
     fi
@@ -65,12 +65,12 @@ function adf_cron_add_uq() {
 
 # Run a command from inside a CRON task
 function adf_cron_logged() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide a CRON task slug."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a command to run."
         return 2
     fi
@@ -102,7 +102,7 @@ function _adf_cron_logged() {
 
 # Read the logs of a specific CRON task
 function adf_cron_logs() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide a task slug to read the logs from. Available ones:"
 
         for file in "$ADF_CONF_CRON_LOGS_DIR/"*(N); do
@@ -114,7 +114,7 @@ function adf_cron_logs() {
 
     local logsfile="$ADF_CONF_CRON_LOGS_DIR/$1.log"
 
-    if [[ ! -f "$logsfile" ]]; then
+    if [[ ! -f $logsfile ]]; then
         echoerr "This task slug doesn't exist or it does not have a log file yet."
         return 2
     fi
@@ -124,6 +124,6 @@ function adf_cron_logs() {
     tail -f "$logsfile"
 }
 
-if [[ ! -d "$ADF_CONF_CRON_LOGS_DIR" ]]; then
+if [[ ! -d $ADF_CONF_CRON_LOGS_DIR ]]; then
     mkdir -p "$ADF_CONF_CRON_LOGS_DIR"
 fi

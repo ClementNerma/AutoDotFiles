@@ -14,7 +14,7 @@ function adf_backup_session() {
     done
 
     # Ignore empty values
-    if [[ -z "$(command ls -A "$outdir")" ]]; then
+    if [[ -z $(command ls -A "$outdir") ]]; then
       echosuccess "Nothing to backup!"
       mv "$outdir" "$finaldir.empty"
       return
@@ -74,7 +74,7 @@ function adf_backup_software_session() {
 # Compile the backup data in a compressed archive to take less space
 # This is the only file that will be taken during backups
 function adf_backup_session_compile() {
-    if [[ -f "$ADF_CONF_WSL_BACKUP_SESSION_COMPILATION" ]]; then
+    if [[ -f $ADF_CONF_WSL_BACKUP_SESSION_COMPILATION ]]; then
         echowarn "Removing previous compilation archive..."
         rm "$ADF_CONF_WSL_BACKUP_SESSION_COMPILATION"
     fi
@@ -102,7 +102,7 @@ function adf_backup_session_compile() {
 function adf_restore_session() {
     local filter=""
 
-    if [[ ! -z "$CKSUM" ]]; then
+    if [[ ! -z $CKSUM ]]; then
       local filter="\-$CKSUM$"
     fi
 
@@ -140,7 +140,7 @@ function adf_restore_session() {
     # Iterate over the list of software to restore
     for list_file in "$ADF_CONF_WSL_BACKUP_SESSION_DIR/$last_backup/"*; do
         # Only restore the provided software, if any
-		if [[ ! -z "$1" && "$(basename "$list_file")" != "$1.txt" ]]; then
+		if [[ ! -z $1 && "$(basename "$list_file")" != "$1.txt" ]]; then
 		    echowarn "> Skipping software file \z[magenta]°$(basename "$list_file")\z[]° as asked."
 		    continue
 		fi
@@ -208,13 +208,13 @@ function adf_restore_session_softlist() {
         local item=$(adf_find_session_item "$trimmed_file" "${@:4}")
 
         # If the item is not found, increase the failures counter
-        if [[ -z "$item" ]]; then
+        if [[ -z $item ]]; then
             local failed=$((failed+1))
         else
             # Else, open it
 	    	echoinfo ">> Software $software_brackets: found \z[yellow]°$item\z[]°"
 
-            if [[ -z "$RESTORATION_DRY_RUN" ]]; then
+            if [[ -z $RESTORATION_DRY_RUN ]]; then
                 toopen+=("$(wslpath -w "$item")")
             fi
         fi
@@ -243,7 +243,7 @@ function adf_restore_session_softlist() {
 # Find an item in a list of session-related directories
 # Usage: adf_find_session_item <item name to find> <directories to look in...>
 function adf_find_session_item() {
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide search directories."
         return 1
     fi
@@ -251,7 +251,7 @@ function adf_find_session_item() {
     # Iterate over the list of lookup directories
     for dir in "${@:2}"; do
         # Assertion to avoid problems if the provided directory does not exist
-        if [[ ! -d "$dir" ]]; then
+        if [[ ! -d $dir ]]; then
             echoerr "Search directory not found: \z[yellow]°$dir\z[]°"
             return 2
         fi
@@ -259,7 +259,7 @@ function adf_find_session_item() {
         # Iterate over the recursive items list from the provided directory
 		while IFS=$'\n' read -r candidate; do
             # If an item exists with the filename we're looking for...
-		    if [[ -f "$candidate/$1" || -d "$candidate/$1" ]]; then
+		    if [[ -f $candidate/$1 || -d $candidate/$1 ]]; then
                 # Success, display it and return
                 echo -n "$candidate/$1"
                 return
@@ -281,27 +281,27 @@ function adf_dry_restore_session() {
 # Register a software to backup
 # Arguments: <slug> <process name> <window format> <executable path> <lookup directories (array)>
 function adf_register_session_backup() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide a slug (will be used in backups' filenames)."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a process name."
         return 2
     fi
 
-    if [[ -z "$3" ]]; then
+    if [[ -z $3 ]]; then
         echoerr "Please provide a window format."
         return 3
     fi
 
-    if [[ -z "$4" ]]; then
+    if [[ -z $4 ]]; then
         echoerr "Please provide an executable path."
         return 4
     fi
 
-    if [[ -z "$5" ]]; then
+    if [[ -z $5 ]]; then
         echoerr "Please provide at least one lookup directory."
         return 5
     fi
@@ -315,13 +315,13 @@ function adf_register_session_backup() {
         _adf_bss_delete_entry "$1"
     fi
 
-    if [[ ! -f "$4" ]]; then
+    if [[ ! -f $4 ]]; then
         echoerr "Provided software path was not found at path: \z[yellow]°$3\z[]°"
         return 7
     fi
 
     for lookup_dir in ${@:5}; do
-        if [[ ! -d "$lookup_dir" ]]; then
+        if [[ ! -d $lookup_dir ]]; then
             echoerr "Lookup directory not found for software \z[cyan]°$1\z[]° at path \z[yellow]°$lookup_dir\z[]°"
             return 8
         fi

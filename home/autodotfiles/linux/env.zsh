@@ -13,7 +13,7 @@ export PROJDIR="$HOMEDIR/Projets"
 export WORKDIR="$HOMEDIR/Work"
 export LOCBAKDIR="$HOMEDIR/Sauvegardes/ADF"
 
-if [[ ! -d "$DLDIR" ]]; then
+if [[ ! -d $DLDIR ]]; then
     export DLDIR="$HOMEDIR/Downloads"
 fi
 

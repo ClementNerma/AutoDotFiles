@@ -10,22 +10,22 @@
 # 4. Modification times are taken into account
 # 5. Files are encrypted during transfer using 7-Zip
 function adf_sync_files() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide a source directory."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a target directory."
         return 2
     fi
 
-    if [[ ! -d "$1" ]]; then
+    if [[ ! -d $1 ]]; then
         echoerr "Source directory does not exist."
         return 3
     fi
 
-    if [[ ! -d "$2" ]]; then
+    if [[ ! -d $2 ]]; then
         echoerr "Target directory does not exist."
         return 4
     fi
@@ -59,7 +59,7 @@ function adf_sync_files() {
     local sync_size=0
 
     while IFS= read -r file; do
-        if [[ -d "$file" ]]; then continue; fi
+        if [[ -d $file ]]; then continue; fi
 
         local rel_path=$(realpath --relative-to="$1" "$file")
         
@@ -114,12 +114,12 @@ function adf_sync_files() {
 }
 
 function __adf_file_sync_path() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Internal error: please provide an absolute target path"
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Internal error: please provide a relative source path"
         return 1
     fi

@@ -10,7 +10,7 @@ if [[ $1 = "--no-id4cover" ]]; then
     shift
 fi
 
-if [[ ! -f "$1" ]]; then
+if [[ ! -f $1 ]]; then
     echo "\e[91mFile not found: \e[95m$1"
     return 1
 fi

@@ -5,11 +5,11 @@ export ADF_VIEW_IDENTIFIERS_DIR="$ADF_VIEWS_DIR/.ids"
 export ADF_VIEW_PATH_FILENAME=".viewpath"
 export ADF_VIEW_SOFTWARE_FILENAME=".viewsoftware"
 
-if [[ ! -d "$ADF_VIEWS_DIR" ]]; then
+if [[ ! -d $ADF_VIEWS_DIR ]]; then
     mkdir "$ADF_VIEWS_DIR"
 fi
 
-if [[ ! -d "$ADF_VIEW_IDENTIFIERS_DIR" ]]; then
+if [[ ! -d $ADF_VIEW_IDENTIFIERS_DIR ]]; then
     mkdir "$ADF_VIEW_IDENTIFIERS_DIR"
 fi
 

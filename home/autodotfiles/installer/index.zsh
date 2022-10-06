@@ -2,7 +2,7 @@
 # This file contains is in charge of installing all components required by the current setup
 #
 
-if [[ -z "$ADF_INSTALLER_DIR" ]]; then
+if [[ -z $ADF_INSTALLER_DIR ]]; then
     echoerr "Environment variable \z[yellow]°\$ADF_INSTALLER_DIR\z[]° is not defined."
     echoerr "       Please make sure the current script is run from AutoDotFiles."
     return 1
@@ -117,7 +117,7 @@ function zercomponent_addtolist() {
     local file_name=$(realpath --relative-to="$ADF_INSTALLER_SCRIPTS_DIR" "$1")
     local script_name="${file_name/.zsh/}"
 
-    if [[ ! -f "$ADF_INSTALLED_DIR/$script_name" ]]; then
+    if [[ ! -f $ADF_INSTALLED_DIR/$script_name ]]; then
         __ADF_TO_INSTALL+=("$script_name")
     fi
 }
@@ -129,12 +129,12 @@ function zercomponent_mark_custom() {
     local script_name="$1"
     local value="$2"
 
-    if [[ ! -z "$3" ]]; then
+    if [[ ! -z $3 ]]; then
         local script_name="$2/$1"
         local value="$3"
     fi
 
-    if [[ ! -f "$ADF_INSTALLER_SCRIPTS_DIR/$script_name.zsh" ]]; then
+    if [[ ! -f $ADF_INSTALLER_SCRIPTS_DIR/$script_name.zsh ]]; then
         echoerr "Provided module not found!"
         return 1
     fi
@@ -161,8 +161,8 @@ function zcu() {
     do
         local found=""
 
-        if [[ ! -f "$ADF_INSTALLER_SCRIPTS_DIR/$component.zsh" ]]; then
-            if found=$(find "$ADF_INSTALLER_SCRIPTS_DIR" -type f -name "$component.zsh") && [[ ! -z "$found" ]]; then
+        if [[ ! -f $ADF_INSTALLER_SCRIPTS_DIR/$component.zsh ]]; then
+            if found=$(find "$ADF_INSTALLER_SCRIPTS_DIR" -type f -name "$component.zsh") && [[ ! -z $found ]]; then
                 if [[ $(echo $found | wc -l) -gt 1 ]]; then
                     echoerr "Multiple candidates were found for component: \z[cyan]°$component\z[]°."
                     return 2
@@ -189,11 +189,11 @@ function _step() {
 }
 
 function _checkdir() {
-    if [[ ! -d "$1" ]]; then
+    if [[ ! -d $1 ]]; then
         return
     fi
 
-    if [[ -f "$1/_init.zsh" ]]; then
+    if [[ -f $1/_init.zsh ]]; then
         zercomponent_addtolist "$1/_init.zsh"
     fi
 

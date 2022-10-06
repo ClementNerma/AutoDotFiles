@@ -32,7 +32,7 @@ function adf_obf_gen_alphabet() {
 
 # Ensure the random alphabets exist locally
 function adf_obf_init_alphabets() {
-    if [[ ! -f "$ADF_OBF_INPUT_ALPHABET_FILE" || $1 == "--regen" ]]; then
+    if [[ ! -f $ADF_OBF_INPUT_ALPHABET_FILE || $1 == "--regen" ]]; then
         echoinfo "Generating input alphabet..."
 
         if ! adf_obf_gen_alphabet > "$ADF_OBF_INPUT_ALPHABET_FILE"; then
@@ -41,7 +41,7 @@ function adf_obf_init_alphabets() {
         fi
     fi
 
-    if [[ ! -f "$ADF_OBF_OUTPUT_ALPHABET_FILE" || $1 == "--regen" ]]; then
+    if [[ ! -f $ADF_OBF_OUTPUT_ALPHABET_FILE || $1 == "--regen" ]]; then
         echoinfo "Generating output alphabet..."
     
         if ! adf_obf_gen_alphabet > "$ADF_OBF_OUTPUT_ALPHABET_FILE"; then
@@ -80,7 +80,7 @@ function adf_obf_checksum() {
 
 # Validate the checksum of a message
 function adf_obf_validate_checksum() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide a message with its checksum to decode."
         return 1
     fi
@@ -150,7 +150,7 @@ function adf_obf_transform() {
 
     local raw_input=""
 
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         local raw_input=$(printf "%s" "$(</dev/stdin)")
     else
         if (( $is_encoding )) && ! (( $OBF_ARG_SAFE )); then
@@ -272,7 +272,7 @@ function adf_obf_test() {
     if [[ -z $OBF_NO_INTERMEDIARY_TEST_DATA ]]; then
         echoinfo "\nEncoded (obfuscated) =\n\n\z[yellow]°%s\z[]°\n" "$encoded"
 
-        if [[ -z "$OBF_NO_BASE64" ]]; then
+        if [[ -z $OBF_NO_BASE64 ]]; then
             echoinfo "Encoded (base64 decoded) =\n\n\z[yellow]°%s\z[]°\n" "$(printf '%s' "$encoded" | base64 -d -w0)"
         fi
     fi

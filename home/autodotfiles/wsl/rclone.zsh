@@ -3,17 +3,17 @@
 #
 
 function rclone_mirror() {
-    if [[ -z "$1" ]]; then
+    if [[ -z $1 ]]; then
         echoerr "Please provide a source."
         return 1
     fi
 
-    if [[ -z "$2" ]]; then
+    if [[ -z $2 ]]; then
         echoerr "Please provide a destination."
         return 2
     fi
 
-    if [[ ! -d "$(wslpath "$1")" ]]; then
+    if [[ ! -d $(wslpath "$1") ]]; then
         echoerr "Source directory was not found at path \z[yellow]°$1\z[]°."
         return 3
     fi
