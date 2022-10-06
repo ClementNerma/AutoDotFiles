@@ -130,7 +130,10 @@ function ytsync() {
 
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°$cookie_msg: \z[magenta]°${download_names[i]}\z[]°..."
 
-        if ! YTDL_ALWAYS_THUMB=1 YTDL_COOKIE_PRESET="$cookie_preset" YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" ytdl "${download_list[i]}" --match-filter "!is_live"; then
+        if ! YTDL_ALWAYS_THUMB=1 YTDL_COOKIE_PRESET="$cookie_preset" YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" \
+             ytdl "${download_list[i]}" --write-sub --sub-lang fr,en \
+             --match-filter "!is_live"
+        then
             local errors=$((errors+1))
             echowarn "Waiting 5 seconds before next video..."
             sleep 5
