@@ -62,11 +62,15 @@ function rclone_mirror() {
         elif [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]+(.+)$ ]]; then
             echoerr "Failed to parse line: \z[white]°$line\z[]°"
             return 5
-        elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9\\.]+[[:space:]][KMGTiBytes]+),[[:space:]]100%, ]]; then
+        elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9\\.]+[[:space:]][KMGTiBytes]+),[[:space:]]100%,([[:space:]]0[[:space:]]B/s,)? ]]; then
             local size="${match[1]}"
+            
+            if [[ ! -z ${match[2]} ]]; then
+                local total=0
+            fi
         elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9]+),[[:space:]]100%$ ]]; then
             local total="${match[1]}"
-        elif [[ $line =~ ^Renamed:[[:space:]]+[0-9]+$ ]]; then
+        elif [[ $line =~ ^Renamed:[[:space:]]+([0-9]+)$ ]]; then
             local renamed="${match[1]}"
         elif [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]*$ ]]; then
         elif [[ $line =~ ^Checks:[[:space:]]+[0-9]+[[:space:]]/[[:space:]][0-9]+,[[:space:]]100%$ ]]; then
