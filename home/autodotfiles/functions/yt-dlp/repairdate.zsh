@@ -32,6 +32,7 @@ function ytrepairdate() {
 
     local max_spaces=$(echo -n "${#entries}" | wc -c)
     local errors=0
+    local warnings=0
 
     for i in {1..${#entries}}; do
         local entry=${entries[i]}
@@ -51,16 +52,22 @@ function ytrepairdate() {
             local display_path="$entry$(printf " %.0s" {1..$((80 - ${#entry}))})"
         fi
 
-        echoinfo -n "| Treating video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#entries}\z[]°: \z[gray]°$video_id\z[]° \z[magenta]°$display_path\z[]°$suffix "
-
         if grep -Fx "$video_id" "$ADF_YT_REPAIR_DATE_LIST" > /dev/null; then
-            echoc "\z[green]°ALREADY\z[]°"
+            echoverb "Already treated: \z[entry]°"
             continue
         fi
 
+        echoinfo -n "| Treating video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#entries}\z[]°: \z[gray]°$video_id\z[]° \z[magenta]°$display_path\z[]°$suffix "
+        
         if ! upload_date=$(yt-dlp --get-filename -o "%(upload_date)s" "${cookie_params[@]}" "$url_prefix$video_id"); then
             local errors=$((errors + 1))
             echoc "\z[red]°FAILED\z[]°"
+            continue
+        fi
+
+        if [[ $upload_date = "NA" ]]; then
+            local warnings=$((warnings + 1))
+            echoc "\z[yellow]°NO DATE FOUND\z[]°"
             continue
         fi
 
@@ -83,6 +90,10 @@ function ytrepairdate() {
     if (( errors > 0 )); then
         echoerr "Failed with \z[yellow]°$errors\z[]° errors."
         return 1
+    fi
+
+    if (( warnings > 0 )); then
+        echowarn "Emitted $warnings warnings!"
     fi
 
     echosuccess "Successfully set date for \z[yellow]°${#entries}\z[]° videos!"
