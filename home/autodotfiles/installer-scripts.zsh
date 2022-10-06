@@ -196,6 +196,17 @@ function p7zip() {
     sudo apt install -yqqq p7zip-full
 }
 
+function sd() {
+    # NAME: sd
+    # PRIORITY: 1
+    # ENV: all
+    # VERSION: sd -V
+    # NEEDS_APT_UPDATE: no
+
+    dlghrelease chmln/sd unknown-linux-musl "$ADF_BIN_DIR/sd"
+    chmod +x "$ADF_BIN_DIR/sd"
+}
+
 function tokei() {
     # NAME: Tokei
     # PRIORITY: 1
