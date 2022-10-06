@@ -1,5 +1,5 @@
 #
-# RClone handler
+# RClone utilities
 #
 
 function rclone_mirror() {
@@ -147,7 +147,13 @@ function rclone_mirror() {
 }
 
 function __rclone_sync_nocheck() {
-    rclone.exe sync \
+    local cmdname="rclone"
+
+    if (( $IS_WSL_ENV )); then
+        local cmdname="$cmdname.exe"
+    fi
+
+    "$cmdname" sync \
         --progress-terminal-title \
         --stats-file-name-length 0 \
         --order-by "name,mixed,75" \

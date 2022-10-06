@@ -161,7 +161,6 @@ function fd() {
 # Load main PC exclusive modules
 if (( $ADF_CONF_MAIN_PERSONAL_COMPUTER )); then
   source "$ADF_ENV_DIR/session-backuper.zsh"
-  source "$ADF_ENV_DIR/rclone.zsh"
 fi
 
 # Enable screen provider on Windows

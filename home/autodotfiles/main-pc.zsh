@@ -47,3 +47,9 @@ function withborgpass() {
 alias borg="withborgpass borg"
 alias borgfs="withborgpass borgfs"
 alias borgmatic="withborgpass borgmatic"
+
+export ADF_MAIN_PC_SCRIPTS="$ADF_DIR/main-pc"
+
+for script in "$ADF_MAIN_PC_SCRIPTS/"*; do
+  source "$script"
+done
