@@ -97,7 +97,7 @@ function zerupdate() {
 
 # Update to test local changes
 function zerupdate_testing() {
-	ADF_SILENT=1 zerupdate
+	ADF_SILENT=1 zerupdate "$@"
 }
 
 # Download latest version and update
