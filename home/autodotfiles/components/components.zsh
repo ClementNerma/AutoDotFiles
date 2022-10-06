@@ -348,7 +348,7 @@ function ytsync_cache_builder() {
 function kopia() {
     # NAME: Kopia
     # PRIORITY: 1
-    # ENV: main-pc/all
+    # ENV: all
     # VERSION: kopia --version
     # NEEDS_APT_UPDATE: no
 
@@ -358,7 +358,7 @@ function kopia() {
 function rclone() {
     # NAME: RClone (Windows)
     # PRIORITY: 1
-    # ENV: main-pc/wsl
+    # ENV: wsl
     # VERSION: rclone.exe -V | sed -n 1p
     # NEEDS_APT_UPDATE: no
     
