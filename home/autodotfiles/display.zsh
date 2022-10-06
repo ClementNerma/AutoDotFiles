@@ -49,14 +49,14 @@ function echoc() {
     local output=""
     local colors_history=()
     local i=0
-    local len=0
+    local rawtext=""
 
     while (( i < ${#text} )); do
         local i=$((i+1))
 
         if [[ $text[$i,$i+2] != "\z[" ]]; then
             local output="${output}${text[$i]}"
-            local len=$((len + 1))
+            local rawtext="${rawtext}${text[$i]}"
             continue
         fi
 
@@ -109,8 +109,8 @@ function echoc() {
     fi
 
     if (( $ADF_CLEAN_EOL )) || (( $ADF_UPDATABLE_LINE )) || (( $ADF_REPLACE_UPDATABLE_LINE )); then
-        local term_width=$(tput cols)
-        local remaining=$((term_width - len))
+        local len=$(wc -L <<< "$rawtext")
+        local remaining=$((COLUMNS - len))
 
         if (( $remaining )); then
             local output="$output$(printf ' %.0s' {1..$remaining})"
