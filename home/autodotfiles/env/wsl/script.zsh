@@ -75,10 +75,6 @@ function wslclocksync() {
 # Mount drives in WSL, including removable ones
 function mount_wsl_drives() {
   local found_c=0
-  local init_cwd="$(pwd)"
-
-  # Go to a path CMD.EXE can access to avoid errors
-  cd /mnt/c
 
   for drive in /mnt/*
   do
@@ -95,16 +91,11 @@ function mount_wsl_drives() {
   if [[ ! -d /mnt/c ]]; then
     echoerr "Assertion error: \z[magenta]°C:\z[]° drive was not found while mounting WSL drives!"
   fi
-
-  cd "$init_cwd"
 }
 
 # Edit a file directly in Sublime Text, even if stored inside WSL
 function edit() {
-  local currdir=$(pwd)
-  cd "$(dirname "$1")"
-  /mnt/c/Program\ Files/Sublime\ Text/sublime_text.exe "$(basename "$1")"
-  cd "$currdir"
+  ( cd "$(dirname "$1")" && /mnt/c/Program\ Files/Sublime\ Text/sublime_text.exe "$(basename "$1")" )
 }
 
 # Link a WSL port with a Windows port
@@ -114,13 +105,7 @@ function wslport() {
     return 1
   fi
 
-  if [[ ! -z $2 ]]; then
-    local linked="$2"
-  else
-    local linked="$1"
-  fi
-
-  win "Start-Process powershell -ArgumentList '-Command netsh interface portproxy add v4tov4 listenport=$linked listenaddress=0.0.0.0 connectport=$1 connectaddress=172.18.28.x ; pause' -Verb RunAs"
+  win "Start-Process powershell -ArgumentList '-Command netsh interface portproxy add v4tov4 listenport=${2:-$1} listenaddress=0.0.0.0 connectport=$1 connectaddress=172.18.28.x ; pause' -Verb RunAs"
 }
 
 # Copy a file to clipboard
@@ -178,10 +163,7 @@ function psymlink() {
   fi
 
   if [[ $(realpath "$1") =~ ^\/mnt\/ ]] || [[ $link_path =~ ^\/mnt\/ ]]; then
-    local cwd=$(pwd)
-    cd /mnt/c
-    wincmd mklink "$wsl_path" "$(wslpath -w "$1")" ">" NUL
-    cd "$cwd"
+    ( cd /mnt/c && wincmd mklink "$wsl_path" "$(wslpath -w "$1")" ">" NUL )
   else
     ln -s "$1" "$2"
   fi

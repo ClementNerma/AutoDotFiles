@@ -28,10 +28,7 @@ function bakproj() {
 
 	local files=""
 	
-	local cwd=$(pwd)
-
 	if ! files=$(fd --threads=1 --hidden --one-file-system --type 'file' --search-path "$1" --absolute-path); then
-		cd "$cwd"
 		echoerr "Command \z[yellow]°fd\z[]° failed."
 		return 2
 	fi
@@ -66,7 +63,7 @@ function bakproj() {
 
 # Backup the current project
 function bakthis() {
-	bakproj "$(pwd)" "$(dirname "$(pwd)")/$(basename "$(pwd)")-$(humandate)"
+	bakproj "$PWD" "$PWD-$(humandate)"
 }
 
 # Rename a Git branch

@@ -34,30 +34,14 @@ export TRASHDIR="$HOME/.trasher"
 
 # Open a file or directory in Windows
 function open() {
-  local topath="$1"
-
-  if [[ -z $topath ]]; then
-    local topath=$(pwd)
-  fi
+  local topath=${1:-$PWD}
 
   if [[ ! -f $topath && ! -d $topath && ! -L $topath ]]; then
-    echoerr "target path \z[yellow]°$topath\z[]° was not found!"
+    echoerr "Target path \z[yellow]°$topath\z[]° was not found!"
     return 1
   fi
 
-  local current_dir=$(pwd)
-  local file_dir_path=$(dirname "$topath")
-  local file_name=$(basename "$topath")
-
-  cd "$file_dir_path"
-
-  # if [[ -d "$topath" ]]; then
-  #   (nohup "/mnt/c/Users/cleme/AppData/Local/Microsoft/WindowsApps/files.exe" "$file_name" > /dev/null 2>&1 &)
-  # else
-    explorer.exe "$file_name"
-  # fi
-
-  cd "$current_dir"
+  ( cd "$(dirname "$topath")" && explorer.exe "$(basename "$topath")" )
 }
 
 # Open a file or directory with a specific search

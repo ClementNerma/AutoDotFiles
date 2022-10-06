@@ -180,11 +180,7 @@ function adf_view_open() {
 
     local first_file=$(command ls -1 "$view_dir" | sort | head -n 1)
 
-    local cwd=$(pwd)
-    cd "$view_dir"
-
-    (nohup "$(adf_view_software "$1")" "$first_file" > /dev/null 2>&1 &)
-    cd "$cwd"
+    ( cd "$view_dir" && nohup "$(adf_view_software "$1")" "$first_file" > /dev/null 2>&1 & )
 }
 
 function adf_view_delete() {

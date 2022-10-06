@@ -158,7 +158,7 @@ function ytsync() {
         local lockfile="$ADF_YS_LOCKFILES_DIR/$video_ie.lock"
         local needlockfile=${ADF_YS_DOMAINS_USE_LOCKFILE[$video_ie]}
 
-        if (( $forecast_lock )) && [[ $(command cat "$lockfile") != "$(pwd)" ]]; then
+        if (( $forecast_lock )) && [[ $(command cat "$lockfile") != $PWD ]]; then
             echoerr "\nInternal error: inconsistency in the lockfile."
             local forecast_lock=0
         fi
@@ -474,10 +474,10 @@ function ytsync_wait_lockfile() {
             done
         fi
 
-        echo "$(pwd)" > "$lockfile"
+        echo "$PWD" > "$lockfile"
         echowarn ">> Writing current path to lockfile\n"
 
-        if [[ $(command cat "$lockfile") != "$(pwd)" ]]; then
+        if [[ $(command cat "$lockfile") != $PWD ]]; then
             echoerr "Internal error: inconsistency in the lockfile."
         else
             break

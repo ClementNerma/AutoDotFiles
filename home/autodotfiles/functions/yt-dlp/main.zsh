@@ -24,7 +24,7 @@ export ADF_YTDL_DEFAULT_FILENAMING="%(title)s-%(id)s.%(ext)s"
 function ytdl() {
 	local tempdir=""
 	
-	local download_to=$(pwd)
+	local download_to=$PWD
 
 	if [[ ! -z $YTDL_LIMIT_BANDWIDTH && ! $YTDL_LIMIT_BANDWIDTH = *"K" && ! $YTDL_LIMIT_BANDWIDTH = *"M" ]]; then
 		echoerr "Invalid bandwidth limit provided."
@@ -44,7 +44,7 @@ function ytdl() {
 	if [[ ! -z $YTDL_OUTPUT_DIR ]]; then
 		local download_to="${YTDL_OUTPUT_DIR%/}"
 
-		if [[ $download_to != "." ]] && [[ $download_to != $(pwd) ]]; then
+		if [[ $download_to != "." ]] && [[ $download_to != $PWD ]]; then
 			echoinfo "Downloading to provided directory: \z[magenta]°$download_to\z[]°"
 		fi
 	fi
@@ -61,7 +61,7 @@ function ytdl() {
 		local tempdir="${YTDL_TEMP_DIR%/}"
 	fi
 
-	if [[ "$(realpath "$(pwd)")" == "$(realpath "$tempdir")" ]]; then
+	if [[ "$(realpath "$PWD")" == "$(realpath "$tempdir")" ]]; then
 		local is_tempdir_cwd=1
 	else
 		local is_tempdir_cwd=0
