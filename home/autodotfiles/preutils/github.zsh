@@ -21,11 +21,18 @@ function dlghrelease() {
 	local found=""
 
 	for url in $release_urls; do
-		if [[ $url =~ $2 ]]; then
+		local filename=${url##*/}
+
+		if [[ $filename =~ ($2) ]]; then
+			if [[ ${match[1]} != $filename ]]; then
+				echowarn "Found incomplete match: \z[cyan]°$filename\z[]°"
+				continue
+			fi
+
 			if [[ -n $found ]]; then
-				echoerr "Found multiple URLs matching the provided pattern:"
-				echoerr "* \z[yellow]°$found\z[]°"
-				echoerr "* \z[yellow]°$url\z[]°"
+				echoerr "Found multiple filenames matching the provided pattern:"
+				echoerr "* \z[yellow]°${found##*/}\z[]°"
+				echoerr "* \z[yellow]°$filename\z[]°"
 				return 20
 			fi
 
