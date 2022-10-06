@@ -8,7 +8,7 @@ export ADF_YTDL_BEST_FORMAT_1440P="bestvideo*[height>1440][height<2160]+bestaudi
 export ADF_YTDL_BEST_FORMAT_2160P="bestvideo*[height>2160][height<4320]+bestaudio/best[height>2160][height<4320]/bestvideo*[height=2160]+bestaudio/best[height=2160]/$ADF_YTDL_BEST_FORMAT_1440P"
 export ADF_YTDL_DEFAULT_BEST_FORMAT="bestvideo*[height>=4320]+bestaudio/best[height>=4320]/$ADF_YTDL_BEST_FORMAT_2160P"
 
-export ADF_YTDL_DEFAULT_FILENAMING="%(stitle)s-%(id)s.%(ext)s"
+export ADF_YTDL_DEFAULT_FILENAMING="%(title)s-%(id)s.%(ext)s"
 
 # Overriding variables:
 # (NOTE: when updating this list, update "_ytdl_build_resume_cmdline" as well)
