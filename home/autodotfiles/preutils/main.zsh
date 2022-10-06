@@ -27,13 +27,20 @@ function confirm() {
 }
 
 # Passive confirmation
+# Set "$PC_TIMEOUT" to set a timeout
 function passive_confirm() {
 	export ___pc_aborted=0
 	export ___pc_answer=""
 
 	while [[ $___pc_answer != $'\n' ]] && ! (( $___pc_aborted )); do
 		trap 'echowarn "Use Ctrl+D to abort." && export ___pc_aborted=1' SIGINT
-		read -sk ___pc_answer
+
+		if ! (( $PC_TIMEOUT )); then
+			read -sk ___pc_answer
+		else
+			read -sk -t $PC_TIMEOUT ___pc_answer
+		fi
+
 		trap SIGINT
 
 		if [[ $___pc_answer = "p" ]]; then
@@ -62,6 +69,10 @@ function passive_confirm() {
 		fi
 		
 		if [[ $___pc_answer = '$\n' ]]; then
+			return
+		fi
+
+		if (( $PC_TIMEOUT )) && [[ -z $___pc_answer ]]; then
 			return
 		fi
 
