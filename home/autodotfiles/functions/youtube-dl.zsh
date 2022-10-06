@@ -18,6 +18,7 @@ export YTDL_PARALLEL_DOWNLOADS=0
 # * YTDL_IGNORE_ERR=1     => consider download a success even if a non-zero exit code was returned
 # * YTDL_ALWAYS_THUMB=1   => if thumbnail cannot be embedded, write it alongside the output file
 # * YTDL_LIMIT_BANDWIDTH  => limit download bandwidth
+# * YTDL_COOKIE_PRESET    => load a cookie preset using "ytdlcookies"
 function ytdl() {
 	export YTDL_PARALLEL_DOWNLOADS=$((YTDL_PARALLEL_DOWNLOADS+1))
 	local decrease_counter=1
@@ -36,6 +37,16 @@ function ytdl() {
 	if [[ ! -z "$YTDL_LIMIT_BANDWIDTH" && ! $YTDL_LIMIT_BANDWIDTH = *"K" && ! $YTDL_LIMIT_BANDWIDTH = *"M" ]]; then
 		echoerr "Invalid bandwidth limit provided."
 		return 1
+	fi
+
+	local cookie_file=""
+
+	if [[ ! -z $YTDL_COOKIE_PRESET ]]; then
+		echoverb "> Using preset \z[yellow]°$YTDL_COOKIE_PRESET\z[]°..."
+
+		if ! cookie_file=$(ytdlcookies get-path "$YTDL_COOKIE_PRESET"); then
+			return 2
+		fi
 	fi
 
 	if [[ ! -z "$YTDL_OUTPUT_DIR" ]]; then
@@ -103,15 +114,15 @@ function ytdl() {
 		thumbnail_params=""
 	fi
 
-	local ytdl_debug_cmd="$bestquality_params $metadata_params $thumbnail_params -r $bandwidth_limit "$@" $YTDL_APPEND"
-
+	local ytdl_debug_cmd="$bestquality_params $metadata_params $thumbnail_params -r $bandwidth_limit --cookies '$cookie_file' "$@" $YTDL_APPEND"
+	
 	if (( $YTDL_PRINT_CMD )) || (( $YTDL_DRY_RUN )); then
 		echoinfo "Command >> yt-dlp $ytdl_debug_cmd"
 	fi
 
 	# Perform the download
 	if [[ "$YTDL_DRY_RUN" != 1 ]] && [[ -z "$YTDL_JUST_ITEM_CMD" ]]; then
-		if ! yt-dlp -f "$quality_format" $metadata_params $thumbnail_params -r $bandwidth_limit \
+		if ! yt-dlp -f "$quality_format" $metadata_params $thumbnail_params -r $bandwidth_limit --cookies "$cookie_file" \
 			 --abort-on-unavailable-fragment --compat-options all -o "%(title)s-%(id)s.%(ext)s" \
 			 "$@" $YTDL_APPEND
 		then

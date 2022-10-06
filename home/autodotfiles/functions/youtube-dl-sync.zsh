@@ -48,8 +48,9 @@ function ytsync() {
 
     local max_spaces=$(echo -n "$count" | wc -c)
 
-    local download_names=()
     local download_list=()
+    local download_ies=()
+    local download_names=()
     local download_bandwidth_limits=()
 
     for i in {1..${count}}; do
@@ -64,6 +65,7 @@ function ytsync() {
             echoinfo "$beginning \z[yellow]°${video_title}\z[]°"
             download_list+=("$video_url")
             download_names+=("$video_title")
+            download_ies+=("$video_ie")
             download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$video_ie]}")
         else
             echoinfo "$beginning Skipping \z[yellow]°${video_title}\z[]° (already downloaded)"
@@ -93,9 +95,16 @@ function ytsync() {
     local errors=0
 
     for i in {1..${#download_list}}; do
-        echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°: \z[magenta]°${download_names[i]}\z[]°..."
+        local cookie_preset=${ADF_YS_DOMAINS_PRESET[$download_ies[i]]}
+        local cookie_msg=""
 
-        if ! YTDL_ALWAYS_THUMB=1 YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" ytdl "${download_list[i]}" --match-filter "!is_live"; then
+        if [[ ! -z $cookie_preset ]]; then
+            local cookie_msg=" (with cookie preset \z[cyan]°$cookie_preset\z[]°)"
+        fi
+
+        echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°$cookie_msg: \z[magenta]°${download_names[i]}\z[]°..."
+
+        if ! YTDL_ALWAYS_THUMB=1 YTDL_COOKIE_PRESET="$cookie_preset" YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" ytdl "${download_list[i]}" --match-filter "!is_live"; then
             errors=$((errors+1))
             echowarn "Waiting 5 seconds before next video..."
             sleep 5
@@ -240,6 +249,7 @@ function ytsync_build_cache() {
 typeset -A ADF_YS_DOMAINS_IE_URLS
 typeset -A ADF_YS_DOMAINS_CHECKING_MODE
 typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
+typeset -A ADF_YS_DOMAINS_PRESET
 
 function ytsync_register() {
     if [[ -z "$1" ]]; then
@@ -274,4 +284,8 @@ function ytsync_register() {
     fi
 
     ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$1]="$4"
+
+    if [[ ! -z "$5" ]]; then
+        ADF_YS_DOMAINS_PRESET[$1]="$5"
+    fi
 }
