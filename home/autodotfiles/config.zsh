@@ -3,9 +3,6 @@
 # Its content can be overriden by the `local/config.zsh` file
 #
 
-# Path to the restoration script
-export ADF_CONF_RESTORATION_SCRIPT="/usr/local/bin/zerrestore"
-
 # Check Crony failures at startup
 export ADF_CHECK_CRONY_FAILURES_STARTUP=1
 

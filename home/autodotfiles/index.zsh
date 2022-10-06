@@ -86,11 +86,6 @@ done
 # Load the updater
 source "$ADF_DIR/updater.zsh"
 
-# Ensure the restoration script is in place
-if [[ ! -f $ADF_CONF_RESTORATION_SCRIPT || $ADF_JUST_INSTALLED = 1 ]]; then
-	zerupdate_restoration_script
-fi
-
 # Load the backupers
 source "$ADF_DIR/backuper.zsh"
 

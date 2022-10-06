@@ -98,10 +98,6 @@ function zerupdate() {
 		rm "$badly_nested"
 	fi
 
-	# Update the restoration script
-	echoverb "Updating the restoration script..."
-	zerupdate_restoration_script
-
 	# Load new environment
 	echoverb "Loading environment..."
 	export ADF_JUST_UPDATED=1
@@ -135,16 +131,6 @@ function zerupdate_online() {
 # Path to the uninstalled file
 export UNINSTALLED_FILE="$HOME/.uninstalled-autodotfiles.txt"
 
-# Update the restoration script
-function zerupdate_restoration_script() {
-	if [[ -f $UNINSTALLED_FILE ]]; then
-		command rm "$UNINSTALLED_FILE"
-	fi
-
-	sudo cp "$ADF_EXTERNAL_DIR/restore.zsh" "$ADF_CONF_RESTORATION_SCRIPT"
-	sudo chmod +x "$ADF_CONF_RESTORATION_SCRIPT"
-}
-
 # Uninstall AutoDotFiles
 function zeruninstall() {
 	zerbackup
@@ -163,8 +149,6 @@ function zeruninstall() {
 	command rm -rf "$ADF_ASSETS_DIR"
 
 	echosuccess "AutoDotFiles was successfully installed!"
-	echosuccess "To restore it, just type '\z[yellow]°zerrestore\z[]°'."
-	echosuccess ""
 
 	echoinfo "Press any key to continue..."
 	read '?'
