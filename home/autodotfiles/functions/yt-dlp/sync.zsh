@@ -1,6 +1,5 @@
 export ADF_YS_URL_FILE=".ytdlsync-url"
 export ADF_YS_CACHE_FILE=".ytdlsync-cache"
-export ADF_YS_FORMAT_FILE=".ytdlsync-quality"
 export ADF_YS_AUTO_BLACKLIST_FILE=".ytdlsync-blacklist"
 export ADF_YS_CUSTOM_BLACKLIST_FILE=".ytdlsync-custom-blacklist"
 
@@ -32,12 +31,6 @@ function ytsync() {
     # TODO: install as a global package, put it in the installer scripts, and call it from here
     if ! TERM_WIDTH=$COLUMNS ytsync-cache-builder --config "$cache_builder_config" --sync-dir "$PWD" --display-colored-list; then
         return 10
-    fi
-
-    local format=""
-
-    if [[ -f $ADF_YS_FORMAT_FILE ]]; then
-        local format=$(command cat "$ADF_YS_FORMAT_FILE")
     fi
 
     # === Parse and validate the cache === #
@@ -144,7 +137,6 @@ function ytsync() {
              YTDL_REPAIR_DATE="$repair_date" \
              YTDL_LIMIT_BANDWIDTH="${YTSYNC_OVERRIDE_BANDWIDTH_LIMIT:-${YTDL_LIMIT_BANDWIDTH:-$bandwidth_limit}}" \
              YTDL_OUTPUT_DIR="$video_dir" \
-             YTDL_FORMAT="$format" \
              ytdl "$video_url" --write-sub --sub-lang fr,en \
              --match-filter "!is_live" \
              1>&1 2>&2 1>"$ytdl_out_file"
