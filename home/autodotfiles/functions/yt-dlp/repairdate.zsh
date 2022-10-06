@@ -84,7 +84,7 @@ function ytrepairdate() {
             continue
         fi
 
-        echoinfo -n "| Treating video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#entries}\z[]°: \z[gray]°$video_id\z[]° \z[magenta]°$display_path\z[]°$suffix "
+        ADF_NO_NEWLINE=1 echoinfo "| Treating video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#entries}\z[]°: \z[gray]°$video_id\z[]° \z[magenta]°$display_path\z[]°$suffix "
         
         if ! upload_date=$(yt-dlp --get-filename -o "%(upload_date)s" "${cookie_params[@]}" "$url_prefix$video_id" 2>> "$ADF_YT_REPAIR_DATE_ERROR_LOG"); then
             local errors=$((errors + 1))

@@ -34,8 +34,7 @@ function echoc() {
         return
     fi
 
-    local text="${@: -1}"
-    shift -p
+    local text="$1"
 
     local output=""
     local colors_history=()
@@ -92,21 +91,23 @@ function echoc() {
         fi
     done
 
-    local echo_args=("$@")
-
     if [[ ${#colors_history[@]} != 0 ]]; then
         _report_echoc_error "Unterminated color groups: $colors_history" "$text" $((${#text}+1)) 1
         return 1
     fi
 
-    if (( $ADF_UPDATABLE_LINE )); then
-        echo_args+=("-n")
-    fi
+    local echo_args=()
+
+    local rest_args=("${@:2}")
 
     if (( $ADF_UPDATABLE_LINE )) || (( $ADF_REPLACE_UPDATABLE_LINE )); then
-        echof "${echo_args[@]}" "\r$output" "$rawtext"
+        echof "\r$output" "$rawtext" "$@"
+    elif (( ${#rest_args} > 0 )); then
+        printf "$output" "${rest_args[@]}"
+    elif (( $ADF_NO_NEWLINE )); then
+        echo -n "$output"
     else
-        echo "${echo_args[@]}" "$output"
+        echo "$output"
     fi
 }
 
@@ -118,8 +119,9 @@ function echof() {
         return 1
     fi
 
-    local formatted=${@: -2:1}
-    local rawtext=${@: -1}
+    local formatted="$1"
+    local rawtext="$2"
+    local rest_args="${@:3}"
 
     local len=$(wc -L <<< "$rawtext")
     local remaining=$((COLUMNS - len))
@@ -137,58 +139,46 @@ function echof() {
         formatted+=$(printf '\b%.0s' {1..$((remaining - 1))})
     fi
 
-    echo "${@:1:-2}" "$formatted"
+    if (( ${#rest_args} > 0 )); then
+        printf "$formatted" "${rest_args[@]}"
+    else
+        echo -n "$formatted"
+    fi
 }
 
 function echoerr() {
-    local message="\z[red]°ERROR: ${@: -1}\z[]°"
-    shift -p
-    >&2 echoc "$@" "$message"
+    >&2 echoc "\z[red]°ERROR: $1\z[]°" "${@:2}"
 }
 
 # Equivalent to 'echoerr', but without prefix ('np' = no prefix)
 function echoerrnp() {
-    local message="\z[red]°${@: -1}\z[]°"
-    shift -p
-    >&2 ADF_SILENT=0 echoc "$@" "$message"
+    >&2 ADF_SILENT=0 echoc "\z[red]°$1\z[]°" "${@:2}"
 }
 
 function echowarn() {
-    local message="\z[yellow]°${@: -1}\z[]°"
-    shift -p
-	>&2 ADF_SILENT=0 echoc "$@" "$message"
+	>&2 ADF_SILENT=0 echoc "\z[yellow]°$1\z[]°" "${@:2}"
 }
 
 function echosuccess() {
-    if (( $ADF_SILENT )); then return; fi
-
-    local message="\z[green]°$1\z[]°"
-    shift -p
-    echoc "$@" "$message"
+    if ! (( $ADF_SILENT )); then
+        echoc "\z[green]°$1\z[]°" "${@:2}"
+    fi
 }
 
 function echoinfo() {
-    if (( $ADF_SILENT )); then return; fi
-
-    local message="\z[blue]°${@: -1}\z[]°"
-    shift -p
-    echoc "$@" "$message"
+    if ! (( $ADF_SILENT )); then
+        echoc "\z[blue]°$1\z[]°" "${@:2}"
+    fi
 }
 
 function echodata() {
-    if (( $ADF_SILENT )); then return; fi
-
-    local message="\z[cyan]°${@: -1}\z[]°"
-    shift -p
-	echoc "$@" "$message"
+    if ! (( $ADF_SILENT )); then
+    	echoc "\z[cyan]°$1\z[]°" "${@:2}"
+    fi
 }
 
 function echoverb() {
-    if ! (( $ADF_VERBOSE )); then
-        return
+    if (( $ADF_VERBOSE )); then
+	    >&2 echoc "\z[gray]°[Verbose]\z[]° \z[magenta]°$1\z[]°" "${@:2}"
     fi
-
-    local message="\z[gray]°[Verbose]\z[]° \z[magenta]°${@: -1}\z[]°"
-    shift -p
-	>&2 echoc "$@" "$message"
 }
