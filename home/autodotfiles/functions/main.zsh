@@ -332,6 +332,11 @@ function humansize() {
 # Display a progressbar
 # Usage: <prefix> <current value> <maximum> <width> <suffix>
 function progress_bar() {
+	if [[ -z $1 ]]; then echoerr "Please provide a prefix."; return 1; fi
+	if [[ -z $2 ]]; then echoerr "Please provide the current value."; return 1; fi
+	if [[ -z $3 ]]; then echoerr "Please provide the maximum value."; return 1; fi
+	if [[ -z $4 ]]; then echoerr "Please provide the progress bar's width."; return 1; fi
+
 	local current=$(($2))
 	local max=$(($3))
 	local width=$(($4))
@@ -361,6 +366,12 @@ function progress_bar() {
 # Display a progressbar with full informations
 # Usage: <prefix> <current value> <maximum> <width> <started> <suffix>
 function progress_bar_detailed() {
+	if [[ -z $1 ]]; then echoerr "Please provide a prefix."; return 1; fi
+	if [[ -z $2 ]]; then echoerr "Please provide the current value."; return 2; fi
+	if [[ -z $3 ]]; then echoerr "Please provide the maximum value."; return 3; fi
+	if [[ -z $4 ]]; then echoerr "Please provide the progress bar's width."; return 4; fi
+	if [[ -z $5 ]]; then echoerr "Please provide the start timestamp."; return 5; fi
+
 	local progress=$(((100 * $2) / $3))
 	local suffix=" $progress % ($2 / $3) | ETA: $(compute_eta $5 $2 $3) | Elapsed: $(timer_show_seconds $5)"
 	progress_bar "$1" $2 $3 $4 "$suffix$6"
