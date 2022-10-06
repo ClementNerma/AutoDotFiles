@@ -17,7 +17,7 @@ function adf_install() {
     fi
 
     local only_install=("$@")
-    local skip_if_installed=$(($ADF_SKIP_INSTALL))
+    local skip_if_installed=$(($ADF_SKIP_INSTALLED))
 
     local scripts=$(cat "$ADF_INSTALLER_SCRIPTS")
     local cksum=$(cksumstr "$scripts")
