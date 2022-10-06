@@ -63,7 +63,7 @@ function adf_install() {
         local i=$((i+1))
 
         echoinfo ">"
-        echoinfo "> Installing component \z[magenta]°$i\z[]° / \z[magenta]°${#to_install}\z[]°: \z[yellow]°${to_install_names[i]}\z[]°"
+        echoinfo "> Installing component \z[magenta]°$i\z[]° / \z[magenta]°${#to_install}\z[]°: \z[yellow]°$name\z[]°"
         echoinfo ">"
         echoinfo ""
 
