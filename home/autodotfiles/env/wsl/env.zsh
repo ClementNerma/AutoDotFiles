@@ -50,7 +50,13 @@ function open() {
   local file_name=$(basename "$topath")
 
   cd "$file_dir_path"
-  explorer.exe "$file_name"
+
+  # if [[ -d "$topath" ]]; then
+  #   (nohup "/mnt/c/Users/cleme/AppData/Local/Microsoft/WindowsApps/files.exe" "$file_name" > /dev/null 2>&1 &)
+  # else
+    explorer.exe "$file_name"
+  # fi
+
   cd "$current_dir"
 }
 
