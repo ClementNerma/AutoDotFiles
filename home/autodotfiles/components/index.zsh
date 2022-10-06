@@ -236,7 +236,7 @@ function adf_install() {
     echowarn ""
 
     # Required trick to avoid getting the whole parent script to stop when getting a SIGINT (Ctrl+C)
-    if ! passive_confirm; then
+    if ! confirm; then
         echoerr "Aborted due to user cancel."
         return 30
     fi

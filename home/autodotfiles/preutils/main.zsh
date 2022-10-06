@@ -34,74 +34,13 @@ function prompt() {
 
 # Ask for confirmation
 function confirm() {
+	trap 'echowarn "Ctrl+C is not allowed here."' SIGINT
 	read -s 'answer?'
-	
+	trap - SIGINT
+
 	if [[ -n $answer && $answer != "y" && $answer != "Y" ]]; then
 		return 1
 	fi
-}
-
-# Passive confirmation (can provide a timeout as an argument)
-function passive_confirm() {
-	export ___pc_aborted=0
-	export ___pc_answer=""
-
-	local timeout=0
-	local timeout_args=()
-
-	if [[ $1 ]]; then
-		local timeout=$(( $1 ))
-
-		if ! (( $timeout )); then
-			echoerr "Please provide a valid timeout"
-			return 1
-		fi
-
-		local timeout_args=("-t" "$1")
-	fi
-
-	while [[ $___pc_answer != $'\n' ]] && ! (( $___pc_aborted )); do
-		trap 'echowarn "Use Ctrl+D to abort." && export ___pc_aborted=1' SIGINT
-
-		read -sk ${timeout_args[@]} ___pc_answer
-
-		trap SIGINT
-
-		if [[ $___pc_answer = "p" ]]; then
-			while true; do
-				export ___pc_choice=""
-
-				trap 'echo "Use A to abort."' SIGINT
-				echoinfo "Sleeping, press C to continue or A to abort."
-				read -sk ___pc_choice
-				trap SIGINT
-
-				if [[ $___pc_choice = "c" ]]; then
-					return
-				fi
-
-				if [[ $___pc_choice = "a" ]]; then
-					return 1
-				fi
-
-				echowarn "Invalid response (C or A expected)."
-			done
-		fi
-
-		if (( $___pc_aborted )); then
-			return 1
-		fi
-		
-		if [[ $___pc_answer = $'\n' ]]; then
-			return
-		fi
-
-		if (( $timeout )) && [[ -z $___pc_answer ]]; then
-			return
-		fi
-
-		echowarn "Unrecognized key (\z[blue]°<Enter>\z[]° to continue, \z[blue]°<Ctrl+C>\z[]° then \z[blue]°<Ctrl+D>\z[]° to abort, \z[blue]°<P>\z[]° to pause)"
-	done
 }
 
 # Faster replacement for "date +%s%N"
