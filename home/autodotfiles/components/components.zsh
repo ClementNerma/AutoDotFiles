@@ -30,24 +30,21 @@ function python() {
     # VERSION: python3 --version
     # NEEDS_APT_UPDATE: yes
 
-    if cat /etc/issue | grep "Ubuntu" > /dev/null; then
-        sudo apt install -yqqq python3-pip
-        return
-    fi
+    sudo apt install -yqqq python3-pip
+    
+    # sudo apt install -yqqq python3 python3-dev python-virtualenv python-is-python3
 
-    sudo apt install -yqqq python3 python3-dev python-virtualenv python-is-python3
+    # if (( $COMPONENT_UPDATING )); then
+    #     echowarn "Skipping PIP install due to update."
+    #     return
+    # fi
 
-    if (( $COMPONENT_UPDATING )); then
-        echowarn "Skipping PIP install due to update."
-        return
-    fi
+    # dl https://bootstrap.pypa.io/get-pip.py "$INSTALLER_TMPDIR/get-pip.py"
+    # export PATH="$HOME/.local/bin:$PATH"
 
-    dl https://bootstrap.pypa.io/get-pip.py "$INSTALLER_TMPDIR/get-pip.py"
-    export PATH="$HOME/.local/bin:$PATH"
-
-    python3 "$INSTALLER_TMPDIR/get-pip.py"
-    sudo python3 "$INSTALLER_TMPDIR/get-pip.py"
-    pip3 install -U pip setuptools wheel
+    # python3 "$INSTALLER_TMPDIR/get-pip.py"
+    # sudo python3 "$INSTALLER_TMPDIR/get-pip.py"
+    # pip3 install -U pip setuptools wheel
 }
 
 function rust() {
