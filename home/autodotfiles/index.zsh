@@ -157,8 +157,11 @@ if [[ ! -d $LOCBAKDIR ]]; then mkdir -p "$LOCBAKDIR"; fi
 if ! typeset -f open > /dev/null; then echowarn "WARNING: contractual 'open' command is not defined. 'open'-related functions won't work correctly."; fi
 if ! typeset -f opens > /dev/null; then echowarn "WARNING: contractual 'opens' command is not defined. 'opens'-related functions won't work correctly."; fi
 
-# Load software configuration and aliases
-source "$ADF_DIR/config-aliases.zsh"
+# Load aliases
+source "$ADF_DIR/aliases.zsh"
+
+# Load software integration
+source "$ADF_DIR/software.zsh"
 
 # Set path to the functions directory
 for script in "$ADF_DIR/functions/"**/*; do

@@ -91,6 +91,20 @@ function bakthis7z() {
 	bakproj7z "$PWD" "$(realpath "..")"
 }
 
+# Make a commit with Git
+function gitcommit() {
+    if (( ${#1} > 72 )); then
+        echowarn "Maximum recommanded message length is \z[cyan]°72\z[]° characters but provided one is \z[cyan]°${#1}\z[]° long."
+
+        if [[ $1 != *"\n"* ]]; then
+            echoerr "Rejecting the commit message, you can use a newline symbol to skip this limitation."
+            return 1
+        fi
+    fi
+
+    git commit -m "$1" "${@:2}"
+}
+
 # Rename a Git branch
 function gitrename() {
     local old_branch=$(git rev-parse --abbrev-ref HEAD)
