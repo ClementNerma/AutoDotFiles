@@ -94,9 +94,6 @@ fi
 # Load the backuper
 source "$ADF_DIR/backuper.zsh"
 
-# Load the synchronizer
-source "$ADF_DIR/sync.zsh"
-
 # Load the obfuscator
 source "$ADF_DIR/obfuscator.zsh"
 
