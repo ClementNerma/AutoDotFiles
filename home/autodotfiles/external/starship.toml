@@ -17,7 +17,8 @@ format="[$symbol$branch(:$remote_branch)]($style) "
 
 [git_status]
 style="bold yellow"
-conflicted="[!](red)"
+conflicted=" [!](bold underline red) "
+diverged=" [⇕](bold underline red) "
 
 [cmd_duration]
 format="[($duration)](yellow)"
