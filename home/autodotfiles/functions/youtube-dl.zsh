@@ -60,7 +60,7 @@ function ytdl() {
 		export YTDL_PARALLEL_DOWNLOADS=$((YTDL_PARALLEL_DOWNLOADS-1))
 		decrease_counter=0
 		is_using_tempdir=1
-		tempdir="$ADF_CONF_YTDL_TEMP_DL_DIR_PATH/$(date +%s%N)"
+		tempdir="$ADF_CONF_YTDL_TEMP_DL_DIR_PATH/$(humandate)-$(date +%N)"
 
 		if [[ -z "$YTDL_TEMP_DIR" ]]; then
 			mkdir -p "$tempdir"
