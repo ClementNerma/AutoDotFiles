@@ -38,6 +38,7 @@ function rclone_mirror() {
     local unparsed=()
     local total=""
     local size=""
+    local renamed=""
     local noitem=0
 
     while IFS= read -r line; do
@@ -65,6 +66,8 @@ function rclone_mirror() {
             local size="${match[1]}"
         elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9]+),[[:space:]]100%$ ]]; then
             local total="${match[1]}"
+        elif [[ $line =~ ^Renamed:[[:space:]]+[0-9]+$ ]]; then
+            local renamed="${match[1]}"
         elif [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]*$ ]]; then
         elif [[ $line =~ ^Checks:[[:space:]]+[0-9]+[[:space:]]/[[:space:]][0-9]+,[[:space:]]100%$ ]]; then
         elif [[ $line =~ ^Elapsed[[:space:]]time:[[:space:]]+[0-9\\.smhd]+$ ]]; then
@@ -95,6 +98,16 @@ function rclone_mirror() {
         if [[ ${#items} -ne $total ]]; then
             local error_msg="Found \z[yellow]°${#items}\z[]°, but expected a total of \z[yellow]°$total\z[]° items to transfer!"
             local exit_code=9
+        fi
+
+        if [[ ${#tomove} ]] && [[ -z $renamed ]]; then
+            local error_msg="Got a list of files to move but did not get their total count."
+            local exit_code=10
+        fi
+
+        if (( $renamed )) && [[ ${#tomove} -ne $renamed ]]; then
+            local error_msg="Found \z[yellow]°${#tomove}\z[]° items to remove, but expected \z[yellow]°$renamed\z[]°!"
+            local exit_code=11
         fi
 
         if (( $exit_code )); then
