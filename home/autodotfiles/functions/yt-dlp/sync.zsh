@@ -179,7 +179,7 @@ function ytsync() {
                     sleep 1
                 done
 
-                local di=(($di - 1))
+                local di=$(($di - 1))
                 continue
             fi
 
