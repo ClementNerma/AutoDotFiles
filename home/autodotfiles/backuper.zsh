@@ -87,7 +87,7 @@ function adf_local_backup() {
         echowarn "Creating a NON-COMPRESSED archive."
         7z a -t7z -m0=Copy -mmt=1 -spf2 -bso0 -mhe=on -p"$passphrase" "$tmpfile" @"$listfile"
     else
-        7z a -t7z -m0=lzma2 -mx=$compression -mfb=64 -md=32m -ms=on -mhc=on -mhe=on -spf2 -bso0 -p"$passphrase" "$tmpfile" @"$listfile"
+        7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=32m -ms=on -mhc=on -mhe=on -spf2 -bso0 -p"$passphrase" "$tmpfile" @"$listfile"
     fi
         
     if (( $? )); then
