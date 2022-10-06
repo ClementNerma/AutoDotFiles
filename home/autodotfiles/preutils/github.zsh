@@ -49,7 +49,7 @@ function dlghrelease() {
 }
 
 # Download a .tar.gz from GitHub releases and extract a single file to the binaries directory
-# Usage: dlbin <github repo name> <asset pattern for AMD64> <asset pattern for ARM64> <file to extract> <binary name>
+# Usage: dlbin <github repo name> <asset pattern for AMD64> <file to extract> <binary name>
 function dlghbin() {
 	if [[ -z $1 ]]; then
 		echoerr "Please provide a GitHub repository name."
@@ -67,11 +67,6 @@ function dlghbin() {
 	fi
 
 	if [[ -z $4 ]]; then
-		echoerr "Please provide an extraction pattern for ARM64."
-		return 4
-	fi
-
-	if [[ -z $5 ]]; then
 		echoerr "Please provide a binary name."
 		return 4
 	fi
@@ -87,23 +82,12 @@ function dlghbin() {
 		local dldir="$INSTALLER_TMPDIR"
 	fi
 
-	local file="$dldir/dlbin-$5-$(humandate)"
-	local exdir="$dldir/dlbin-$5-$(humandate)-extract"
-
-	local asset_pattern="$2"
-
-	if (( $ADF_IS_ARM64 )); then
-		local asset_pattern="$3"
-
-		if [[ $asset_pattern = "-" ]]; then
-			echoerr "Component does not have an ARM64 version!"
-			return 30
-		fi
-	fi
+	local file="$dldir/dlbin-$4-$(humandate)"
+	local exdir="$dldir/dlbin-$4-$(humandate)-extract"
 
 	echoinfo "> (1/4) Download release from GitHub..."
 
-	dlghrelease "$1" "$asset_pattern" "$file" || return 10
+	dlghrelease "$1" "$2" "$file" || return 10
 
 	echoinfo "> (2/4) Extracting archive..."
 
@@ -121,9 +105,9 @@ function dlghbin() {
 
 	echoinfo "> (3/4) Moving final binary..."
 
-	mv "$exdir/"${~4} "$ADF_BIN_DIR/$5" || return 14
+	mv "$exdir/"${~4} "$ADF_BIN_DIR/$4" || return 14
 
-	chmod +x "$ADF_BIN_DIR/$5"
+	chmod +x "$ADF_BIN_DIR/$4"
 
 	echoinfo "> (4/4) Cleaning up..."
 	

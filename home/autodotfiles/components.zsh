@@ -157,12 +157,6 @@ function __adf_install_component() {
         ;;
 
         python)
-            if (( $ADF_IS_ARM64 )); then
-                echowarn "Detected ARM64, Python should already be installed:"
-                python3 -V && pip3 -V
-                return
-            fi
-
             sudo apt install -yqqq python3-pip
         ;;
 
@@ -194,27 +188,19 @@ function __adf_install_component() {
         ;;
 
         bat)
-            dlghbin sharkdp/bat "bat-.*-x86_64-unknown-linux-musl.tar.gz" "bat-.*-aarch64-unknown-linux-gnu.tar.gz" "bat-*/bat" bat
+            dlghbin sharkdp/bat "bat-.*-x86_64-unknown-linux-musl.tar.gz" "bat-*/bat" bat
         ;;
 
         crony)
-            if (( $ADF_IS_ARM64 )); then
-                ghdl "ClementNerma/Crony" "$INSTALLER_TMPDIR/Crony"
-                cargo build --release --manifest-path="$INSTALLER_TMPDIR/Crony/Cargo.toml"
-                mv "$INSTALLER_TMPDIR/Crony/target/release/Crony" "$ADF_BIN_DIR/Crony"
-                command rm -rf "$INSTALLER_TMPDIR/Crony"
-                return
-            fi
-
-            dlghbin "ClementNerma/Crony" "crony-linux-x86_64-musl.zip" "-" "crony" "crony"
+            dlghbin "ClementNerma/Crony" "crony-linux-x86_64-musl.zip" "crony" "crony"
         ;;
 
         exa)
-            dlghbin ogham/exa "exa-linux-x86_64-musl-.*.zip" "exa-linux-armv7-.*.zip" "bin/exa" exa
+            dlghbin ogham/exa "exa-linux-x86_64-musl-.*.zip" "bin/exa" exa
         ;;
 
         fd)
-            dlghbin sharkdp/fd "fd-.*-x86_64-unknown-linux-musl.tar.gz" "fd-.*-arm-unknown-linux-musleabihf.tar.gz" "fd-*/fd" fd
+            dlghbin sharkdp/fd "fd-.*-x86_64-unknown-linux-musl.tar.gz" "fd-*/fd" fd
         ;;
 
         fzf)
@@ -228,15 +214,7 @@ function __adf_install_component() {
         ;;
 
         jumpy)
-            if (( $ADF_IS_ARM64 )); then
-                ghdl "ClementNerma/Jumpy" "$INSTALLER_TMPDIR/jumpy"
-                cargo build --release --manifest-path="$INSTALLER_TMPDIR/jumpy/Cargo.toml"
-                mv "$INSTALLER_TMPDIR/jumpy/target/release/jumpy" "$ADF_BIN_DIR/jumpy"
-                command rm -rf "$INSTALLER_TMPDIR/jumpy"
-                return
-            fi
-
-            dlghbin "ClementNerma/Jumpy" "jumpy-linux-x86_64.zip" "-" "jumpy" "jumpy"
+            dlghbin "ClementNerma/Jumpy" "jumpy-linux-x86_64.zip" "jumpy" "jumpy"
         ;;
 
         micro)
@@ -266,11 +244,6 @@ function __adf_install_component() {
             if (( $COMPONENT_UPDATING )); then
                 echowarn "Nothing to update."
                 return
-            fi
-
-            if (( $ADF_IS_ARM64 )); then
-                echoerr "Volta is unsupported on ARM64 architectures."
-                return 1
             fi
 
             if [[ -d ~/.volta ]]; then
@@ -308,7 +281,7 @@ function __adf_install_component() {
         ;;
 
         ripgrep)
-            dlghbin BurntSushi/ripgrep "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz" "ripgrep-.*-arm-unknown-linux-gnueabihf.tar.gz" "ripgrep-*/rg" "rg"
+            dlghbin BurntSushi/ripgrep "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz" "ripgrep-*/rg" "rg"
         ;;
 
         scout)
@@ -322,23 +295,15 @@ function __adf_install_component() {
         ;;
 
         tokei)
-            dlghbin XAMPPRocky/tokei "tokei-x86_64-unknown-linux-musl.tar.gz" "tokei-aarch64-unknown-linux-gnu.tar.gz" "tokei" tokei
+            dlghbin XAMPPRocky/tokei "tokei-x86_64-unknown-linux-musl.tar.gz" "tokei" tokei
         ;;
 
         starship)
-            dlghbin starship/starship "starship-x86_64-unknown-linux-gnu.tar.gz" "starship-aarch64-unknown-linux-musl.tar.gz" "starship" starship
+            dlghbin starship/starship "starship-x86_64-unknown-linux-gnu.tar.gz" "starship" starship
         ;;
 
         trasher)
-            if (( $ADF_IS_ARM64 )); then
-                ghdl "ClementNerma/Trasher" "$INSTALLER_TMPDIR/trasher"
-                cargo build --release --manifest-path="$INSTALLER_TMPDIR/trasher/Cargo.toml"
-                mv "$INSTALLER_TMPDIR/trasher/target/release/trasher" "$ADF_BIN_DIR/trasher"
-                command rm -rf "$INSTALLER_TMPDIR/trasher"
-                return
-            fi
-
-            dlghbin "ClementNerma/Trasher" "trasher-linux-x86_64.zip" "-" "trasher" "trasher"
+            dlghbin "ClementNerma/Trasher" "trasher-linux-x86_64.zip" "trasher" "trasher"
         ;;
 
         utils)
@@ -359,19 +324,11 @@ function __adf_install_component() {
         # =============== MAIN COMPUTER =============== #
 
         kopia)
-            dlghbin kopia/kopia "kopia-.*-linux-x64.tar.gz" "kopia-.*-linux-arm64.tar.gz" "kopia-*/kopia" kopia
+            dlghbin kopia/kopia "kopia-.*-linux-x64.tar.gz" "kopia-*/kopia" kopia
         ;;
 
         ytdl)
-            if (( $ADF_IS_ARM64 )); then
-                ghdl "ClementNerma/ytdl" "$INSTALLER_TMPDIR/ytdl"
-                cargo build --release --manifest-path="$INSTALLER_TMPDIR/ytdl/Cargo.toml"
-                mv "$INSTALLER_TMPDIR/ytdl/target/release/ytdl" "$ADF_BIN_DIR/ytdl"
-                command rm -rf "$INSTALLER_TMPDIR/ytdl"
-                return
-            fi
-
-            dlghbin "ClementNerma/ytdl" "ytdl-linux-x86_64-musl.zip" "-" "ytdl" "ytdl"
+            dlghbin "ClementNerma/ytdl" "ytdl-linux-x86_64-musl.zip" "ytdl" "ytdl"
         ;;
 
         *)

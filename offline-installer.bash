@@ -49,7 +49,7 @@ echo -e "\e[92m====== AUTOMATED (OFFLINE) INSTALLER ======\e[0m"
 echo -e "\e[92m===========================================\e[0m"
 
 arch="$(dpkg --print-architecture)"
-if [[ $arch != "amd64" && $arch != "arm64" ]]; then
+if [[ $arch != "amd64" ]]; then
 	echo "ERROR: Unsupported CPU architecture detected: ${arch}"
 	_fail 2 "Exiting now."
 fi
