@@ -78,6 +78,9 @@ if [[ $1 != "--offline" ]]; then
 	INSTALL_FROM="$TMPDIR/AutoDotFiles-github-download"
 	git clone "https://github.com/ClementNerma/AutoDotFiles.git" "$INSTALL_FROM"
 	bash "$INSTALL_FROM/installer.bash" --offline
+
+	# Exit installer now
+	return
 fi
 
 if [ ! -d "$INSTALL_FROM/home" ] || [ ! -d "$INSTALL_FROM/home/autodotfiles" ]; then
