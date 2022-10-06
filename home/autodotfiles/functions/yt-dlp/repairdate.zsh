@@ -1,4 +1,5 @@
 export ADF_YT_REPAIR_DATE_LIST=".ytrepairdate"
+export ADF_YT_REPAIR_DATE_ERROR_LOG="$TEMPDIR/.ytrepairdate-log"
 
 function ytrepairdate() {
     if [[ -z $1 ]]; then
@@ -57,6 +58,8 @@ function ytrepairdate() {
     local errors=0
     local warnings=0
 
+    echo "===== Going to treat ${#entries} for IE: $1 =====\n" >> "$ADF_YT_REPAIR_DATE_ERROR_LOG"
+
     for i in {1..${#entries}}; do
         local entry=${entries[i]}
 
@@ -83,9 +86,10 @@ function ytrepairdate() {
 
         echoinfo -n "| Treating video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#entries}\z[]°: \z[gray]°$video_id\z[]° \z[magenta]°$display_path\z[]°$suffix "
         
-        if ! upload_date=$(yt-dlp --get-filename -o "%(upload_date)s" "${cookie_params[@]}" "$url_prefix$video_id"); then
+        if ! upload_date=$(yt-dlp --get-filename -o "%(upload_date)s" "${cookie_params[@]}" "$url_prefix$video_id" 2>> "$ADF_YT_REPAIR_DATE_ERROR_LOG"); then
             local errors=$((errors + 1))
             echoc "\z[red]°FAILED\z[]°"
+            printf "%s\n" "$video_id" >> "$ADF_YT_REPAIR_DATE_LIST"
             continue
         fi
 
@@ -110,6 +114,10 @@ function ytrepairdate() {
         echosuccess "OK"
         printf "%s\n" "$video_id" >> "$ADF_YT_REPAIR_DATE_LIST"
     done
+
+    echo "=========================\n\n" >> "$ADF_YT_REPAIR_DATE_ERROR_LOG"
+    
+    echowarn "Please check the log file at \z[yellow]°$ADF_YT_REPAIR_DATE_ERROR_LOG\z[]°!"
 
     if (( errors > 0 )); then
         echoerr "Failed with \z[yellow]°$errors\z[]° errors."
