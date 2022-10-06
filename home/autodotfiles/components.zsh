@@ -119,6 +119,7 @@ export ADF_INSTALLABLE_COMPONENTS=(
     exa
     fd
     jumpy
+    pomsky
     micro
     ripgrep
     scout
@@ -187,19 +188,20 @@ function __adf_install_component() {
         fzf)      command rm -rf ~/.fzf && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && bash ~/.fzf/install --all ;;
 
         bat)      dlghbin sharkdp/bat "bat-.*-x86_64-unknown-linux-musl.tar.gz" "bat-*/bat" ;;
-        crony)    dlghbin "ClementNerma/Crony" "crony-linux-x86_64-musl.zip" "crony" ;;
+        crony)    dlghbin ClementNerma/Crony "crony-linux-x86_64-musl.zip" "crony" ;;
         exa)      dlghbin ogham/exa "exa-linux-x86_64-musl-.*.zip" "bin/exa" ;;
         fd)       dlghbin sharkdp/fd "fd-.*-x86_64-unknown-linux-musl.tar.gz" "fd-*/fd" ;;
-        jumpy)    dlghbin "ClementNerma/Jumpy" "jumpy-linux-x86_64-musl.zip" "jumpy" ;;
+        jumpy)    dlghbin ClementNerma/Jumpy "jumpy-linux-x86_64-musl.zip" "jumpy" ;;
+        pomsky)   dlghbin rulex-rs/pomsky "pomsky_linux_v.*" "-" "pomsky" ;;
         ripgrep)  dlghbin BurntSushi/ripgrep "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz" "ripgrep-*/rg" ;;
         scout)    dlghbin jhbabon/scout "scout-linux" "-" "scout" ;;
         tokei)    dlghbin XAMPPRocky/tokei "tokei-x86_64-unknown-linux-musl.tar.gz" "tokei" ;;
         starship) dlghbin starship/starship "starship-x86_64-unknown-linux-gnu.tar.gz" "starship" ;;
-        trasher)  dlghbin "ClementNerma/Trasher" "trasher-linux-x86_64.zip" "trasher" ;;
+        trasher)  dlghbin ClementNerma/Trasher "trasher-linux-x86_64.zip" "trasher" ;;
         kopia)    dlghbin kopia/kopia "kopia-.*-linux-x64.tar.gz" "kopia-*/kopia" ;;
-        ytdl)     dlghbin "ClementNerma/ytdl" "ytdl-linux-x86_64-musl.zip" "ytdl" ;;
-        ytdlp)    dlghbin "yt-dlp/yt-dlp" "yt-dlp" "-" ;;
-        micro)    dlghbin "zyedidia/micro" "micro-.*-linux64.tar.gz" "micro-*/micro"
+        ytdl)     dlghbin ClementNerma/ytdl "ytdl-linux-x86_64-musl.zip" "ytdl" ;;
+        ytdlp)    dlghbin yt-dlp/yt-dlp "yt-dlp" "-" ;;
+        micro)    dlghbin zyedidia/micro "micro-.*-linux64.tar.gz" "micro-*/micro"
                   ensure_config_file "$HOME/.config/micro/bindings.json" '{ "CtrlN": "AddTab", "CtrlW": "Quit", "CtrlD": "SpawnMultiCursor" }' ;;
         ncdu)
                   # TODO: Find a way to not hardcode NCDU's version and link here
