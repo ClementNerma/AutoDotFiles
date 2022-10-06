@@ -20,6 +20,8 @@ function rclone_mirror() {
 
     local rclone_output_file="$TEMPDIR/rclone-output-$(humandate).txt"
 
+    local started=$(timer_start)
+    
     if ! __rclone_sync_nocheck "$1" "$2" --dry-run "${@:3}" > "$rclone_output_file" 2>&1; then
         echoerr "RClone failed: \z[yellow]°$(command cat "$rclone_output_file")\z[]°"
         rm "$rclone_output_file"
@@ -108,6 +110,7 @@ function rclone_mirror() {
         done <<< $(printf '%s\n' "${todelete[@]}" | sort -n)
     fi
 
+    echoinfo "Built items list in \z[gray]°$(timer_end "$started")\z[]°."
     echoinfo "Found \z[yellow]°${#items}\z[]° item(s) to transfer, \z[yellow]°${#tomove}\z[]° to move and \z[yellow]°${#todelete}\z[]° to delete for a total of \z[yellow]°$size\z[]°."
 
     if [[ ${#items} -eq 0 && ${#todelete} -eq 0 && ${#tomove} -eq 0 ]]; then
