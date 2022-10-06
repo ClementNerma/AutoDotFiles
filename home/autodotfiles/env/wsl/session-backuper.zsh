@@ -117,13 +117,15 @@ function adf_backup_session_compile() {
 
 # Restore the last session backed up with `backup_session`
 # Previous backups can be restored by providing their checksum through the `CKSUM` variable
-# Usage: restore_session [<software name>]
+# Usage: restore_session [<software name>] [<ignore the last X entries>]
 function adf_restore_session() {
     local filter=""
 
     if [[ ! -z $CKSUM ]]; then
       local filter="\-$CKSUM$"
     fi
+
+    local go_back=${2:-0}
 
     local files=($(command ls -1A "$ADF_CONF_WSL_BACKUP_SESSION_DIR" | grep "^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\.txt$" | sort -r))
     local session_file=""
@@ -135,8 +137,8 @@ function adf_restore_session() {
         if ! grep -q "$ADF_SESSION_UPDATE_START_LINE_MARKER" "$file_path"; then continue; fi
 
         local session_file="$file"
-        local start_line=$(grep -n "$ADF_SESSION_UPDATE_START_LINE_MARKER" "$file_path" | tail -1 | cut -f1 -d':')
-        local end_line=$(grep -n "$ADF_SESSION_UPDATE_END_LINE_MARKER" "$file_path" | tail -1 | cut -f1 -d':')
+        local start_line=$(grep -n "$ADF_SESSION_UPDATE_START_LINE_MARKER" "$file_path" | tail -$((1 + $go_back)) | head -1 | cut -f1 -d':')
+        local end_line=$(grep -n "$ADF_SESSION_UPDATE_END_LINE_MARKER" "$file_path" | tail -$((1 + $go_back)) | head -1 | cut -f1 -d':')
 
         local content=$(command cat "$file_path" | tail +$(($start_line + 1)) | head -n$(($end_line - $start_line - 1)))
         break
