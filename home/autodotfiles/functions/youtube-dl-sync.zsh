@@ -217,19 +217,21 @@ function ytsync_build_cache() {
         fi
     done
 
-    echoinfo "Checking availibility of \z[yellow]°${#check_list_ids}\z[]° videos..."
+    if [[ ${#check_list_ids} -ne 0 ]]; then
+        echoinfo "Checking availibility of \z[yellow]°${#check_list_ids}\z[]° videos..."
 
-    for i in {1..${#check_list_ids}}; do
-        echoinfo "| Checking video \z[yellow]°$i\z[]° / \z[yellow]°${#check_list_ids}\z[]° \z[gray]°(${check_list_ids[i]})\z[]°..."
+        for i in {1..${#check_list_ids}}; do
+            echoinfo "| Checking video \z[yellow]°$i\z[]° / \z[yellow]°${#check_list_ids}\z[]° \z[gray]°(${check_list_ids[i]})\z[]°..."
 
-        if ! yt-dlp "${check_list_urls[i]}" --get-url > /dev/null 2>&1; then
-            echowarn "| > Video \z[magenta]°${check_list_titles[i]}\z[]° is unavailable, skipping it."
-            continue
-        fi
+            if ! yt-dlp "${check_list_urls[i]}" --get-url > /dev/null 2>&1; then
+                echowarn "| > Video \z[magenta]°${check_list_titles[i]}\z[]° is unavailable, skipping it."
+                continue
+            fi
 
-        cache_content+="${check_list_ids[i]}\n${check_list_titles[i]}\n${check_list_urls[i]}\n\n"
-        total=$((total+1))
-    done
+            cache_content+="${check_list_ids[i]}\n${check_list_titles[i]}\n${check_list_urls[i]}\n\n"
+            total=$((total+1))
+        done
+    fi
 
     echo "$total\n\n$cache_content" > "$ADF_YS_CACHE"
     echoinfo "Written download informations to cache."
