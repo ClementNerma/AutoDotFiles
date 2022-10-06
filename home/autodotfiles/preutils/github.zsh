@@ -76,16 +76,13 @@ function dlghbin() {
 	if [[ $3 = "-" ]]; then
 		local to_move="$file"
 		local target_name=${4:-$(basename "$2")}
-	elif [[ ! -z $4 ]]; then
+	else
 		local expanded=("$exdir/"${~3})
 		local to_move=${expanded[1]}
-		local target_name=$4
-	else
-		local expanded=("$exdir/"**/*)
+
 		[[ ${#expanded} -eq 1 ]] || { echoerr "Did not find exactly one file in extraction directory: \z[magenta]°$exdir\z[]°"; return 10 }
 
-		local to_move=${expanded[1]}
-		local target_name=$(basename "$to_move")
+		local target_name=${4:-$(basename "$to_move")}
 	fi
 
 	mv "$to_move" "$ADF_BIN_DIR/$target_name" || return 14
