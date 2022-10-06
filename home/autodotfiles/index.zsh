@@ -111,7 +111,7 @@ if [[ ! -f $ADF_CONF_RESTORATION_SCRIPT || $ADF_JUST_INSTALLED = 1 ]]; then
 fi
 
 # Load the backupers
-source "$ADF_DIR/backups/full.zsh"
+source "$ADF_DIR/backuper.zsh"
 
 # Run the installer
 export ADF_INSTALLER_ABORTED=0
