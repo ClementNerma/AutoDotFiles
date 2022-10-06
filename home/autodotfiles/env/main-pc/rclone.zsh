@@ -70,6 +70,9 @@ function rclone_mirror() {
             fi
         elif [[ $line =~ ^Transferred:[^/]+/[[:space:]]([0-9]+),[[:space:]]100%$ ]]; then
             local total="${match[1]}"
+        elif [[ $line =~ ^Transferred:[[:space:]]+0[[:space:]]B[[:space:]]/[[:space:]]0[[:space:]]B,[[:space:]]-,[[:space:]]0[[:space:]]B/s,[[:space:]]ETA[[:space:]]-$ ]]; then
+            local total=0
+            local size="-"
         elif [[ $line =~ ^Renamed:[[:space:]]+([0-9]+)$ ]]; then
             local renamed="${match[1]}"
         elif [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]*$ ]]; then
