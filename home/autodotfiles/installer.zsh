@@ -344,7 +344,7 @@ function adf_install() {
 }
 
 function adf_update() {
-    adf_install "*"
+    adf_install "${1:-*}"
 }
 
 if ! ADF_SKIP_INSTALLED=1 adf_install "*"; then
