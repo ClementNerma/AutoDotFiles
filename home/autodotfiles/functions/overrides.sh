@@ -84,3 +84,8 @@ function code() {
 		command code "$to_open" "${@:2}"
 	fi
 }
+
+# Configuration override for YTDL
+function ytdl() {
+    command ytdl -c "$ADF_DATA_DIR/ytdl/ytdl-config.json" "$@"
+}
