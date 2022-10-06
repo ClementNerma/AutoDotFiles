@@ -24,8 +24,6 @@ function _report_echoc_error() {
 
 # NO_COLOR=1                   => disable colors
 # ADF_CLEAN_EOL=1              => clean with space characters up to the end of the line (based on `tput cols` value)
-# ADF_UPDATABLE_LINE=1         => clear the line instantly everytime we're writing on it (requires to print a line to overwrite beforehand)
-# ADF_REPLACE_UPDATABLE_LINE=1 => same as "ADF_UPDATABLE_LINE" but print a newline symbol after
 # ADF_NEVER_CUT_LINE=1         => don't cut an updatable line if it's longer than the terminal's width
 # ADF_SILENT=1                 => disable all messages, except those from `echowarn` and `echoerr`
 # ADF_FULLY_SILENT=1           => disable all messages
@@ -100,49 +98,12 @@ function echoc() {
 
     local rest_args=("${@:2}")
 
-    if (( $ADF_UPDATABLE_LINE )) || (( $ADF_REPLACE_UPDATABLE_LINE )); then
-        echof "\r$output" "$rawtext" "$@"
-    elif (( ${#rest_args} > 0 )); then
+    if (( ${#rest_args} > 0 )); then
         printf "$output" "${rest_args[@]}"
     elif (( $ADF_NO_NEWLINE )); then
         echo -n "$output"
     else
         echo "$output"
-    fi
-}
-
-# Fill a line with a message (can't overflow)
-# Usage: echof [<...arguments for 'echo'>] <formatted message> <raw message>
-function echof() {
-    if (( $# < 2 )); then
-        echoerr "Please provide the formatted message as well as the raw message."
-        return 1
-    fi
-
-    local formatted="$1"
-    local rawtext="$2"
-    local rest_args="${@:3}"
-
-    local len=$(wc -L <<< "$rawtext")
-    local remaining=$((COLUMNS - len))
-
-    if (( $remaining < 0 )); then
-        tput rmam
-        echo -n "$formatted"
-        tput smam
-        return
-    fi
-
-    formatted+=$(printf ' %.0s' {1..$remaining})
-
-    if (( $remaining > 1 )); then
-        formatted+=$(printf '\b%.0s' {1..$((remaining - 1))})
-    fi
-
-    if (( ${#rest_args} > 0 )); then
-        printf "$formatted" "${rest_args[@]}"
-    else
-        echo -n "$formatted"
     fi
 }
 
