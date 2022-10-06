@@ -218,6 +218,11 @@ function ytsync() {
         printf "\n\n"
     done
 
+    if (( $needlockfile )); then
+        echowarn ">> Removing lockfile..."
+        rm "$lockfile"
+    fi
+
     if [[ $errors -eq 0 ]]; then
         echosuccess "Done!"
         rm "$ADF_YS_CACHE"
