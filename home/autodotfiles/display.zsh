@@ -22,16 +22,8 @@ function _report_echoc_error() {
     >&2 echo "${ADF_FORMAT_RED}=========================================================${ADF_FORMAT_RESET}"
 }
 
-# NO_COLOR=1                   => disable colors
-# ADF_CLEAN_EOL=1              => clean with space characters up to the end of the line (based on `tput cols` value)
-# ADF_NEVER_CUT_LINE=1         => don't cut an updatable line if it's longer than the terminal's width
 # ADF_SILENT=1                 => disable all messages, except those from `echowarn` and `echoerr`
-# ADF_FULLY_SILENT=1           => disable all messages
 function echoc() {
-    if (( $ADF_FULLY_SILENT )); then
-        return
-    fi
-
     local text="$1"
 
     local output=""
@@ -84,9 +76,9 @@ function echoc() {
         local format_varname="$ADF_PREFIX_FORMAT${add_color:u}"
         local i=$((i+4+${#color}))
         
-        if ! (( $NO_COLOR )); then
-            output+="${(P)format_varname}"
-        fi
+        # if ! (( $NO_COLOR )); then
+        #     output+="${(P)format_varname}"
+        # fi
     done
 
     if [[ ${#colors_history[@]} != 0 ]]; then
