@@ -101,7 +101,7 @@ if (( $ADF_INSTALLER_ABORTED )); then
 fi
 
 # Set path to platform-specific scripts
-export ADF_ENV_DIR="$ADF_DIR/$ENV_NAME_STR"
+export ADF_ENV_DIR="$ADF_DIR/env/$ENV_NAME_STR"
 
 # Load platform-specific configuration
 source "$ADF_ENV_DIR/env.zsh"
