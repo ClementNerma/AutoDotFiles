@@ -80,7 +80,7 @@ function zerupdate() {
 	command ls -1A "$update_path/home" > "$ADF_FILES_LIST"
 
 	# Restore local items
-	cp -R "$ADF_LAST_BACKUP_DIR/autodotfiles-local" ~/
+	cp -R "$ADF_LAST_BACKUP_DIR/autodotfiles-local" ~
 
 	# Update the restoration script
 	echoverb "Updating the restoration script..."
