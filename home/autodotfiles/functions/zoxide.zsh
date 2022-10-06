@@ -1,90 +1,90 @@
 
 # Open a file or directory with the file explorer from a 'fd' search
 function openfd() {
-  local results=$(fd "$@")
-  local count=$(echo "$results" | wc -l)
+    local results=$(fd "$@")
+    local count=$(echo "$results" | wc -l)
 
-  if [[ -z $results ]]; then
-      echoerr "No result found for this search."
-      return 1
-  fi
+    if [[ -z $results ]]; then
+        echoerr "No result found for this search."
+        return 1
+    fi
 
-  if [[ $count = 1 ]]; then
-    open "$results"
-    return
-  fi
+    if [[ $count = 1 ]]; then
+        open "$results"
+        return
+    fi
 
-  local selected=$(echo "$results" | fzf)
+    local selected=$(echo "$results" | fzf)
 
-  if [[ -z $selected ]]; then
-    return 1
-  fi
+    if [[ -z $selected ]]; then
+        return 1
+    fi
 
-  open "$selected"
+    open "$selected"
 }
 
 # Open a file or directory with the file explorer from a 'zoxide' search
 function openz() {
-  local result=$(zoxide query "$1" 2>/dev/null)
+    local result=$(zoxide query "$1" 2>/dev/null)
 
-  if [[ -z $result ]]; then
-    echoerr "No result found by Zoxide."
-    return 1
-  fi
+    if [[ -z $result ]]; then
+        echoerr "No result found by Zoxide."
+      return 1
+    fi
 
-  open "$result"
+    open "$result"
 }
 
 # Open a file or directory with the file explorer from a 'zoxide' interactive search
 function openzi() {
-  local list=$(zoxide query --list)
-  local selected=$(fzf <<< "$list")
+    local list=$(zoxide query --list)
+    local selected=$(fzf <<< "$list")
 
-  if [[ -z $selected ]]; then
-    return 1
-  fi
+    if [[ -z $selected ]]; then
+        return 1
+    fi
 
-  open "$selected"
+    open "$selected"
 }
 
 # Open a file or directory with the file explorer from a 'zoxide' + 'fd' search
 function openfz() {
-  if [[ -z $1 ]]; then
-    echoerr "Please provide a search for Zoxide."
-    return 1
-  fi
+    if [[ -z $1 ]]; then
+        echoerr "Please provide a search for Zoxide."
+        return 1
+    fi
 
-  local result=$(zoxide query "$1" 2>/dev/null)
+    local result=$(zoxide query "$1" 2>/dev/null)
 
-  if [[ -z $result ]]; then
-    echoerr "No result found by Zoxide."
-    return 1
-  fi
+    if [[ -z $result ]]; then
+        echoerr "No result found by Zoxide."
+        return 1
+    fi
   
-  cd "$result"
-  openfd
+    cd "$result"
+    openfd
 }
 
 # Open a search with the file explorer from a 'zoxide' search
 function opensz() {
-  if [[ -z $1 ]]; then
-    echoerr "Please provide a search for Zoxide."
-    return 1
-  fi
+    if [[ -z $1 ]]; then
+        echoerr "Please provide a search for Zoxide."
+        return 1
+    fi
 
-  if [[ -z $1 ]]; then
-    echoerr "Please provide a search for the file explorer."
-    return 1
-  fi
+    if [[ -z $1 ]]; then
+        echoerr "Please provide a search for the file explorer."
+        return 1
+    fi
 
-  local result=$(zoxide query "$1" 2>/dev/null)
+    local result=$(zoxide query "$1" 2>/dev/null)
 
-  if [[ -z $result ]]; then
-    echoerr "No result found by Zoxide."
-    return 1
-  fi
+    if [[ -z $result ]]; then
+        echoerr "No result found by Zoxide."
+        return 1
+    fi
   
-  opens "$result" "$2"
+    opens "$result" "$2"
 }
 
 # Aliases to exit after open commands
