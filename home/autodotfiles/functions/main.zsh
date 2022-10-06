@@ -215,14 +215,10 @@ function progress_bar() {
 
 	local suffix="$5"
 
-	if (( $CLEAR_COMPLETE_SUFFIX )) && [[ $current -eq $max ]]; then
-		local suffix=""
-	fi
-
-	echof -n "\r$1$ADF_FORMAT_WHITE$filled$ADF_FORMAT_GRAY$remaining$ADF_FORMAT_RESET$suffix" "$1$filled$remaining$suffix"
-
-	if [[ $current -eq $max ]]; then
-		echo ""
+	if ! (( $NO_CLEAR_ON_COMPLETE )) && [[ $current -eq $max ]]; then
+		echof -n "\r" ""
+	else
+		echof -n "\r$1$ADF_FORMAT_WHITE$filled$ADF_FORMAT_GRAY$remaining$ADF_FORMAT_RESET$suffix" "$1$filled$remaining$suffix"
 	fi
 }
 
@@ -241,8 +237,13 @@ function progress_bar_detailed() {
 	fi
 
 	local progress=$(((100 * $2) / $3))
-	local suffix=" $progress % ($2 / $3) | ETA: $(compute_eta $5 $2 $3) | Elapsed: $(timer_show_seconds $5)"
-	progress_bar "$1" $2 $3 $4 "$suffix$6"
+	local suffix=" $progress % ($2 / $3) | ETA: $(compute_eta $2 $3 $5) | Elapsed: $(timer_show_seconds $5)"
+
+	if [[ ! -z $6 ]]; then
+		suffix+=$(echoc "$6")
+	fi
+
+	progress_bar "$1" $2 $3 $4 "$suffix"
 }
 
 # Display a message while a progress bar is still in place
@@ -252,25 +253,25 @@ function progress_bar_print() {
 }
 
 # Estimate remaining time
-# Usage: <start date (from $(now))> <current> <max>
+# Usage: <current> <max> <start date (from $(now))> 
 function compute_eta() {
-	local started=$(($1))
-	local progress=$(($2))
-	local maximum=$(($3))
+	local current=$(($1))
+	local maximum=$(($2))
+	local started=$(($3))
 
-	if ! (( $2 )); then
+	if ! (( $current )); then
 		printf "%s" "<computing...>"
 		return
-	elif [[ $2 -eq $3 ]]; then
+	elif [[ $current -eq $maximum ]]; then
 		printf "%s" "<complete>"
 		return
 	fi
 
 	local now=$(now)
 	local elapsed=$((now - started))
-	local remaining=$((maximum - progress))
+	local remaining=$((maximum - current))
 
-	local eta_nanos=$((elapsed * remaining / progress))
+	local eta_nanos=$((elapsed * remaining / current))
 	local eta_s=$((eta_nanos / 1000 / 1000 / 1000))
 
 	humanduration $eta_s
