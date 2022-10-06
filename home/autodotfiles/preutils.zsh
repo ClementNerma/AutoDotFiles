@@ -183,6 +183,11 @@ function cksumstr() {
 	echo "$1" | cksum | cut -d ' ' -f 1
 }
 
+# Display the hash of a string
+function hashstr() {
+	echo "$1" | sha1sum | cut -d ' ' -f 1
+}
+
 # Check if a command exists
 function commandexists() {
 	command -v "$1" > /dev/null 2>&1
