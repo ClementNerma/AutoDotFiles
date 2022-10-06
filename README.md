@@ -27,20 +27,6 @@ Currently, it contains ~4k lines of ZSH (not counting blank lines and comments).
 
 ## Content
 
-* Periodic single-archive full backups of important directories, excluding all files listed in a `.gitignore`
-* Periodic incremental archive with deduplication and replication of multiple data sources
-* Transfer program to synchronize local directories to a remote server safely and ensure consistency
-* Data hoarding programs to download, tag, manage and synchronize videos and playlists from many different platforms easily
-* Remote programs install from Github archives (binaries, ZIP and 7Z archives mainly)
-* Custom function-based installers for many programs
-* Views management to open files from a directory in random order (e.g. photos, videos or music)
-* Built-in CRON tasks management
-* Messages formatting for display and logging in the terminal
-* Session backup program to save and restore a navigation session from different softwares in case of crash or re-use
-
-
-## Content
-
 * Shell is [`zsh`](https://github.com/zsh-users/zsh)
 * Shell framework is [OhMyZSH!](https://github.com/ohmyzsh/ohmyzsh)
 * Prompt is [Powerlevel10k](https://github.com/romkatv/powerlevel10k)
