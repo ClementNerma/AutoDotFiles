@@ -19,6 +19,6 @@ fi
 
 # Set up opening function
 function open() {
-    echoerr "Opening is not currently supported"
+    echoerr "Opening is not currently implemented for Linux"
     false
 }
