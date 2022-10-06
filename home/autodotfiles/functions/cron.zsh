@@ -119,7 +119,9 @@ function adf_cron_logs() {
         return 2
     fi
 
-    cat "$logsfile"
+    echoinfo "\z[magenta]°===== LOG FILE: \z[blue]°\$ADF_CONF_CRON_LOGS_DIR\z[]°\z[yellow]°/$1.log\z[]° =====\z[]°"
+
+    tail -f "$logsfile"
 }
 
 if [[ ! -d "$ADF_CONF_CRON_LOGS_DIR" ]]; then
