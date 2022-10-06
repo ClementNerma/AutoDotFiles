@@ -1,6 +1,16 @@
 
 # Arguments: "<url>" "<download location>"
 function dl() {
+	if [[ -z $1 ]]; then
+		echoerr "Please provide an URL to download from."
+		return 1
+	fi
+
+	if [[ -z $2 ]]; then
+		echoerr "Please provide a download location."
+		return 2
+	fi
+
 	curl -L "$1" -o "$2"
 }
 
