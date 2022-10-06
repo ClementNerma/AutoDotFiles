@@ -22,6 +22,7 @@ export ADF_YTDL_DEFAULT_FILENAMING="%(title)s-%(id)s.%(ext)s"
 # * YTDL_LIMIT_BANDWIDTH   => limit download bandwidth
 # * YTDL_COOKIE_PROFILE    => load a cookie profile using "ytdlcookies"
 # * YTDL_REPAIR_DATE       => repair date of all videos after download
+# * YTDL_NO_METADATA       => don't store any metadata
 # * YTDL_NO_THUMBNAIL      => don't download the thumbnail
 function ytdl() {
 	local tempdir=""
@@ -96,6 +97,12 @@ function ytdl() {
 		fi
 	fi
 
+	if (( $YTDL_NO_METADATA )); then
+		local metadata_params=()
+	else
+		local metadata_params=("--add-metadata")
+	fi
+
 	if [[ ! -z $cookie_file ]]; then
 		local cookie_params=("--cookies" "$cookie_file")
 	else
@@ -106,7 +113,7 @@ function ytdl() {
 
 	local args=(
 		--format "${YTDL_FORMAT:-$ADF_YTDL_DEFAULT_BEST_FORMAT}"
-		--add-metadata
+		"${metadata_params[@]}"
 		--limit-rate "${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH}"
 		--abort-on-unavailable-fragment
 		--compat-options abort-on-error
