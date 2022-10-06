@@ -188,7 +188,7 @@ function __adf_install_component() {
         crony)    dlghbin "ClementNerma/Crony" "crony-linux-x86_64-musl.zip" "crony" ;;
         exa)      dlghbin ogham/exa "exa-linux-x86_64-musl-.*.zip" "bin/exa" ;;
         fd)       dlghbin sharkdp/fd "fd-.*-x86_64-unknown-linux-musl.tar.gz" "fd-*/fd" ;;
-        jumpy)    dlghbin "ClementNerma/Jumpy" "jumpy-linux-x86_64.zip" "jumpy" ;;
+        jumpy)    dlghbin "ClementNerma/Jumpy" "jumpy-linux-x86_64-musl.zip" "jumpy" ;;
         ripgrep)  dlghbin BurntSushi/ripgrep "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz" "ripgrep-*/rg" ;;
         scout)    dlghbin jhbabon/scout "scout-linux" "-" "scout" ;;
         tokei)    dlghbin XAMPPRocky/tokei "tokei-x86_64-unknown-linux-musl.tar.gz" "tokei" ;;
