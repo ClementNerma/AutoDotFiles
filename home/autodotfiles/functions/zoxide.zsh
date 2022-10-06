@@ -109,7 +109,7 @@ function zoxide_populate_with() {
         fd_args+=("--search-path" "$dir")
     done
 
-    if ! fd_list=$(fd ${fd_args[@]} --type d --hidden --max-depth 1); then
+    if ! fd_list=$(fd ${fd_args[@]} --type d --max-depth ${MAX_DEPTH:-1}); then
         echoerr "Command \z[cyan]°fd\z[]° failed (see output above)."
         return 10
     fi
