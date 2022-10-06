@@ -94,6 +94,10 @@ function humandate() {
 	date '+%Y_%m_%d-%Hh_%Mm_%Ss'
 }
 
+function printabledate() {
+	date +"%d/%m/%Y %T"
+}
+
 # Move an item called <something> to <something>.bak-<timestamp>
 function mvbak() {
 	local itempath="${1%/}"

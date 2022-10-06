@@ -81,12 +81,12 @@ function adf_cron_logged() {
 }
 
 function _adf_cron_logged() {
-    echoinfo "[ADF:CRON] Running task \z[yellow]°$1\z[]° at \z[magenta]°$(humandate)\z[]°..."
+    echoinfo "[ADF:CRON] Running task \z[yellow]°$1\z[]° at \z[yellow]°$(printabledate)\z[]°..."
 
     "${@:2}"
 
     local ret=$?
-    local ended=$(date +"%m-%d-%Y %T")
+    local ended=$(printabledate)
 
     local failure_file="$ADF_CONF_CRON_FAILURE_DIR/$1"
 
@@ -99,7 +99,7 @@ function _adf_cron_logged() {
         command rm "$failure_file"
     fi
 
-    echoinfo "[ADF:CRON] Finished running task \z[yellow]°$ended\z[]° at \z[magenta]°$(humandate)\z[]°, $exitcodemsg."
+    echoinfo "[ADF:CRON] Finished running task \z[yellow]°$ended\z[]° at \z[yellow]°$(printabledate)\z[]°, $exitcodemsg."
     echoinfo " "
     echoinfo " "
 
