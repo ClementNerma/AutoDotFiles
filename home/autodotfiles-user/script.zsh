@@ -14,5 +14,8 @@ function zer_filter_history() {
     # Return a non-zero exit code if you do not want to log "$1" in ZSH's history
 }
 
+# Items to put in ADF's local backups
+#export ADF_BACKUPS_CONTENT=()
+
 # Put your own commands here
 

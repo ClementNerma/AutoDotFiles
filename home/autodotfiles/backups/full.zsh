@@ -62,7 +62,7 @@ function adf_local_backup() {
     touch "$listfile"
 
     if ! adf_build_files_list "$listfile" "$@"; then return 3; fi
-    if ! adf_build_files_list "$listfile" $ADF_ALWAYS_BACKUP; then return 3; fi
+    if ! adf_build_files_list "$listfile" $ADF_BACKUPS_CONTENT; then return 3; fi
 
     if (( $ADF_ADD_ADF_FILES_TO_BACKUP )); then
         ADF_SILENT=1 zerbackup
