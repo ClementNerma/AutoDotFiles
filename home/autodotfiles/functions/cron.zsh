@@ -140,6 +140,24 @@ fi
 
 function adf_check_crons() {
     for failure in "$ADF_CONF_CRON_FAILURE_DIR/"*(N); do
-        echoerr "* Job \z[yellow]°$(basename "$failure")\z[]° failed at \z[blue]°$(command cat "$failure")\z[]°"
+        local dismiss="\z[cyan]°adf_cron_dismiss '$(basename "$failure")'\z[]°"
+        echoerr "* Job \z[yellow]°$(basename "$failure")\z[]° failed at \z[blue]°$(command cat "$failure")\z[]° (dismiss with $dismiss)"
     done
+}
+
+function adf_cron_dismiss() {
+    if [[ -z $1 ]]; then
+        echoerr "Please provide a CRON name to dismiss."
+        return 1
+    fi
+
+    local failure="$ADF_CONF_CRON_FAILURE_DIR/$1"
+
+    if [[ ! -f $failure ]]; then
+        echoerr "No CRON failure found for the provided name."
+        return 2
+    fi
+
+    command rm "$failure"
+    echo OK
 }
