@@ -424,12 +424,12 @@ function borgmatic() {
     pip3 install --user --upgrade "borgmatic"
 }
 
-function zoxide() {
-    # NAME: Zoxide
-    # PRIORITY: 1
-    # ENV: all
-    # VERSION: zoxide -V
-    # NEEDS_APT_UPDATE: no
+# function zoxide() {
+#     # NAME: Zoxide
+#     # PRIORITY: 1
+#     # ENV: all
+#     # VERSION: zoxide -V
+#     # NEEDS_APT_UPDATE: no
 
-    dlghbin ajeetdsouza/zoxide "zoxide-v.*-x86_64-unknown-linux-musl.tar.gz" "zoxide-v.*-aarch64-unknown-linux-musl.tar.gz" "zoxide" "zoxide"
-}
+#     dlghbin ajeetdsouza/zoxide "zoxide-v.*-x86_64-unknown-linux-musl.tar.gz" "zoxide-v.*-aarch64-unknown-linux-musl.tar.gz" "zoxide" "zoxide"
+# }
