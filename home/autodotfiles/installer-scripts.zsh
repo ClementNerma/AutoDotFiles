@@ -129,6 +129,24 @@ function fzf() {
     ~/.fzf/install --all
 }
 
+function jumpy() {
+    # NAME: Jumpy
+    # PRIORITY: 1
+    # ENV: all
+    # VERSION: jumpy -V
+    # NEEDS_APT_UPDATE: no
+
+    if [[ $(dpkg --print-architecture) = "arm64" ]]; then
+        ghdl "ClementNerma/Jumpy" "$INSTALLER_TMPDIR/jumpy"
+        cargo build --release --manifest-path="$INSTALLER_TMPDIR/jumpy/Cargo.toml"
+        mv "$INSTALLER_TMPDIR/jumpy/target/release/jumpy" "$ADF_BIN_DIR/jumpy"
+        command rm -rf "$INSTALLER_TMPDIR/jumpy"
+        return
+    fi
+
+    dlghbin "ClementNerma/Jumpy" "jumpy-linux-x86_64.zip" "-" "jumpy" "jumpy"
+}
+
 function micro() {
     # NAME: Micro
     # PRIORITY: 1

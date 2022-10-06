@@ -1,4 +1,19 @@
 
+function z() {
+    if [[ -z $1 ]]; then
+        echoerr "Please provide a query."
+        return 1
+    fi
+
+    local result=$(jumpy query "$1" --after "$PWD")
+
+    if [[ -n $result ]]; then
+        export __JUMPY_DONT_REGISTER=1
+        cd "$result"
+        export __JUMPY_DONT_REGISTER=0
+    fi
+}
+
 # Open a file or directory with the file explorer from a 'fd' search
 function openfd() {
     local results=$(fd "$@")
@@ -23,41 +38,42 @@ function openfd() {
     open "$selected"
 }
 
-# Open a file or directory with the file explorer from a 'zoxide' search
+# Open a file or directory with the file explorer from a 'jumpy' search
 function openz() {
-    local result=$(zoxide query "$1" 2>/dev/null)
+    local result=$(jumpy query "$1" 2>/dev/null)
 
     if [[ -z $result ]]; then
-        echoerr "No result found by Zoxide."
+        echoerr "No result found by Jumpy."
       return 1
     fi
 
     open "$result"
 }
 
-# Open a file or directory with the file explorer from a 'zoxide' interactive search
+# Open a file or directory with the file explorer from a 'jumpy' interactive search
 function openzi() {
-    local list=$(zoxide query --list)
+    local list=$(jumpy list)
     local selected=$(fzf <<< "$list")
 
     if [[ -z $selected ]]; then
         return 1
     fi
 
+    jumpy add "$selected"
     open "$selected"
 }
 
-# Open a file or directory with the file explorer from a 'zoxide' + 'fd' search
+# Open a file or directory with the file explorer from a 'jumpy' + 'fd' search
 function openfz() {
     if [[ -z $1 ]]; then
-        echoerr "Please provide a search for Zoxide."
+        echoerr "Please provide a search for Jumpy."
         return 1
     fi
 
-    local result=$(zoxide query "$1" 2>/dev/null)
+    local result=$(jumpy query "$1" 2>/dev/null)
 
     if [[ -z $result ]]; then
-        echoerr "No result found by Zoxide."
+        echoerr "No result found by Jumpy."
         return 1
     fi
   
@@ -65,10 +81,10 @@ function openfz() {
     openfd
 }
 
-# Open a search with the file explorer from a 'zoxide' search
+# Open a search with the file explorer from a 'jumpy' search
 function opensz() {
     if [[ -z $1 ]]; then
-        echoerr "Please provide a search for Zoxide."
+        echoerr "Please provide a search for Jumpy."
         return 1
     fi
 
@@ -77,10 +93,10 @@ function opensz() {
         return 1
     fi
 
-    local result=$(zoxide query "$1" 2>/dev/null)
+    local result=$(jumpy query "$1" 2>/dev/null)
 
     if [[ -z $result ]]; then
-        echoerr "No result found by Zoxide."
+        echoerr "No result found by Jumpy."
         return 1
     fi
   
@@ -98,9 +114,9 @@ function opensze() { opensz "$@" ; exit }
 function openl() { open "$(latest)" }
 function openle() { opene "$(latest)" }
 
-# Add a list of directories to Zoxide's index
+# Add a list of directories to Jumpy's index
 # All directories one level under the provided list will be indexed as well
-function zoxide_populate_with() {
+function jumpy_populate_with() {
     echoinfo "Building directories list..."
 
     local fd_args=()
@@ -116,11 +132,22 @@ function zoxide_populate_with() {
 
     IFS=$'\n' local directories=($(echo -E "$fd_list"))
 
-    echoinfo "Found \z[yellow]°${#directories}\z[]° directories to populate Zoxide with."
+    echoinfo "Found \z[yellow]°${#directories}\z[]° directories to populate Jumpy with."
 
     for dir in $directories; do
-        zoxide add "$dir"
+        jumpy add "$dir"
     done
 
-    echosuccess "Successfully populated Zoxide."
+    echosuccess "Successfully populated Jumpy."
 }
+
+function jumpy_handler() {
+    if (( $__JUMPY_DONT_REGISTER )); then
+        return
+    fi
+
+    emulate -L zsh
+    jumpy add "$PWD"
+}
+
+chpwd_functions=(${chpwd_functions[@]} "jumpy_handler")
