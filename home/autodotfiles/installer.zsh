@@ -228,8 +228,7 @@ function adf_install() {
     done
 
     echowarn ""
-    echowarn "Starting in 5 seconds (press \z[cyan]°Enter\z[]° to start immediatly)..."
-    echowarn "Press any other key to cancel."
+    echowarn "Press \z[cyan]°<Enter>\z[]° to continue, or \z[cyan]°<Ctrl+C>\z[]° then \z[cyan]°<Ctrl+D>\z[]° to cancel."
     echowarn ""
 
     # Required trick to avoid getting the whole parent script to stop when getting a SIGINT (Ctrl+C)
