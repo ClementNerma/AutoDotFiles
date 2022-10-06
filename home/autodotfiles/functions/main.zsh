@@ -54,7 +54,7 @@ function bakproj() {
 		local relative="$(realpath --relative-to="$1" "$file")"
 		local dest="$target/$relative"
 
-		CLEAR_COMPLETE_SUFFIX=1 progress_bar "Copying: " $i $count 100 " \z[magenta]°$relative\z[]°"
+		CLEAR_COMPLETE_SUFFIX=1 progress_bar "Copying: " $i $count 0 " \z[magenta]°$relative\z[]°"
 
 		mkdir -p "$(dirname "$dest")"
 		cp "$file" "$dest"
@@ -331,7 +331,7 @@ function humansize() {
 }
 
 # Display a progressbar
-# Usage: <prefix> <current value> <maximum> <width> <suffix>
+# Usage: <prefix> <current value> <maximum> <width (0 for auto)> <suffix>
 function progress_bar() {
 	if [[ -z $1 ]]; then echoerr "Please provide a prefix."; return 1; fi
 	if [[ -z $2 ]]; then echoerr "Please provide the current value."; return 1; fi
@@ -341,6 +341,10 @@ function progress_bar() {
 	local current=$(($2))
 	local max=$(($3))
 	local width=$(($4))
+
+	if ! (( $width )); then
+		local width=$((COLUMNS / 3))
+	fi
 	
 	# This formula is used to round the result to the nearest instead of doing a floor()
 	local progress_bar=$((current * width / max))
@@ -371,7 +375,7 @@ function progress_bar() {
 }
 
 # Display a progressbar with full informations
-# Usage: <prefix> <current value> <maximum> <width> <started> <suffix>
+# Usage: <prefix> <current value> <maximum> <width (0 for auto)> <started> <suffix>
 function progress_bar_detailed() {
 	if [[ -z $1 ]]; then echoerr "Please provide a prefix."; return 1; fi
 	if [[ -z $2 ]]; then echoerr "Please provide the current value."; return 2; fi

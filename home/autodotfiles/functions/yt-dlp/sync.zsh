@@ -81,7 +81,7 @@ function ytsync() {
             download_ies+=("$video_ie")
             download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$video_ie]}")
         else
-            progress_bar_detailed "Checking videos: " $i $count 50 $started
+            progress_bar_detailed "Checking videos: " $i $count 0 $started
         fi
     done
 
