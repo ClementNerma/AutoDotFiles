@@ -92,41 +92,6 @@ function bakthis7z() {
 	bakproj7z "$PWD" "$(realpath "..")"
 }
 
-# Automatically use parent SSH private key file with 'git' commands
-function git() {
-    local current=$PWD
-    local key_file=0
-
-    while [[ $current != "/" ]]; do
-        if [[ -f "$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME" ]]; then
-            local key_file=1
-            break
-        fi
-
-        local current=$(dirname "$current")
-    done
-
-    if (( $key_file )); then
-        GIT_SSH_COMMAND="ssh -i '$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME'" command git "$@"
-    else
-        command git "$@"
-    fi
-}
-
-# Make a commit with Git
-function gitcommit() {
-    if (( ${#1} > 72 )); then
-        echowarn "Maximum recommanded message length is \z[cyan]°72\z[]° characters but provided one is \z[cyan]°${#1}\z[]° long."
-
-        if [[ $1 != *"\n"* ]]; then
-            echoerr "Rejecting the commit message, you can use a newline symbol to skip this limitation."
-            return 1
-        fi
-    fi
-
-    git commit -m "$1" "${@:2}"
-}
-
 # Rename a Git branch
 function gitrename() {
     local old_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -227,19 +192,6 @@ function mkcd() {
 # Get most recent item in current directory
 function latest() {
 	command ls ${1:-$PWD} -Art | tail -n 1
-}
-
-# Software: Trasher
-function trasher() {
-	sudo "$ADF_BIN_DIR/trasher" --create-trash-dir --trash-dir "$TRASHDIR" "$@"
-}
-
-function rm() {
-	trasher rm --move-ext-filesystems "$@"
-}
-
-function unrm() {
-	trasher unrm --move-ext-filesystems "$@"
 }
 
 # Install a Debian package
@@ -407,36 +359,4 @@ function cw() {
 function cwr() {
 	local args="$@"
 	cargo watch -x "run --release -- $args"
-}
-
-# Safety handlers for 'npm', 'yarn' and 'pnpm'
-function npm() {
-	[[ -f yarn.lock ]] && { echoerr "A lockfile from \z[cyan]°Yarn\z[]° is already present!"; return 1 }
-	[[ -f pnpm-lock.yaml ]] && { echoerr "A lockfile from \z[cyan]°PNPM\z[]° is already present!"; return 1 }
-	command npm "$@"
-}
-
-function yarn() {
-	[[ -f package-lock.json ]] && { echoerr "A lockfile from \z[cyan]°NPM\z[]° is already present!"; return 1 }
-	[[ -f pnpm-lock.yaml ]] && { echoerr "A lockfile from \z[cyan]°PNPM\z[]° is already present!"; return 1 }
-	command yarn "$@"
-}
-
-function pnpm() {
-	[[ -f package-lock.json ]] && { echoerr "A lockfile from \z[cyan]°NPM\z[]° is already present!"; return 1 }
-	[[ -f yarn.lock ]] && { echoerr "A lockfile from \z[cyan]°Yarn\z[]° is already present!"; return 1 }
-	command pnpm "$@"
-}
-
-# VSCode opener
-function code() {
-	local dir=${1:-.}
-	local workspace=($dir/*.code-workspace(N))
-	local to_open=${workspace[1]:-$dir}
-
-	if command -v code-insiders > /dev/null; then
-		code-insiders "$to_open"
-	else
-		command code "$to_open"
-	fi
 }
