@@ -114,8 +114,8 @@ export ADF_INSTALLABLE_COMPONENTS=(
     utils
     ntpdate
     p7zip
-    fzf
 
+    atuin
     bat
     crony
     exa
@@ -190,6 +190,7 @@ function __adf_install_component() {
         p7zip)    sudo apt install -yqqq p7zip-full ;;
         fzf)      command rm -rf ~/.fzf && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && bash ~/.fzf/install --all ;;
 
+        atuin)    dlghbin ellie/atuin "atuin-v.*-x86_64-unknown-linux-gnu.tar.gz" "atuin-*/atuin" ;;
         bat)      dlghbin sharkdp/bat "bat-.*-x86_64-unknown-linux-musl.tar.gz" "bat-*/bat" ;;
         crony)    dlghbin ClementNerma/Crony "crony-linux-x86_64-musl.zip" "crony" ;;
         exa)      dlghbin ogham/exa "exa-linux-x86_64-musl-.*.zip" "bin/exa" ;;

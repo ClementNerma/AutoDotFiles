@@ -36,8 +36,10 @@ function jumpy_handler() {
 
 chpwd_functions=(${chpwd_functions[@]} "jumpy_handler")
 
-# Integration for FZF
-source ~/.fzf.zsh
+# Integration for Atuin
+if command -v atuin > /dev/null; then
+    eval "$(atuin init zsh)"
+fi
 
 # Ensure Crony is started
 crony start --ignore-started
