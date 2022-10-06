@@ -175,7 +175,7 @@ function adf_restore_session() {
             continue
         fi
 
-        local software_brackets="\z[cyan]°[$1]\z[]°"
+        local software_brackets="\z[cyan]°[$software]\z[]°"
 
         # Trim the file's name
         local file="$(echo "${match[2]}" | sed 's/ *$//g')"
