@@ -12,6 +12,7 @@ export SOFTWAREDIR="$HOMEDIR/Logiciels"
 export PROJDIR="$HOMEDIR/Projets"
 export WORKDIR="$HOMEDIR/Work"
 export LOCBAKDIR="$HOMEDIR/Sauvegardes/ADF"
+export PLOCALDIR="$HOMEDIR/.adf-views"
 
 if [[ ! -d $DLDIR ]]; then
     export DLDIR="$HOMEDIR/Downloads"
