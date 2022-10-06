@@ -178,7 +178,7 @@ function adf_view_open() {
         return 2
     fi
 
-    local first_file=$(command ls -1A "$view_dir" | sort | head -n 1)
+    local first_file=$(command ls -1 "$view_dir" | sort | head -n 1)
 
     local cwd=$(pwd)
     cd "$view_dir"
