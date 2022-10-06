@@ -97,6 +97,9 @@ function zerupdate() {
 	export ADF_JUST_UPDATED=1
 	source "$ADF_DIR/index.zsh"
 
+	# Reload current directory (fix for 'fd')
+	cd "$PWD"
+
 	# Done!
 	echosuccess "Environment successfully updated!"
 }
