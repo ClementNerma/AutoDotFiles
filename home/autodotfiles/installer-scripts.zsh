@@ -58,7 +58,11 @@ function rust() {
     # NEEDS_APT_UPDATE: no
 
     if (( $COMPONENT_UPDATING )); then
-        echowarn "Nothing to update."
+        echoinfo "> Updating Rustup first..."
+        rustup self update
+
+        echoinfo "> Now updating the Rust toolchain..."
+        rustup update
         return
     fi
 
