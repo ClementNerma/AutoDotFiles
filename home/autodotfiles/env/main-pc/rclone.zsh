@@ -193,6 +193,7 @@ function __rclone_sync_nocheck() {
         --filter "- desktop.ini" \
         --filter "- sync.ffs_db" \
         --create-empty-src-dirs \
-        --track-renames --track-renames-strategy "leaf,size" \
+        --track-renames \
         "$@"
+        # --track-renames-strategy "leaf,size"
 }
