@@ -20,7 +20,6 @@ function adf_install() {
     local cksum=$(cksumstr "$scripts")
 
     if (( $skip_if_installed )) && [[ -f $ADF_INSTALLER_HASH_FILE ]] && [[ $(cat "$ADF_INSTALLER_HASH_FILE") != $cksum ]]; then
-        echosuccess "Nothing to install or update."
         return
     fi
 
@@ -182,8 +181,10 @@ function adf_install() {
     done
 
     if [[ $to_install -eq 0 ]]; then
-        echosuccess "No component to install or update."
-        ! (( $skip_if_installed )) && printf '%s' "$cksum" > "$ADF_INSTALLER_HASH_FILE"
+        if ! (( $skip_if_installed )); then
+            printf '%s' "$cksum" > "$ADF_INSTALLER_HASH_FILE"
+        fi
+
         return
     fi
 
@@ -321,7 +322,9 @@ function adf_install() {
 
     command rm -rf "$BASE_INSTALLER_TMPDIR"
 
-    ! (( $skip_if_installed )) && printf '%s' "$cksum" > "$ADF_INSTALLER_HASH_FILE"
+    if ! (( $skip_if_installed )); then
+        printf '%s' "$cksum" > "$ADF_INSTALLER_HASH_FILE"
+    fi
 }
 
 if ! adf_install "*" 1; then
