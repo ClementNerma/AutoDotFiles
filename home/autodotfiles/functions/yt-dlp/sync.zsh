@@ -525,8 +525,10 @@ function ytsync_wait_lockfile() {
         echo "$PWD" > "$lockfile"
         echoverb ">> Writing current path to lockfile\n"
 
-        if [[ $(command cat "$lockfile") != $PWD ]]; then
-            echoerr "Internal error: inconsistency in the lockfile."
+        local lockfile_content=$(command cat "$lockfile")
+
+        if [[ $lockfile_content != $PWD ]]; then
+            echoerr "Internal error: inconsistency in the lockfile, expected \z[yellow]°$PWD\z[]° but got \z[gray]°$lockfile_content\z[]°"
         else
             break
         fi
