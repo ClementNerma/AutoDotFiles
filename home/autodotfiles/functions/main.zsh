@@ -133,12 +133,12 @@ function mvprogress() {
 
 # Archive a directory into a .tar file
 function maketar() {
-	tar cf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1.tar"
+	tar cf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1-$(humandate).tar"
 }
 
 # Archive a directory into a .tar.gz file
 function maketargz() {
-	tar czf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1.tar"
+	tar czf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1-$(humandate).tar"
 }
 
 # Measure time a command takes to complete
