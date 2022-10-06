@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # WARNING:
 # This installer should **NOT** contain **ANY** private information, as it is meant to be used on
