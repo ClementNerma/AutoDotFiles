@@ -259,11 +259,10 @@ function ytdlp() {
     echoinfo "> Installing FFMpeg and AtomicParsley..."
     sudo apt install -yqqq ffmpeg atomicparsley
 
-    echoinfo "> Downloading dependencies for PhantomJS..."
-    sudo apt install -yqqq chrpath libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev
-
     # REMOVED as it makes yt-dlp buggy in many situations (wrong format selection, wrong playlists fetching, etc.)
     #
+    # echoinfo "> Downloading dependencies for PhantomJS..."
+    # sudo apt install -yqqq chrpath libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev
     # # TODO: Find a way to not hardcode the version here
     # echoinfo "> Downloading PhantomJS..."
     # dl "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2" "$INSTALLER_TMPDIR/phantomjs.tar.bz2"
