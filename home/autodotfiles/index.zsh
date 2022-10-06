@@ -98,8 +98,6 @@ fi
 source "$ADF_DIR/backuper.zsh"
 
 # Run the installer
-export ADF_INSTALLER_ABORTED=0
-
 source "$ADF_DIR/components.zsh"
 
 # Exit if the installer aborted

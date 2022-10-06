@@ -338,6 +338,8 @@ function __adf_install_component() {
     esac
 }
 
+export ADF_INSTALLER_ABORTED=0
+
 if ! ADF_SKIP_INSTALLED=1 adf_install "*"; then
     export ADF_INSTALLER_ABORTED=1
 fi
