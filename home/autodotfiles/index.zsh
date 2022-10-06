@@ -34,10 +34,10 @@ export ADF_ENTRYPOINT="${(%):-%x}"
 export ADF_DIR=$(dirname "$ADF_ENTRYPOINT")
 
 # Set path to local directory
-export ADF_LOCAL_DIR="$ADF_DIR-local"
+export ADF_USER_DIR="$ADF_DIR-user"
 
 # Set path to cache directory
-export ADF_DATA_DIR="$ADF_LOCAL_DIR/data"
+export ADF_DATA_DIR="$ADF_USER_DIR/data"
 
 # Set path to data directory
 export ADF_ASSETS_DIR="$ADF_DIR-assets"
@@ -63,7 +63,7 @@ export ADF_FILES_LIST="$HOME/.autodotfiles-files-list.txt"
 source "$ADF_DIR/config.zsh"
 
 # Load the local configuration file
-source "$ADF_LOCAL_DIR/config.zsh"
+source "$ADF_USER_DIR/config.zsh"
 
 # Load display functions
 source "$ADF_DIR/display.zsh"
@@ -107,7 +107,7 @@ export ADF_ENV_DIR="$ADF_DIR/$ENV_NAME_STR"
 source "$ADF_ENV_DIR/env.zsh"
 
 # Load the local configuration
-source "$ADF_LOCAL_DIR/env.zsh"
+source "$ADF_USER_DIR/env.zsh"
 
 # Allow fast reloading of this file after changes
 alias reload="source ${(%):-%x}"
@@ -172,7 +172,7 @@ source "$ADF_ENV_DIR/script.zsh"
 if ! typeset -f psymlink > /dev/null; then echowarn "WARNING: contractual 'psymlink' command is not defined."; fi
 
 # Load the local script
-source "$ADF_LOCAL_DIR/script.zsh"
+source "$ADF_USER_DIR/script.zsh"
 
 if [[ -z $ADF_STARTUP_DIR ]]; then
 	echowarn "WARNING: Contractual '\$ADF_STARTUP_DIR' variable was not set by the local script."
