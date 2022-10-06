@@ -101,42 +101,6 @@ function debir() {
 	command rm "$debpath"
 }
 
-function filesize() {
-	if [[ ! -f $1 ]]; then
-		echoerr "Path \z[magenta]°$1\z[]° is not a file!"
-		return 1
-	fi
-
-	humansize "$(stat -c %s "$1")"
-}
-
-function humansize() {
-	if [[ -z $1 ]]; then
-		echoerr "Please provide an integer size."
-		return 1
-	fi
-
-	if [[ $1 =~ [^0-9] ]]; then
-		echoerr "Provided size (\z[yellow]°$1\z[]°) is invalid."
-		return 2
-	fi
-	
-	if (( $1 < 1024 )); then
-		echo "${1}B"
-	else
-		numfmt --to=iec-i --suffix=B --format="%.2f" "$1"
-	fi
-}
-
-# Get character bytecode
-function charbytecode() {
-	local input="$1"
-
-	for i in {1..${#input}}; do
-		printf '%x\n' "'${input[i]}'"
-	done
-}
-
 # Run a command each time a Cargo project is modified
 # NOTE: Requires 'cargo-watch' to be installed (otherwise: 'cargo install cargo-watch')
 function cw() {
