@@ -92,6 +92,27 @@ function bakthis7z() {
 	bakproj7z "$PWD" "$(realpath "..")"
 }
 
+# Automatically use parent SSH private key file with 'git' commands
+function git() {
+    local current=$PWD
+    local key_file=0
+
+    while [[ $current != "/" ]]; do
+        if [[ -f "$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME" ]]; then
+            local key_file=1
+            break
+        fi
+
+        local current=$(dirname "$current")
+    done
+
+    if (( $key_file )); then
+        GIT_SSH_COMMAND="ssh -i '$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME'" command git "$@"
+    else
+        command git "$@"
+    fi
+}
+
 # Make a commit with Git
 function gitcommit() {
     if (( ${#1} > 72 )); then
