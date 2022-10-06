@@ -70,11 +70,13 @@ function adf_install() {
         export INSTALLER_TMPDIR="$BASE_INSTALLER_TMPDIR/$func_name"
         mkdir -p "$INSTALLER_TMPDIR"
 
-        if grep -Fxq "$component" "$ADF_INSTALLED_LIST"; then
-            export COMPONENT_UPDATING=1
+        if grep -Fxq "$name" "$ADF_INSTALLED_LIST"; then
+            local already_installed=1
         else
-            export COMPONENT_UPDATING=0
+            local already_installed=0
         fi
+
+        export COMPONENT_UPDATING=$already_installed
 
         if ! __adf_install_component "$name"; then
             local failed=$((failed+1))
@@ -84,11 +86,11 @@ function adf_install() {
 
         echosuccess ""
 
-        if (( ${to_install_already_installed[i]} )); then
+        if (( $already_installed )); then
             echosuccess "Successfully updated component \z[yellow]°$name\z[]°!"
         else
             echosuccess "Successfully installed component \z[yellow]°$name\z[]°!"
-            echo "${to_install_functions[i]}" >> "$ADF_INSTALLED_LIST"
+            echo "$name" >> "$ADF_INSTALLED_LIST"
         fi
         
         echosuccess ""
