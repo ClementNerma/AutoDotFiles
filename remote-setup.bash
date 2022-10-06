@@ -72,7 +72,7 @@ scp -r "$SCRIPT_DIR/home" $user_name@$computer_ip:./.___remote_setup
 scp "$SCRIPT_DIR/auto-install.bash" $user_name@$computer_ip:./.___remote_setup
 
 _step "Step 3/3: Running installer..."
-ssh $user_name@$computer_ip bash .___remote_setup/auto-install.bash
+ssh $user_name@$computer_ip bash .___remote_setup/offline-installer.bash
 
 _step "Done!"
 
