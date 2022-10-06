@@ -13,10 +13,10 @@ function rclone_mirror() {
         return 2
     fi
 
-    if [[ ! -d $(wslpath "$1") ]]; then
-        echoerr "Source directory was not found at path \z[yellow]°$1\z[]°."
-        return 3
-    fi
+    # if [[ ! -d $(wslpath "$1") ]]; then
+    #     echoerr "Source directory was not found at path \z[yellow]°$1\z[]°."
+    #     return 3
+    # fi
 
     local started=$(timer_start)
 
