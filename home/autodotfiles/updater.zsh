@@ -10,16 +10,11 @@ function zerbackup() {
 	local old_env_backup_dir="$old_env_loc/_adf-backup/Backup $(date '+%Y.%m.%d - %Hh %Mm %Ss')"
 	mkdir -p "$old_env_backup_dir"
 
-	while read item
-	do
+	while read item; do
 		# Security (should never happen, this check is here just in case)
-		if [[ -z $item ]]; then
-			continue
-		fi
+		if [[ -z $item ]]; then continue; fi
 
-		if [[ -f $old_env_loc/$item || -d $old_env_loc/$item ]]; then
-			cp -R "$old_env_loc/$item" "$old_env_backup_dir/$item"
-		fi
+		cp -R "$old_env_loc/$item" "$old_env_backup_dir/$item"
 	done < "$ADF_FILES_LIST"
 
 	# Done!
