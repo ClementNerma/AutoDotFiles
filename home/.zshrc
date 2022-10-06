@@ -26,16 +26,15 @@ set +H
 export HISTSIZE=10000000
 export SAVEHIST=10000000
 
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+# Load modules
+source ~/zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Which plugins would you like to load?
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
+# Keybindings
+bindkey ";5C" forward-word
+bindkey ";5D" backward-word
 
-# Load Oh My ZSH!
-source $ZSH/oh-my-zsh.sh
-
-# ZSH custom library
+# Load ADF
 source $HOME/autodotfiles/index.zsh
 
 # .zshrc profiling

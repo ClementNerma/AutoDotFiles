@@ -94,16 +94,9 @@ sudo apt update
 
 sudo apt install -yqqq zsh git curl
 
-if [ -d ~/.oh-my-zsh ]; then
-	echo -e "\e[33m\!/ A previous version of \e[32mOh-My-ZSH! \e[33mwas detected ==> backing it up to \e[32m~/.oh-my-zsh.bak\e[33m...\e[0m"
-	rm -rf ~/.oh-my-zsh.bak
-	mv ~/.oh-my-zsh ~/.oh-my-zsh.bak
-fi
-
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -- --unattended
-
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+mkdir -p ~/zsh-plugins
+git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/zsh-plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/zsh-plugins/zsh-autosuggestions
 
 cp -a "$INSTALL_FROM/home/." ~/
 
