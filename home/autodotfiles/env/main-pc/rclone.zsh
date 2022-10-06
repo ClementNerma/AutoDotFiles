@@ -74,37 +74,44 @@ function rclone_mirror() {
     done <<< "$rclone_list"
 
     if [[ $noitem -eq 0 ]]; then
+        local error_msg=""
+        local exit_code=0
+
         if [[ -z $size ]] && [[ -z $total ]]; then
-            echoerr "Failed to get both the total transfer size and the number of items to transfer."
-            echoerr "Original output:"
-            echowarn "$rclone_list"
-            echoerr "Aborting transfer."
-            return 6
+            local error_msg="Failed to get both the total transfer size and the number of items to transfer."
+            local exit_code=6
         fi
 
         if [[ -z $size ]]; then
-            echoerr "Failed to get the total transfer size."
-            echoerr "Original output:"
-            echowarn "$rclone_list"
-            echoerr "Aborting transfer."
-            return 7
+            local error_msg="Failed to get the total transfer size."
+            local exit_code=7
         fi
         
         if [[ -z $total ]]; then
-            echoerr "Failed to get the total number of items to transfer."
-            echoerr "Original output:"
-            echowarn "$rclone_list"
-            echoerr "Aborting transfer."
-            return 8
+            local error_msg="Failed to get the total number of items to transfer."
+            local exit_code=8
         fi
 
         if [[ ${#items} -ne $total ]]; then
-            echoerr "Found \z[yellow]°${#items}\z[]°, but expected a total of \z[yellow]°$total\z[]° items to transfer!"
+            local error_msg="Found \z[yellow]°${#items}\z[]°, but expected a total of \z[yellow]°$total\z[]° items to transfer!"
+            local exit_code=9
+        fi
+
+        if (( $exit_code )); then
+            if (( ${#unparsed} )); then
+                for line in $unparsed; do
+                    echoerr "> Unparsed: >$line<"
+                done
+                echo ""
+            fi
+        
+            echoerr "$error_msg"
             echoerr "Original output:"
             echowarn "$rclone_list"
             echoerr "Aborting transfer."
-            return 9
         fi
+
+        return $exit_code
     fi
 
     if (( ${#items} )); then
