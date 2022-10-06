@@ -135,14 +135,6 @@ for script in "$ADF_DIR/functions/"**/*; do
 	source "$script"
 done
 
-# Dir hashes
-hash -d Home="$HOMEDIR"
-hash -d Projects="$PROJDIR"
-hash -d Work="$WORKDIR"
-hash -d Downloads="$DLDIR"
-hash -d Temp="$TEMPDIR"
-hash -d Software="$SOFTWAREDIR"
-
 # Load software
 source "$ADF_DIR/software.zsh"
 
