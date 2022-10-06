@@ -145,7 +145,6 @@ function ytsync() {
              YTDL_LIMIT_BANDWIDTH="${YTSYNC_OVERRIDE_BANDWIDTH_LIMIT:-${YTDL_LIMIT_BANDWIDTH:-$bandwidth_limit}}" \
              YTDL_OUTPUT_DIR="$video_dir" \
              YTDL_FORMAT="$format" \
-             YTDL_FILENAMING_PREFIX="${ADF_YS_DOMAINS_FILENAME_PREFIX[$video_ie]}" \
              ytdl "$video_url" --write-sub --sub-lang fr,en \
              --match-filter "!is_live" \
              1>&1 2>&2 1>"$ytdl_out_file"
@@ -273,7 +272,6 @@ typeset -A ADF_YS_DOMAINS_REPAIR_DATE_MODE
 typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
 typeset -A ADF_YS_DOMAINS_PROFILE
 typeset -A ADF_YS_DOMAINS_USE_LOCKFILE
-typeset -A ADF_YS_DOMAINS_FILENAME_PREFIX
 typeset -A ADF_YS_DOMAINS_RATE_LIMITED
 
 # Register a domain to use with 'ytsync'
@@ -282,7 +280,7 @@ function ytsync_register() {
         [required_positional]=1
         [optional_positional]=1
         [required_args]="playlists-url-regex, videos-url-regex, videos-url-prefix, bandwidth-limit"
-        [optional_args]="always-check, repair-date, use-lockfile, cookie-profile, filename-prefix, rate-limited"
+        [optional_args]="always-check, repair-date, use-lockfile, cookie-profile, rate-limited"
     )
 
     adf_args_parser
@@ -297,7 +295,6 @@ function ytsync_register() {
     ADF_YS_DOMAINS_USE_LOCKFILE[$ie_key]=${arguments[use-lockfile]:-0}
     ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$ie_key]=${arguments[bandwidth-limit]}
     ADF_YS_DOMAINS_PROFILE[$ie_key]=${arguments[cookie-profile]}
-    ADF_YS_DOMAINS_FILENAME_PREFIX[$ie_key]=${arguments[filename-prefix]}
     ADF_YS_DOMAINS_RATE_LIMITED[$ie_key]=${arguments[rate-limited]}
 }
 
