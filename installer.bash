@@ -70,7 +70,7 @@ if [ ! -x /usr/bin/sudo ]; then
     fi
 fi
 
-if [[ $1 != "--online" ]]; then
+if [[ $1 != "--offline" ]]; then
 	echo -e "\e[94mDownloading required files...\e[0m"
 
 	sudo apt install git -y
@@ -79,7 +79,7 @@ if [[ $1 != "--online" ]]; then
 fi
 
 if [ ! -d "$INSTALL_FROM/home" ] || [ ! -d "$INSTALL_FROM/home/autodotfiles" ]; then
-	_fail 7 "'home' directory was not found, to download required files from the web use the '--online' flag"
+	_fail 7 "'home' directory was not found, to download required files from the web don't use the '--offline' flag"
 fi
 
 if [ -d ~/autodotfiles ]; then
