@@ -183,6 +183,7 @@ function ytsync() {
                 echoinfo ""
 
                 if [[ $blocked_at = $di ]]; then
+                    local errors=$((errors+1))
                     echoerr "Failed twice on this video, skipping it."
                     continue
                 fi
