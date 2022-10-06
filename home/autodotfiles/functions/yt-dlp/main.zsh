@@ -82,23 +82,25 @@ function ytdl() {
 	if [[ ! -z $cookie_file ]]; then
 		local cookie_params=("--cookies" "$cookie_file")
 	else
-		local cookie_param=()
+		local cookie_params=()
 	fi
 
 	local resume_cmdline=$(_ytdl_build_resume_cmdline "$tempdir" "$@")
 
+	local args=(
+		--format "${YTDL_FORMAT:-$ADF_YTDL_DEFAULT_BEST_FORMAT}"
+		--add-metadata
+		--limit-rate "${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH}"
+		--abort-on-unavailable-fragment
+		--compat-options abort-on-error
+		-o "$tempdir/${YTDL_FILENAMING:-$ADF_YTDL_DEFAULT_FILENAMING}"
+		"${thumbnail_params[@]}"
+		"${cookie_params[@]}"
+		"$@"
+	)
+
 	# Perform the download
-	if ! yt-dlp \
-		--format "${YTDL_FORMAT:-$ADF_YTDL_DEFAULT_BEST_FORMAT}" \
-		--add-metadata \
-		--limit-rate ${YTDL_LIMIT_BANDWIDTH:-$ADF_CONF_YTDL_DEFAUT_LIMIT_BANDWIDTH} \
-		--abort-on-unavailable-fragment \
-		--compat-options abort-on-error \
-		-o "$tempdir/${YTDL_FILENAMING:-$ADF_YTDL_DEFAULT_FILENAMING}" \
-		"${thumbnail_params[@]}" \
-		"${cookie_params[@]}" \
-		"$@";
-	then
+	if ! yt-dlp "${args[@]}"; then
 		echoerr "Failed to download videos with Youtube-DL!"
 		echoerr "You can resume the download with:"
 		echowarn "$resume_cmdline"
