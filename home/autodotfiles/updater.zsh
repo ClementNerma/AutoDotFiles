@@ -22,8 +22,6 @@ function zerbackup() {
 		fi
 	done < "$ADF_FILES_LIST"
 
-	sync
-
 	# Done!
 	export ADF_LAST_BACKUP_DIR="$old_env_backup_dir"
 	echoinfo "Backup completed at \z[magenta]°$old_env_backup_dir\z[]°"
