@@ -2,6 +2,7 @@ export ADF_YS_URL_FILE=".ytdlsync-url"
 export ADF_YS_CACHE=".ytdlsync-cache"
 export ADF_YS_FILENAMING=".ytdlsync-filenaming"
 export ADF_YS_FORMAT=".ytdlsync-quality"
+export ADF_YS_BLACKLIST=".ytdlsync-blacklist"
 export ADF_YS_LOCKFILES_DIR="$ADF_ASSETS_DIR/ytsync-lockfiles"
 
 if [[ ! -d $ADF_YS_LOCKFILES_DIR ]]; then
@@ -439,7 +440,17 @@ function ytsync_build_cache() {
                 local path_display="\z[cyan]°${check_list_paths[i]}\z[]° "
             fi
 
-            echoinfo -n "| Checking video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#check_list_ids}\z[]° $path_display\z[gray]°(${check_list_ids[i]})\z[]°..."
+            local blacklist_pattern="${check_list_ies[i]}/${check_list_ids[i]}"
+            local playlist_blacklist="${check_list_paths[i]}/$ADF_YS_BLACKLIST"
+
+            local checking_msg="| Checking video \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#check_list_ids}\z[]° $path_display\z[gray]°(${check_list_ids[i]})\z[]°..."
+
+            if [[ -f $playlist_blacklist ]] && grep -q "$blacklist_pattern" "$playlist_blacklist"; then
+                echoinfo "$checking_msg \z[yellow]°BLACKLISTED\z[]°"
+                continue
+            fi
+
+            echoinfo -n "$checking_msg"
 
             local cookie_profile=${ADF_YS_DOMAINS_PROFILE[${check_list_ies[i]}]}
             local cookie_params=()
@@ -456,6 +467,7 @@ function ytsync_build_cache() {
             if ! yt-dlp ${cookie_params[@]} "${check_list_urls[i]}" --get-url > /dev/null 2>&1; then
                 echoc " \z[red]°ERROR\z[]°"
                 echoverb "| > Video \z[magenta]°${check_list_titles[i]}\z[]° is unavailable, skipping it."
+                printf "%s\n" "$blacklist_pattern" >> "$playlist_blacklist"
                 continue
             else
                 echoc " \z[green]°OK\z[]°"
