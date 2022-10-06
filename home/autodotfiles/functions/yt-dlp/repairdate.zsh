@@ -66,7 +66,7 @@ function ytrepairdate() {
 
         if [[ ! $upload_date =~ ^20[0-9]{6}$ ]]; then
             local errors=$((errors + 1))
-            echoc "\z[red]°INVALID\z[]° DATE\z[]°"
+            echoc "\z[red]°INVALID DATE: \z[yellow]°$upload_date\z[]°\z[]°"
             continue
         fi
 
