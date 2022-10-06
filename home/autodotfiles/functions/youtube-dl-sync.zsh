@@ -32,8 +32,6 @@ function ytsync() {
         if ! ytsync_build_cache "$url"; then
             return 10
         fi
-
-        echo
     fi
 
     # === Parse and validate the cache === #
