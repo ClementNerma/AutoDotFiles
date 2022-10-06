@@ -72,7 +72,6 @@ function zerupdate() {
 	fi
 
 	# Load new environment
-	export ADF_JUST_UPDATED=1
 	source "$ADF_DIR/index.zsh"
 
 	# Reload current directory (fix for 'fd')

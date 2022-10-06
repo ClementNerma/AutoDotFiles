@@ -32,14 +32,6 @@ else
 	export ENV_NAME_STR="linux"
 fi
 
-if [[ -f $HOME/.autodotfiles-just-installed ]]; then
-	export ADF_JUST_INSTALLED=1
-	export ADF_JUST_UPDATED=1
-	command rm "$HOME/.autodotfiles-just-installed"
-else
-	export ADF_JUST_INSTALLED=0
-fi
-
 # Set path to the main script of AutoDotFiles
 export ADF_ENTRYPOINT="${(%):-%x}"
 
