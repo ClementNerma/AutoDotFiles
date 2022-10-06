@@ -19,9 +19,12 @@ function rclone_mirror() {
     fi
 
     local started=$(timer_start)
+
+    local source="$1"
+    local dest="$2"
     
     (){
-        rclone_output=$(__rclone_sync_nocheck "$1" "$2" --dry-run "${@:3}" 2> $1)
+        rclone_output=$(__rclone_sync_nocheck "$source" "$dest" --dry-run "${@:3}" 2> $1)
         rclone_status=$?
         rclone_err=$(<$1)
     } =(:)
