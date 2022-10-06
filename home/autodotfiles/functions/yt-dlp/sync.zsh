@@ -254,7 +254,9 @@ function ytsync_build_cache() {
     local max_spaces=$(echo -n "${#playlist_url_files}" | wc -c)
 
     for i in {1..${#playlist_url_files}}; do
-        echoinfo "| Checking playlist \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#playlist_url_files}\z[]°: \z[magenta]°$(dirname "${playlist_url_files[i]}")\z[]°"
+        if (( ${#playlist_url_files} > 1 )); then
+            echoinfo "| Checking playlist \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#playlist_url_files}\z[]°: \z[magenta]°$(dirname "${playlist_url_files[i]}")\z[]°"
+        fi
 
         local url=$(command cat "${playlist_url_files[i]}")
         local sub_json=$(yt-dlp -J --flat-playlist -i "$url")
