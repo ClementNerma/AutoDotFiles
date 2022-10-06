@@ -39,6 +39,11 @@ function zerupdate() {
 		echoverb "Updating from configured path: \z[magenta]°$ADF_UPDATE_PATH\z[]°"
 		local update_path="$ADF_UPDATE_PATH"
 	elif [[ $ADF_CONF_MAIN_PERSONAL_COMPUTER = 1 ]]; then
+		if [[ -z $PROJDIR ]]; then
+			echoerr "Tried to update from projects directory, but \$PROJDIR is not defined."
+			return 1
+		fi
+
 		local update_path="$PROJDIR/AutoDotFiles"
 	else
 		echoerr "Please provide a path to update ZSH (default path is only available for main computer)"
@@ -79,7 +84,7 @@ function zerupdate() {
 
 	# Save the new files list
 	command ls -1A "$update_path/home" > "$ADF_FILES_LIST"
-	command echo "$ADF_ASSETS_DIR" >> "$ADF_FILES_LIST"
+	command echo "$(basename "$ADF_ASSETS_DIR")" >> "$ADF_FILES_LIST"
 
 	# Restore user scripts
 	cp -R "$ADF_LAST_BACKUP_DIR/autodotfiles-user/"* "$ADF_USER_DIR"
