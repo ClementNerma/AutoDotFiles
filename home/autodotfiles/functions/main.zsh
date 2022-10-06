@@ -58,7 +58,7 @@ function bakproj() {
 		cp "$file" "$dest"
 	done <<< "$files"
 
-	echosuccess "\nDone in \z[magenta]°$target\z[]°"
+	echosuccess "Done in \z[magenta]°$target\z[]°"
 }
 
 # Backup the current project
