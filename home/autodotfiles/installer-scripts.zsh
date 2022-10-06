@@ -264,7 +264,7 @@ function zoxide() {
     # NAME: Zoxide
     # PRIORITY: 1
     # ENV: all
-    # VERSION: -
+    # VERSION: zoxide -V
     # NEEDS_APT_UPDATE: no
 
     dlghbin ajeetdsouza/zoxide "zoxide-x86_64-unknown-linux-musl.tar.gz" "zoxide-aarch64-unknown-linux-musl.tar.gz" "zoxide-*/zoxide" "zoxide"
