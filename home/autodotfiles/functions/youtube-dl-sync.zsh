@@ -46,6 +46,12 @@ function ytsync() {
         return 11
     fi
 
+    if [[ $count -eq 0 ]]; then
+        echosuccess "Nothing to download!"
+        rm "$ADF_YS_CACHE"
+        return
+    fi
+
     local max_spaces=$(echo -n "$count" | wc -c)
 
     local download_list=()
