@@ -16,31 +16,20 @@ function sudodl() {
     fi
 }
 
-# Download files whose URL will be provided through STDIN
-# Arguments: "<download location>"
-function dli() { wget -qi - --show-progress -O "$1" }
-function sudodli() { sudo wget -qi - --show-progress -O "$1" }
-
 # Download a file from the latest of a GitHub repository
 # Arguments: "<repo author>/<reponame>" "<file grep pattern>" "<download location>"
 function dlghrelease() {
-	local release_url=$(
-		curl -s "https://api.github.com/repos/$1/releases/latest" \
-        | grep "browser_download_url.*$2" \
-        | cut -d : -f 2,3 \
-        | tr -d \"
-	)
+	local api_response=$(curl -s "https://api.github.com/repos/$1/releases/latest")
+
+	local release_url=$(printf "%s" "$api_response" | grep "browser_download_url.*$2" | cut -d : -f 2,3 | tr -d \")
 
 	if [[ -z $release_url ]]; then
 		echoerr "Failed to find an URL matching in repository \z[yellow]°$1\z[]° (pattern \z[cyan]°$2\z[]°)"
+		echoerr "API response: \z[blue]°$(echo -E "${api_response:0:$((COLUMNS - 25))}" | tr '\n' ' ')\z[]°"
 		return 1
 	fi
 
-    curl -s "https://api.github.com/repos/$1/releases/latest" \
-        | grep "browser_download_url.*$2" \
-        | cut -d : -f 2,3 \
-        | tr -d \" \
-        | dli "$3"
+    dl "$release_url" "$3"
 }
 
 # Download the latest version of the source code from a GitHub repository
