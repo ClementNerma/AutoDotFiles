@@ -53,7 +53,7 @@ function ytdl() {
 		local download_to_display=$download_to
 		# echoinfo "> Downloading to provided directory: \z[cyan]°$download_to\z[]°"
 	else
-		local download_to_display="\z[magenta]°. => \z[]°$(basename "$PWD")"
+		local download_to_display="\z[magenta]°. (\z[]°$(basename "$PWD"))"
 	fi
 
 	# Check if download must be performed in a temporary directory
