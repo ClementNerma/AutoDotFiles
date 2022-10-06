@@ -407,10 +407,15 @@ function pnpm() {
 	command pnpm "$@"
 }
 
-# # VSCode opener
-# function code() {
-# 	local path=${1:-.}
-# 	local workspace=$($path/*.code-workspace(N))
+# VSCode opener
+function code() {
+	local dir=${1:-.}
+	local workspace=($dir/*.code-workspace(N))
+	local to_open=${workspace[1]:-$dir}
 
-# 	command code "${workspace[0]:-$path}"
-# }
+	if command -v code-insiders > /dev/null; then
+		code-insiders "$to_open"
+	else
+		command code "$to_open"
+	fi
+}
