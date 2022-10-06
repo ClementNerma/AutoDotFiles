@@ -22,6 +22,7 @@ function _report_echoc_error() {
     >&2 echo "${ADF_FORMAT_RED}=========================================================${ADF_FORMAT_RESET}"
 }
 
+# NO_COLOR=1                   => disable colors
 # ADF_CLEAN_EOL=1              => clean with space characters up to the end of the line (based on `tput cols` value)
 # ADF_UPDATABLE_LINE=1         => clear the line instantly everytime we're writing on it (requires to print a line to overwrite beforehand)
 # ADF_REPLACE_UPDATABLE_LINE=1 => same as "ADF_UPDATABLE_LINE" but print a newline symbol after
@@ -69,8 +70,6 @@ function echoc() {
             return 1
         fi
 
-        local add_color=""
-
         if [[ -z $color ]]; then
             if [[ ${#colors_history[@]} = 0 ]]; then
                 _report_echoc_error "Cannot close a color as no one is opened" "$text" $((i-1)) $segment_len
@@ -81,13 +80,16 @@ function echoc() {
 
             local add_color="${colors_history[-1]:-reset}"
         else
-            colors_history+=("$color")
             local add_color="$color"
+            colors_history+=("$color")
         fi
 
         local format_varname="$ADF_PREFIX_FORMAT${add_color:u}"
-        local output="${output}${(P)format_varname}"
         local i=$((i+4+${#color}))
+        
+        if ! (( $NO_COLOR )); then
+            output+="${(P)format_varname}"
+        fi
     done
 
     local echo_args=("$@")
