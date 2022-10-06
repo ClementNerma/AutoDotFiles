@@ -125,6 +125,9 @@ if [ ! -x /usr/bin/sudo ]; then
 	unset -f sudo
 fi
 
+# Set default shell to ZSH
+sudo chsh -s $(which zsh) $(whoami)
+
 printf "Automated installer completed in "
 print_seconds "$(($(date +%s) - ${AUTO_INSTALLER_STARTED_AT}))"
 
