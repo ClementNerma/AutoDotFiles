@@ -39,6 +39,7 @@ function _report_echoc_error() {
 # ADF_CLEAN_EOL=1              => clean with space characters up to the end of the line (based on `tput cols` value)
 # ADF_UPDATABLE_LINE=1         => clear the line instantly everytime we're writing on it (requires to print a line to overwrite beforehand)
 # ADF_REPLACE_UPDATABLE_LINE=1 => same as "ADF_UPDATABLE_LINE" but print a newline symbol after
+# ADF_NEVER_CUT_LINE=1         => don't cut an updatable line if it's longer than the terminal's width
 function echoc() {
     if (( $ADF_FULLY_SILENT )); then
         return
@@ -115,20 +116,32 @@ function echoc() {
         local output="\r$output"
     fi
 
+    local overflowing=0
+
     if (( $ADF_CLEAN_EOL )) || (( $ADF_UPDATABLE_LINE )) || (( $ADF_REPLACE_UPDATABLE_LINE )); then
         local len=$(wc -L <<< "$rawtext")
-        local remaining=$((COLUMNS - len))
 
-        if (( $remaining )); then
-            output+=$(printf ' %.0s' {1..$remaining})
-        fi
+        # Avoid overflows
+        if ! (( $ADF_REPLACE_UPDATABLE_LINE )) && ! (( $ADF_NEVER_CUT_LINE )) && (( len > COLUMNS )); then
+            local overflowing=1
+        else
+            local remaining=$((COLUMNS - len))
 
-        if (( $remaining > 1 )); then
-            output+=$(printf '\b%.0s' {1..$((remaining-1))})
+            if (( $remaining )); then
+                output+=$(printf ' %.0s' {1..$remaining})
+            fi
+
+            if (( $remaining > 1 )); then
+                output+=$(printf '\b%.0s' {1..$((remaining-1))})
+            fi
         fi
     fi
 
+    if (( overflowing )); then tput rmam; fi
+
     echo "${echo_args[@]}" "$output"
+
+    if (( overflowing )); then tput smam; fi
 }
 
 function echoerr() {
