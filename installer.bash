@@ -5,9 +5,6 @@
 #  distant servers, computers at work, etc.
 #
 #
-# Make the script exit on error
-set -oeE pipefail
-trap "printf '\nerror: Script failed: see failed command above.\n'" ERR
 
 # Display a number of seconds in a human-readable format
 function print_seconds {
@@ -23,11 +20,16 @@ function print_seconds {
 	printf '%d seconds\n' $S
 }
 
+# Fail
+function _fail() {
+	echo -e "\e[91mERROR: $2\e[0m"
+	exit $1
+}
+
 # Show current step
 function _step() {
-	CURRENT_STEP=$((CURRENT_STEP + 1))
 	echo
-	echo -e "\e[92m>>> Step ${CURRENT_STEP}/${TOTAL_STEPS}: $@\e[0m"
+	echo -e "\e[92m>>> $1\e[0m"
 	echo
 }
 
@@ -47,32 +49,52 @@ AUTO_INSTALLER_STARTED_AT=$(date +%s)
 # Choose a temporary directory
 TMPDIR="/tmp/_autodotfiles_autoinstaller_$AUTO_INSTALLER_STARTED_AT"
 
+# Determine the parent directory of the current script
+INSTALL_FROM="."
+
 # Beginning of the installer!
 echo
 echo -e "\e[92m=================================\e[0m"
 echo -e "\e[92m====== AUTOMATED INSTALLER ======\e[0m"
 echo -e "\e[92m=================================\e[0m"
 
-_step "Checking compatibility..."
 arch="$(dpkg --print-architecture)"
 if [[ $arch != "amd64" && $arch != "arm64" ]]; then
 	echo "ERROR: Unsupported CPU architecture detected: ${arch}"
-	echo "ERROR: Exiting now."
-	exit 1
+	_fail 2 "Exiting now."
 fi
 
-_step "Creating temporary directory..."
-rm -rf "$TMPDIR"
-mkdir -p "$TMPDIR"
+if [ ! -x /usr/bin ]; then
+    _fail 3 "Command 'apt' was not found."
+fi
 
-_step "Ensuring the 'sudo' command is available..."
+if [ -d "$TMPDIR" ]; then
+	_fail 4 "Temporary directory '$TMPDIR' already exists."
+fi
+
+if ! mkdir -p "$TMPDIR"; then
+	_fail 5 "Failed to create a temporary directory at '$TMPDIR'."
+fi
 
 if [ ! -x /usr/bin/sudo ]; then
 	echo -e "\e[33m\!/ WARNING: 'sudo' command was not found, installing it for compatibility reasons.\e[0m"
-	su -s /bin/bash -c "apt install sudo" root
+	
+	if ! su -s /bin/bash -c "apt install sudo -y" root; then
+        _fail 6 "Failed to install 'sudo' package"
+    fi
 fi
 
-_step "Backing up important files before overriding them..."
+if [[ $1 != "--online" ]]; then
+	echo -e "\e[94mDownloading required files...\e[0m"
+
+	sudo apt install git -y
+	git clone "https://github.com/ClementNerma/AutoDotFiles.git" "$TMPDIR/AutoDotFiles-GHDL"
+	INSTALL_FROM="$TMPDIR/AutoDotFiles-GHDL"
+fi
+
+if [ ! -d "$INSTALL_FROM/home" ] || [ ! -d "$INSTALL_FROM/home/autodotfiles" ]; then
+	_fail 7 "'home' directory was not found, to download required files from the web use the '--online' flag"
+fi
 
 if [ -d ~/autodotfiles ]; then
 	echo -e "\e[33m\!/ A previous version of \e[32mAutoDotFiles \e[33mwas detected ==> backing it up to \e[32m~/autodotfiles.$AUTO_INSTALLER_STARTED_AT\e[33m...\e[0m"
@@ -87,13 +109,9 @@ if [ -f ~/.bashrc ]; then
 	mv ~/.bashrc ~/.bashrc.bak
 fi
 
-_step "Updating repositories..."
 sudo apt update
 
-_step "Installing required packages..."
 sudo apt install -yqqq zsh git curl
-
-_step "Installing Oh-My-ZSH!..."
 
 if [ -d ~/.oh-my-zsh ]; then
 	echo -e "\e[33m\!/ A previous version of \e[32mOh-My-ZSH! \e[33mwas detected ==> backing it up to \e[32m~/.oh-my-zsh.bak\e[33m...\e[0m"
@@ -103,20 +121,15 @@ fi
 
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -- --unattended
 
-_step "Installing plugins for Oh-My-ZSH!..."
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
 
-_step "Copying configuration files..."
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-cp -a "$SCRIPT_DIR/home/." ~/
+cp -a "$INSTALL_FROM/home/." ~/
 
-_step "Saving list of files..."
-ls -1A "$SCRIPT_DIR/home" > ~/.autodotfiles-files-list.txt
+ls -1A "$INSTALL_FROM/home" > ~/.autodotfiles-files-list.txt
 touch ~/.autodotfiles-just-installed
 
-_step "Cleaning up temporary directory..."
 rm -rf "$TMPDIR"
 
 echo Done\!

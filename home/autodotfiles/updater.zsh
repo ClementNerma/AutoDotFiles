@@ -44,7 +44,7 @@ function zerupdate() {
 		fi
 	fi
 
-	if [[ ! -d $update_path ]] || [[ ! -f $update_path/auto-install.bash ]] || [[ ! -f $update_path/home/.zshrc ]]; then
+	if [[ ! -d $update_path ]] || [[ ! -f $update_path/installer.bash ]] || [[ ! -f $update_path/home/.zshrc ]]; then
 		echoerr "Could not find \z[yellow]°AutoDotFiles\z[]° files at path \z[magenta]°$update_path\z[]°"
 		return 1
 	fi
