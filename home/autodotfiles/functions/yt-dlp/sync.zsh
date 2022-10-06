@@ -1,4 +1,4 @@
-export ADF_YS_URL=".ytdlsync-url"
+export ADF_YS_URL_FILE=".ytdlsync-url"
 export ADF_YS_CACHE=".ytdlsync-cache"
 export ADF_YS_FILENAMING=".ytdlsync-filenaming"
 export ADF_YS_LOCKFILES_DIR="$ADF_ASSETS_DIR/ytsync-lockfiles"
@@ -11,7 +11,7 @@ function ytsync() {
     # === Determine the sync. URL and build the list of videos === #
 
     if [[ ! -z $1 ]]; then
-        if [[ -f $ADF_YS_URL ]]; then
+        if [[ -f $ADF_YS_URL_FILE ]]; then
             echoerr "An URL was provided but an URL file already exists."
             return 1
         fi
@@ -19,7 +19,7 @@ function ytsync() {
         local url="$1"
         
         echowarn "Writing provided URL to local directory file."
-        echo "$url" > "$ADF_YS_URL"
+        echo "$url" > "$ADF_YS_URL_FILE"
 
         if [[ ! -z $2 ]]; then
             local filenaming="$2"
@@ -229,14 +229,23 @@ function ytsync_build_cache() {
 
     local started=$(timer_start)
 
-    IFS=$'\n' local playlist_url_files=($(fd --hidden "$ADF_YS_URL"))
+    IFS=$'\n' local playlist_url_files=($(fd --hidden "$ADF_YS_URL_FILE"))
 
     if [[ -z $playlist_url_files ]]; then
         echoerr "No playlist to synchronize!"
         return 1
     fi
 
-    echoinfo "Found \z[yellow]°${#playlist_url_files}\z[]° playlist(s) to treat."
+    if [[ -f $ADF_YS_URL_FILE ]]; then
+        if [[ ${#playlist_url_files} -ne 1 ]]; then
+            echoerr "A directory containing a \z[yellow]°$ADF_YS_URL_FILE\z[]° playlist file cannot have sub-directories containing one too."
+            return 10
+        fi
+
+        echoinfo "Detected current directory as being a single playlist."
+    else
+        echoinfo "Found \z[yellow]°${#playlist_url_files}\z[]° playlist(s) to treat."
+    fi
 
     local fetching_started=$(timer_start)
     local json="[]"
