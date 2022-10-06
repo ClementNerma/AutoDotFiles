@@ -72,7 +72,7 @@ function adf_install() {
 
         local script_name=${match[1]}
 
-        if [[ ! ${lines[i + 2]} =~ ^[[:space:]]*\#[[:space:]]PRIORITY:[[:space:]]([1-9])$ ]]; then
+        if [[ ! ${lines[i + 2]} =~ ^[[:space:]]*\#[[:space:]]PRIORITY:[[:space:]]([0-9])$ ]]; then
             echoerr "Missing or invalid \z[cyan]°PRIORITY\z[]° statement in script \z[yellow]°$script_name\z[]°"
             return 81
         fi
@@ -90,7 +90,7 @@ function adf_install() {
             local for_this_pc=1
         elif [[ ${match[1]} = "main-pc/" ]]; then
             ! (( $ADF_CONF_MAIN_PERSONAL_COMPUTER ))
-            local for_this_pc=($?)
+            local for_this_pc=$?
         else
             echoerr "Internal error: invalid installer main PC indicator: \z[yellow]°${match[1]}\z[]°"
             return 82
@@ -100,10 +100,10 @@ function adf_install() {
             local for_this_env=1
         elif [[ ${match[2]} = "wsl" ]]; then
             ! (( $IS_WSL_ENV ))
-            local for_this_env=($?)
+            local for_this_env=$?
         elif [[ ${match[2]} = "linux" ]]; then
             (( $IS_WSL_ENV ))
-            local for_this_env=($?)
+            local for_this_env=$?
         else
             echoerr "Internal error: invalid installer environment: \z[yellow]°$script_env\z[]°"
             return 83
@@ -152,7 +152,7 @@ function adf_install() {
             continue
         fi
 
-        if [[ $only_install != "*" ]] && [[ $only_install != $func_name ]]; then
+        if [[ $only_install != $func_name ]] && [[ $only_install != "*" || $priority -eq 0 ]]; then
             continue
         fi
 
@@ -185,6 +185,11 @@ function adf_install() {
     done
 
     if [[ $to_install -eq 0 ]]; then
+        if [[ $only_install != "*" ]]; then
+            echoerr "Component \z[yellow]°$only_install\z[]° was not found."
+            return 20
+        fi
+
         if (( $skip_if_installed )); then
             printf '%s' "$cksum" > "$ADF_INSTALLER_HASH_FILE"
         fi
@@ -193,7 +198,7 @@ function adf_install() {
     fi
 
     echoinfo ""
-    echoinfo "Detected \z[cyan]°$to_install\z[]° components to install or update."
+    echoinfo "Detected \z[cyan]°$to_install\z[]° component(s) to install or update."
     echoinfo ""
 
     for i in {1..$to_install}; do
