@@ -85,6 +85,7 @@ function ytdl() {
 	local thumbnail_params="--embed-thumbnail"
 	local bandwidth_limit="1G"
 	local quality_format="bestvideo[height>2160]+bestaudio/best[height>2160]/bestvideo[height=2160]+bestaudio/best[height=2160]/bestvideo[height>1440]+bestaudio/best[height>1440]/bestvideo[height=1440]+bestaudio/best[height=1440]/bestvideo[height>1080]+bestaudio/best[height>1080]/bestvideo[height=1080]+bestaudio/best[height=1080]/bestvideo[height>720]+bestaudio/best[height>720]/bestvideo[height=720]+bestaudio/best[height=720]/bestvideo[height>480]+bestaudio/best[height>480]/bestvideo[height=480]+bestaudio/best[height=480]/bestvideo[height>320]+bestaudio/best[height>320]/bestvideo[height=320]+bestaudio/best[height=320]/bestvideo[height>240]+bestaudio/best[height>240]/bestvideo[height=240]+bestaudio/best[height=240]/bestvideo[height>144]+bestaudio/best[height>144]/bestvideo[height=144]+bestaudio/best[height=144]/bestvideo+bestaudio/best"
+	local cookie_param=""
 
 	if [[ $1 == "https://www.youtube.com/"* || $1 == "https://music.youtube.com/"* ]]; then
 		if (( $YTDL_ALWAYS_THUMB )); then
@@ -114,7 +115,11 @@ function ytdl() {
 		thumbnail_params=""
 	fi
 
-	local ytdl_debug_cmd="$bestquality_params $metadata_params $thumbnail_params -r $bandwidth_limit --cookies '$cookie_file' "$@" $YTDL_APPEND"
+	if [[ ! -z $cookie_file ]]; then
+		cookie_param="--cookies"
+	fi
+
+	local ytdl_debug_cmd="$bestquality_params $metadata_params $thumbnail_params -r $bandwidth_limit $cookie_param $cookie_file "$@" $YTDL_APPEND"
 	
 	if (( $YTDL_PRINT_CMD )) || (( $YTDL_DRY_RUN )); then
 		echoinfo "Command >> yt-dlp $ytdl_debug_cmd"
@@ -122,7 +127,7 @@ function ytdl() {
 
 	# Perform the download
 	if [[ "$YTDL_DRY_RUN" != 1 ]] && [[ -z "$YTDL_JUST_ITEM_CMD" ]]; then
-		if ! yt-dlp -f "$quality_format" $metadata_params $thumbnail_params -r $bandwidth_limit --cookies "$cookie_file" \
+		if ! yt-dlp -f "$quality_format" $metadata_params $thumbnail_params -r $bandwidth_limit $cookie_param $cookie_file \
 			 --abort-on-unavailable-fragment --compat-options all -o "%(title)s-%(id)s.%(ext)s" \
 			 "$@" $YTDL_APPEND
 		then
