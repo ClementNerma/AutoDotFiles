@@ -119,7 +119,7 @@ function ytsync() {
             download_ies+=("$video_ie")
             download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$video_ie]}")
         else
-            local elapsed=$(timer_elapsed "$last_pb")
+            local elapsed=$(timer_elapsed_raw "$last_pb")
 
             if (( elapsed / 200000000 )) || [[ $i -eq $count ]]; then # 200 milliseconds
                 local last_pb=$(timer_start)
@@ -366,7 +366,7 @@ function ytsync_build_cache() {
     local last_pb=$(timer_start)
 
     for i in {1..$count}; do
-        local elapsed=$(timer_elapsed "$last_pb")
+        local elapsed=$(timer_elapsed_raw "$last_pb")
 
         if (( elapsed / 200000000 )) || [[ $i -eq $count ]]; then # 200 milliseconds
             local last_pb=$(timer_start)

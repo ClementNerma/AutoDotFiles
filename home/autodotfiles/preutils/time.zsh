@@ -1,7 +1,7 @@
 # Start a timer
 alias timer_start="now"
 
-function timer_elapsed() {
+function timer_elapsed_raw() {
 	if [[ -z $1 ]]; then
 		echoerr "Please provide a timer value."
 		return 1
@@ -14,7 +14,7 @@ function timer_elapsed() {
 	printf '%s' $elapsed
 }
 
-function timer_elapsed_seconds() {
+function timer_elapsed_raw_seconds() {
 	if [[ -z $1 ]]; then
 		echoerr "Please provide a timer value."
 		return 1
@@ -33,7 +33,7 @@ function timer_show() {
 		return 1
 	fi
 
-	local elapsed=$(timer_elapsed "$1")
+	local elapsed=$(timer_elapsed_raw "$1")
 	humanduration_ms $((elapsed / 1000000))
 }
 
@@ -43,7 +43,7 @@ function timer_show_seconds() {
 		return 1
 	fi
 
-	local elapsed=$(timer_elapsed "$1")
+	local elapsed=$(timer_elapsed_raw "$1")
 	humanduration $((elapsed / 1000000000))
 }
 
