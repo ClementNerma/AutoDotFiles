@@ -251,7 +251,11 @@ function ytsync_build_cache() {
     local json="[]"
     local total=0
 
+    local max_spaces=$(echo -n "${#playlist_url_files}" | wc -c)
+
     for i in {1..${#playlist_url_files}}; do
+        echoinfo "| Checking playlist \z[yellow]°$(printf "%${max_spaces}s" $i)\z[]° / \z[yellow]°${#playlist_url_files}\z[]°: \z[magenta]°$(dirname "${playlist_url_files[i]}")\z[]°"
+
         local url=$(command cat "${playlist_url_files[i]}")
         local sub_json=$(yt-dlp -J --flat-playlist -i "$url")
 
@@ -269,8 +273,6 @@ function ytsync_build_cache() {
             echoerr "Failed to merge JSONs together!"
             return 2
         fi
-
-        progress_bar_detailed "Getting playlists content: " $i ${#playlist_url_files} 0 $fetching_started " | $sub_total new videos ($total total)"
     done
 
     echoinfo "Videos list was retrieved in \z[yellow]°$(timer_end $started)\z[]°."
