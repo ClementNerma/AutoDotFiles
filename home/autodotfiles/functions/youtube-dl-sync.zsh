@@ -198,37 +198,35 @@ function ytsync() {
             fi
         done
     else
+        IFS=$'\n' local video_type=($(jq -r -c '.[] | ._type' "$cache_name"))
+        IFS=$'\n' local video_ids=($(jq -r -c '.[] | .id' "$cache_name"))
+        IFS=$'\n' local video_titles=($(jq -r -c '.[] | .title' "$cache_name"))
+        IFS=$'\n' local video_uploaded=($(jq -r -c '.[] | .upload_date' "$cache_name"))
+        IFS=$'\n' local video_urls=($(jq -r -c '.[] | .webpage_url' "$cache_name"))
+
         for i in {1..$count}; do
             local index=$((i-1))
-            local videojson=$(echo -E "$json" | jq ".[$index]")
 
-            local entry_type=$(echo -E "$videojson" | jq "._type" -r)
-
-            if [[ $entry_type != "null" ]]; then
-                local entry_title=$(echo -E "$videojson" | jq ".title" -r)
-
-                if [[ $entry_type = "playlist" ]]; then
-                    echowarn "Found playlist entry: \z[yellow]°$entry_title\z[]°"
+            if [[ ${video_type[i]} != "null" ]]; then
+                if [[ ${video_type[i]} = "playlist" ]]; then
+                    echowarn "Found playlist entry: \z[yellow]°${video_titles[i]}\z[]°"
                 else
-                    echowarn "Found unknown entry type \z[blue]°$entry_type\z[]°: \z[yellow]°$entry_title\z[]°"
+                    echowarn "Found unknown entry type \z[blue]°${video_type[i]}\z[]°: \z[yellow]°${video_titles[i]}\z[]°"
                 fi
 
                 return 20
             fi
 
-            local videoid=$(echo -E "$videojson" | jq ".id" -r)
-
-            if [[ $videoid = "null" ]]; then
+            if [[ ${video_ids[i]} = "null" ]]; then
                 continue
             fi
 
             local current=$(printf "%${max_spaces}s" $i)
 
-            if (( $empty_dir )) || [[ -z $(find . -name "*-$videoid.*") ]]; then
-                local title=$(echo -E "$videojson" | jq ".title" -r)
-                local uploaded=$(echo -E "$videojson" | jq ".upload_date" -r | sed -E "s/([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])/\3\/\2\/\1/")
-                echoinfo "\z[gray]°$current / $count\z[]° \z[magenta]°[$videoid]\z[]° \z[cyan]°$uploaded\z[]° \z[yellow]°${title}\z[]°"
-                download_list+=($(echo -E "$videojson" | jq ".webpage_url" -r))
+            if (( $empty_dir )) || [[ -z $(find . -name "*-${video_ids[i]}.*") ]]; then
+                local uploaded=$(echo -E "${video_uploaded[i]}" | sed -E "s/([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])/\3\/\2\/\1/")
+                echoinfo "\z[gray]°$current / $count\z[]° \z[magenta]°[${video_ids[i]}]\z[]° \z[cyan]°$uploaded\z[]° \z[yellow]°${video_titles[i]}\z[]°"
+                download_list+=("${video_urls[i]}")
             fi
         done
     fi
