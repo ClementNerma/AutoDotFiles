@@ -132,12 +132,12 @@ function mvprogress() {
 }
 
 # Archive a directory into a .tar file
-function tarprogress() {
+function maketar() {
 	tar cf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1.tar"
 }
 
 # Archive a directory into a .tar.gz file
-function targzprogress() {
+function maketargz() {
 	tar czf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1.tar"
 }
 
