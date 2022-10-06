@@ -291,5 +291,11 @@ function filesize() {
 		return 1
 	fi
 
-	numfmt --to=iec-i --suffix=B --format="%.3f" $(stat -c %s "$1")
+	local size=$(stat -c %s "$1")
+
+	if (( $size < 1024 )); then
+		echo "${size}B"
+	else
+		numfmt --to=iec-i --suffix=B --format="%.2f" "$size"
+	fi
 }
