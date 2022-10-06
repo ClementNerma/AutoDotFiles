@@ -14,8 +14,6 @@ function z() {
     fi
 }
 
-# Aliases to exit after open commands
-function opene() { open "$@" && exit }
 
 function jumpy_handler() {
     if (( $__JUMPY_DONT_REGISTER )); then

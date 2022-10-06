@@ -181,3 +181,8 @@ function humanduration() {
 	fi
 
 }
+
+# Aliases to exit after open commands
+function opene() {
+	open "$@" && exit
+}
