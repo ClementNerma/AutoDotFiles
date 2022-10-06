@@ -7,7 +7,7 @@ It is meant for personal usage only, but as it's a relatively complex setup I ma
 
 The goal of this project is to install with a simple single command my whole environment - aliases, software configuration, tools, packages - with a one-line update process with a simple rollback method in case something goes wrong.
 
-It also adapts the environment depending on if the platform is WSL 2 or a real Debian distribution, and also if the computer is my main computer or not, meaning I also use it on my professional computer.
+It also adapts the environment depending on if the platform is WSL 2 or a real Ubuntu distribution, and also if the computer is my main computer or not, meaning I also use it on my professional computer.
 
 Currently, it contains ~2k of ZSH (not counting blank lines and comments).
 
@@ -17,7 +17,7 @@ Currently, it contains ~2k of ZSH (not counting blank lines and comments).
 * Auto-installation and configuration of aliases, functions, configuration for softwares
 * Auto-backup of current environment during update process
 * Remote installer to setup the environment on a distant server
-* Works both on WSL (Debian) and Debian-based distributions
+* Works both on WSL (Ubuntu) and Debian-based distributions
 
 ## Content
 
@@ -27,7 +27,7 @@ Currently, it contains ~2k of ZSH (not counting blank lines and comments).
 
 Many other software are included, and change from time to time depending on which tools I find the most intuitive and enjoyable to use.
 
-This project is mainly tailored for Debian in WSL 2, but should work fine on any Debian-based distribution.
+This project is mainly tailored for Ubuntu in WSL 2, but should work fine on any Debian-based distribution.
 
 ## Usage
 
