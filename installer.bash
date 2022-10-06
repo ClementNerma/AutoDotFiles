@@ -27,7 +27,7 @@ function _fail() {
 }
 
 # Get the total number of steps
-REALPATH=$(realpath "$0")
+CURRPATH=$(realpath "$0")
 
 # Get current timestamp
 AUTO_INSTALLER_STARTED_AT=$(date +%s)
@@ -36,7 +36,7 @@ AUTO_INSTALLER_STARTED_AT=$(date +%s)
 TMPDIR="/tmp/_autodotfiles_autoinstaller_$AUTO_INSTALLER_STARTED_AT"
 
 # Determine the parent directory of the current script
-INSTALL_FROM="."
+INSTALL_FROM=$(dirname "$CURRPATH")
 
 # Beginning of the installer!
 echo
@@ -74,8 +74,10 @@ if [[ $1 != "--offline" ]]; then
 	echo -e "\e[94mDownloading required files...\e[0m"
 
 	sudo apt install git -y
-	git clone "https://github.com/ClementNerma/AutoDotFiles.git" "$TMPDIR/AutoDotFiles-GHDL"
-	INSTALL_FROM="$TMPDIR/AutoDotFiles-GHDL"
+
+	INSTALL_FROM="$TMPDIR/AutoDotFiles-github-download"
+	git clone "https://github.com/ClementNerma/AutoDotFiles.git" "$INSTALL_FROM"
+	bash "$INSTALL_FROM/$(filename "$0")" --offline
 fi
 
 if [ ! -d "$INSTALL_FROM/home" ] || [ ! -d "$INSTALL_FROM/home/autodotfiles" ]; then
