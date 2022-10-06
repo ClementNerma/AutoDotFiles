@@ -191,7 +191,7 @@ function zshaddhistory() {
 function gostartupdir() {
 	local cwd=$(pwd)
 
-	if [[ "$cwd" = "$HOME" || "$cwd" = "$HOMEDIR" ]] || [[ ! -f "$ALTERNATE_HOMEDIR" && "$cwd" = "$ALTERNATE_HOMEDIR" ]]; then
+	if [[ "$cwd" = "$HOME" || "$cwd" = "$HOMEDIR" ]] || [[ -d "$ALTERNATE_HOMEDIR" && "$cwd" = "$ALTERNATE_HOMEDIR" ]]; then
 		goproj
 	fi
 }
