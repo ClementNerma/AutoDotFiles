@@ -7,12 +7,6 @@ if [[ -f ~/.cargo/env ]]; then
 	source ~/.cargo/env
 fi
 
-# Integration for Go
-if [[ -d ~/go ]]; then
-    export GOPATH=$HOME/go
-    export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
-fi
-
 # Integration for Python
 export PATH="$HOME/.local/bin:$PATH"
 
