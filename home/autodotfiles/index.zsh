@@ -40,17 +40,17 @@ export ADF_LOCAL_DIR="$ADF_DIR-local"
 export ADF_DATA_DIR="$ADF_LOCAL_DIR/data"
 
 # Set path to data directory
-export ADF_THISCOMP_DIR="$ADF_DIR-thiscomp"
+export ADF_ASSETS_DIR="$ADF_DIR-assets"
 
 # Set path to binaries directory
-export ADF_BIN_DIR="$ADF_THISCOMP_DIR/bin"
+export ADF_BIN_DIR="$ADF_ASSETS_DIR/bin"
 
 # Register the local binaries directory in PATH
 export PATH="$ADF_BIN_DIR:$PATH"
 
 # Create base directories
 if [[ ! -d $ADF_DATA_DIR ]]; then mkdir "$ADF_DATA_DIR"; fi
-if [[ ! -d $ADF_THISCOMP_DIR ]]; then mkdir "$ADF_THISCOMP_DIR"; fi
+if [[ ! -d $ADF_ASSETS_DIR ]]; then mkdir "$ADF_ASSETS_DIR"; fi
 if [[ ! -d $ADF_BIN_DIR ]]; then mkdir "$ADF_BIN_DIR"; fi
 
 # Set path to the external scripts directory

@@ -78,8 +78,8 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 source ~/.fzf.zsh
 
 # Integration for Zoxide
-export _ZO_DATA_DIR="$ADF_THISCOMP_DIR/zoxide"
-ZOXIDE_LOAD_FILE="$ADF_THISCOMP_DIR/zoxide.zsh"
+export _ZO_DATA_DIR="$ADF_ASSETS_DIR/zoxide"
+ZOXIDE_LOAD_FILE="$ADF_ASSETS_DIR/zoxide.zsh"
 
 if [[ ! -f $ZOXIDE_LOAD_FILE ]]; then
 	zoxide init zsh > "$ZOXIDE_LOAD_FILE"

@@ -2,9 +2,8 @@
 # This file contains is in charge of installing all components required by the current setup
 #
 
-
-export ADF_INSTALLED_LIST="$ADF_THISCOMP_DIR/.installed.list"
-export ADF_INSTALLER_HASH_FILE="$ADF_THISCOMP_DIR/.installer.cksum"
+export ADF_INSTALLED_LIST="$ADF_ASSETS_DIR/installed-components.txt"
+export ADF_INSTALLER_HASH_FILE="$ADF_ASSETS_DIR/installer-checksum.txt"
 export ADF_INSTALLER_SCRIPTS="$ADF_DIR/installer-scripts.zsh"
 
 # Usage: <component name ("*" for everything)> <1 to skip if component already installed>
