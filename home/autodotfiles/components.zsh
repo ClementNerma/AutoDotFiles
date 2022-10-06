@@ -69,7 +69,7 @@ function adf_install() {
         return 30
     fi
 
-    export BASE_INSTALLER_TMPDIR="/tmp/adf-installer-$(humandate)"
+    export BASE_INSTALLER_TMPDIR=$(mktemp -d)
 
     local failed=0
     local successes=()

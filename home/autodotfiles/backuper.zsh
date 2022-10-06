@@ -51,7 +51,7 @@ function adf_local_backup() {
     echoinfo "(2/5) Building the files list..."
     echoinfo " "
 
-    local listfile="/tmp/rebackup-list-$(now).txt"
+    local listfile=$(mktemp)
     touch "$listfile"
 
     if ! adf_build_files_list "$listfile" "$@"; then return 3; fi

@@ -95,7 +95,7 @@ function debi() {
 
 # Install a Debian package from the web
 function debir() {
-	local debpath="/tmp/$(now).deb"
+	local debpath=$(mktemp)
 	dl "$1" "$debpath"
 	debi "$debpath"
 	command rm "$debpath"
