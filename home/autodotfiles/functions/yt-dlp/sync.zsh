@@ -199,7 +199,7 @@ function ytsync() {
             
             if ! PC_TIMEOUT=5 passive_confirm; then
                 if (( $needlockfile )); then
-                    echowarn ">> Removing lockfile..."
+                    echoverb ">> Removing lockfile..."
                     command rm "$lockfile"
                 fi
 
@@ -220,7 +220,7 @@ function ytsync() {
     done
 
     if (( $needlockfile )); then
-        echowarn ">> Removing lockfile..."
+        echoverb ">> Removing lockfile..."
         command rm "$lockfile"
     fi
 
@@ -508,7 +508,7 @@ function ytsync_wait_lockfile() {
         fi
 
         echo "$PWD" > "$lockfile"
-        echowarn ">> Writing current path to lockfile\n"
+        echoverb ">> Writing current path to lockfile\n"
 
         if [[ $(command cat "$lockfile") != $PWD ]]; then
             echoerr "Internal error: inconsistency in the lockfile."
