@@ -221,6 +221,8 @@ function __rclone_sync_nocheck() {
         --filter "- sync.ffs_db" \
         --create-empty-src-dirs \
         --track-renames \
+        --track-renames-strategy "modtime,size" \
         "$@"
-        # --track-renames-strategy "leaf,size"
+
+    # Use strategy "leaf,size" for other remotes when modtime not available
 }
