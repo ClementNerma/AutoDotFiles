@@ -148,30 +148,13 @@ function ytsync() {
         local lockfile="$ADF_YS_LOCKFILES_DIR/$video_ie.lock"
         local needlockfile=${ADF_YS_DOMAINS_USE_LOCKFILE[$video_ie]}
 
-        if ! (( $forecast_lock )) && (( $needlockfile )); then
+        if (( $forecast_lock )) && [[ $(command cat "$lockfile") != "$(pwd)" ]]; then
+            echoerr "\nInternal error: inconsistency in the lockfile."
             local forecast_lock=0
+        fi
 
-            while true; do
-                if [[ -f $lockfile ]]; then
-                    local started_waiting=$(timer_start)
-
-                    while [[ -f $lockfile ]]; do
-                        local pending=$(command cat "$lockfile")
-                        local waiting_for=$(timer_show_seconds "$started_waiting")
-                        ADF_UPDATABLE_LINE=1 echowarn ">> Waiting for lockfile removal (download pending at \z[magenta]°$pending\z[]°)... \z[cyan]°$waiting_for\z[]°"
-                        sleep 1
-                    done
-                fi
-
-                echo "$(pwd)" > "$lockfile"
-                echowarn "\n>> Writting current path to lockfile"
-
-                if [[ $(command cat "$lockfile") != "$(pwd)" ]]; then
-                    echoerr "Internal error: inconsistency in the lockfile."
-                else
-                    break
-                fi
-            done
+        if ! (( $forecast_lock )) && (( $needlockfile )); then
+            ytsync_wait_lockfile
         fi
 
         local cookie_preset=${ADF_YS_DOMAINS_PRESET[$global_ie]}
@@ -429,6 +412,33 @@ function ytsync_build_cache() {
 
     echo "$total\n\n$cache_content" > "$ADF_YS_CACHE"
     echoinfo "Written download informations to cache."
+}
+
+# Lockfile handling
+function ytsync_wait_lockfile() {
+    while true; do
+        if [[ -f $lockfile ]]; then
+            local started_waiting=$(timer_start)
+
+            while [[ -f $lockfile ]]; do
+                local pending=$(command cat "$lockfile")
+                local waiting_for=$(timer_show_seconds "$started_waiting")
+
+                ADF_UPDATABLE_LINE=1 echowarn ">> Waiting for lockfile removal (download pending at \z[magenta]°$pending\z[]°)... \z[cyan]°$waiting_for\z[]°"
+                
+                sleep 1
+            done
+        fi
+
+        echo "$(pwd)" > "$lockfile"
+        echowarn "\n>> Writting current path to lockfile"
+
+        if [[ $(command cat "$lockfile") != "$(pwd)" ]]; then
+            echoerr "Internal error: inconsistency in the lockfile."
+        else
+            break
+        fi
+    done
 }
 
 # URL mapper for IDs in playlists
