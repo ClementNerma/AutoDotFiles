@@ -57,10 +57,13 @@ function adf_install() {
     export BASE_INSTALLER_TMPDIR=$(mktemp -d)
 
     local failed=0
+    local i=0
 
     for name in $to_install; do
+        local i=$((i+1))
+
         echoinfo ">"
-        echoinfo "> Installing component \z[magenta]°$i\z[]° / \z[magenta]°$to_install\z[]°: \z[yellow]°${to_install_names[i]}\z[]°"
+        echoinfo "> Installing component \z[magenta]°$i\z[]° / \z[magenta]°${#to_install}\z[]°: \z[yellow]°${to_install_names[i]}\z[]°"
         echoinfo ">"
         echoinfo ""
 
