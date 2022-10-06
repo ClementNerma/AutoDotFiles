@@ -37,13 +37,14 @@ function rclone_mirror() {
     local noitem=0
 
     while IFS= read -r line; do
-        if [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]([^:]+):[[:space:]]Skipped[[:space:]](copy|delete|move|remove[[:space:]]directory)[[:space:]]as[[:space:]]--dry-run[[:space:]]is[[:space:]]set([[:space:]]\\(size[[:space:]][0-9\\.kMGT]+\\))?$ ]]; then
+        if [[ $line =~ ^[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9]?[0-9][[:space:]][0-9]?[0-9]:[0-9][0-9]:[0-9][0-9][[:space:]]NOTICE:[[:space:]]([^:]+):[[:space:]]Skipped[[:space:]](copy|delete|move|make[[:space:]]directory|remove[[:space:]]directory)[[:space:]]as[[:space:]]--dry-run[[:space:]]is[[:space:]]set([[:space:]]\\(size[[:space:]][0-9\\.kMGT]+\\))?$ ]]; then
             if [[ ${match[2]} = "copy" ]]; then
                 items+=("${match[1]}")
             elif [[ ${match[2]} = "delete" ]] || [[ ${match[2]} = "remove directory" ]]; then
                 todelete+=("${match[1]}")
             elif [[ ${match[2]} = "move" ]]; then
                 tomove+=("${match[1]}")
+            elif [[ ${match[2]} = "make directory" ]]; then
             else
                 echoerr "Unreachable: expected 'copy', 'delete' or 'move' in regex result, got '${match[2]}'"
                 return 5
