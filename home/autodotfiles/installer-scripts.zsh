@@ -215,6 +215,16 @@ function p7zip() {
     sudo apt install -yqqq p7zip-full
 }
 
+function ripgrep() {
+    # NAME: ripgrep
+    # PRIORITY: 1
+    # ENV: all
+    # VERSION: rg -V
+    # NEEDS_APT_UPDATE: no
+
+    dlghbin BurntSushi/ripgrep "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz" "ripgrep-.*-arm-unknown-linux-gnueabihf.tar.gz" "ripgrep-*/rg" "rg"
+}
+
 function sd() {
     # NAME: sd
     # PRIORITY: 1
