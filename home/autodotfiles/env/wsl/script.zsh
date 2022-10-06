@@ -15,7 +15,6 @@ if [[ ! -f $WIN_CMD_PATH ]]; then echoerr "CMD executable was not found at path 
 
 # Alternate default entry directory that may occur sometimes
 export ALTERNATE_HOMEDIR="/mnt/c/WINDOWS/system32"
-export BUGGY_HOMEDIR="/mnt/wsl/docker-desktop-bind-mounts/*"
 
 # Run a Windows command through PowerShell
 # e.g. "win echo Hello!" will display "Hello!" by running PowerShell transparently

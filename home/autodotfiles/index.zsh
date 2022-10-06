@@ -203,7 +203,7 @@ function zshaddhistory() {
 
 # Go to the a specific folder on startup, except if the shell has been started in a custom directory
 function gostartupdir() {
-	if [[ $PWD = $HOME || $PWD = $HOMEDIR ]] || [[ -d $ALTERNATE_HOMEDIR && $PWD = $ALTERNATE_HOMEDIR ]] || [[ ! -z $BUGGY_HOMEDIR && $PWD =~ $BUGGY_HOMEDIR ]]; then
+	if [[ $PWD = $HOME || $PWD = $HOMEDIR ]] || [[ -d $ALTERNATE_HOMEDIR && $PWD = $ALTERNATE_HOMEDIR ]]; then
 		cd "$ADF_STARTUP_DIR"
 	fi
 }
