@@ -1,9 +1,4 @@
 
-# Run a command in background
-function runback() {
-	(nohup "$@" > "${NOHUP_FILE:-/dev/null}" 2>&1 &)
-}
-
 # Arguments: "<url>" "<download location>"
 function dl() {
 	if [[ -z $1 ]]; then
@@ -54,10 +49,6 @@ function humandate() {
 	date '+%Y_%m_%d-%Hh_%Mm_%Ss'
 }
 
-function printabledate() {
-	date +"%d/%m/%Y %T"
-}
-
 # Move an item called <something> to <something>.bak-<timestamp>
 function mvbak() {
 	local itempath="${1%/}"
@@ -71,50 +62,6 @@ function mvbak() {
 
 	mv "$itempath" "$renpath"
 	export LAST_MVBAK_PATH="$renpath"
-}
-
-# Display the checksum of a file
-function cksumfile() {
-	cksum < "$1" | cut -d ' ' -f 1
-}
-
-# Display the checksum of a string
-function cksumstr() {
-	echo "$1" | cksum | cut -d ' ' -f 1
-}
-
-# Display the hash of a string
-function hashstr() {
-	echo "$1" | sha1sum | cut -d ' ' -f 1
-}
-
-# Check if a command exists
-function commandexists() {
-	command -v "$1" > /dev/null 2>&1
-}
-
-# Pad start with spaces
-function padspaces() {
-	local len=$(echo -n "$1" | wc -c)
-	local rem=$(($2 - len))
-
-	if (( $rem > 0 )); then
-		printf ' %.0s' {1..$rem}
-	fi
-
-	printf '%s' "$1"
-}
-
-# Pad end with spaces
-function padendspaces() {
-	local len=$(echo -n "$1" | wc -c)
-	local rem=$(($2 - len))
-
-	printf '%s' "$1"
-
-	if (( $rem > 0 )); then
-		printf ' %.0s' {1..$rem}
-	fi
 }
 
 # Obfuscate a content
