@@ -2,6 +2,8 @@ export ADF_YS_URL=".ytdlsync-url"
 export ADF_YS_CACHE=".ytdlsync-cache"
 
 function ytsync() {
+    # === Determine the sync. URL and build the list of videos === #
+
     if [[ -z $1 ]]; then
         if [[ ! -f $ADF_YS_URL ]]; then
             echoerr "Missing URL container file \z[yellow]°$ADF_YS_URL\z[]°"
@@ -34,6 +36,8 @@ function ytsync() {
         echo
     fi
 
+    # === Parse and validate the cache === #
+
     IFS=$'\n' local entries=($(command cat "$ADF_YS_CACHE"))
 
     local count=$(head -n1 < "$ADF_YS_CACHE")
@@ -54,12 +58,15 @@ function ytsync() {
 
     local max_spaces=$(echo -n "$count" | wc -c)
 
+    # === Build the list of videos to download === #
+
     local download_list=()
     local download_ies=()
     local download_names=()
     local download_bandwidth_limits=()
 
     for i in {1..${count}}; do
+        # This system allows for super-fast checking
         local video_ie=${entries[((i*4-2))]}
         local video_id=${entries[((i*4-1))]}
         local video_title=${entries[(((i*4)))]}
@@ -67,6 +74,8 @@ function ytsync() {
 
         local beginning="\z[gray]°$(printf "%${max_spaces}s" $i) / $count\z[]° \z[magenta]°[$video_id]\z[]°"
 
+        # This is the fastest checking method I've found, even faster than building a list of files beforehand
+        # and checking if the file is in the array!
         if [[ -z $(find . -name "*-${video_id}.*") ]]; then
             echoinfo "$beginning \z[yellow]°${video_title}\z[]°"
             download_list+=("$video_url")
@@ -86,10 +95,6 @@ function ytsync() {
 
     echoinfo "\nGoing to download \z[yellow]°${#download_list}\z[]° videos."
 
-    if (( $read_from_cache )); then
-        echowarn "Video list was retrieved from a cache file."
-    fi
-
     if ! (( ${count} )); then
         echosuccess "No video to download!"
         rm "$ADF_YS_CACHE"
@@ -104,6 +109,8 @@ function ytsync() {
         return 2
     fi
 
+    # === Download videos === #
+
     local errors=0
 
     for i in {1..${#download_list}}; do
@@ -117,7 +124,7 @@ function ytsync() {
         echoinfo "| Downloading video \z[yellow]°${i}\z[]° / \z[yellow]°${#download_list}\z[]°$cookie_msg: \z[magenta]°${download_names[i]}\z[]°..."
 
         if ! YTDL_ALWAYS_THUMB=1 YTDL_COOKIE_PRESET="$cookie_preset" YTDL_LIMIT_BANDWIDTH="${download_bandwidth_limits[i]}" ytdl "${download_list[i]}" --match-filter "!is_live"; then
-            errors=$((errors+1))
+            local errors=$((errors+1))
             echowarn "Waiting 5 seconds before next video..."
             sleep 5
         fi
@@ -132,7 +139,8 @@ function ytsync() {
     fi
 }
 
-# Build cache for YTSync
+# Build cache for 'ytsync' (download videos and write them into the cache file)
+# The goal is to make a cache which is both human-readable and super-fast to parse
 function ytsync_build_cache() {
     if [[ -z "$1" ]]; then
         echoerr "Please provide a URL to build the cache from."
@@ -140,7 +148,9 @@ function ytsync_build_cache() {
     fi
 
     local url="$1"
-        
+
+    # Download the list of videos
+
     echoinfo "Downloading videos list from playlist URL \z[magenta]°$url\z[]°..."
 
     local started=$(timer_start)
@@ -166,6 +176,9 @@ function ytsync_build_cache() {
     fi
 
     echoinfo "$count videos were found."
+
+    # === Get complete informations on the video and check the ones to download === #
+
     echoinfo "Establishing the list of videos to download..."
 
     local empty_dir=0
@@ -192,6 +205,7 @@ function ytsync_build_cache() {
     local total=0
 
     for i in {1..$count}; do
+        # IE = extractor name
         local ie_url="${ADF_YS_DOMAINS_IE_URLS[${video_ies[i]}]}"
 
         if [[ -z $ie_url ]]; then
@@ -203,6 +217,8 @@ function ytsync_build_cache() {
         local video_title=${video_titles[i]}
         local video_url=${video_urls[i]}
         
+        # Some extractors won't give us the video identifier with "--flat-playlist"
+        # So we get it using the video's URL thanks to the user-registered extractors
         if [[ -z $video_id || $video_id = "null" ]]; then
             if [[ -z $video_url || $video_url = "null" ]]; then
                 echoerr "Video \z[yellow]°${video_title} does not have an ID nor an URL."
@@ -217,23 +233,29 @@ function ytsync_build_cache() {
             local video_id=${video_url[$((${#ie_url}+1)),-1]}
         fi
 
-        if (( $empty_dir )) || [[ -z $(find . -name "*-${video_id}.*") ]]; then
-            if [[ ! -z $video_id && $video_id != "null" ]]; then
-                local video_url=${ie_url}${video_id}
-            fi
+        # Don't download videos that are already present on the disk
+        if ! (( $empty_dir )) && [[ -z $(find . -name "*-${video_id}.*") ]]; then
+            continue
+        fi
 
-            if (( ${ADF_YS_DOMAINS_CHECKING_MODE[${video_ies[i]}]} )); then
-                check_list_ies+=("${video_ies[i]}")
-                check_list_ids+=("$video_id")
-                check_list_titles+=("$video_title")
-                check_list_urls+=("$video_url")
-            else
-                cache_content+="${video_ies[i]}\n${video_id}\n${video_title}\n${video_url}\n\n"
-                total=$((total+1))
-            fi
+        if [[ ! -z $video_id && $video_id != "null" ]]; then
+            local video_url=${ie_url}${video_id}
+        fi
+
+        # Add the video to the checklist if the domain is marked as requiring a check for each video
+        # (e.g. videos with paywalls etc.)
+        if (( ${ADF_YS_DOMAINS_CHECKING_MODE[${video_ies[i]}]} )); then
+            check_list_ies+=("${video_ies[i]}")
+            check_list_ids+=("$video_id")
+            check_list_titles+=("$video_title")
+            check_list_urls+=("$video_url")
+        else
+            cache_content+="${video_ies[i]}\n${video_id}\n${video_title}\n${video_url}\n\n"
+            local total=$((total+1))
         fi
     done
 
+    # Check videos if required
     if [[ ${#check_list_ids} -ne 0 ]]; then
         echoinfo "Checking availibility of \z[yellow]°${#check_list_ids}\z[]° videos..."
 
@@ -263,6 +285,8 @@ typeset -A ADF_YS_DOMAINS_CHECKING_MODE
 typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
 typeset -A ADF_YS_DOMAINS_PRESET
 
+# Register a domain to use with 'ytsync'
+# Usage: ytsync_register <IE key> <URL prefix> <nocheck | alwayscheck> <bandwidth limit> [<cookie preset>]
 function ytsync_register() {
     if [[ -z "$1" ]]; then
         echoerr "Please provide an IE key."
