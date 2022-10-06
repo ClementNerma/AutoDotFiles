@@ -1,6 +1,14 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# format="""
+# $all\
+# $fill\
+# $time\
+# $line_break\
+# $character
+# """
+
 [directory]
 fish_style_pwd_dir_length=30
 
@@ -11,11 +19,18 @@ format="[$symbol$branch(:$remote_branch)]($style) "
 style="bold green"
 conflicted="[!](red)"
 staged="[+](yellow)"
-
-# Hide some symbols
 deleted=""
 renamed=""
 untracked=""
 
 [cmd_duration]
 format="[($duration)](yellow)"
+
+[fill]
+symbol=" "
+
+# [time]
+# disabled=false
+# format="[@ $time]($style)"
+# format="[[\\[$time\\]]($style)]"
+# style="bold white bg:black"
