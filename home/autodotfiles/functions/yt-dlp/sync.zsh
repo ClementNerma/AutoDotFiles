@@ -42,7 +42,7 @@ function ytsync() {
     local cache_builder_config=$(ytsync_cache_builder_config)
     
     # TODO: install as a global package, put it in the installer scripts, and call it from here
-    if ! TERM_WIDTH=$COLUMNS zer_ytsync_build_cache --config "$cache_builder_config" --sync-dir "$PWD" --display-colored-list; then
+    if ! TERM_WIDTH=$COLUMNS ytsync-cache-builder --config "$cache_builder_config" --sync-dir "$PWD" --display-colored-list; then
         return 10
     fi
 
