@@ -66,6 +66,27 @@ function bakthis() {
 	bakproj "$PWD" "$PWD-$(humandate)"
 }
 
+# Make an archive out of a project directory
+function bakproj7z() {
+	if [[ -z $1 ]]; then echoerr "Please provide a source directory."; return 1; fi
+	if [[ ! -z $2 ]] && [[ ! -d $2 ]]; then echoerr "Provided target directory does not exist."; return 2; fi
+
+	local target="$TEMPDIR/$(basename "$1")"
+
+	ADF_SILENT=1 bakproj "$1" "$target"
+
+	make7z "$target" "${2:-$PWD}"
+
+	echosuccess "Sucessfully backed up in \z[magenta]°$__LAST_MADE_7Z\z[]°"
+
+	rm "$target"
+}
+
+# Make an archive out of the current project directory
+function bakthis7z() {
+	bakproj7z "$PWD" "$(realpath "..")"
+}
+
 # Rename a Git branch
 function gitrename() {
     local old_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -89,8 +110,18 @@ function rmprogress() {
 function make7z() {
 	if [[ -z $1 ]]; then echoerr "Please provide an item to archive."; return 1; fi
 	if [[ ! -e $1 ]]; then echoerr "Provided input item does not exist."; return 10; fi
+	if [[ ! -z $2 ]] && [[ ! -d $2 ]]; then echoerr "Provided output directory does not exist."; return 11; fi
 
-	7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=32m -ms=on -mhc=on -mhe=on -spf2 -bso0 "$(basename "$1")-$(humandate).7z" "$1"
+	local dest="${2:-$PWD}/$(basename "$1")-$(humandate).7z"
+	local cwd=$PWD
+
+	cd "$(dirname "$1")"
+
+	7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=32m -ms=on -mhc=on -mhe=on -spf2 -bso0 "$dest" "$(basename "$1")"
+
+	cd "$cwd"
+
+	export __LAST_MADE_7Z="$dest"
 }
 
 # Measure time a command takes to complete
