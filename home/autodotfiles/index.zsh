@@ -100,7 +100,7 @@ source "$ADF_DIR/obfuscator.zsh"
 # Run the installer
 export ADF_INSTALLER_ABORTED=0
 
-source "$ADF_DIR/installer.zsh"
+source "$ADF_DIR/components/index.zsh"
 
 # Exit if the installer aborted
 if (( $ADF_INSTALLER_ABORTED )); then

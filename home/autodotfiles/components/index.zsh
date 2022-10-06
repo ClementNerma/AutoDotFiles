@@ -5,7 +5,7 @@
 export ADF_INSTALLED_LIST="$ADF_ASSETS_DIR/installed-components.txt"
 export ADF_INSTALLER_HASH_FILE="$ADF_ASSETS_DIR/installer-checksum.txt"
 export ADF_INSTALLER_MAIN_PC_CHECKED_MARKER="$ADF_ASSETS_DIR/installer-checked-for-main-pc.txt"
-export ADF_INSTALLER_SCRIPTS="$ADF_DIR/installer-scripts.zsh"
+export ADF_INSTALLER_SCRIPTS="$ADF_DIR/components/components.zsh"
 
 # Usage: <component name (not specified = everything)>
 # ADF_SKIP_INSTALLED=1 => skip already-installed components
