@@ -92,14 +92,15 @@ function adf_sync_files() {
     for i in {1..${#tosync}}; do
         echoinfo "| Transferring encrypted file \z[yellow]°$i\z[]° / \z[yellow]°${#tosync}\z[]°: \z[magenta]°${tosync[$i]}\z[]°..."
 
-        local dest_file="$2/${tosync[$i]}"
+        local dest_filename="$(hashstr "${tosync[$i]}").7z"
+        local dest_file="$2/$dest_filename"
         local dest_file_dir=$(dirname "$dest_file")
 
         if [[ $dest_file_dir != "$2" ]]; then
             mkdir -p "$dest_file_dir"
         fi
 
-        if ! sync_7z_output=$(7z a -t7z -m0=Copy -mhe=on -p"$passphrase" "$2/${tosync[$i]}.7z" "$1/${tosync[$i]}" 2>&1 > /dev/null); then
+        if ! sync_7z_output=$(7z a -t7z -m0=Copy -mhe=on -p"$passphrase" "$2/$dest_filename" "$1/${tosync[$i]}" 2>&1 > /dev/null); then
             echoerr "> Failed to transfer file (command \z[yellow]°7z\z[]° failed): \z[yellow]°${sync_7z_output}\z[]°."
             errors=$((errors+1))
         fi
