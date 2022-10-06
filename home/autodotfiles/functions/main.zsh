@@ -138,7 +138,7 @@ function maketar() {
 
 # Archive a directory into a .tar.gz file
 function maketargz() {
-	tar czf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1-$(humandate).tar"
+	tar czf - "$1" -P | pv -s $(du -sb "$1" | awk '{print $1}') > "$1-$(humandate).tar.gz"
 }
 
 # Measure time a command takes to complete
