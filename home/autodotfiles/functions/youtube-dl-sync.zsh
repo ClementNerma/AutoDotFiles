@@ -65,6 +65,10 @@ function ytsync() {
     local download_names=()
     local download_bandwidth_limits=()
 
+    local started=$(timer_start)
+
+    echo -n ""
+
     for i in {1..${count}}; do
         # This system allows for super-fast checking
         local video_ie=${entries[((i*4-2))]}
@@ -72,18 +76,16 @@ function ytsync() {
         local video_title=${entries[(((i*4)))]}
         local video_url=${entries[((i*4+1))]}
 
-        local beginning="\z[gray]°$(printf "%${max_spaces}s" $i) / $count\z[]° \z[magenta]°[$video_id]\z[]°"
-
         # This is the fastest checking method I've found, even faster than building a list of files beforehand
         # and checking if the file is in the array!
         if [[ -z $(find . -name "*-${video_id}.*") ]]; then
-            echoinfo "$beginning \z[yellow]°${video_title}\z[]°"
+            echoinfo "\r\z[gray]°$(printf "%${max_spaces}s" $i) / $count\z[]° \z[magenta]°[$video_id]\z[]° \z[yellow]°${video_title}\z[]°"
             download_list+=("$video_url")
             download_names+=("$video_title")
             download_ies+=("$video_ie")
             download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$video_ie]}")
         else
-            echoverb "$beginning Skipping \z[yellow]°${video_title}\z[]° (already downloaded)"
+            progress_bar_detailed "Checking videos: " $i $count 50 $started
         fi
     done
 
