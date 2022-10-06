@@ -215,8 +215,6 @@ function ytsync() {
             fi
         fi
 
-        command rm "$tmp_err_file"
-
         if (( $needlockfile )) && (( $di < $count )); then
             if [[ $next_video_ie = $video_ie ]]; then
                 local forecast_lock=1
