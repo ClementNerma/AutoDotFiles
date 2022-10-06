@@ -86,7 +86,8 @@ function ytdl() {
 	# Perform the download
 	if ! yt-dlp \
 			--format "$quality_format" \
-			--add-medata $thumbnail_params \
+			--add-metadata \
+			$thumbnail_params \
 			--limit-rate ${YTDL_LIMIT_BANDWIDTH:-1G} $cookie_param $cookie_file \
 			--abort-on-unavailable-fragment \
 			--compat-options all \
