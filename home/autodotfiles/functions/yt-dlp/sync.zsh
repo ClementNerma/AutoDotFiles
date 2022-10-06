@@ -158,7 +158,7 @@ function ytsync() {
             local errors=$((errors+1))
             echowarn "Waiting 5s before the next video..."
             
-            if ! PC_TIMEOUT=5 passive_confirm; then
+            if ! passive_confirm 5; then
                 if (( $needlockfile )); then
                     echoverb ">> Removing lockfile..."
                     command rm "$lockfile"

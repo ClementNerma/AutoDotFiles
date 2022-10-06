@@ -41,20 +41,29 @@ function confirm() {
 	fi
 }
 
-# Passive confirmation
-# Set "$PC_TIMEOUT" to set a timeout
+# Passive confirmation (can provide a timeout as an argument)
 function passive_confirm() {
 	export ___pc_aborted=0
 	export ___pc_answer=""
 
+	local timeout=0
+	local timeout_args=()
+
+	if [[ $1 ]]; then
+		local timeout=$(( $1 ))
+
+		if ! (( $timeout )); then
+			echoerr "Please provide a valid timeout"
+			return 1
+		fi
+
+		local timeout_args=("-t" "$1")
+	fi
+
 	while [[ $___pc_answer != $'\n' ]] && ! (( $___pc_aborted )); do
 		trap 'echowarn "Use Ctrl+D to abort." && export ___pc_aborted=1' SIGINT
 
-		if ! (( $PC_TIMEOUT )); then
-			read -sk ___pc_answer
-		else
-			read -sk -t $PC_TIMEOUT ___pc_answer
-		fi
+		read -sk ${timeout_args[@]} ___pc_answer
 
 		trap SIGINT
 
@@ -87,7 +96,7 @@ function passive_confirm() {
 			return
 		fi
 
-		if (( $PC_TIMEOUT )) && [[ -z $___pc_answer ]]; then
+		if (( $timeout )) && [[ -z $___pc_answer ]]; then
 			return
 		fi
 
