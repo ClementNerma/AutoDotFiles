@@ -246,7 +246,6 @@ function humanduration() {
 		local duration_s=$((duration / 1000))
 	fi
 
-
 	local D=$((duration_s / 60 / 60 / 24))
 	local H=$((duration_s / 60 / 60 % 24))
 	local M=$((duration_s / 60 % 60))
