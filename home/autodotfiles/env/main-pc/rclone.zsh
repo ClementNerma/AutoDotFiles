@@ -109,7 +109,7 @@ function rclone_mirror() {
             echoerr "Original output:"
             echowarn "$rclone_list"
             echoerr "Aborting transfer."
-            
+
             return $exit_code
         fi
     fi
@@ -118,14 +118,14 @@ function rclone_mirror() {
         local item_c=0
         while IFS= read -r item; do
             local item_c=$((item_c+1))
-            echoinfo "> Going to transfer: \z[magenta]°$item\z[]° \z[yellow]°(${items_size[${items[(ie)$item]}]})\z[]°"
+            echosuccess "> Going to transfer: \z[magenta]°$item\z[]° \z[yellow]°(${items_size[${items[(ie)$item]}]})\z[]°"
         done <<< $(printf '%s\n' "${items[@]}" | sort -n)
         echo ""
     fi
 
     if (( ${#tomove} )); then
         while IFS= read -r item; do
-            echosuccess "> Going to move from: \z[magenta]°$item\z[]°"
+            echoinfo "> Going to move from: \z[magenta]°$item\z[]°"
         done <<< $(printf '%s\n' "${tomove[@]}" | sort -n)
         echo ""
     fi
@@ -156,7 +156,6 @@ function rclone_mirror() {
         return
     fi
 
-    echo ""
     echo ""
     echowarn "Confirm the synchronization (Y/n)?"
 
