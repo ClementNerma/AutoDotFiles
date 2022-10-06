@@ -210,3 +210,36 @@ function padendspaces() {
 		printf ' %.0s' {1..$rem}
 	fi
 }
+
+# Obfuscate a content
+function adf_obf_encode() {
+	if [[ -z $1 ]]; then
+		echoerr "Please provide a content to encode."
+		return 1
+	fi
+
+	local content="$1"
+
+	for i in {1..$ADF_OBF_ROUNDS}; do
+		local content=$(base64 --wrap=0 <<< "|$content|")
+	done
+
+	printf '%s' "$content"
+}
+
+# De-obfuscate a content
+function adf_obf_decode() {
+	if [[ -z $1 ]]; then
+		echoerr "Please provide a content to decode."
+		return 1
+	fi
+
+	local content="$1"
+
+	for i in {1..$ADF_OBF_ROUNDS}; do
+		local content=$(base64 -d --wrap=0 <<< "$content")
+		local content=${content:1:${#content}-2}
+	done
+
+	printf '%s' "$content"
+}

@@ -38,3 +38,6 @@ export ADF_UPDATE_PATH=""
 
 # Key filename for Git
 export ADF_GIT_SSH_PRIVATE_KEY_FILENAME="id_rsa"
+
+# Number of rounds for (de-)obfuscation
+export ADF_OBF_ROUNDS=3
