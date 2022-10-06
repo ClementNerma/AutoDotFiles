@@ -46,7 +46,7 @@ function gitcommit() {
 alias gm="gitcommit"
 
 # Set the default editor
-export EDITOR="nano"
+export EDITOR="micro"
 alias nano="$EDITOR"
 
 # Allow to sign Git commits with GPG
