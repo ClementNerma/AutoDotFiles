@@ -310,11 +310,11 @@ function zoxide() {
     dlghbin ajeetdsouza/zoxide "zoxide-v.*-x86_64-unknown-linux-musl.tar.gz" "zoxide-v.*-aarch64-unknown-linux-musl.tar.gz" "zoxide" "zoxide"
 }
 
-function borg_borgmatic() {
-    # NAME: Borg with Borgmatic
+function borg() {
+    # NAME: Borg
     # PRIORITY: 1
     # ENV: main-pc/all
-    # VERSION: borg -V && borgmatic --version
+    # VERSION: borg -V
     # NEEDS_APT_UPDATE: yes
     
     echoinfo "> Installing dependencies..."
@@ -322,8 +322,15 @@ function borg_borgmatic() {
 
     echoinfo "> Installing Borg..."
     sudo pip3 install --upgrade "borgbackup[fuse]"
+}
 
-    echoinfo "> Installing Borgmatic..."
+function borgmatic() {
+    # NAME: Borgmatic
+    # PRIORITY: 1
+    # ENV: main-pc/all
+    # VERSION: borgmatic --version
+    # NEEDS_APT_UPDATE: no
+
     sudo pip3 install --upgrade "borgmatic"
 }
 
