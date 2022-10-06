@@ -14,25 +14,11 @@ export ADF_FORMAT_CYAN="\e[96m"
 export ADF_FORMAT_WHITE="\e[97m"
 
 function _report_echoc_error() {
-    local cursor=""
-
-    for i in {1..$(($3-1))}; do
-        cursor+=" "
-    done
-
-    local carets=""
-
-    for i in {1..$4}; do
-        carets+="^"
-    done
-
-    local cursor+="${ADF_FORMAT_BLUE}$carets${ADF_FORMAT_RESET}"
-
     >&2 echo "${ADF_FORMAT_RED}====================== echoc error ======================${ADF_FORMAT_RESET}"
     >&2 echo "${ADF_FORMAT_RED}| $1${ADF_FORMAT_RESET}"
     >&2 echo "${ADF_FORMAT_RED}|${ADF_FORMAT_RESET}"
     >&2 echo "${ADF_FORMAT_RED}| In: ${ADF_FORMAT_YELLOW}${2:0:$3-1}${ADF_FORMAT_BLUE}${2:$3:$4}${ADF_FORMAT_YELLOW}${2:$3+$4}${ADF_FORMAT_RESET}"
-    >&2 echo "${ADF_FORMAT_RED}|     $cursor"
+    >&2 echo "${ADF_FORMAT_RED}|     $(printf ' %.0s' {1..$(($3-1))})${ADF_FORMAT_BLUE}$(printf '^%.0s' {1..$4})${ADF_FORMAT_RESET}"
     >&2 echo "${ADF_FORMAT_RED}=========================================================${ADF_FORMAT_RESET}"
 }
 
