@@ -31,6 +31,9 @@ export HISTFILE=$HOME/.zsh_history
 source ~/zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# Enable partial path autocompletion
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
 # Keybindings
 bindkey ";5C" forward-word
 bindkey ";5D" backward-word
