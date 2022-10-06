@@ -193,6 +193,7 @@ function ytsync() {
              YTDL_OUTPUT_DIR="${download_paths[di]}" \
              YTDL_FORMAT="$format" \
              YTDL_FILENAMING_PREFIX="${ADF_YS_DOMAINS_FILENAME_PREFIX[$video_ie]}" \
+             YTDL_FILENAMING_SUFFIX="${ADF_YS_DOMAINS_FILENAME_SUFFIX[$video_ie]}" \
              ytdl "${download_list[di]}" --write-sub --sub-lang fr,en \
              --match-filter "!is_live"
         then
@@ -544,6 +545,7 @@ typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
 typeset -A ADF_YS_DOMAINS_PROFILE
 typeset -A ADF_YS_DOMAINS_USE_LOCKFILE
 typeset -A ADF_YS_DOMAINS_FILENAME_PREFIX
+typeset -A ADF_YS_DOMAINS_FILENAME_SUFFIX
 
 # Register a domain to use with 'ytsync'
 function ytsync_register() {
@@ -551,7 +553,7 @@ function ytsync_register() {
         [required_positional]=2
         [optional_positional]=2
         [required_args]="bandwidth-limit"
-        [optional_args]="always-check, repair-date, use-lockfile, cookie-profile, filename-prefix"
+        [optional_args]="always-check, repair-date, use-lockfile, cookie-profile, filename-prefix, filename-suffix"
     )
 
     adf_args_parser
@@ -565,6 +567,7 @@ function ytsync_register() {
     ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$ie_key]=${arguments[bandwidth-limit]}
     ADF_YS_DOMAINS_PROFILE[$ie_key]=${arguments[cookie-profile]}
     ADF_YS_DOMAINS_FILENAME_PREFIX[$ie_key]=${arguments[filename-prefix]}
+    ADF_YS_DOMAINS_FILENAME_SUFFIX[$ie_key]=${arguments[filename-suffix]}
 }
 
 # Remove a lockfile
