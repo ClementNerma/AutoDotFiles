@@ -63,6 +63,8 @@ function ytsync() {
     local download_names=()
     local download_bandwidth_limits=()
 
+    local last_pb=$(timer_start)
+
     local started=$(timer_start)
 
     for i in {1..${count}}; do
@@ -82,7 +84,12 @@ function ytsync() {
             download_ies+=("$video_ie")
             download_bandwidth_limits+=("${ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$video_ie]}")
         else
-            progress_bar_detailed "Checking videos from cache: " $i $count 0 $started
+            local elapsed=$(timer_elapsed "$last_pb")
+
+            if (( elapsed / 200000000 )) || [[ $i -eq $count ]]; then # 200 milliseconds
+                local last_pb=$(timer_start)
+                progress_bar_detailed "Checking videos from cache: " $i $count 0 $started
+            fi
         fi
     done
 
