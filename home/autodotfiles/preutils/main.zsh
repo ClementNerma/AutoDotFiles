@@ -109,7 +109,7 @@ function mvbak() {
 # Files order and timestamps are not taken into consideration
 function cksumdir() {
 	if [[ -f $1 && ! -z $ADF_ALLOW_CKSUM_FILE ]]; then
-		command cat "$1" | cksum
+		cksumfile "$1"
 		return
 	fi
 
@@ -132,6 +132,11 @@ function cksumdir() {
 	done
 
 	cksumstr "$checksums"
+}
+
+# Display the checksum of a file
+function cksumfile() {
+	cksum < "$1" | cut -d ' ' -f 1
 }
 
 # Display the checksum of a string
