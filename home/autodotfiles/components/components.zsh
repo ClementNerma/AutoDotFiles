@@ -96,6 +96,24 @@ function bat() {
     dlghbin sharkdp/bat "bat-.*-x86_64-unknown-linux-musl.tar.gz" "bat-.*-aarch64-unknown-linux-gnu.tar.gz" "bat-*/bat" bat
 }
 
+function crony() {
+    # NAME: Crony
+    # PRIORITY: 1
+    # ENV: all
+    # VERSION: crony -V
+    # NEEDS_APT_UPDATE: no
+
+    if (( $ADF_IS_ARM64 )); then
+        ghdl "ClementNerma/Crony" "$INSTALLER_TMPDIR/Crony"
+        cargo build --release --manifest-path="$INSTALLER_TMPDIR/Crony/Cargo.toml"
+        mv "$INSTALLER_TMPDIR/Crony/target/release/Crony" "$ADF_BIN_DIR/Crony"
+        command rm -rf "$INSTALLER_TMPDIR/Crony"
+        return
+    fi
+
+    dlghbin "ClementNerma/Crony" "crony-linux-x86_64-musl.zip" "-" "crony" "crony"
+}
+
 function exa() {
     # NAME: Exa
     # PRIORITY: 1
