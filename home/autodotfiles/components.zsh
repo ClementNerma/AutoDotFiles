@@ -188,7 +188,6 @@ function __adf_install_component() {
         utils)    sudo apt install -yqqq htop net-tools ;;
         ntpdate)  sudo apt install -yqqq ntpdate ;;
         p7zip)    sudo apt install -yqqq p7zip-full ;;
-        fzf)      command rm -rf ~/.fzf && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && bash ~/.fzf/install --all ;;
 
         atuin)    dlghbin ellie/atuin "atuin-v.*-x86_64-unknown-linux-gnu.tar.gz" "atuin-*/atuin" ;;
         bat)      dlghbin sharkdp/bat "bat-.*-x86_64-unknown-linux-musl.tar.gz" "bat-*/bat" ;;
