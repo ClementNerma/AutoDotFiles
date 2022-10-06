@@ -63,7 +63,7 @@ function adf_sync_files() {
 
         local rel_path=$(realpath --relative-to="$1" "$file")
         
-        if [[ ! -f "$2/$rel_path.7z" ]]; then
+        if [[ ! -f $(__adf_file_sync_path "$2" "$rel_path") ]]; then
             echoinfo "> Going to synchronize file: \z[green]°$(LC_TIME=fr_FR.UTF-8 date -r "$file")\z[]° \z[magenta]°$rel_path\z[]° (\z[yellow]°$(filesize "$file")\z[]°)"
             tosync+=("$rel_path")
             sync_size=$((sync_size+$(stat -c %s "$file")))
@@ -90,17 +90,16 @@ function adf_sync_files() {
     echoinfo "Starting the synchronization..."
 
     for i in {1..${#tosync}}; do
-        echoinfo "| Transferring encrypted file \z[yellow]°$i\z[]° / \z[yellow]°${#tosync}\z[]°: \z[magenta]°${tosync[$i]}\z[]°..."
-
-        local dest_filename="$(hashstr "${tosync[$i]}").7z"
-        local dest_file="$2/$dest_filename"
+        local dest_file=$(__adf_file_sync_path "$2" "${tosync[$i]}")
         local dest_file_dir=$(dirname "$dest_file")
+
+        echoinfo "| Transferring encrypted file \z[yellow]°$i\z[]° / \z[yellow]°${#tosync}\z[]°: \z[magenta]°${tosync[$i]}\z[]° (\z[yellow]°$(filesize "$1/${tosync[$i]}")\z[]°) as \z[gray]°$(basename "$dest_file")\z[]°..."
 
         if [[ $dest_file_dir != "$2" ]]; then
             mkdir -p "$dest_file_dir"
         fi
 
-        if ! sync_7z_output=$(7z a -t7z -m0=Copy -mhe=on -p"$passphrase" "$2/$dest_filename" "$1/${tosync[$i]}" 2>&1 > /dev/null); then
+        if ! sync_7z_output=$(7z a -t7z -m0=Copy -mhe=on -p"$passphrase" "$dest_file" "$1/${tosync[$i]}" 2>&1 > /dev/null); then
             echoerr "> Failed to transfer file (command \z[yellow]°7z\z[]° failed): \z[yellow]°${sync_7z_output}\z[]°."
             errors=$((errors+1))
         fi
@@ -112,4 +111,25 @@ function adf_sync_files() {
     fi
 
     echosuccess "\nSuccessfully synchronized \z[yellow]°${#tosync}\z[]° new files!"
+}
+
+function __adf_file_sync_path() {
+    if [[ -z "$1" ]]; then
+        echoerr "Internal error: please provide an absolute target path"
+        return 1
+    fi
+
+    if [[ -z "$2" ]]; then
+        echoerr "Internal error: please provide a relative source path"
+        return 1
+    fi
+
+    local target="$1"
+    local dir=$(dirname "$2")
+
+    if [[ $dir != "." ]]; then
+        local target="$target/$dir"
+    fi
+
+    printf '%s' "$target/$(hashstr "$(basename "$2")").7z"
 }
