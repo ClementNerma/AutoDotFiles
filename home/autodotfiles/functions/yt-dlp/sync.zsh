@@ -3,12 +3,6 @@ export ADF_YS_CACHE_FILE=".ytdlsync-cache"
 export ADF_YS_AUTO_BLACKLIST_FILE=".ytdlsync-blacklist"
 export ADF_YS_CUSTOM_BLACKLIST_FILE=".ytdlsync-custom-blacklist"
 
-export ADF_YS_LOCKFILES_DIR="$ADF_ASSETS_DIR/ytsync-lockfiles"
-
-if [[ ! -d $ADF_YS_LOCKFILES_DIR ]]; then
-    mkdir "$ADF_YS_LOCKFILES_DIR"
-fi
-
 # To set up a playlist to synchronize: ytsync <url>
 # To set up with a specific profile: ytsync "withprofile[<profile> with_ie <alternative_ie>]:<url>"
 function ytsync() {
@@ -72,7 +66,6 @@ function ytsync() {
 
     local download_started=$(timer_start)
     local errors=0
-    local forecast_lock=0
 
     local di=0
     local blocked_at=-1
@@ -93,18 +86,6 @@ function ytsync() {
         if [[ -z $video_ie ]] || [[ -z $video_dir ]] || [[ -z $video_id ]] || [[ -z $video_title ]] || [[ -z $video_url ]]; then
             echoerr "Invalid cache content: entry n°\z[yellow]°$i\z[]° has some missing data."
             return 11
-        fi
-
-        local lockfile="$ADF_YS_LOCKFILES_DIR/$video_ie.lock"
-        local needlockfile=${ADF_YS_DOMAINS_USE_LOCKFILE[$video_ie]}
-
-        if (( $forecast_lock )) && [[ $(command cat "$lockfile") != $PWD ]]; then
-            echoerr "\nInternal error: inconsistency in the lockfile."
-            local forecast_lock=0
-        fi
-
-        if ! (( $forecast_lock )) && (( $needlockfile )); then
-            ytsync_wait_lockfile
         fi
 
         local cookie_profile=${ADF_YS_DOMAINS_PROFILE[$video_ie]}
@@ -167,16 +148,7 @@ function ytsync() {
                 fi
 
                 local blocked_at=$di
-
                 local di=$(($di - 1))
-
-                if (( $needlockfile )) && (( $di < $count )); then
-                    if [[ $next_video_ie = $video_ie ]]; then
-                        local forecast_lock=1
-                    else
-                        command rm "$lockfile"
-                    fi
-                fi
                 
                 continue
             fi
@@ -184,32 +156,12 @@ function ytsync() {
             local errors=$((errors+1))
             echowarn "Waiting 5s before the next video..."
             
-            if ! passive_confirm 5; then
-                if (( $needlockfile )); then
-                    echoverb ">> Removing lockfile..."
-                    command rm "$lockfile"
-                fi
-
-                return
-            fi
-        fi
-
-        if (( $needlockfile )) && (( $di < $count )); then
-            if [[ $next_video_ie = $video_ie ]]; then
-                local forecast_lock=1
-            else
-                command rm "$lockfile"
-            fi
+            passive_confirm 5 || return
         fi
 
         progress_bar_detailed "Instant progress: " $di $count 0 $download_started
         printf "\n\n"
     done
-
-    if (( $needlockfile )); then
-        echoverb ">> Removing lockfile..."
-        command rm "$lockfile"
-    fi
 
     if [[ $errors -eq 0 ]]; then
         echosuccess "Done!"
@@ -220,40 +172,6 @@ function ytsync() {
     fi
 }
 
-# Lockfile handling
-function ytsync_wait_lockfile() {
-    while true; do
-        if [[ -f $lockfile ]]; then
-            local started_waiting=$(timer_start)
-            local waited=0
-
-            while [[ -f $lockfile ]]; do
-                local waited=1
-                local pending=$(command cat "$lockfile")
-                local waiting_for=$(timer_elapsed_seconds "$started_waiting")
-
-                ADF_UPDATABLE_LINE=1 echowarn ">> Waiting for lockfile removal (download pending at \z[magenta]°$pending\z[]°)... \z[cyan]°$waiting_for\z[]°"
-                
-                sleep 1
-            done
-
-            if (( $waited )); then
-                echo ""
-            fi
-        fi
-
-        echo "$PWD" > "$lockfile"
-        echoverb ">> Writing current path to lockfile\n"
-
-        local lockfile_content=$(command cat "$lockfile")
-
-        if [[ $lockfile_content != $PWD ]]; then
-            echoerr "Internal error: inconsistency in the lockfile, expected \z[yellow]°$PWD\z[]° but got \z[gray]°$lockfile_content\z[]°"
-        else
-            break
-        fi
-    done
-}
 
 # URL mapper for IDs in playlists
 typeset -A ADF_YS_DOMAINS_IE_PLAYLISTS_URL_REGEX
@@ -263,7 +181,6 @@ typeset -A ADF_YS_DOMAINS_CHECKING_MODE
 typeset -A ADF_YS_DOMAINS_REPAIR_DATE_MODE
 typeset -A ADF_YS_DOMAINS_BANDWIDTH_LIMIT
 typeset -A ADF_YS_DOMAINS_PROFILE
-typeset -A ADF_YS_DOMAINS_USE_LOCKFILE
 typeset -A ADF_YS_DOMAINS_RATE_LIMITED
 
 # Register a domain to use with 'ytsync'
@@ -272,7 +189,7 @@ function ytsync_register() {
         [required_positional]=1
         [optional_positional]=1
         [required_args]="playlists-url-regex, videos-url-regex, videos-url-prefix, bandwidth-limit"
-        [optional_args]="always-check, repair-date, use-lockfile, cookie-profile, rate-limited"
+        [optional_args]="always-check, repair-date, cookie-profile, rate-limited"
     )
 
     adf_args_parser
@@ -284,7 +201,6 @@ function ytsync_register() {
     ADF_YS_DOMAINS_IE_VIDEOS_URL_PREFIX[$ie_key]=${arguments[videos-url-prefix]}
     ADF_YS_DOMAINS_CHECKING_MODE[$ie_key]=${arguments[always-check]:-0}
     ADF_YS_DOMAINS_REPAIR_DATE_MODE[$ie_key]=${arguments[repair-date]:-0}
-    ADF_YS_DOMAINS_USE_LOCKFILE[$ie_key]=${arguments[use-lockfile]:-0}
     ADF_YS_DOMAINS_BANDWIDTH_LIMIT[$ie_key]=${arguments[bandwidth-limit]}
     ADF_YS_DOMAINS_PROFILE[$ie_key]=${arguments[cookie-profile]}
     ADF_YS_DOMAINS_RATE_LIMITED[$ie_key]=${arguments[rate-limited]}
