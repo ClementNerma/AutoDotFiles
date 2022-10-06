@@ -180,6 +180,8 @@ function ytsync() {
                     sleep 1
                 done
 
+                echoinfo ""
+
                 if [[ $blocked_at = $di ]]; then
                     echoerr "Failed twice on this video, skipping it."
                     continue
