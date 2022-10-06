@@ -129,11 +129,6 @@ function echof() {
         return
     fi
 
-    if ! (( $remaining )); then
-        echo -n "${@:1:-2}" "$formatted"
-        return
-    fi
-
     formatted+=$(repeat $remaining printf ' ')
 
     if (( $remaining > 1 )); then

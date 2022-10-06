@@ -213,7 +213,7 @@ function progress_bar() {
 		local suffix=""
 	fi
 
-	ADF_UPDATABLE_LINE=1 echoc "$1\z[white]°$filled\z[]°\z[gray]°$remaining\z[]°$suffix"
+	echof "$1$ADF_FORMAT_WHITE$filled$ADF_FORMAT_GRAY$remaining$ADF_FORMAT_RESET$suffix" "$1$filled$remaining$suffix"
 
 	if [[ $current -eq $max ]]; then
 		echo ""
