@@ -26,16 +26,7 @@ function make7z() {
 	if [[ ! -e $1 ]]; then echoerr "Provided input item does not exist."; return 10; fi
 	if [[ -n $2 ]] && [[ ! -d $2 ]]; then echoerr "Provided output directory does not exist."; return 11; fi
 
-	local dest="${2:-$PWD}/$(basename "$1")-$(humandate).7z"
-	local cwd=$PWD
-
-	cd "$(dirname "$1")"
-
-	7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=32m -ms=on -mhc=on -mhe=on -spf2 -bso0 "$dest" "$(basename "$1")"
-
-	cd "$cwd"
-
-	export __LAST_MADE_7Z="$dest"
+	7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=32m -ms=on -mhc=on -mhe=on -spf2 -bso0 "${2:-$PWD}/$(basename "$1")-$(humandate).7z" "$1"
 }
 
 # Merge multiple ZIPs together
