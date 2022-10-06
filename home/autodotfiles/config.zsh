@@ -20,14 +20,8 @@ export ADF_CONF_WSL_BACKUP_SESSION_DIR="/mnt/c/Temp/SessionBackup"
 # Backup path for sessions' compilation (WSL-only) - must end with `.7z` extension
 export ADF_CONF_WSL_BACKUP_SESSION_COMPILATION="$ADF_CONF_WSL_BACKUP_SESSION_DIR/session-backups.7z"
 
-# CRON tasks' logs directory
-export ADF_CONF_CRON_LOGS_DIR="$ADF_ASSETS_DIR/cron-logs"
-
-# CRON failures empty files
-export ADF_CONF_CRON_FAILURE_DIR="$ADF_CONF_CRON_LOGS_DIR/failures"
-
-# Check CRON failures at startup
-export ADF_CHECK_CRON_FAILURES_STARTUP=1
+# Check Crony failures at startup
+export ADF_CHECK_CRONY_FAILURES_STARTUP=1
 
 # Default bandwidth limit for the 'ytdl' function
 # Can be overriden with the YTDL_LIMIT_BANDWIDTH variable
