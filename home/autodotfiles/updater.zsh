@@ -84,14 +84,9 @@ function zerupdate() {
 
 	# Save the new files list
 	command ls -1A "$update_path/home" > "$ADF_FILES_LIST"
-	command echo "$(basename "$ADF_ASSETS_DIR")" >> "$ADF_FILES_LIST"
 
 	# Restore user scripts
 	cp -R "$ADF_LAST_BACKUP_DIR/autodotfiles-user/"* "$ADF_USER_DIR"
-
-	# Restore assets
-	mkdir "$ADF_ASSETS_DIR"
-	cp -R "$ADF_LAST_BACKUP_DIR/autodotfiles-assets/"* "$ADF_ASSETS_DIR"
 
 	if [[ -d $badly_nested ]]; then
 		echowarn "Badly nested user directory detected, removing it (at path \z[magenta]°$badly_nested\z[]°)"
@@ -165,7 +160,7 @@ function zeruninstall() {
 	echosuccess "AutoDotFiles was successfully installed!"
 	echosuccess "To restore it, just type '\z[yellow]°zerrestore\z[]°'."
 	echosuccess ""
-	
+
 	echoinfo "Press any key to continue..."
 	read '?'
 
