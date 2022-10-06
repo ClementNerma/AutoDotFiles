@@ -309,6 +309,8 @@ function zoxide() {
     dlghbin ajeetdsouza/zoxide "zoxide-v.*-x86_64-unknown-linux-musl.tar.gz" "zoxide-v.*-aarch64-unknown-linux-musl.tar.gz" "zoxide" "zoxide"
 }
 
+# =============== MAIN COMPUTER =============== #
+
 function borg() {
     # NAME: Borg
     # PRIORITY: 1
