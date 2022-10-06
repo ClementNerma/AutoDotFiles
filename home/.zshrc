@@ -22,21 +22,31 @@ unsetopt BANG_HIST
 # Disable history expansion
 set +H
 
-# Increase history capacity
-export HISTSIZE=10000000
-export SAVEHIST=10000000
-export HISTFILE=$HOME/.zsh_history
+# Prezto configuration version
+_prezto_config_version="1"
+_prezto_version_file="$HOME/.adf-prezto-config-version"
 
-# Load modules
-source ~/zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ ! -f $_prezto_version_file ]]; then
+	echo "Setting up Prezto configuration files..."
 
-# Enable partial path autocompletion
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+	setopt EXTENDED_GLOB
 
-# Keybindings
-bindkey ";5C" forward-word
-bindkey ";5D" backward-word
+	for rcfile in "$HOME"/.zprezto/runcoms/^README.md(.N); do
+		ln -s "$rcfile" "$HOME/.${rcfile:t}"
+	done
+
+	echo "0" > "$_prezto_version_file"
+fi
+
+if [[ $(command cat "$_prezto_version_file") != $_prezto_config_version ]]; then
+	echo "Updating Prezto configuration..."
+
+	command cat "$HOME/.prezto.zsh" > "$HOME/.zpreztorc"
+	echo "$_prezto_config_version" > "$_prezto_version_file"
+fi
+
+# Load Prezto
+source "$HOME/.zprezto/init.zsh"
 
 # Load ADF
 source $HOME/autodotfiles/index.zsh
