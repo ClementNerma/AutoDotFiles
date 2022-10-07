@@ -38,8 +38,12 @@ chpwd_functions=(${chpwd_functions[@]} "jumpy_handler")
 
 # Integration for Atuin
 if command -v atuin > /dev/null; then
+    if [[ ! -f $HOME/.config/atuin/config.toml ]] || ! cmp "$HOME/atuin.toml" "$HOME/.config/atuin/config.toml" > /dev/null; then
+        echoinfo "Updating Atuin configuration..."
+        command cat "$HOME/atuin.toml" > "$HOME/.config/atuin/config.toml"
+    fi
+
     eval "$(atuin init zsh)"
 fi
-
 # Ensure Crony is started
 crony start --ignore-started
