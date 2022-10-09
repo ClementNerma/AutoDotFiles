@@ -175,6 +175,10 @@ function find_pid() {
 	printf '%s' "${pids[1]}" | pomsky "$PSS_ENTRY_PARSER" '$pid'
 }
 
+function has_pid() {
+	pss | grep "$1" | grep -v "grep " > /dev/null
+}
+
 function pomsky() {
 	if ! _pomsky_regex=$(command pomsky "$1"); then
 		return 1

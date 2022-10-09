@@ -2,17 +2,6 @@
 # Background jobs management
 #
 
-function bjstart() {
-    [[ -z $1 ]] && { echoerr "Please provide a task name"; return 1 }
-    [[ -z $2 ]] && { echoerr "Please provide a command to run"; return 2 }
-
-    nohup "$(which zsh)" \
-        "$ADF_ENTRYPOINT" "--just-run" \
-        _bjmarker "$1" "${@:2}" \
-        > /dev/null & \
-        disown 
-}
-
 function bjlist() {
     IFS=$'\n' local pids=($(
 		pss | grep " _bjmarker " | grep -v "grep "
@@ -26,9 +15,33 @@ function bjlist() {
     echoinfo "Found \z[yellow]°${#pids}\z[]° running command(s):"
 
     for entry in $pids; do
-        local command=$(printf '%s' "$entry" | pomsky "$PSS_ENTRY_PARSER" '$command' | pomsky "Start Codepoint+ '_bjmarker' [s] ![s]+ [s] :command(Codepoint+) End" '$command')
-        echoinfo "* \z[magenta]°$command\z[]°"
+        local task=$(printf '%s' "$entry" | pomsky "$PSS_ENTRY_PARSER" '$command' | pomsky "Start Codepoint+ '_bjmarker' [s] :name(![s]+) [s] :command(Codepoint+) End" '\z[yellow]°$name\z[]° => \z[magenta]°$command\z[]°')
+        echoinfo "* $task"
     done
+}
+
+function bjhas() {
+    [[ -z $1 ]] && { echoerr "Please provide a task name"; return 1 }
+
+    if ! has_pid "_bjmarker $1" > /dev/null; then
+        return 1
+    fi
+}
+
+function bjstart() {
+    [[ -z $1 ]] && { echoerr "Please provide a task name"; return 1 }
+    [[ -z $2 ]] && { echoerr "Please provide a command to run"; return 2 }
+
+    if bjhas "$1"; then
+        if [[ $3 == "--ignore-running" ]]; then
+            return
+        fi
+
+        echowarn "This job is already running."
+        return 1
+    fi
+
+    (nohup "$(which zsh)" "$ADF_ENTRYPOINT" "--just-run" _bjmarker "$1" "${@:2}" > /dev/null 2>&1 &)
 }
 
 function bjkill() {
