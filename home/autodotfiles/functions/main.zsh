@@ -145,6 +145,8 @@ function z() {
     fi
 }
 
+export PSS_ENTRY_PARSER="Start :pid(![s]+) '   ' :command(Codepoint+) End"
+
 function pss() {
 	ps -ux \
     | pomsky \
@@ -157,20 +159,20 @@ function find_pid() {
 		pss | grep "$1" | grep -v "grep "
 	))
 
-	local parse_pid_result="Start :pid(![s]+) '   ' :command(Codepoint+) End"
+	(( ${#pids} > 0 )) || return 1
 
 	if (( ${#pids} > 1 )); then
 		echowarn "Found multiple candidates:"
 
 		for entry in $pids; do
-			IFS=$'\n' local parsed=($(printf '%s' "$entry" | pomsky "$parse_pid_result" '$pid\n$command'))
+			IFS=$'\n' local parsed=($(printf '%s' "$entry" | pomsky "$PSS_ENTRY_PARSER" '$pid\n$command'))
 			echoinfo "* \z[yellow]°${parsed[1]}\z[]° \z[blue]°${parsed[2]}\z[]°"
 		done
 
 		return 1
 	fi
 
-	printf '%s' "${pids[1]}" | pomsky "$parse_pid_result" '$pid'
+	printf '%s' "${pids[1]}" | pomsky "$PSS_ENTRY_PARSER" '$pid'
 }
 
 function pomsky() {
