@@ -2,6 +2,12 @@
 # Background jobs management
 #
 
+export ADF_BJOBS_LOGS_DIR="$ADF_ASSETS_DIR/bjobs"
+
+if [[ ! -d $ADF_BJOBS_LOGS_DIR ]]; then
+    mkdir "$ADF_BJOBS_LOGS_DIR"
+fi
+
 function bjlist() {
     IFS=$'\n' local pids=($(
 		pss | grep " _bjmarker " | grep -v "grep "
@@ -30,14 +36,29 @@ function bjhas() {
 
 function bjstart() {
     [[ -z $1 ]] && { echoerr "Please provide a task name"; return 1 }
-    [[ -z $2 ]] && { echoerr "Please provide a command to run"; return 2 }
+    [[ -z $2 ]] && { echoerr "Please provide a start directory"; return 1 }
+    [[ -z $3 ]] && { echoerr "Please provide a command to run"; return 2 }
 
     if bjhas "$1"; then
         return 1
     fi
 
-    (nohup "$(which zsh)" "$ADF_ENTRYPOINT" "--just-run" _bjmarker "$1" "${@:2}" > /dev/null 2>&1 &)
+    echo "========== Starting task on $(humandate)... ==========" >> "$ADF_BJOBS_LOGS_DIR/$1.log"
+    (nohup "$(which zsh)" "$ADF_ENTRYPOINT" "--just-run" _bjmarker "$1" "$2" "${@:3}" >> "$ADF_BJOBS_LOGS_DIR/$1.log" 2>&1 &)
     echoinfo "Started task \z[yellow]°$1\z[]°."
+}
+
+function bjlogs() {
+    [[ -z $1 ]] && { echoerr "Please provide a task name"; return 1 }
+
+    local logfile="$ADF_BJOBS_LOGS_DIR/$1.log"
+
+    if [[ ! -f $logfile ]]; then
+        echoerr "No log file found for the provided task."
+        return 1
+    fi
+
+    tail -f "$logfile"
 }
 
 function bjkill() {
@@ -54,7 +75,9 @@ function bjkill() {
 
 function _bjmarker() {
     [[ -z $1 ]] && { echoerr "Please provide a task name"; return 1 }
-    [[ -z $2 ]] && { echoerr "Please provide a command to run"; return 2 }
+    [[ -z $2 ]] && { echoerr "Please provide a start directory"; return 2 }
+    [[ -z $3 ]] && { echoerr "Please provide a command to run"; return 2 }
 
-    "${@:2}"
+    cd "$2"
+    "${@:3}"
 }
