@@ -41,6 +41,10 @@ fi
 # Load Prezto
 source "$HOME/.zprezto/init.zsh"
 
+# Custom keybindings
+bindkey '^H' backward-kill-word
+bindkey '5~' kill-word
+
 # Load ADF
 source $HOME/autodotfiles/index.zsh
 
