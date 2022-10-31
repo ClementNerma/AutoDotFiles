@@ -132,6 +132,7 @@ export ADF_INSTALLABLE_COMPONENTS=(
     trasher
     kopia
     ytdl
+    zellij
 
     micro
     ncdu
@@ -207,6 +208,7 @@ function __adf_install_component() {
         kopia)    dlghbin kopia/kopia "kopia-.*-linux-x64.tar.gz" "kopia-*/kopia" ;;
         ytdl)     dlghbin ClementNerma/ytdl "ytdl-linux-x86_64-musl.zip" "ytdl" ;;
         ytdlp)    dlghbin yt-dlp/yt-dlp "yt-dlp" "-" ;;
+        zellij)   dlghbin zellij-org/zellij "zellij-x86_64-unknown-linux-musl.tar.gz" "zellij" ;;
         micro)    dlghbin zyedidia/micro "micro-.*-linux64.tar.gz" "micro-*/micro"
                   ensure_config_file "$HOME/.config/micro/bindings.json" '{ "CtrlN": "AddTab", "CtrlW": "Quit", "CtrlD": "SpawnMultiCursor" }' ;;
         ncdu)
