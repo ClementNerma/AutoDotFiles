@@ -41,6 +41,10 @@ alias g="gitui"
 alias yd="ytdl dl"
 alias ytsync="ytdl sync"
 
+function yu() {
+    yd "${@:2}" --cookie-profile "$1"
+}
+
 # Set the default editor
 export EDITOR="micro"
 alias nano="$EDITOR"
