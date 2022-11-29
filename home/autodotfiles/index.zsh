@@ -69,7 +69,6 @@ if (( $ADF_INSTALLER_ABORTED )); then
 	return
 fi
 
-
 # Determine if current environment is WSL
 if grep -q microsoft /proc/version; then
 	source "$ADF_DIR/env/wsl.zsh"

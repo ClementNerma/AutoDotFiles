@@ -123,3 +123,58 @@ function zeruninstall() {
 
 	exit
 }
+
+# Download the latest version of the source code from a GitHub repository
+# Arguments: "<repo author>/<repo name>" "<download location>"
+function ghdl() {
+	local repo_url="$1"
+
+	if [[ $repo_url = "https://"* ]]; then
+		if ! [[ $repo_url != "https://github.com/"* ]]; then
+			echoerr "Invalid GitHub repository URL: \z[yellow]°$repo_url\z[]°"
+			return 1
+		fi
+	elif [[ $repo_url = "http://"* ]]; then
+		echoerr "Cannot get from HTTP link with GitHub"
+		return 1
+	else
+		repo_url="https://github.com/$repo_url"
+	fi
+
+	local repoauthor=$(echo "$repo_url" | cut -d'/' -f4)
+	local reponame=$(echo "$repo_url" | cut -d'/' -f5)
+	local outdir="$reponame"
+
+	if [[ -n $2 ]]; then
+		outdir="$2"
+	fi
+	
+	reponame="${reponame%.git}"
+
+	echosuccess "Cloning from repository: \z[yellow]°$repoauthor/$reponame\z[]°..."
+
+	[[ -d $outdir ]] && { echoerr "> Directory \z[magenta]°$outdir\z[]° already exists!"; return 1 }
+
+	echoinfo "> Fetching default branch..."
+	local branch=$(curl -s -S "https://api.github.com/repos/$repoauthor/$reponame" | jq -r ".default_branch")
+
+	[[ $branch != "null" ]] || { echoerr "> Failed to determine default branch!"; return 1 }
+
+	local filename="$reponame-$(humandate).zip"
+	echoinfo "> Fetching archive for branch \z[yellow]°$branch\z[]° to \z[magenta]°$filename\z[]°..."
+	
+	local zipurl="https://codeload.github.com/$repoauthor/$reponame/zip/$branch"
+
+	dl "$zipurl" "$filename" || { echoerr "> Failed to fetch archive from URL: \z[yellow]°$zipurl\z[]°!"; return 1 }
+
+	echoinfo "> Extracting archive to directory \z[yellow]°$outdir\z[]°..."
+	unzip -q "$filename"
+	command rm "$filename"
+	mv "$reponame-$branch" "$outdir"
+
+	if [[ -z $2 ]]; then
+		cd "$outdir"
+	fi
+
+	echosuccess "Done!"
+}
