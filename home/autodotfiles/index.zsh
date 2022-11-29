@@ -51,9 +51,7 @@ source "$ADF_DIR/config.zsh"
 source "$ADF_DIR/display.zsh"
 
 # Load common utilities usable by the installer
-for script in "$ADF_DIR/preutils/"**/*; do
-	source "$script"
-done
+source "$ADF_DIR/preutils.zsh"
 
 # Load the updater
 source "$ADF_DIR/updater.zsh"
