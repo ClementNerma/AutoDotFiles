@@ -94,10 +94,6 @@ sudo apt update
 
 sudo apt install -yqqq zsh git curl
 
-mkdir -p ~/zsh-plugins
-git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/zsh-plugins/zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/zsh-plugins/zsh-autosuggestions
-
 cp -a "$INSTALL_FROM/home/." ~/
 
 ls -1A "$INSTALL_FROM/home" > ~/.autodotfiles-files-list.txt
