@@ -94,6 +94,8 @@ sudo apt update
 
 sudo apt install -yqqq zsh git curl
 
+git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+
 cp -a "$INSTALL_FROM/home/." ~/
 
 ls -1A "$INSTALL_FROM/home" > ~/.autodotfiles-files-list.txt
