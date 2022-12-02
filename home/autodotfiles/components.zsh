@@ -19,7 +19,7 @@ function adf_install_components() {
     fi
 
     if ! grep -Fxq "rust" "$ADF_INSTALLED_LIST"; then
-        echoinfo ">\n> Installing Rust..\n>"
+        echoinfo "\n>\n> Installing Rust..\n>"
 
         mvoldbak ~/.rustup
         mvoldbak ~/.cargo
@@ -27,33 +27,33 @@ function adf_install_components() {
         curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y
         source $HOME/.cargo/env # Just for this session
 
-        echoinfo ">\n> Installing tools for Rust...\n>"
+        echoinfo "\n>\n> Installing tools for Rust...\n>\n"
 
         sudo apt update
         sudo apt install -yqqq llvm libclang-dev
 
         echo "rust" >> "$ADF_INSTALLED_LIST"
     elif ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo ">\n> Updating Rustup...\n>"
+        echoinfo "\n>\n> Updating Rustup...\n>\n"
         rustup self update
 
-        echoinfo ">\n> Updating the Rust toolchain...\n>"
+        echoinfo "\n>\n> Updating the Rust toolchain...\n>\n"
         rustup update
     fi
 
     if ! grep -Fxq "nodejs" "$ADF_INSTALLED_LIST"; then
         mvoldbak ~/.volta
 
-        echoinfo ">\n> Installing Volta...\n>"
+        echoinfo "\n>\n> Installing Volta...\n>\n"
         curl https://get.volta.sh | bash
 
         export VOLTA_HOME="$HOME/.volta"    # Just for this session
         export PATH="$VOLTA_HOME/bin:$PATH" # Just for this session
 
-        echoinfo ">\n> Installing Node.js & NPM...\n>"
+        echoinfo "\n>\n> Installing Node.js & NPM...\n>\n"
         volta install node@latest
 
-        echoinfo ">\n> Installing Yarn & PNPM...\n>"
+        echoinfo "\n>\n> Installing Yarn & PNPM...\n>\n"
         volta install yarn pnpm
 
         yarn -v > /dev/null # Just to be sure Yarn was installed correctly
@@ -61,10 +61,10 @@ function adf_install_components() {
 
         echo "nodejs" >> "$ADF_INSTALLED_LIST"
     elif ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo ">\n> Updating Node.js & NPM...\n>"
+        echoinfo "\n>\n> Updating Node.js & NPM...\n>\n"
         volta install node@latest
 
-        echoinfo ">\n> Updating Yarn & PNPM...\n>"
+        echoinfo "\n>\n> Updating Yarn & PNPM...\n>\n"
         volta install yarn pnpm
     fi
 
@@ -83,6 +83,8 @@ function adf_install_components() {
     fi
 
     if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )); then
+        echoinfo "\n>\n> Installing Fetchy...\n>\n"
+
         # Fetchy
         wget https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-linux-x86_64 -qO "$ADF_BIN_DIR/fetchy"
         chmod +x "$ADF_BIN_DIR/fetchy"
@@ -94,10 +96,18 @@ function adf_install_components() {
     fi
 
     if ! (( $ADF_SKIP_INSTALLED )); then
-        fetchy -q repos:update
+        echoinfo "\n>\n> Updating Fetchy repositories...\n>\n"
 
-        # Install missing packages
-        fetchy require "bat" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij"
+        fetchy -q repos:update
+    fi
+
+    # Install missing packages
+    fetchy require "bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij"
+
+    if ! (( $ADF_SKIP_INSTALLED )); then
+        echoinfo "\n>\n> Update packages using Fetchy...\n>\n"
+
+        fetchy update
     fi
 }
 
