@@ -65,7 +65,7 @@
           "GitHub": {
             "author": "ClementNerma",
             "repo_name": "Crony",
-            "asset_pattern": "Start \"crony-linux-x86_64-musl.zip\" End"
+            "asset_pattern": "Start \"crony-linux-x86_64.zip\" End"
           }
         },
         "file_format": {
