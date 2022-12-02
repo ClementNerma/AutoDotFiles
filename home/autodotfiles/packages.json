@@ -1,0 +1,495 @@
+{
+  "name": "AutoDotFiles",
+  "description": "Repository for AutoDotFiles",
+  "packages": [
+    {
+      "name": "bat",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "sharkdp",
+            "repo_name": "bat",
+            "asset_pattern": "\"-x86_64-unknown-linux-musl.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"bat-\" Codepoint+ \"/bat\" End",
+                "rename_to": "bat"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "DownloadedFileName",
+          "regex": "Start \"bat-v\" :(['0'-'9' '.']+) \"-x86_64\""
+        }
+      }
+    },
+
+    {
+      "name": "bjobs",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "ClementNerma",
+            "repo_name": "BackgroundJobs",
+            "asset_pattern": "Start \"crony-linux-x86_64-musl.zip\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "Zip",
+            "files": [
+              {
+                "relative_path": "Start \"bjobs\" End",
+                "rename_to": "bjobs"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "crony",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "ClementNerma",
+            "repo_name": "Crony",
+            "asset_pattern": "Start \"crony-linux-x86_64-musl.zip\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "Zip",
+            "files": [
+              {
+                "relative_path": "Start \"crony\" End",
+                "rename_to": "crony"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "exa",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "ogham",
+            "repo_name": "exa",
+            "asset_pattern": "Start \"exa-linux-x86_64-musl-v\" Codepoint+ \".zip\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "Zip",
+            "files": [
+              {
+                "relative_path": "Start \"bin/exa\" End",
+                "rename_to": "exa"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "DownloadedFileName",
+          "regex": "\"exa-linux-x86_64-musl-\" :(Codepoint+) \".zip\""
+        }
+      }
+    },
+
+    {
+      "name": "fd",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "sharkdp",
+            "repo_name": "fd",
+            "asset_pattern": "\"-x86_64-unknown-linux-musl.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"fd-\" Codepoint+ \"/fd\" End",
+                "rename_to": "fd"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "DownloadedFileName",
+          "regex": "Start \"fd-v\" :(['0'-'9' '.']+) \"-x86_64\""
+        }
+      }
+    },
+
+    {
+      "name": "gitui",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "extrawurst",
+            "repo_name": "gitui",
+            "asset_pattern": "Start \"gitui-linux-musl.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"./\"? \"gitui\" End",
+                "rename_to": "gitui"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "jumpy",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "ClementNerma",
+            "repo_name": "Jumpy",
+            "asset_pattern": "Start \"jumpy-linux-x86_64-musl.zip\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "Zip",
+            "files": [
+              {
+                "relative_path": "Start \"jumpy\" End",
+                "rename_to": "jumpy"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "kopia",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "kopia",
+            "repo_name": "kopia",
+            "asset_pattern": "\"-linux-x64.tar.gz\""
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"kopia-\" Codepoint+ \"/kopia\" End",
+                "rename_to": "kopia"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "DownloadedFileName",
+          "regex": "Start \"kopia-\" :(['0'-'9' '.']+) \"-linux-x64.tar.gz\" End"
+        }
+      }
+    },
+
+    {
+      "name": "micro",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "zyedidia",
+            "repo_name": "micro",
+            "asset_pattern": "\"-linux64.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"micro-\" Codepoint+ \"/micro\" End",
+                "rename_to": "micro"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "DownloadedFileName",
+          "regex": "Start \"micro-\" :(['0'-'9' '.']+) \"-linux64\""
+        }
+      }
+    },
+
+    {
+      "name": "ncdu",
+      "download": {
+        "source": {
+          "Direct": {
+            "url": "https://dev.yorhel.nl/download/ncdu-2.2.1-linux-x86_64.tar.gz"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"ncdu\" End",
+                "rename_to": "ncdu"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "Url",
+          "regex": "\"/download/ncdu-\" :(['0'-'9' '.']+) \"-linux-x86_64.tar.gz\" End"
+        }
+      }
+    },
+
+    {
+      "name": "pomsky",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "rulex-rs",
+            "repo_name": "pomsky",
+            "asset_pattern": "\"pomsky_linux_v\""
+          }
+        },
+        "file_format": {
+          "Binary": {
+            "filename": "pomsky"
+          }
+        },
+        "version_extraction": {
+          "source": "DownloadedFileName",
+          "regex": "Start \"pomsky_linux_v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "ripgrep",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "BurntSushi",
+            "repo_name": "ripgrep",
+            "asset_pattern": "\"-x86_64-unknown-linux-musl.tar.gz\""
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"ripgrep-\" Codepoint+ \"/rg\" End",
+                "rename_to": "rg"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "DownloadedFileName",
+          "regex": "Start \"ripgrep-\" :(['0'-'9' '.']+) \"-x86\""
+        }
+      }
+    },
+
+    {
+      "name": "starship",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "starship",
+            "repo_name": "starship",
+            "asset_pattern": "Start \"starship-x86_64-unknown-linux-musl.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"starship\" End",
+                "rename_to": "starship"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "tokei",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "XAMPPRocky",
+            "repo_name": "tokei",
+            "asset_pattern": "Start \"tokei-x86_64-unknown-linux-musl.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"tokei\" End",
+                "rename_to": "tokei"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "trasher",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "ClementNerma",
+            "repo_name": "Trasher",
+            "asset_pattern": "Start \"trasher-linux-x86_64.zip\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "Zip",
+            "files": [
+              {
+                "relative_path": "Start \"trasher\" End",
+                "rename_to": "trasher"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"Trasher v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "yt-dlp",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "yt-dlp",
+            "repo_name": "yt-dlp",
+            "asset_pattern": "Start \"yt-dlp\" End"
+          }
+        },
+        "file_format": {
+          "Binary": {
+            "filename": "yt-dlp"
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"yt-dlp \" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "ytdl",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "ClementNerma",
+            "repo_name": "ytdl",
+            "asset_pattern": "Start \"ytdl-linux-x86_64-musl.zip\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "Zip",
+            "files": [
+              {
+                "relative_path": "Start \"ytdl\" End",
+                "rename_to": "ytdl"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "zellij",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "zellij-org",
+            "repo_name": "zellij",
+            "asset_pattern": "Start \"zellij-x86_64-unknown-linux-musl.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"zellij\" End",
+                "rename_to": "zellij"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"Release v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    }
+  ]
+}

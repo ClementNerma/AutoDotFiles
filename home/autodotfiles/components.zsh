@@ -81,6 +81,28 @@ function adf_install_components() {
         
         echo "micro-config" >> "$ADF_INSTALLED_LIST"
     fi
+
+    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )); then
+        # Fetchy
+        wget https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-linux-x86_64 -qO "$ADF_BIN_DIR/fetchy"
+        chmod +x "$ADF_BIN_DIR/fetchy"
+
+        # Add packages repository
+        fetchy repos:add -i "$ADF_DIR/packages.json"
+
+        echo "fetchy" >> "$ADF_INSTALLED_LIST"
+    fi
+
+    if ! (( $ADF_SKIP_INSTALLED )); then
+        fetchy -q repos:update
+
+        # Install missing packages
+        fetchy require "bat" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij"
+    fi
+}
+
+function adf_update() {
+    adf_install_components
 }
 
 export ADF_INSTALLER_ABORTED=0
