@@ -82,32 +82,31 @@ function adf_install_components() {
         echo "micro-config" >> "$ADF_INSTALLED_LIST"
     fi
 
-    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo "\n>\n> Installing Fetchy...\n>\n"
+    local req_packages=("bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij")
+
+    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy check-installed "${req_packages[@]}" 2> /dev/null; then
+        echoinfo "\n>\n Updating Fetchy...\n>\n"
 
         # Fetchy
         wget https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-linux-x86_64 -qO "$ADF_BIN_DIR/fetchy"
         chmod +x "$ADF_BIN_DIR/fetchy"
 
         # Add packages repository
+        echoinfo "\n>\n Adding/updating Fetchy repositories...\n>\n"
+
         fetchy repos:add -i "$ADF_DIR/packages.json" || return 1
+        fetchy -q repos:update || return 1
 
         echo "fetchy" >> "$ADF_INSTALLED_LIST"
     fi
 
-    if ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo "\n>\n> Updating Fetchy repositories...\n>\n"
-
-        fetchy -q repos:update || return 1
-    fi
-
     # Install missing packages
-    if ! fetchy require --confirm "bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij"; then
+    if ! fetchy require "${req_packages[@]}" --confirm ; then
         return 1
     fi
 
     if ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo "\n>\n> Update packages using Fetchy...\n>\n"
+        echoinfo "\n>\n> Updating packages using Fetchy...\n>\n"
 
         fetchy update || return 1
     fi
