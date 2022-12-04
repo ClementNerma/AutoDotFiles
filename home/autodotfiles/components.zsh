@@ -90,7 +90,7 @@ function adf_install_components() {
         chmod +x "$ADF_BIN_DIR/fetchy"
 
         # Add packages repository
-        fetchy repos:add -i "$ADF_DIR/packages.json"
+        fetchy repos:add -i "$ADF_DIR/packages.json" || return 1
 
         echo "fetchy" >> "$ADF_INSTALLED_LIST"
     fi
@@ -98,16 +98,18 @@ function adf_install_components() {
     if ! (( $ADF_SKIP_INSTALLED )); then
         echoinfo "\n>\n> Updating Fetchy repositories...\n>\n"
 
-        fetchy -q repos:update
+        fetchy -q repos:update || return 1
     fi
 
     # Install missing packages
-    fetchy require --confirm "bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij"
+    if ! fetchy require --confirm "bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij"; then
+        return 1
+    fi
 
     if ! (( $ADF_SKIP_INSTALLED )); then
         echoinfo "\n>\n> Update packages using Fetchy...\n>\n"
 
-        fetchy update
+        fetchy update || return 1
     fi
 }
 
