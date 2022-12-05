@@ -331,6 +331,28 @@
     },
 
     {
+      "name": "scout",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "jhbabon",
+            "repo_name": "scout",
+            "asset_pattern": "\"scout-linux\""
+          }
+        },
+        "file_format": {
+          "Binary": {
+            "filename": "scout"
+          }
+        },
+        "version_extraction": {
+          "source": "TagName",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
       "name": "starship",
       "download": {
         "source": {
