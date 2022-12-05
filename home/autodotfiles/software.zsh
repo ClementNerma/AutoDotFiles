@@ -4,11 +4,6 @@ if [[ -f ~/.cargo/env ]]; then
 	source ~/.cargo/env
 fi
 
-# Integration for Fetchy
-if command -v fetchy > /dev/null; then
-    export PATH="$(fetchy path):$PATH"
-fi
-
 # Integration for Python
 export PATH="$HOME/.local/bin:$PATH"
 

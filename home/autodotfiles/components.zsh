@@ -121,3 +121,8 @@ export ADF_INSTALLER_ABORTED=0
 if ! ADF_SKIP_INSTALLED=1 adf_install_components; then
     export ADF_INSTALLER_ABORTED=1
 fi
+
+# Make Fetchy packages available early
+if command -v fetchy > /dev/null; then
+    export PATH="$(fetchy path):$PATH"
+fi
