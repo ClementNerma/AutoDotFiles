@@ -85,14 +85,14 @@ function adf_install_components() {
     local req_packages=("bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "ripgrep" "scout" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij")
 
     if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q check-installed "${req_packages[@]}" 2> /dev/null; then
-        echoinfo "\n>\n Updating Fetchy...\n>\n"
+        echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
         # Fetchy
         wget https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-linux-x86_64 -qO "$ADF_BIN_DIR/fetchy"
         chmod +x "$ADF_BIN_DIR/fetchy"
 
         # Add packages repository
-        echoinfo "\n>\n Adding/updating Fetchy repositories...\n>\n"
+        echoinfo "\n>\n> Adding/updating Fetchy repositories...\n>\n"
 
         fetchy repos:add -i "$ADF_DIR/packages.json" || return 1
         fetchy -q repos:update || return 1
