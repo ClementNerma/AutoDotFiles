@@ -84,7 +84,7 @@ function adf_install_components() {
 
     local req_packages=("bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij")
 
-    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy check-installed "${req_packages[@]}" 2> /dev/null; then
+    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q check-installed "${req_packages[@]}" 2> /dev/null; then
         echoinfo "\n>\n Updating Fetchy...\n>\n"
 
         # Fetchy
@@ -101,7 +101,7 @@ function adf_install_components() {
     fi
 
     # Install missing packages
-    if ! fetchy require "${req_packages[@]}" --confirm ; then
+    if ! fetchy -q require "${req_packages[@]}" --confirm ; then
         return 1
     fi
 
