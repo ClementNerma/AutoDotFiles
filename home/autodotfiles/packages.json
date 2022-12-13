@@ -53,7 +53,35 @@
         },
         "version_extraction": {
           "source": "ReleaseTitle",
-          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+          "regex": "Start 'v' :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
+    {
+      "name": "croc",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "schollz",
+            "repo_name": "croc",
+            "asset_pattern": "Start \"croc_9.6.2_Linux-64bit.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"croc\" End",
+                "rename_to": "croc"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "TagName",
+          "regex": "Start 'v' :(['0'-'9' '.']+) End"
         }
       }
     },
