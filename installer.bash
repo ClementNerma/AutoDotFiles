@@ -36,7 +36,7 @@ if [ ! -x /usr/bin/sudo ]; then
     fi
 fi
 
-OFFLINE_INSTALLER_FILENAME="offline-installer.bash"
+OFFLINE_INSTALLER_FILENAME="local-installer.bash"
 
 if [[ $1 = "--offline" ]]; then
 	if [[ ! -f "$OFFLINE_INSTALLER_FILENAME" ]]; then
