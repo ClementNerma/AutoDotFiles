@@ -103,19 +103,13 @@ function echowarn() {
 }
 
 function echosuccess() {
-    if ! (( $ADF_SILENT )); then
-        echoc "\z[green]°$1\z[]°" "${@:2}"
-    fi
+    ! (( $ADF_SILENT )) && echoc "\z[green]°$1\z[]°" "${@:2}"
 }
 
 function echoinfo() {
-    if ! (( $ADF_SILENT )); then
-        echoc "\z[blue]°$1\z[]°" "${@:2}"
-    fi
+    ! (( $ADF_SILENT )) && echoc "\z[blue]°$1\z[]°" "${@:2}"
 }
 
 function echoverb() {
-    if (( $ADF_VERBOSE )); then
-	    >&2 echoc "\z[gray]°[Verbose]\z[]° \z[magenta]°$1\z[]°" "${@:2}"
-    fi
+    (( $ADF_VERBOSE )) && >&2 echoc "\z[gray]°[Verbose]\z[]° \z[magenta]°$1\z[]°" "${@:2}"
 }
