@@ -309,28 +309,6 @@
     },
 
     {
-      "name": "pomsky",
-      "download": {
-        "source": {
-          "GitHub": {
-            "author": "rulex-rs",
-            "repo_name": "pomsky",
-            "asset_pattern": "\"pomsky_linux_v\""
-          }
-        },
-        "file_format": {
-          "Binary": {
-            "filename": "pomsky"
-          }
-        },
-        "version_extraction": {
-          "source": "DownloadedFileName",
-          "regex": "Start \"pomsky_linux_v\" :(['0'-'9' '.']+) End"
-        }
-      }
-    },
-
-    {
       "name": "ripgrep",
       "download": {
         "source": {
