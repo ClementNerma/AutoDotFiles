@@ -82,32 +82,36 @@ function adf_install_components() {
         echo "micro-config" >> "$ADF_INSTALLED_LIST"
     fi
 
-    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo "\n>\n> Installing Fetchy...\n>\n"
+    local req_packages=("bat" "bjobs" "croc" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "ripgrep" "scout" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij")
+
+    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q check-installed "${req_packages[@]}" 2> /dev/null; then
+        echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
         # Fetchy
         wget https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-linux-x86_64 -qO "$ADF_BIN_DIR/fetchy"
         chmod +x "$ADF_BIN_DIR/fetchy"
 
         # Add packages repository
-        fetchy repos:add -i "$ADF_DIR/packages.json"
+        echoinfo "\n>\n> Adding/updating Fetchy repositories...\n>\n"
+
+        fetchy repos:add -i "$ADF_DIR/packages.json" || return 1
+        fetchy -q repos:update || return 1
 
         echo "fetchy" >> "$ADF_INSTALLED_LIST"
     fi
 
-    if ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo "\n>\n> Updating Fetchy repositories...\n>\n"
-
-        fetchy -q repos:update
+    # Install missing packages
+    if ! fetchy -q require "${req_packages[@]}" --confirm ; then
+        return 1
     fi
 
     # Install missing packages
     fetchy --quiet require --confirm "bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij"
 
     if ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo "\n>\n> Update packages using Fetchy...\n>\n"
+        echoinfo "\n>\n> Updating packages using Fetchy...\n>\n"
 
-        fetchy update
+        fetchy update || return 1
     fi
 }
 
@@ -119,4 +123,9 @@ export ADF_INSTALLER_ABORTED=0
 
 if ! ADF_SKIP_INSTALLED=1 adf_install_components; then
     export ADF_INSTALLER_ABORTED=1
+fi
+
+# Make Fetchy packages available early
+if command -v fetchy > /dev/null; then
+    export PATH="$(fetchy path):$PATH"
 fi
