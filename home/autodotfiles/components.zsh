@@ -82,7 +82,7 @@ function adf_install_components() {
         echo "micro-config" >> "$ADF_INSTALLED_LIST"
     fi
 
-    local req_packages=("bat" "bjobs" "croc" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "ripgrep" "scout" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij")
+    local req_packages=("bat" "bjobs" "croc" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "ripgrep" "scout" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij")
 
     if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q check-installed "${req_packages[@]}" 2> /dev/null; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
@@ -92,7 +92,7 @@ function adf_install_components() {
             echoerr "Failed to download latest release of Fetchy!"
             return 1
         fi
-        
+
         chmod +x "$ADF_BIN_DIR/fetchy"
 
         # Add packages repository
