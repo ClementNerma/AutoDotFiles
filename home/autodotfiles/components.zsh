@@ -88,7 +88,7 @@ function adf_install_components() {
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
         # Fetchy
-        wget https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-linux-x86_64 -qO "$ADF_BIN_DIR/fetchy"
+        wget https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-linux-x86_64 -q --show-progress -O "$ADF_BIN_DIR/fetchy"
         chmod +x "$ADF_BIN_DIR/fetchy"
 
         # Add packages repository
