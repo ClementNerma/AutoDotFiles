@@ -106,7 +106,7 @@ function adf_install_components() {
     fi
 
     # Install missing packages
-    fetchy --quiet require --confirm "bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "pomsky" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij"
+    fetchy --quiet require --confirm "bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij"
 
     if ! (( $ADF_SKIP_INSTALLED )); then
         echoinfo "\n>\n> Updating packages using Fetchy...\n>\n"
