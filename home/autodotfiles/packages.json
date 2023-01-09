@@ -414,6 +414,34 @@
       }
     },
 
+        {
+      "name": "topgrade",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "topgrade-rs",
+            "repo_name": "topgrade",
+            "asset_pattern": "Start \"topgrade-v\" :(['0'-'9' '.']+) \"-x86_64-unknown-linux-musl.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"topgrade\" End",
+                "rename_to": "topgrade"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "ReleaseTitle",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+
     {
       "name": "trasher",
       "download": {
