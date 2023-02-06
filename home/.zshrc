@@ -41,6 +41,9 @@ unsetopt BANG_HIST
 # Disable history expansion
 set +H
 
+# Disable unused feature to greatly accelerate autocompletion
+unsetopt PATH_DIRS
+
 # Custom keybindings
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
