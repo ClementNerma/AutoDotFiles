@@ -114,8 +114,10 @@ function adf_install_components() {
 
     if ! (( $ADF_SKIP_INSTALLED )); then
         echoinfo "\n>\n> Updating packages using Fetchy...\n>\n"
-
         fetchy update || return 1
+
+        echoinfo "\n>\n> Updating Prezto...\n>\n"
+        zprezto-update || return 1
     fi
 }
 
