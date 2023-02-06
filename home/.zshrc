@@ -16,12 +16,6 @@ function zerperf() {
 # Load required ZSH modules
 zmodload zsh/mathfunc
 
-# Disable bang history (allows to input '!' characters without escaping)
-unsetopt BANG_HIST
-
-# Disable history expansion
-set +H
-
 # Prezto configuration version
 if [[ ! -f $HOME/.zpreztorc ]]; then
 	echo "Setting up Prezto configuration files..."
@@ -40,6 +34,12 @@ fi
 
 # Load Prezto
 source "$HOME/.zprezto/init.zsh"
+
+# Disable bang history (allows to input '!' characters without escaping)
+unsetopt BANG_HIST
+
+# Disable history expansion
+set +H
 
 # Custom keybindings
 bindkey '^H' backward-kill-word
