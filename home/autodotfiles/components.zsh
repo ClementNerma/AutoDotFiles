@@ -112,6 +112,9 @@ function adf_install_components() {
     # Install missing packages
     fetchy --quiet require --confirm "bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "starship" "tokei" "topgrade" "trasher" "yt-dlp" "ytdl" "zellij"
 
+    # Fix download binaries' permissions
+    chmod +x "$(fetchy path)/"*
+
     if (( $ADF_SKIP_INSTALLED )); then
         return
     fi
