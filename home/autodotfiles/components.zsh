@@ -123,7 +123,7 @@ function adf_install_components() {
     zprezto-update || return 1
 
     echoinfo "\n>\n> Updating other packages...\n>\n"
-    topgrade || return 1
+    topgrade --skip-notify || return 1
 }
 
 function adf_update() {
