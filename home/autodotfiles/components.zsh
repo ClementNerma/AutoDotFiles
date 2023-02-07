@@ -112,13 +112,18 @@ function adf_install_components() {
     # Install missing packages
     fetchy --quiet require --confirm "bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "starship" "tokei" "topgrade" "trasher" "yt-dlp" "ytdl" "zellij"
 
-    if ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo "\n>\n> Updating packages using Fetchy...\n>\n"
-        fetchy update || return 1
-
-        echoinfo "\n>\n> Updating Prezto...\n>\n"
-        zprezto-update || return 1
+    if (( $ADF_SKIP_INSTALLED )); then
+        return
     fi
+
+    echoinfo "\n>\n> Updating packages using Fetchy...\n>\n"
+    fetchy update || return 1
+
+    echoinfo "\n>\n> Updating Prezto...\n>\n"
+    zprezto-update || return 1
+
+    echoinfo "\n>\n> Updating other packages...\n>\n"
+    topgrade || return 1
 }
 
 function adf_update() {
