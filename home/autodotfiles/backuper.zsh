@@ -44,8 +44,8 @@ function adf_local_backup() {
     local listfile=$(mktemp)
     touch "$listfile"
 
-    if ! adf_build_files_list "$listfile" "$@"; then return 3; fi
-    if ! adf_build_files_list "$listfile" $ADF_BACKUPS_CONTENT; then return 3; fi
+    adf_build_files_list "$listfile" "$@" || return 3
+    adf_build_files_list "$listfile" $ADF_BACKUPS_CONTENT || return 3
 
     if (( $ADF_ADD_ADF_FILES_TO_BACKUP )); then
         ADF_SILENT=1 zerbackup
