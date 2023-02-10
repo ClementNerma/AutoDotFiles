@@ -220,6 +220,45 @@
       }
     },
     {
+      "name": "helix",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "helix-editor",
+            "repo_name": "helix",
+            "asset_pattern": "Start \"helix-\" :(['0'-'9' '.']+) \"-x86_64-linux.tar.xz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarXz",
+            "files": [
+              {
+                "relative_path": "Start \"helix-\" :(['0'-'9' '.']+) \"-x86_64-linux/hx\" End",
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "hx"
+                  }
+                }
+              },
+              {
+                "relative_path": "Start \"helix-\" :(['0'-'9' '.']+) \"-x86_64-linux/runtime\" End",
+                "file_type": {
+                  "ConfigSubDir": {
+                    "copy_as": "runtime"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "TagName",
+          "regex": "Start :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+    {
       "name": "jumpy",
       "download": {
         "source": {
