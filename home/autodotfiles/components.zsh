@@ -75,15 +75,6 @@ function adf_install_components() {
         echo "fzf" >> "$ADF_INSTALLED_LIST"
     fi
 
-    if ! grep -Fxq "micro-config" "$ADF_INSTALLED_LIST"; then
-        local micro_config_path="$HOME/.config/micro/bindings.json"
-
-        [[ -d $(basename "$micro_config_path") ]] || mkdir -p "$HOME/.config/micro"
-        [[ -f $micro_config_path ]] || echo '{ "CtrlN": "AddTab", "CtrlW": "Quit", "CtrlD": "SpawnMultiCursor" }' > "$micro_config_path"
-        
-        echo "micro-config" >> "$ADF_INSTALLED_LIST"
-    fi
-
     local req_packages=("bat" "bjobs" "crony" "exa" "fd" "gitui" "jumpy" "kopia" "micro" "ncdu" "nushell" "ripgrep" "scout" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij")
 
     if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q check-installed "${req_packages[@]}" 2> /dev/null; then
