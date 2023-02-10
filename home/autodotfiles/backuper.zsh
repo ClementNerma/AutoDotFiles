@@ -8,7 +8,6 @@
 # Requires to set the "ADF_LOCBAK_PASSPHRASE" variable
 # Arguments are paths to back up
 # Set "ADF_ADD_ADF_FILES_TO_BACKUP" to perform a backup of the current environment
-#  To search for specific patterns inside the directory, suffix it by `::<glob pattern>`
 # You may also set "ADF_DEOBFUSCATE_PASSPHRASE"
 # As well as "ADF_MIRROR_BACKUP" to duplicate it to another location
 function adf_local_backup() {
