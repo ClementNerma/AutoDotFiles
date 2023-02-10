@@ -27,6 +27,8 @@ function adf_install_components() {
         curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y
         source $HOME/.cargo/env # Just for this session
 
+        rustup component add rust-analyzer
+
         echoinfo "\n>\n> Installing tools for Rust...\n>\n"
 
         sudo apt update
