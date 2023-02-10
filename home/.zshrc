@@ -44,6 +44,10 @@ set +H
 # Disable unused feature to greatly accelerate autocompletion
 unsetopt PATH_DIRS
 
+# Disable ZSH command correction
+unsetopt correct
+unsetopt correct_all
+
 # Custom keybindings
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
