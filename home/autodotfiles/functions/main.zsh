@@ -36,7 +36,7 @@ function merge_zips() {
 	local outfile="${@: -1}"
 
 	if [[ $outfile = "-" ]]; then
-		local outfile="$(dirname "$1").zip"
+		outfile="$(dirname "$1").zip"
 	fi
 
 	if [[ -f $outfile ]] || [[ -d $outfile ]]; then

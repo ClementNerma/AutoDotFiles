@@ -68,7 +68,7 @@ function adf_obf_encode() {
 	local content="$1"
 
 	for i in {1..$ADF_OBF_ROUNDS}; do
-		local content=$(base64 --wrap=0 <<< "|$content|")
+		content=$(base64 --wrap=0 <<< "|$content|")
 	done
 
 	printf '%s' "$content"
@@ -81,8 +81,8 @@ function adf_obf_decode() {
 	local content="$1"
 
 	for i in {1..$ADF_OBF_ROUNDS}; do
-		local content=$(base64 -d --wrap=0 <<< "$content")
-		local content=${content:1:${#content}-2}
+		content=$(base64 -d --wrap=0 <<< "$content")
+		content=${content:1:${#content}-2}
 	done
 
 	printf '%s' "$content"

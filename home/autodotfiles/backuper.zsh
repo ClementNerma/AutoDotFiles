@@ -99,7 +99,7 @@ function adf_build_files_list() {
         local files=""
         
         if [[ -f $item ]]; then
-            local files="$item"
+            files="$item"
         elif [[ ! -d $item ]]; then
             echoerr "Input directory \z[yellow]°$item\z[]° does not exist!"
             return 2
@@ -108,7 +108,7 @@ function adf_build_files_list() {
             return 2
         fi
 
-        local files=$(printf "%s" "$files" | grep "\S")
+        files=$(printf "%s" "$files" | grep "\S")
 
         if [[ -z $files ]]; then
             echowarn ">  WARNING: No matching found for this item!"

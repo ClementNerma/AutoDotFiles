@@ -6,11 +6,11 @@ function git() {
 
     while [[ $current != "/" ]]; do
         if [[ -f "$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME" ]]; then
-            local key_file=1
+            key_file=1
             break
         fi
 
-        local current=$(dirname "$current")
+        current=$(dirname "$current")
     done
 
     if (( $key_file )); then

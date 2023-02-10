@@ -120,11 +120,12 @@ function fd() {
 # Fix external connection for e.g. Explorer, VSCode, etc.
 function fix_socket_connection() {
   local interop_pid=$$
+  local pid
 
   while true ; do
     [[ -e /run/WSL/${interop_pid}_interop ]] && break
-    local pid=$(ps -p ${interop_pid:-$$} -o ppid=;)
-    local interop_pid=${pid// /}
+    pid=$(ps -p ${interop_pid:-$$} -o ppid=;)
+    interop_pid=${pid// /}
     [[ ${interop_pid} = 1 ]] && break
   done
 
