@@ -18,7 +18,11 @@
             "files": [
               {
                 "relative_path": "Start \"bat-\" Codepoint+ \"/bat\" End",
-                "rename_to": "bat"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "bat"
+                  }
+                }
               }
             ]
           }
@@ -45,7 +49,11 @@
             "files": [
               {
                 "relative_path": "Start \"bjobs\" End",
-                "rename_to": "bjobs"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "bjobs"
+                  }
+                }
               }
             ]
           }
@@ -72,7 +80,11 @@
             "files": [
               {
                 "relative_path": "Start \"cargo-binstall\" End",
-                "rename_to": "cargo-binstall"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "cargo-binstall"
+                  }
+                }
               }
             ]
           }
@@ -99,7 +111,11 @@
             "files": [
               {
                 "relative_path": "Start \"crony\" End",
-                "rename_to": "crony"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "crony"
+                  }
+                }
               }
             ]
           }
@@ -126,7 +142,11 @@
             "files": [
               {
                 "relative_path": "Start \"bin/exa\" End",
-                "rename_to": "exa"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "exa"
+                  }
+                }
               }
             ]
           }
@@ -153,7 +173,11 @@
             "files": [
               {
                 "relative_path": "Start \"fd-\" Codepoint+ \"/fd\" End",
-                "rename_to": "fd"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "fd"
+                  }
+                }
               }
             ]
           }
@@ -180,7 +204,11 @@
             "files": [
               {
                 "relative_path": "Start \"./\"? \"gitui\" End",
-                "rename_to": "gitui"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "gitui"
+                  }
+                }
               }
             ]
           }
@@ -207,7 +235,11 @@
             "files": [
               {
                 "relative_path": "Start \"jumpy\" End",
-                "rename_to": "jumpy"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "jumpy"
+                  }
+                }
               }
             ]
           }
@@ -234,7 +266,11 @@
             "files": [
               {
                 "relative_path": "Start \"kopia-\" Codepoint+ \"/kopia\" End",
-                "rename_to": "kopia"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "kopia"
+                  }
+                }
               }
             ]
           }
@@ -261,7 +297,11 @@
             "files": [
               {
                 "relative_path": "Start \"micro-\" Codepoint+ \"/micro\" End",
-                "rename_to": "micro"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "micro"
+                  }
+                }
               }
             ]
           }
@@ -286,7 +326,11 @@
             "files": [
               {
                 "relative_path": "Start \"ncdu\" End",
-                "rename_to": "ncdu"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "ncdu"
+                  }
+                }
               }
             ]
           }
@@ -313,7 +357,11 @@
             "files": [
               {
                 "relative_path": "Start \"ripgrep-\" Codepoint+ \"/rg\" End",
-                "rename_to": "rg"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "rg"
+                  }
+                }
               }
             ]
           }
@@ -361,7 +409,11 @@
             "files": [
               {
                 "relative_path": "Start \"starship\" End",
-                "rename_to": "starship"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "starship"
+                  }
+                }
               }
             ]
           }
@@ -388,7 +440,11 @@
             "files": [
               {
                 "relative_path": "Start \"tokei\" End",
-                "rename_to": "tokei"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "tokei"
+                  }
+                }
               }
             ]
           }
@@ -415,7 +471,11 @@
             "files": [
               {
                 "relative_path": "Start \"topgrade\" End",
-                "rename_to": "topgrade"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "topgrade"
+                  }
+                }
               }
             ]
           }
@@ -442,7 +502,11 @@
             "files": [
               {
                 "relative_path": "Start \"trasher\" End",
-                "rename_to": "trasher"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "trasher"
+                  }
+                }
               }
             ]
           }
@@ -490,7 +554,11 @@
             "files": [
               {
                 "relative_path": "Start \"ytdl\" End",
-                "rename_to": "ytdl"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "ytdl"
+                  }
+                }
               }
             ]
           }
@@ -517,7 +585,11 @@
             "files": [
               {
                 "relative_path": "Start \"zellij\" End",
-                "rename_to": "zellij"
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "zellij"
+                  }
+                }
               }
             ]
           }
