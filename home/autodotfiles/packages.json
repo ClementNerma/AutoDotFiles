@@ -381,6 +381,37 @@
       }
     },
     {
+      "name": "nushell",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "nushell",
+            "repo_name": "nushell",
+            "asset_pattern": "Start \"nu-\" :(['0'-'9' '.']+) \"-x86_64-unknown-linux-musl.tar.gz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"nu-\" :(['0'-'9' '.']+) \"-x86_64-unknown-linux-musl/nu\" End",
+                "file_type": {
+                  "Binary": {
+                    "copy_as": "nu"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "TagName",
+          "regex": "Start :(['0'-'9' '.']+) End"
+        }
+      }
+    },
+    {
       "name": "ripgrep",
       "download": {
         "source": {
