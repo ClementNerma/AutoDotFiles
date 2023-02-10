@@ -29,7 +29,6 @@
         }
       }
     },
-
     {
       "name": "bjobs",
       "download": {
@@ -57,7 +56,33 @@
         }
       }
     },
-
+    {
+      "name": "cargo-binstall",
+      "download": {
+        "source": {
+          "GitHub": {
+            "author": "cargo-bins",
+            "repo_name": "cargo-binstall",
+            "asset_pattern": "Start \"cargo-binstall-x86_64-unknown-linux-musl.tgz\" End"
+          }
+        },
+        "file_format": {
+          "Archive": {
+            "format": "TarGz",
+            "files": [
+              {
+                "relative_path": "Start \"cargo-binstall\" End",
+                "rename_to": "cargo-binstall"
+              }
+            ]
+          }
+        },
+        "version_extraction": {
+          "source": "TagName",
+          "regex": "Start 'v' :(['0'-'9' '.']+) End"
+        }
+      }
+    },
     {
       "name": "croc",
       "download": {
@@ -85,7 +110,6 @@
         }
       }
     },
-
     {
       "name": "crony",
       "download": {
@@ -113,7 +137,6 @@
         }
       }
     },
-
     {
       "name": "exa",
       "download": {
@@ -141,7 +164,6 @@
         }
       }
     },
-
     {
       "name": "fd",
       "download": {
@@ -169,7 +191,6 @@
         }
       }
     },
-
     {
       "name": "gitui",
       "download": {
@@ -197,7 +218,6 @@
         }
       }
     },
-
     {
       "name": "jumpy",
       "download": {
@@ -225,7 +245,6 @@
         }
       }
     },
-
     {
       "name": "kopia",
       "download": {
@@ -253,7 +272,6 @@
         }
       }
     },
-
     {
       "name": "micro",
       "download": {
@@ -281,7 +299,6 @@
         }
       }
     },
-
     {
       "name": "ncdu",
       "download": {
@@ -307,7 +324,6 @@
         }
       }
     },
-
     {
       "name": "ripgrep",
       "download": {
@@ -335,7 +351,6 @@
         }
       }
     },
-
     {
       "name": "scout",
       "download": {
@@ -357,7 +372,6 @@
         }
       }
     },
-
     {
       "name": "starship",
       "download": {
@@ -385,7 +399,6 @@
         }
       }
     },
-
     {
       "name": "tokei",
       "download": {
@@ -413,8 +426,7 @@
         }
       }
     },
-
-        {
+    {
       "name": "topgrade",
       "download": {
         "source": {
@@ -441,7 +453,6 @@
         }
       }
     },
-
     {
       "name": "trasher",
       "download": {
@@ -469,7 +480,6 @@
         }
       }
     },
-
     {
       "name": "yt-dlp",
       "download": {
@@ -491,7 +501,6 @@
         }
       }
     },
-
     {
       "name": "ytdl",
       "download": {
@@ -519,7 +528,6 @@
         }
       }
     },
-
     {
       "name": "zellij",
       "download": {
