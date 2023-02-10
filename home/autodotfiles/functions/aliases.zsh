@@ -46,5 +46,5 @@ function yu() {
 }
 
 # Set the default editor
-export EDITOR="micro"
+export EDITOR="hx"
 alias nano="$EDITOR"
