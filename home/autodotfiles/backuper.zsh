@@ -89,12 +89,9 @@ function adf_local_backup() {
 }
 
 function adf_build_files_list() {
-    local plain_output=0
-
     [[ -f $1 ]] || { echoerr "List file not found while building files list"; return 1 }
 
-    local listfile="$1"
-    shift
+    local listfile="$1"; shift
 
     for item in "$@"; do
         >&2 echoinfo "> Treating: \z[magenta]°$item\z[]°"
