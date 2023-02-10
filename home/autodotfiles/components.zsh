@@ -54,6 +54,7 @@ function adf_install_components() {
 
         echoinfo "\n>\n> Installing Node.js & NPM...\n>\n"
         volta install node@latest
+        volta install npm@bundled
 
         echoinfo "\n>\n> Installing Yarn & PNPM...\n>\n"
         volta install yarn pnpm
