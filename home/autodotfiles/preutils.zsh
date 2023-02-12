@@ -7,19 +7,6 @@ function dl() {
 	curl -L "$1" -o "$2"
 }
 
-# Ask for confirmation
-function confirm() {
-	local cancelled=0
-
-	trap 'echowarn "Ctrl+C is not allowed here." && cancelled=1' SIGINT
-	read -ks 'answer?'
-	trap - SIGINT
-
-	if [[ -z $answer ]] || (( $cancelled )); then
-		return 1
-	fi
-}
-
 # Faster replacement for "date +%s%N"
 function now() {
 	printf ${${EPOCHREALTIME//.}:0:19}
