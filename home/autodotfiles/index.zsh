@@ -38,9 +38,6 @@ if [[ ! -d $ADF_DATA_DIR ]]; then mkdir "$ADF_DATA_DIR"; fi
 if [[ ! -d $ADF_ASSETS_DIR ]]; then mkdir "$ADF_ASSETS_DIR"; fi
 if [[ ! -d $ADF_BIN_DIR ]]; then mkdir "$ADF_BIN_DIR"; fi
 
-# Set path to the external scripts directory
-export ADF_EXTERNAL_DIR="$ADF_DIR/external"
-
 # Set path to the files list
 export ADF_FILES_LIST="$HOME/.autodotfiles-files-list.txt"
 
