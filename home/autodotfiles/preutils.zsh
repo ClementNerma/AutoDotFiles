@@ -53,14 +53,6 @@ function mvoldbak() {
 	echowarn ""
 }
 
-# Create a file if it does not exist
-function ensure_config_file() {
-	if [[ ! -f "$1" ]]; then
-		mkdir -p "$(dirname "$1")"
-		echo "$2" > "$1"
-	fi
-}
-
 # Obfuscate a content
 function adf_obf_encode() {
 	[[ -z $1 ]] && { echoerr "Please provide a content to encode."; return 1 }
