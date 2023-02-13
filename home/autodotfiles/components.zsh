@@ -104,7 +104,7 @@ function adf_install_components() {
     fi
 
     # Install missing packages
-    fetchy --quiet require --confirm "bat" "bjobs" "cargo-binstall" "crony" "exa" "fd" "gitui" "helix" "jumpy" "kopia" "micro" "ncdu" "starship" "tokei" "topgrade" "trasher" "yt-dlp" "ytdl" "zellij"
+    fetchy --quiet require --confirm "${req_packages[@]}"
 
     # Fix download binaries' permissions
     chmod +x "$(fetchy path)/"*
