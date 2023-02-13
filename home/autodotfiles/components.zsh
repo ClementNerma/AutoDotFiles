@@ -103,9 +103,6 @@ function adf_install_components() {
         return 1
     fi
 
-    # Install missing packages
-    fetchy --quiet require --confirm "${req_packages[@]}"
-
     # Fix download binaries' permissions
     chmod +x "$(fetchy path)/"*
 
