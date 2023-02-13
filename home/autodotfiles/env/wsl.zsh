@@ -73,13 +73,11 @@ function mount_wsl_drives() {
   do
     local letter=${drive:s/\/mnt\//}
 
-    if [[ ${#letter} = 1 ]]; then
-      if [[ $letter != "c" ]]; then
-        if mountpoint -q "/mnt/$letter"; then
-          remount "$letter"
-        else
-          sudo rmdir "/mnt/$letter"
-        fi
+    if [[ ${#letter} = 1 ]] && [[ $letter != "c" ]]; then
+      if mountpoint -q "/mnt/$letter"; then
+        remount "$letter"
+      else
+        sudo rmdir "/mnt/$letter"
       fi
     fi
   done
