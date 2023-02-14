@@ -104,7 +104,10 @@ function adf_install_components() {
     fi
 
     # Fix download binaries' permissions
-    chmod +x "$(fetchy path)/"*
+    # The 'if' block is here to handle a rare bug
+    if command -v fetchy > /dev/null; then
+        chmod +x "$(fetchy path)/"*
+    fi
 
     if (( $ADF_SKIP_INSTALLED )); then
         return
