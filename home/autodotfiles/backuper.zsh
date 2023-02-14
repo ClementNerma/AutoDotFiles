@@ -17,11 +17,8 @@ function adf_local_backup() {
         echoerr "The provided mirror backup directory does not exist!"
     fi
     
-    local passphrase="$ADF_LOCBAK_PASSPHRASE"
-    
-    if (( $ADF_DEOBFUSCATE_PASSPHRASE )); then
-        passphrase=$(adf_obf_decode "$passphrase") || return 2
-    fi
+    local passphrase
+    passphrase=$(adf_obf_decode "$passphrase") || return 2
 
     [[ -z $passphrase ]] && { echoerr "The encryption passphrase cannot be empty!"; return 1 }
 
