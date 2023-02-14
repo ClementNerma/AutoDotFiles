@@ -106,9 +106,6 @@ if [[ ! -d $WORKDIR ]]; then mkdir -p "$WORKDIR"; fi
 if [[ ! -d $SOFTWAREDIR ]]; then mkdir -p "$SOFTWAREDIR"; fi
 if [[ ! -d $LOCBAKDIR ]]; then mkdir -p "$LOCBAKDIR"; fi
 
-# Ensure the 'open' function is defined
-if ! typeset -f open > /dev/null; then echowarn "WARNING: contractual 'open' command is not defined. 'open'-related functions won't work correctly."; fi
-
 # Set path to the functions directory
 for script in "$ADF_DIR/functions/"**/*; do
 	source "$script"

@@ -16,9 +16,3 @@ export LOCBAKDIR="$HOMEDIR/Sauvegardes/ADF"
 if [[ ! -d $DLDIR ]]; then
     export DLDIR="$HOMEDIR/Downloads"
 fi
-
-# Set up opening function
-function open() {
-    echoerr "Opening is not currently implemented for Linux"
-    false
-}
