@@ -31,9 +31,6 @@ alias gc="git checkout"
 alias gp="git push"
 alias gpf="git push --force-with-lease"
 
-# Custom commit command
-alias gm="gitcommit"
-
 # Software: GitUI
 alias g="gitui"
 

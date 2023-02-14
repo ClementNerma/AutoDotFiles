@@ -21,7 +21,7 @@ function git() {
 }
 
 # Make a commit with Git
-function gitcommit() {
+function gm() {
     local first_line=$(printf '%s' $1 | head -n1)
 
     if (( ${#first_line} > 50 )); then
