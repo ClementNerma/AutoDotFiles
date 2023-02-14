@@ -133,6 +133,7 @@ function opene() {
 	open "$@" && exit
 }
 
+# Jump to a directory using Jumpy
 function z() {
     [[ -z $1 ]] && { echoerr "Please provide a query."; return 1 }
 
