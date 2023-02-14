@@ -92,7 +92,7 @@ function adf_install_components() {
         # Add packages repository
         echoinfo "\n>\n> Adding/updating Fetchy repositories...\n>\n"
 
-        fetchy repos:add -i "$ADF_DIR/packages.json" || return 1
+        fetchy repos:add -i "$ADF_CONFIG_FILES_DIR/fetchy-repo.json" || return 1
         fetchy -q repos:update || return 1
 
         echo "fetchy" >> "$ADF_INSTALLED_LIST"

@@ -16,7 +16,7 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 
 # Integration for Starship
-export STARSHIP_CONFIG="$HOME/starship.toml"
+export STARSHIP_CONFIG="$ADF_CONFIG_FILES_DIR/starship.toml"
 
 if command -v starship > /dev/null; then
     eval "$(starship init zsh)"
