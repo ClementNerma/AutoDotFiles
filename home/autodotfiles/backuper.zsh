@@ -7,8 +7,6 @@
 # Perform a local backup
 # Requires to set the "ADF_LOCBAK_PASSPHRASE" variable
 # Arguments are paths to back up
-# Set "ADF_ADD_ADF_FILES_TO_BACKUP" to perform a backup of the current environment
-# You may also set "ADF_DEOBFUSCATE_PASSPHRASE"
 # As well as "ADF_MIRROR_BACKUP" to duplicate it to another location
 function adf_local_backup() {
     [[ -z $ADF_LOCBAK_PASSPHRASE ]] && { echoerr "Please provide a \z[yellow]°\$ADF_LOCBAK_PASSPHRASE\z[]° variable."; return 1 }
