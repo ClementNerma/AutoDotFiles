@@ -31,9 +31,6 @@ alias gc="git checkout"
 alias gp="git push"
 alias gpf="git push --force-with-lease"
 
-# Software: GitUI
-alias g="gitui"
-
 # Software: 'ytdl'
 alias yd="ytdl dl"
 alias ytsync="ytdl sync"
