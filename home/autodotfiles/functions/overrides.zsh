@@ -24,8 +24,8 @@ function git() {
 function gitcommit() {
     local first_line=$(printf '%s' $1 | head -n1)
 
-    if (( ${#first_line} > 72 )); then
-        echowarn "Maximum recommanded message length is \z[cyan]°72\z[]° characters but provided one is \z[cyan]°${#1}\z[]° long."
+    if (( ${#first_line} > 50 )); then
+        echowarn "Maximum recommanded message length is \z[cyan]°50\z[]° characters but provided one is \z[cyan]°${#1}\z[]° long."
         return 1
     fi
 
