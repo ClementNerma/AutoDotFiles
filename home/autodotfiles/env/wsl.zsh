@@ -60,6 +60,18 @@ function win() {
   "$WIN_POWERSHELL_PATH" -command "$@"
 }
 
+# Same as 'win' but as administrator
+function winadmin() {
+  [[ -z $1 ]] && { echoerr "please specify a command to run"; return 1 }
+  [[ -z $2 ]] || { echoerr "please ONLY specify a command to run"; return 1 }
+
+  # Escape quotes
+  local escaped=${${1:gs/\'/\'\'}:gs/\"/\"\"\"}
+
+  # Single quotes are automatically escaped
+  win "Start-Process powershell -ArgumentList '-NoExit -Command & { $escaped }' -Verb RunAs"
+}
+
 # Remount a drive in WSL
 function remount() {
 	sudo umount /mnt/${1:l} 2> /dev/null
@@ -96,7 +108,47 @@ function edit() {
 function wslport() {
   [[ -z $1 ]] && { echoerr "please specify a port (syntax: wslport <wsl port> [<windows port>]"; return 1 }
 
-  win "Start-Process powershell -ArgumentList '-Command netsh interface portproxy add v4tov4 listenport=${2:-$1} listenaddress=0.0.0.0 connectport=$1 connectaddress=172.18.28.x ; pause' -Verb RunAs"
+  winadmin "netsh interface portproxy add v4tov4 listenport=${2:-$1} listenaddress=0.0.0.0 connectport=$1 connectaddress=172.18.28.x"
+}
+
+# Open a port on the local network
+function openport() {
+  [[ -z $1 ]] && { echoerr "please specify at least one part"; return 1 }
+
+  local ports_str=${(j:,:)@}
+  local task_name="WSL 2 Firewall Unlock for ports: $ports_str"
+
+  winadmin "
+    \$remoteport = bash.exe -c \"ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'\"
+    \$found = \$remoteport -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
+
+    if (\$found) {
+      \$remoteport = \$matches[0];
+    } else {
+      echo \"The Script Exited, the ip address of WSL 2 cannot be found\";
+      exit;
+    }
+
+    # All the ports you want to forward separated by coma
+    \$ports=@($ports_str);
+
+    # You can change the addr to your ip config to listen to a specific address
+    \$addr='0.0.0.0';
+    \$ports_a = \$ports -join \",\";
+
+    # Remove Firewall Exception Rules
+    iex \"Remove-NetFireWallRule -DisplayName '$task_name' \";
+
+    # Add Exception Rules for inbound and outbound Rules
+    iex \"New-NetFireWallRule -DisplayName '$task_name' -Direction Outbound -LocalPort \$ports_a -Action Allow -Protocol TCP\";
+    iex \"New-NetFireWallRule -DisplayName '$task_name' -Direction Inbound -LocalPort \$ports_a -Action Allow -Protocol TCP\";
+
+    for (\$i = 0; \$i -lt \$ports.length; \$i++) {
+      \$port = \$ports[\$i];
+      iex \"netsh interface portproxy delete v4tov4 listenport=\$port listenaddress=\$addr\";
+      iex \"netsh interface portproxy add v4tov4 listenport=\$port listenaddress=\$addr connectport=\$port connectaddress=\$remoteport\";
+    }
+  "
 }
 
 # Copy a file to clipboard
