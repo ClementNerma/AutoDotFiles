@@ -197,3 +197,8 @@ mount_wsl_drives
 # Schedule clock fix
 # Required as WSL2's clock tends to go out of sync from time to time
 crony register timesync --run 'sudo ntpdate time.windows.com' --at 'h=*' --ignore-identical
+
+# Fix startup directory
+if [[ $PWD = "/mnt/c/Windows/System32" || $PWD = "/mnt/c/Users/cleme/AppData/Local/Microsoft/WindowsApps" ]]; then
+  cd "$HOME"
+fi
