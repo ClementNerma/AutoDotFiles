@@ -199,6 +199,6 @@ mount_wsl_drives
 crony register timesync --run 'sudo ntpdate time.windows.com' --at 'h=*' --ignore-identical
 
 # Fix startup directory
-if [[ $PWD = "/mnt/c/Windows/System32" || $PWD = "/mnt/c/Users/cleme/AppData/Local/Microsoft/WindowsApps" ]]; then
+if [[ $PWD = "/mnt/c/Windows/System32" || $PWD = "/mnt/c/Users/$WINUSER/AppData/Local/Microsoft/WindowsApps" ]]; then
   cd "$HOME"
 fi
