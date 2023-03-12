@@ -64,11 +64,11 @@ function adf_install_components() {
 
         echo "nodejs" >> "$ADF_INSTALLED_LIST"
     elif ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo "\n>\n> Updating Node.js & NPM...\n>\n"
+        echoinfo "\n>\n> Updating Node.js...\n>\n"
         volta install node@latest
 
-        echoinfo "\n>\n> Updating Yarn & PNPM...\n>\n"
-        volta install yarn pnpm
+        echoinfo "\n>\n> Updating NPM, Yarn & PNPM...\n>\n"
+        volta install npm yarn pnpm
     fi
 
     if ! grep -Fxq "fzf" "$ADF_INSTALLED_LIST"; then
