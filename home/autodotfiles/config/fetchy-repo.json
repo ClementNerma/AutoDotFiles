@@ -563,7 +563,7 @@
           "GitHub": {
             "author": "ClementNerma",
             "repo_name": "Trasher",
-            "asset_pattern": "Start \"trasher-linux-x86_64.zip\" End"
+            "asset_pattern": "Start \"trasher-linux-x86_64-musl.zip\" End"
           }
         },
         "file_format": {
