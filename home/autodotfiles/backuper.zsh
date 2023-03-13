@@ -16,7 +16,7 @@ function adf_local_backup() {
     fi
     
     local passphrase
-    passphrase=$(adf_obf_decode "$passphrase") || return 2
+    passphrase=$(adf_obf_decode "$ADF_LOCBAK_PASSPHRASE") || return 2
 
     [[ -z $passphrase ]] && { echoerr "The encryption passphrase cannot be empty!"; return 1 }
 
