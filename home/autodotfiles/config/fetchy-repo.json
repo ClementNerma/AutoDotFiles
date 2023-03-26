@@ -347,7 +347,7 @@
         },
         "version_extraction": {
           "source": "ReleaseTitle",
-          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
+          "regex": "Start \"gdu v\" :(['0'-'9' '.']+) End"
         }
       }
     },
