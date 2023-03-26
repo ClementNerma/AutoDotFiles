@@ -321,11 +321,13 @@
       }
     },
     {
-      "name": "ncdu",
+      "name": "gdu",
       "download": {
         "source": {
-          "Direct": {
-            "url": "https://dev.yorhel.nl/download/ncdu-2.2.1-linux-x86_64.tar.gz"
+          "GitHub": {
+            "author": "dundee",
+            "repo_name": "gdu",
+            "asset_pattern": "Start \"gdu_linux_amd64.tgz\" End"
           }
         },
         "file_format": {
@@ -333,10 +335,10 @@
             "format": "TarGz",
             "files": [
               {
-                "relative_path": "Start \"ncdu\" End",
+                "relative_path": "Start \"gdu_linux_amd64\" End",
                 "file_type": {
                   "Binary": {
-                    "copy_as": "ncdu"
+                    "copy_as": "gdu"
                   }
                 }
               }
@@ -344,8 +346,8 @@
           }
         },
         "version_extraction": {
-          "source": "Url",
-          "regex": "\"/download/ncdu-\" :(['0'-'9' '.']+) \"-linux-x86_64.tar.gz\" End"
+          "source": "ReleaseTitle",
+          "regex": "Start \"v\" :(['0'-'9' '.']+) End"
         }
       }
     },
