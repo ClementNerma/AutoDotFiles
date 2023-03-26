@@ -321,37 +321,6 @@
       }
     },
     {
-      "name": "micro",
-      "download": {
-        "source": {
-          "GitHub": {
-            "author": "zyedidia",
-            "repo_name": "micro",
-            "asset_pattern": "\"-linux64.tar.gz\" End"
-          }
-        },
-        "file_format": {
-          "Archive": {
-            "format": "TarGz",
-            "files": [
-              {
-                "relative_path": "Start \"micro-\" Codepoint+ \"/micro\" End",
-                "file_type": {
-                  "Binary": {
-                    "copy_as": "micro"
-                  }
-                }
-              }
-            ]
-          }
-        },
-        "version_extraction": {
-          "source": "DownloadedFileName",
-          "regex": "Start \"micro-\" :(['0'-'9' '.']+) \"-linux64\""
-        }
-      }
-    },
-    {
       "name": "ncdu",
       "download": {
         "source": {
