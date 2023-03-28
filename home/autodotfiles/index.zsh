@@ -129,7 +129,7 @@ fi
 function zshaddhistory() {
     emulate -L zsh
 
-	if [[ "$1" == "open"* || "$1" == "z "* ]]; then
+	if [[ "$1" == "open "*  || "$1" == "opene "* || "$1" == "z "* ]]; then
 		return 1
 	fi
 
