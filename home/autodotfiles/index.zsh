@@ -149,6 +149,8 @@ if [[ $1 = "--just-run" && -n $2 ]]; then
 	if (( $ADF_JUST_RUN_RET )); then
 		return $ADF_JUST_RUN_RET
 	fi
+elif [[ $1 = "--start-with" && -n $2 ]]; then
+	${@:2}
 elif (( $ADF_CHECK_CRONY_FAILURES_STARTUP )); then
 	crony check
 fi
