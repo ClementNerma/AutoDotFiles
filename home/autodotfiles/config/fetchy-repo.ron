@@ -396,7 +396,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"v\" :(['0'-'9' 'a'-'z' 'A'-'Z' '-' '.']+) End"
         )
       )
     ),
