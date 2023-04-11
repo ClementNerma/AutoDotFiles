@@ -113,10 +113,10 @@ function wslport() {
 
 # Open a port on the local network
 function openport() {
-  [[ -z $1 ]] && { echoerr "please specify at least one part"; return 1 }
+  [[ -z $1 ]] && { echoerr "please specify a port to open"; return 1 }
+  [[ -z $2 ]] || { echoerr "please specify only one port to open"; return 1 }
 
-  local ports_str=${(j:,:)@}
-  local task_name="WSL 2 Firewall Unlock for ports: $ports_str"
+  local task_name="WSL 2 Firewall Unlock for ports: $1"
 
   winadmin "
     \$remoteport = bash.exe -c \"ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'\"
@@ -129,25 +129,15 @@ function openport() {
       exit;
     }
 
-    # All the ports you want to forward separated by coma
-    \$ports=@($ports_str);
-
-    # You can change the addr to your ip config to listen to a specific address
-    \$addr='0.0.0.0';
-    \$ports_a = \$ports -join \",\";
-
     # Remove Firewall Exception Rules
-    iex \"Remove-NetFireWallRule -DisplayName '$task_name' \";
+    iex \"Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock for port: $1' \";
 
     # Add Exception Rules for inbound and outbound Rules
-    iex \"New-NetFireWallRule -DisplayName '$task_name' -Direction Outbound -LocalPort \$ports_a -Action Allow -Protocol TCP\";
-    iex \"New-NetFireWallRule -DisplayName '$task_name' -Direction Inbound -LocalPort \$ports_a -Action Allow -Protocol TCP\";
+    iex \"New-NetFireWallRule -DisplayName '$task_name' -Direction Outbound -LocalPort $1 -Action Allow -Protocol TCP\";
+    iex \"New-NetFireWallRule -DisplayName '$task_name' -Direction Inbound -LocalPort $1 -Action Allow -Protocol TCP\";
 
-    for (\$i = 0; \$i -lt \$ports.length; \$i++) {
-      \$port = \$ports[\$i];
-      iex \"netsh interface portproxy delete v4tov4 listenport=\$port listenaddress=\$addr\";
-      iex \"netsh interface portproxy add v4tov4 listenport=\$port listenaddress=\$addr connectport=\$port connectaddress=\$remoteport\";
-    }
+    iex \"netsh interface portproxy delete v4tov4 listenport=$1 listenaddress=0.0.0.0\";
+    iex \"netsh interface portproxy add v4tov4 listenport=$1 listenaddress=0.0.0.0 connectport=$1 connectaddress=$1\";
   "
 }
 
