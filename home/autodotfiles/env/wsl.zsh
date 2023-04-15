@@ -116,7 +116,7 @@ function openport() {
   [[ -z $1 ]] && { echoerr "please specify a port to open"; return 1 }
   [[ -z $2 ]] || { echoerr "please specify only one port to open"; return 1 }
 
-  local task_name="WSL 2 Firewall Unlock for ports: $1"
+  local task_name="WSL 2 Firewall Unlock for port: $1"
 
   winadmin "
     \$remoteport = bash.exe -c \"ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'\"
@@ -130,7 +130,7 @@ function openport() {
     }
 
     # Remove Firewall Exception Rules
-    iex \"Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock for port: $1' \";
+    iex \"Remove-NetFireWallRule -DisplayName '$task_name' \";
 
     # Add Exception Rules for inbound and outbound Rules
     iex \"New-NetFireWallRule -DisplayName '$task_name' -Direction Outbound -LocalPort $1 -Action Allow -Protocol TCP\";

@@ -151,6 +151,8 @@ if [[ $1 = "--just-run" && -n $2 ]]; then
 	fi
 elif [[ $1 = "--start-with" && -n $2 ]]; then
 	${@:2}
+elif [[ ! -z $ADF_START_WITH ]]; then
+	eval "$ADF_START_WITH"
 elif (( $ADF_CHECK_CRONY_FAILURES_STARTUP )); then
 	crony check
 fi
