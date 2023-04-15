@@ -137,7 +137,7 @@ function openport() {
     iex \"New-NetFireWallRule -DisplayName '$task_name' -Direction Inbound -LocalPort $1 -Action Allow -Protocol TCP\";
 
     iex \"netsh interface portproxy delete v4tov4 listenport=$1 listenaddress=0.0.0.0\";
-    iex \"netsh interface portproxy add v4tov4 listenport=$1 listenaddress=0.0.0.0 connectport=$1 connectaddress=$1\";
+    iex \"netsh interface portproxy add v4tov4 listenport=$1 listenaddress=0.0.0.0 connectport=$1 connectaddress=$(hostname -I)\";
   "
 }
 
