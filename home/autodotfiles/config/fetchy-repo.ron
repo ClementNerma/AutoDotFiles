@@ -153,6 +153,30 @@
       )
     ),
     (
+      name: "ffmpeg",
+      download: (
+        source: Direct(
+          url: "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+        ),
+        file_format: Archive(
+          format: TarXz,
+          files: [
+            (
+              relative_path: "Start \"ffmpeg-\" ['0'-'9' '.']+ \"-amd64-static/ffmpeg\"",
+              file_type: Binary(
+                copy_as: "ffmpeg"
+              )
+            )
+          ]
+        ),
+        // TODO: to improve
+        version_extraction: (
+          source: Url,
+          regex: ":()"
+        )
+      )
+    ),
+    (
       name: "gitui",
       download: (
         source: GitHub(
