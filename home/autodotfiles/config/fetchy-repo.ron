@@ -166,6 +166,12 @@
               file_type: Binary(
                 copy_as: "ffmpeg"
               )
+            ),
+            (
+              relative_path: "Start \"ffmpeg-\" ['0'-'9' '.']+ \"-amd64-static/ffprobe\"",
+              file_type: Binary(
+                copy_as: "ffprobe"
+              )
             )
           ]
         ),
