@@ -99,9 +99,9 @@ function mount_wsl_drives() {
   fi
 }
 
-# Edit a file directly in Sublime Text, even if stored inside WSL
+# Edit a file directly in a native text editor, even if stored inside WSL
 function edit() {
-  ( cd "$(dirname "$1")" && /mnt/c/Program\ Files/Sublime\ Text/sublime_text.exe "$(basename "$1")" )
+  ( cd "$(dirname "$1")" && "$SOFTWAREDIR/Lite XL/lite-xl.exe" "$(basename "$1")" )
 }
 
 # Link a WSL port with a Windows port
