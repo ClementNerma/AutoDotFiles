@@ -81,13 +81,7 @@ function adf_install_components() {
     if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q check-installed "${req_packages[@]}" 2> /dev/null; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
-        # Fetchy
-        if ! wget https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-linux-x86_64 -q --show-progress -O "$ADF_BIN_DIR/fetchy"; then
-            echoerr "Failed to download latest release of Fetchy!"
-            return 1
-        fi
-
-        chmod +x "$ADF_BIN_DIR/fetchy"
+        cargo binstall fetchy-pkgs --no-confirm
 
         adf_update_fetchy_repo
 
