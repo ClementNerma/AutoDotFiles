@@ -21,8 +21,6 @@ alias cat="bat --theme=base16"
 # Software: Git
 alias ga="git add"
 alias gb="git checkout -b"
-alias gd="git diff"
-alias gds="git diff --staged"
 alias gs="gitui"
 alias gr="git reset"
 alias gl="git log"
