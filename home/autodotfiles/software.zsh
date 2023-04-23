@@ -4,6 +4,9 @@ if [[ -f ~/.cargo/env ]]; then
 	source ~/.cargo/env
 fi
 
+# Integration for Trasher
+export TRASH_DIR=$TRASHDIR
+
 # Integration for Python
 export PATH="$HOME/.local/bin:$PATH"
 

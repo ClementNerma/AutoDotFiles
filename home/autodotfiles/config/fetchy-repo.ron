@@ -461,10 +461,10 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "Trasher",
-          asset_pattern: "Start \"trasher-linux-x86_64-musl.zip\" End"
+          asset_pattern: "Start \"trasher-linux-x86_64-musl.tgz\" End"
         ),
         file_format: Archive(
-          format: Zip,
+          format: TarGz,
           files: [
             (
               relative_path: "Start \"trasher\" End",

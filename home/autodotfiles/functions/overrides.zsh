@@ -27,17 +27,12 @@ function gm() {
     git commit -m "$1" "${@:2}"
 }
 
-# Software: Trasher
-function trasher() {
-	command trasher --create-trash-dir --trash-dir "$TRASHDIR" "$@"
-}
-
 function rm() {
-	trasher rm --move-ext-filesystems "$@"
+	trasher rm "$@"
 }
 
 function unrm() {
-	trasher unrm --move-ext-filesystems "$@"
+	trasher unrm "$@"
 }
 
 # Safety handlers for 'npm', 'yarn' and 'pnpm'
