@@ -33,10 +33,6 @@ alias gpf="git push --force-with-lease"
 alias yd="ytdl dl"
 alias ytsync="ytdl sync"
 
-function yu() {
-    yd "${@:2}" --cookie-profile "$1"
-}
-
 # Set the default editor
 export EDITOR="hx"
 alias nano="$EDITOR"
