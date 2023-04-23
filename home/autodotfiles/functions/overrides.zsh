@@ -2,22 +2,17 @@
 # Automatically use parent SSH private key file with 'git' commands
 function git() {
     local current=$PWD
-    local key_file=0
 
     while [[ $current != "/" ]]; do
         if [[ -f "$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME" ]]; then
-            key_file=1
-            break
+            GIT_SSH_COMMAND="ssh -i '$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME'" command git "$@"
+            return
         fi
 
         current=$(dirname "$current")
     done
 
-    if (( $key_file )); then
-        GIT_SSH_COMMAND="ssh -i '$current/$ADF_GIT_SSH_PRIVATE_KEY_FILENAME'" command git "$@"
-    else
-        command git "$@"
-    fi
+    command git "$@"
 }
 
 # Make a commit with Git
