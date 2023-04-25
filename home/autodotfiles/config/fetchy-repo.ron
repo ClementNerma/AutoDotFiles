@@ -23,7 +23,7 @@
         ),
         version_extraction: (
           source: DownloadedFileName,
-          regex: "Start \"bat-v\" :(['0'-'9' '.']+) \"-x86_64\""
+          regex: "Start \"bat-v\" :([d '.']+) \"-x86_64\""
         )
       )
     ),
@@ -48,7 +48,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start 'v' :(['0'-'9' '.']+) End"
+          regex: "Start 'v' :([d '.']+) End"
         )
       )
     ),
@@ -73,7 +73,7 @@
         ),
         version_extraction: (
           source: TagName,
-          regex: "Start 'v' :(['0'-'9' '.']+) End"
+          regex: "Start 'v' :([d '.']+) End"
         )
       )
     ),
@@ -98,7 +98,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"v\" :([d '.']+) End"
         )
       )
     ),
@@ -148,7 +148,7 @@
         ),
         version_extraction: (
           source: DownloadedFileName,
-          regex: "Start \"fd-v\" :(['0'-'9' '.']+) \"-x86_64\""
+          regex: "Start \"fd-v\" :([d '.']+) \"-x86_64\""
         )
       )
     ),
@@ -162,13 +162,13 @@
           format: TarXz,
           files: [
             (
-              relative_path: "Start \"ffmpeg-\" ['0'-'9' '.']+ \"-amd64-static/ffmpeg\"",
+              relative_path: "Start \"ffmpeg-\" [d '.']+ \"-amd64-static/ffmpeg\"",
               file_type: Binary(
                 copy_as: "ffmpeg"
               )
             ),
             (
-              relative_path: "Start \"ffmpeg-\" ['0'-'9' '.']+ \"-amd64-static/ffprobe\"",
+              relative_path: "Start \"ffmpeg-\" [d '.']+ \"-amd64-static/ffprobe\"",
               file_type: Binary(
                 copy_as: "ffprobe"
               )
@@ -203,7 +203,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"v\" :([d '.']+) End"
         )
       )
     ),
@@ -213,19 +213,19 @@
         source: GitHub(
           author: "helix-editor",
           repo_name: "helix",
-          asset_pattern: "Start \"helix-\" :(['0'-'9' '.']+) \"-x86_64-linux.tar.xz\" End"
+          asset_pattern: "Start \"helix-\" :([d '.']+) \"-x86_64-linux.tar.xz\" End"
         ),
         file_format: Archive(
           format: TarXz,
           files: [
             (
-              relative_path: "Start \"helix-\" :(['0'-'9' '.']+) \"-x86_64-linux/hx\" End",
+              relative_path: "Start \"helix-\" :([d '.']+) \"-x86_64-linux/hx\" End",
               file_type: Binary(
                 copy_as: "hx"
               )
             ),
             (
-              relative_path: "Start \"helix-\" :(['0'-'9' '.']+) \"-x86_64-linux/runtime\" End",
+              relative_path: "Start \"helix-\" :([d '.']+) \"-x86_64-linux/runtime\" End",
               file_type: ConfigSubDir(
                 copy_as: "runtime"
               )
@@ -234,7 +234,7 @@
         ),
         version_extraction: (
           source: TagName,
-          regex: "Start :(['0'-'9' '.']+) End"
+          regex: "Start :([d '.']+) End"
         )
       )
     ),
@@ -259,7 +259,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"v\" :([d '.']+) End"
         )
       )
     ),
@@ -284,7 +284,7 @@
         ),
         version_extraction: (
           source: DownloadedFileName,
-          regex: "Start \"kopia-\" :(['0'-'9' '.']+) \"-linux-x64.tar.gz\" End"
+          regex: "Start \"kopia-\" :([d '.']+) \"-linux-x64.tar.gz\" End"
         )
       )
     ),
@@ -309,7 +309,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"gdu v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"gdu v\" :([d '.']+) End"
         )
       )
     ),
@@ -319,7 +319,7 @@
         source: GitHub(
           author: "jesseduffield",
           repo_name: "lazydocker",
-          asset_pattern: "Start \"lazydocker_\" :(['0'-'9' '.']+) \"_Linux_x86_64.tar.gz\" End"
+          asset_pattern: "Start \"lazydocker_\" :([d '.']+) \"_Linux_x86_64.tar.gz\" End"
         ),
         file_format: Archive(
           format: TarGz,
@@ -334,7 +334,7 @@
         ),
         version_extraction: (
           source: TagName,
-          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"v\" :([d '.']+) End"
         )
       )
     ),
@@ -344,13 +344,13 @@
         source: GitHub(
           author: "nushell",
           repo_name: "nushell",
-          asset_pattern: "Start \"nu-\" :(['0'-'9' '.']+) \"-x86_64-unknown-linux-musl.tar.gz\" End"
+          asset_pattern: "Start \"nu-\" :([d '.']+) \"-x86_64-unknown-linux-musl.tar.gz\" End"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"nu-\" :(['0'-'9' '.']+) \"-x86_64-unknown-linux-musl/nu\" End",
+              relative_path: "Start \"nu-\" :([d '.']+) \"-x86_64-unknown-linux-musl/nu\" End",
               file_type: Binary(
                 copy_as: "nu"
               )
@@ -359,7 +359,7 @@
         ),
         version_extraction: (
           source: TagName,
-          regex: "Start :(['0'-'9' '.']+) End"
+          regex: "Start :([d '.']+) End"
         )
       )
     ),
@@ -384,7 +384,7 @@
         ),
         version_extraction: (
           source: DownloadedFileName,
-          regex: "Start \"ripgrep-\" :(['0'-'9' '.']+) \"-x86\""
+          regex: "Start \"ripgrep-\" :([d '.']+) \"-x86\""
         )
       )
     ),
@@ -401,7 +401,7 @@
         ),
         version_extraction: (
           source: TagName,
-          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"v\" :([d '.']+) End"
         )
       )
     ),
@@ -426,7 +426,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"v\" :([d '.']+) End"
         )
       )
     ),
@@ -451,7 +451,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"v\" :(['0'-'9' 'a'-'z' 'A'-'Z' '-' '.']+) End"
+          regex: "Start \"v\" :([d 'a'-'z' 'A'-'Z' '-' '.']+) End"
         )
       )
     ),
@@ -461,7 +461,7 @@
         source: GitHub(
           author: "topgrade-rs",
           repo_name: "topgrade",
-          asset_pattern: "Start \"topgrade-v\" :(['0'-'9' '.']+) \"-x86_64-unknown-linux-musl.tar.gz\" End"
+          asset_pattern: "Start \"topgrade-v\" :([d '.']+) \"-x86_64-unknown-linux-musl.tar.gz\" End"
         ),
         file_format: Archive(
           format: TarGz,
@@ -476,7 +476,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"v\" :([d '.']+) End"
         )
       )
     ),
@@ -501,7 +501,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"Trasher v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"Trasher v\" :([d '.']+) End"
         )
       )
     ),
@@ -518,7 +518,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"yt-dlp \" :(['0'-'9' '.']+) End"
+          regex: "Start \"yt-dlp \" :([d '.']+) End"
         )
       )
     ),
@@ -543,7 +543,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"v\" :([d '.']+) End"
         )
       )
     ),
@@ -568,7 +568,7 @@
         ),
         version_extraction: (
           source: ReleaseTitle,
-          regex: "Start \"Release v\" :(['0'-'9' '.']+) End"
+          regex: "Start \"Release v\" :([d '.']+) End"
         )
       )
     )
