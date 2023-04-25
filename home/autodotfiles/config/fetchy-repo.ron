@@ -314,6 +314,31 @@
       )
     ),
     (
+      name: "lazydocker",
+      download: (
+        source: GitHub(
+          author: "jesseduffield",
+          repo_name: "lazydocker",
+          asset_pattern: "Start \"lazydocker_\" :(['0'-'9' '.']+) \"_Linux_x86_64.tar.gz\" End"
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "Start \"lazydocker\" End",
+              file_type: Binary(
+                copy_as: "lazydocker"
+              )
+            )
+          ]
+        ),
+        version_extraction: (
+          source: TagName,
+          regex: "Start \"v\" :(['0'-'9' '.']+) End"
+        )
+      )
+    ),
+    (
       name: "nushell",
       download: (
         source: GitHub(
