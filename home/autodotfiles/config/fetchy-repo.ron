@@ -22,8 +22,7 @@
           ]
         ),
         version_extraction: (
-          source: DownloadedFileName,
-          regex: "Start \"bat-v\" :([d '.']+) \"-x86_64\""
+          source: TagName
         )
       )
     ),
@@ -47,8 +46,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start 'v' :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -72,8 +70,7 @@
           ]
         ),
         version_extraction: (
-          source: TagName,
-          regex: "Start 'v' :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -97,8 +94,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -122,8 +118,7 @@
           ]
         ),
         version_extraction: (
-          source: DownloadedFileName,
-          regex: "\"exa-linux-x86_64-musl-\" :(Codepoint+) \".zip\""
+          source: TagName
         )
       )
     ),
@@ -147,8 +142,7 @@
           ]
         ),
         version_extraction: (
-          source: DownloadedFileName,
-          regex: "Start \"fd-v\" :([d '.']+) \"-x86_64\""
+          source: TagName
         )
       )
     ),
@@ -175,10 +169,9 @@
             )
           ]
         ),
-        // TODO: to improve
         version_extraction: (
-          source: Url,
-          regex: ":()"
+          source: Url
+          // TODO: find a way to extraction version number
         )
       )
     ),
@@ -202,8 +195,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -233,8 +225,7 @@
           ]
         ),
         version_extraction: (
-          source: TagName,
-          regex: "Start :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -258,8 +249,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -283,8 +273,7 @@
           ]
         ),
         version_extraction: (
-          source: DownloadedFileName,
-          regex: "Start \"kopia-\" :([d '.']+) \"-linux-x64.tar.gz\" End"
+          source: TagName
         )
       )
     ),
@@ -308,8 +297,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"gdu v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -333,8 +321,7 @@
           ]
         ),
         version_extraction: (
-          source: TagName,
-          regex: "Start \"v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -358,8 +345,7 @@
           ]
         ),
         version_extraction: (
-          source: TagName,
-          regex: "Start :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -383,8 +369,7 @@
           ]
         ),
         version_extraction: (
-          source: DownloadedFileName,
-          regex: "Start \"ripgrep-\" :([d '.']+) \"-x86\""
+          source: TagName
         )
       )
     ),
@@ -400,8 +385,7 @@
           filename: "scout"
         ),
         version_extraction: (
-          source: TagName,
-          regex: "Start \"v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -425,8 +409,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -450,8 +433,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"v\" :([d 'a'-'z' 'A'-'Z' '-' '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -475,8 +457,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -500,8 +481,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"Trasher v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -517,8 +497,7 @@
           filename: "yt-dlp"
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"yt-dlp \" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -542,8 +521,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"v\" :([d '.']+) End"
+          source: TagName
         )
       )
     ),
@@ -567,8 +545,7 @@
           ]
         ),
         version_extraction: (
-          source: ReleaseTitle,
-          regex: "Start \"Release v\" :([d '.']+) End"
+          source: TagName
         )
       )
     )
