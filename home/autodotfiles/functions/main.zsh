@@ -145,3 +145,27 @@ function z() {
         export __JUMPY_DONT_REGISTER=0
     fi
 }
+
+# Publish a new Rust project release
+function rustpublish() {
+	[[ -f Cargo.toml ]] || { echoerr "No Cargo.toml file found."; return 1 }
+
+	local crate_name=$(cat Cargo.toml | rg "^name = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
+	local crate_version=$(cat Cargo.toml | rg "^version = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
+
+	echoinfo "\n\n>\n> (1/3) Producing a proper standalone build...\n>\n"
+	cargo dist || return 1
+
+	echoinfo "\n\n>\n> (2/3) Releasing to GitHub...\n>\n"
+	gh release create "v$crate_version" \
+		--title "$crate_name v$crate_version" \
+		--generate-notes \
+		--latest \
+		"target/distrib/$crate_name-v$crate_version-x86_64-unknown-linux-gnu.tar.xz" \
+		|| return 1
+
+	echoinfo "\n\n>\n> (3/3) Publishing to crates.io...\n>\n"
+	cargo publish || return 1
+
+	echosuccess "Done!"
+}
