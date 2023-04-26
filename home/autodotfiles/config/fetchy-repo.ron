@@ -497,7 +497,7 @@
           format: TarXz,
           files: [
             (
-              relative_path: "^trasher$",
+              relative_path: "/trasher$",
               file_type: Binary(
                 copy_as: "trasher"
               )
