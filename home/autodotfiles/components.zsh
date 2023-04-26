@@ -78,7 +78,7 @@ function adf_install_components() {
 
     local req_packages=("bat" "cargo-binstall" "crony" "exa" "fd" "gitui" "helix" "jumpy" "gdu" "ripgrep" "scout" "starship" "tokei" "topgrade" "trasher" "yt-dlp" "ytdl" "zellij")
 
-    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q check-installed "${req_packages[@]}" 2> /dev/null; then
+    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q require "${req_packages[@]}" --no-install; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
         cargo binstall fetchy-pkgs --no-confirm
@@ -120,8 +120,8 @@ function adf_update() {
 function adf_update_fetchy_repo() {
     echoinfo "\n>\n> Adding/updating Fetchy repositories...\n>\n"
 
-    fetchy repos:add -i "$ADF_CONFIG_FILES_DIR/fetchy-repo.ron" || return 1
-    fetchy -q repos:update || return 1
+    fetchy repos add -i "$ADF_CONFIG_FILES_DIR/fetchy-repo.ron" || return 1
+    fetchy -q repos update || return 1
 }
 
 export ADF_INSTALLER_ABORTED=0
