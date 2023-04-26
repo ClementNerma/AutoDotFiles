@@ -302,6 +302,30 @@
       )
     ),
     (
+      name: "github-cli",
+      download: (
+        source: GitHub(
+          author: "cli",
+          repo_name: "cli",
+          asset_pattern: "_linux_amd64.tar.gz$"
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "/bin/gh$",
+              file_type: Binary(
+                copy_as: "gh"
+              )
+            )
+          ]
+        ),
+        version_extraction: (
+          source: TagName
+        )
+      )
+    ),
+    (
       name: "lazydocker",
       download: (
         source: GitHub(
