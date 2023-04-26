@@ -18,6 +18,10 @@ alias tree="ls --tree"
 # Software: Bat
 alias cat="bat --theme=base16"
 
+# Software: Trasher
+alias rm="trasher rm"
+alias unrm="trasher unrm"
+
 # Software: Git
 alias ga="git add"
 alias gb="git checkout -b"

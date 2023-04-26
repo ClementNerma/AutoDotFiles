@@ -27,14 +27,6 @@ function gm() {
     git commit -m "$1" "${@:2}"
 }
 
-function rm() {
-	trasher rm "$@"
-}
-
-function unrm() {
-	trasher unrm "$@"
-}
-
 # Safety handlers for 'npm', 'yarn' and 'pnpm'
 function npm() {
 	[[ -f yarn.lock ]] && { echoerr "A lockfile from \z[cyan]°Yarn\z[]° is already present!"; return 1 }
