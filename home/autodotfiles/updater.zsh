@@ -74,6 +74,9 @@ function zerupdate() {
 	# Reload current directory (fix for 'fd')
 	cd "."
 
+	# Update Fetchy repository
+	adf_update_fetchy_repo
+
 	# Done!
 	echosuccess "Environment successfully updated!"
 }
