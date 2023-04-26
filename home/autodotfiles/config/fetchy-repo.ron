@@ -467,10 +467,10 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "Trasher",
-          asset_pattern: "^trasher-linux-x86_64-musl.tgz$"
+          asset_pattern: "-x86_64-unknown-linux-gnu.tar.xz$"
         ),
         file_format: Archive(
-          format: TarGz,
+          format: TarXz,
           files: [
             (
               relative_path: "^trasher$",
