@@ -51,6 +51,30 @@
       )
     ),
     (
+      name: "cargo-binstall",
+      download: (
+        source: GitHub(
+          author: "cargo-bins",
+          repo_name: "cargo-binstall",
+          asset_pattern: "^cargo-binstall-x86_64-unknown-linux-musl.tgz$"
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "^cargo-binstall$",
+              file_type: Binary(
+                copy_as: "cargo-binstall"
+              )
+            )
+          ]
+        ),
+        version_extraction: (
+          source: TagName
+        )
+      )
+    ),
+    (
       name: "crony",
       download: (
         source: GitHub(
