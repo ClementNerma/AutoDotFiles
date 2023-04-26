@@ -80,7 +80,7 @@ function adf_install_components() {
         echo "fzf" >> "$ADF_INSTALLED_LIST"
     fi
 
-    local req_packages=("bat" "bjobs" "crony" "exa" "erdtree" "fd" "gitui" "helix" "jumpy" "kopia" "gdu" "nushell" "ripgrep" "scout" "starship" "tokei" "topgrade" "trasher" "yt-dlp" "ytdl" "zellij")
+    local req_packages=("bat" "crony" "exa" "fd" "gitui" "helix" "jumpy" "gdu" "ripgrep" "scout" "starship" "tokei" "topgrade" "trasher" "yt-dlp" "ytdl" "zellij")
 
     if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q check-installed "${req_packages[@]}" 2> /dev/null; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
