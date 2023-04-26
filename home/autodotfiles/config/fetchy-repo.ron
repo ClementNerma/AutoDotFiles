@@ -8,13 +8,13 @@
         source: GitHub(
           author: "sharkdp",
           repo_name: "bat",
-          asset_pattern: "\"-x86_64-unknown-linux-musl.tar.gz\" End"
+          asset_pattern: "x86_64-unknown-linux-musl.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"bat-\" Codepoint+ \"/bat\" End",
+              relative_path: "bat-.*/bat$",
               file_type: Binary(
                 copy_as: "bat"
               )
@@ -32,39 +32,15 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "BackgroundJobs",
-          asset_pattern: "Start \"bjobs-linux-x86_64-musl.zip\" End"
+          asset_pattern: "^bjobs-linux-x86_64-musl.zip$"
         ),
         file_format: Archive(
           format: Zip,
           files: [
             (
-              relative_path: "Start \"bjobs\" End",
+              relative_path: "^bjobs$",
               file_type: Binary(
                 copy_as: "bjobs"
-              )
-            )
-          ]
-        ),
-        version_extraction: (
-          source: TagName
-        )
-      )
-    ),
-    (
-      name: "cargo-binstall",
-      download: (
-        source: GitHub(
-          author: "cargo-bins",
-          repo_name: "cargo-binstall",
-          asset_pattern: "Start \"cargo-binstall-x86_64-unknown-linux-musl.tgz\" End"
-        ),
-        file_format: Archive(
-          format: TarGz,
-          files: [
-            (
-              relative_path: "Start \"cargo-binstall\" End",
-              file_type: Binary(
-                copy_as: "cargo-binstall"
               )
             )
           ]
@@ -80,13 +56,13 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "Crony",
-          asset_pattern: "Start \"crony-linux-x86_64.zip\" End"
+          asset_pattern: "^crony-linux-x86_64.zip$"
         ),
         file_format: Archive(
           format: Zip,
           files: [
             (
-              relative_path: "Start \"crony\" End",
+              relative_path: "^crony$",
               file_type: Binary(
                 copy_as: "crony"
               )
@@ -104,13 +80,13 @@
         source: GitHub(
           author: "solidiquis",
           repo_name: "erdtree",
-          asset_pattern: "\"-x86_64-unknown-linux-gnu.tar.gz\" End"
+          asset_pattern: "-x86_64-unknown-linux-gnu.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"erd\" End",
+              relative_path: "^erd$",
               file_type: Binary(
                 copy_as: "erd"
               )
@@ -128,13 +104,13 @@
         source: GitHub(
           author: "ogham",
           repo_name: "exa",
-          asset_pattern: "Start \"exa-linux-x86_64-musl-v\" Codepoint+ \".zip\" End"
+          asset_pattern: "^exa-linux-x86_64-musl-v.*.zip$"
         ),
         file_format: Archive(
           format: Zip,
           files: [
             (
-              relative_path: "Start \"bin/exa\" End",
+              relative_path: "^bin/exa",
               file_type: Binary(
                 copy_as: "exa"
               )
@@ -152,13 +128,13 @@
         source: GitHub(
           author: "sharkdp",
           repo_name: "fd",
-          asset_pattern: "\"-x86_64-unknown-linux-musl.tar.gz\" End"
+          asset_pattern: "-x86_64-unknown-linux-musl.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"fd-\" Codepoint+ \"/fd\" End",
+              relative_path: "^fd-.*/fd$",
               file_type: Binary(
                 copy_as: "fd"
               )
@@ -180,13 +156,13 @@
           format: TarXz,
           files: [
             (
-              relative_path: "Start \"ffmpeg-\" [d '.']+ \"-amd64-static/ffmpeg\"",
+              relative_path: "^ffmpeg-(\\d\\.)-amd64-static/ffmpeg$",
               file_type: Binary(
                 copy_as: "ffmpeg"
               )
             ),
             (
-              relative_path: "Start \"ffmpeg-\" [d '.']+ \"-amd64-static/ffprobe\"",
+              relative_path: "^ffmpeg-(\\d\\.)-amd64-static/ffprobe$",
               file_type: Binary(
                 copy_as: "ffprobe"
               )
@@ -205,13 +181,13 @@
         source: GitHub(
           author: "extrawurst",
           repo_name: "gitui",
-          asset_pattern: "Start \"gitui-linux-musl.tar.gz\" End"
+          asset_pattern: "^gitui-linux-musl.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"./\"? \"gitui\" End",
+              relative_path: "^(./)?gitui$",
               file_type: Binary(
                 copy_as: "gitui"
               )
@@ -229,19 +205,19 @@
         source: GitHub(
           author: "helix-editor",
           repo_name: "helix",
-          asset_pattern: "Start \"helix-\" :([d '.']+) \"-x86_64-linux.tar.xz\" End"
+          asset_pattern: "-x86_64-linux.tar.xz$"
         ),
         file_format: Archive(
           format: TarXz,
           files: [
             (
-              relative_path: "Start \"helix-\" :([d '.']+) \"-x86_64-linux/hx\" End",
+              relative_path: "-x86_64-linux/hx$",
               file_type: Binary(
                 copy_as: "hx"
               )
             ),
             (
-              relative_path: "Start \"helix-\" :([d '.']+) \"-x86_64-linux/runtime\" End",
+              relative_path: "-x86_64-linux/runtime$",
               file_type: ConfigSubDir(
                 copy_as: "runtime"
               )
@@ -259,13 +235,13 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "Jumpy",
-          asset_pattern: "Start \"jumpy-linux-x86_64-musl.zip\" End"
+          asset_pattern: "^jumpy-linux-x86_64-musl.zip$"
         ),
         file_format: Archive(
           format: Zip,
           files: [
             (
-              relative_path: "Start \"jumpy\" End",
+              relative_path: "^jumpy$",
               file_type: Binary(
                 copy_as: "jumpy"
               )
@@ -283,13 +259,13 @@
         source: GitHub(
           author: "kopia",
           repo_name: "kopia",
-          asset_pattern: "\"-linux-x64.tar.gz\""
+          asset_pattern: "-linux-x64.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"kopia-\" Codepoint+ \"/kopia\" End",
+              relative_path: "^kopia-.*/kopia$",
               file_type: Binary(
                 copy_as: "kopia"
               )
@@ -307,13 +283,13 @@
         source: GitHub(
           author: "dundee",
           repo_name: "gdu",
-          asset_pattern: "Start \"gdu_linux_amd64.tgz\" End"
+          asset_pattern: "^gdu_linux_amd64.tgz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"gdu_linux_amd64\" End",
+              relative_path: "^gdu_linux_amd64$",
               file_type: Binary(
                 copy_as: "gdu"
               )
@@ -331,13 +307,13 @@
         source: GitHub(
           author: "jesseduffield",
           repo_name: "lazydocker",
-          asset_pattern: "Start \"lazydocker_\" :([d '.']+) \"_Linux_x86_64.tar.gz\" End"
+          asset_pattern: "^lazydocker_[\\d\\.]+_Linux_x86_64.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"lazydocker\" End",
+              relative_path: "^lazydocker$",
               file_type: Binary(
                 copy_as: "lazydocker"
               )
@@ -355,13 +331,13 @@
         source: GitHub(
           author: "nushell",
           repo_name: "nushell",
-          asset_pattern: "Start \"nu-\" :([d '.']+) \"-x86_64-unknown-linux-musl.tar.gz\" End"
+          asset_pattern: "-x86_64-unknown-linux-musl.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"nu-\" :([d '.']+) \"-x86_64-unknown-linux-musl/nu\" End",
+              relative_path: "-x86_64-unknown-linux-musl/nu$",
               file_type: Binary(
                 copy_as: "nu"
               )
@@ -379,13 +355,13 @@
         source: GitHub(
           author: "BurntSushi",
           repo_name: "ripgrep",
-          asset_pattern: "\"-x86_64-unknown-linux-musl.tar.gz\""
+          asset_pattern: "-x86_64-unknown-linux-musl.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"ripgrep-\" Codepoint+ \"/rg\" End",
+              relative_path: "^ripgrep-.*/rg$",
               file_type: Binary(
                 copy_as: "rg"
               )
@@ -403,7 +379,7 @@
         source: GitHub(
           author: "jhbabon",
           repo_name: "scout",
-          asset_pattern: "\"scout-linux\""
+          asset_pattern: "^scout-linux$"
         ),
         file_format: Binary(
           filename: "scout"
@@ -419,13 +395,13 @@
         source: GitHub(
           author: "starship",
           repo_name: "starship",
-          asset_pattern: "Start \"starship-x86_64-unknown-linux-musl.tar.gz\" End"
+          asset_pattern: "^starship-x86_64-unknown-linux-musl.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"starship\" End",
+              relative_path: "^starship$",
               file_type: Binary(
                 copy_as: "starship"
               )
@@ -443,13 +419,13 @@
         source: GitHub(
           author: "XAMPPRocky",
           repo_name: "tokei",
-          asset_pattern: "Start \"tokei-x86_64-unknown-linux-musl.tar.gz\" End"
+          asset_pattern: "^tokei-x86_64-unknown-linux-musl.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"tokei\" End",
+              relative_path: "^tokei$",
               file_type: Binary(
                 copy_as: "tokei"
               )
@@ -467,13 +443,13 @@
         source: GitHub(
           author: "topgrade-rs",
           repo_name: "topgrade",
-          asset_pattern: "Start \"topgrade-v\" :([d '.']+) \"-x86_64-unknown-linux-musl.tar.gz\" End"
+          asset_pattern: "-x86_64-unknown-linux-musl.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"topgrade\" End",
+              relative_path: "^topgrade$",
               file_type: Binary(
                 copy_as: "topgrade"
               )
@@ -491,13 +467,13 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "Trasher",
-          asset_pattern: "Start \"trasher-linux-x86_64-musl.tgz\" End"
+          asset_pattern: "^trasher-linux-x86_64-musl.tgz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"trasher\" End",
+              relative_path: "^trasher$",
               file_type: Binary(
                 copy_as: "trasher"
               )
@@ -515,7 +491,7 @@
         source: GitHub(
           author: "yt-dlp",
           repo_name: "yt-dlp",
-          asset_pattern: "Start \"yt-dlp\" End"
+          asset_pattern: "^yt-dlp$"
         ),
         file_format: Binary(
           filename: "yt-dlp"
@@ -531,13 +507,13 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "ytdl",
-          asset_pattern: "Start \"ytdl-linux-x86_64-musl.zip\" End"
+          asset_pattern: "^ytdl-linux-x86_64-musl.zip$"
         ),
         file_format: Archive(
           format: Zip,
           files: [
             (
-              relative_path: "Start \"ytdl\" End",
+              relative_path: "^ytdl$",
               file_type: Binary(
                 copy_as: "ytdl"
               )
@@ -555,13 +531,13 @@
         source: GitHub(
           author: "zellij-org",
           repo_name: "zellij",
-          asset_pattern: "Start \"zellij-x86_64-unknown-linux-musl.tar.gz\" End"
+          asset_pattern: "^zellij-x86_64-unknown-linux-musl.tar.gz$"
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "Start \"zellij\" End",
+              relative_path: "^zellij$",
               file_type: Binary(
                 copy_as: "zellij"
               )
