@@ -32,13 +32,13 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "BackgroundJobs",
-          asset_pattern: "^bjobs-linux-x86_64-musl.zip$"
+          asset_pattern: "-x86_64-unknown-linux-gnu.tar.xz$"
         ),
         file_format: Archive(
-          format: Zip,
+          format: TarXz,
           files: [
             (
-              relative_path: "^bjobs$",
+              relative_path: "/bjobs$",
               file_type: Binary(
                 copy_as: "bjobs"
               )
