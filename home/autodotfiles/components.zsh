@@ -81,9 +81,9 @@ function adf_install_components() {
     if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q require "${req_packages[@]}" --no-install; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
-        cargo binstall fetchy-pkgs --no-confirm
-
-        adf_update_fetchy_repo
+        cargo binstall fetchy-pkgs --no-confirm || return 1
+        fetchy repos add -i "$ADF_CONFIG_FILES_DIR/fetchy-repo.ron" || return 1
+        adf_update_fetchy_repo || return 1
 
         echo "fetchy" >> "$ADF_INSTALLED_LIST"
     fi
@@ -120,7 +120,6 @@ function adf_update() {
 function adf_update_fetchy_repo() {
     echoinfo "\n>\n> Adding/updating Fetchy repositories...\n>\n"
 
-    fetchy repos add -i "$ADF_CONFIG_FILES_DIR/fetchy-repo.ron" || return 1
     fetchy -q repos update || return 1
 }
 
