@@ -75,7 +75,7 @@ function adf_install_components() {
 
         cargo binstall fetchy-pkgs --no-confirm || return 1
         fetchy repos add -i "$ADF_CONFIG_FILES_DIR/fetchy-repo.ron" || return 1
-        adf_update_fetchy_repo || return 1
+        fetchy -q repos update || return 1
     fi
 
     # Install missing packages
@@ -105,12 +105,6 @@ function adf_install_components() {
 
 function adf_update() {
     adf_install_components
-}
-
-function adf_update_fetchy_repo() {
-    echoinfo "\n>\n> Adding/updating Fetchy repositories...\n>\n"
-
-    fetchy -q repos update || return 1
 }
 
 export ADF_INSTALLER_ABORTED=0

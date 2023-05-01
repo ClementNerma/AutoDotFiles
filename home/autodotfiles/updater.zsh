@@ -75,7 +75,7 @@ function zerupdate() {
 	cd "."
 
 	# Update Fetchy repository
-	adf_update_fetchy_repo
+	fetchy -q repos update
 
 	# Done!
 	echosuccess "Environment successfully updated!"
