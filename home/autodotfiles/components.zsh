@@ -68,7 +68,7 @@ function adf_install_components() {
         ( cd ~/.fzf && git pull && bash ./install --all )
     fi
 
-    local req_packages=("bat" "cargo-binstall" "crony" "exa" "fd" "gitui" "helix" "jumpy" "gdu" "ripgrep" "scout" "starship" "tokei" "topgrade" "trasher" "yt-dlp" "ytdl" "zellij")
+    local req_packages=("bat" "cargo-binstall" "crony" "exa" "fd" "gitui" "helix" "jumpy" "gdu" "ripgrep" "scout" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij")
 
     if [[ ! -f ~/.cargo/bin/fetchy ]] || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q require "${req_packages[@]}" --no-install; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
@@ -98,9 +98,6 @@ function adf_install_components() {
 
     echoinfo "\n>\n> Updating Prezto...\n>\n"
     zprezto-update || return 1
-
-    echoinfo "\n>\n> Updating other packages...\n>\n"
-    topgrade --skip-notify || return 1
 }
 
 function adf_update() {
