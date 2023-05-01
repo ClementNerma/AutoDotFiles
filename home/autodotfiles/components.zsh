@@ -2,23 +2,17 @@
 # This file contains is in charge of installing all components required by the current setup
 #
 
-export ADF_INSTALLED_LIST="$ADF_ASSETS_DIR/installed-components.txt"
-
 function adf_install_components() {
-    if [[ ! -f $ADF_INSTALLED_LIST ]]; then
-        touch $ADF_INSTALLED_LIST
-    fi
-
-    if ! grep -Fxq "apt-packages" "$ADF_INSTALLED_LIST"; then
+    if [[ ! -f $ADF_ASSETS_DIR/installed-apt-pkgs ]]; then
         echoinfo "> Installing APT packages..."
 
         sudo apt update
         sudo apt install -yqqq wget sed grep unzip jq apt-transport-https dos2unix libssl-dev pkg-config fuse libfuse-dev colorized-logs build-essential gcc g++ make perl htop net-tools ntpdate p7zip-full
 
-        echo "apt-packages" >> "$ADF_INSTALLED_LIST"
+        touch "$ADF_ASSETS_DIR/installed-apt-pkgs"
     fi
 
-    if ! grep -Fxq "rust" "$ADF_INSTALLED_LIST"; then
+    if [[ ! -d ~/.rustup ]]; then
         echoinfo "\n>\n> Installing Rust..\n>"
 
         mvoldbak ~/.rustup
@@ -34,7 +28,6 @@ function adf_install_components() {
         sudo apt update
         sudo apt install -yqqq llvm libclang-dev
 
-        echo "rust" >> "$ADF_INSTALLED_LIST"
     elif ! (( $ADF_SKIP_INSTALLED )); then
         echoinfo "\n>\n> Updating Rustup...\n>\n"
         rustup self update
@@ -43,10 +36,11 @@ function adf_install_components() {
         rustup update
     fi
 
-    if ! grep -Fxq "nodejs" "$ADF_INSTALLED_LIST"; then
+    if [[ ! -d ~/.volta ]]; then
+        echoinfo "\n>\n> Installing Volta...\n>\n"
+
         mvoldbak ~/.volta
 
-        echoinfo "\n>\n> Installing Volta...\n>\n"
         curl https://get.volta.sh | bash
 
         export VOLTA_HOME="$HOME/.volta"    # Just for this session
@@ -61,31 +55,27 @@ function adf_install_components() {
 
         yarn -v > /dev/null # Just to be sure Yarn was installed correctly
         pnpm -v > /dev/null # Just to be sure PNPM was installed correctly
-
-        echo "nodejs" >> "$ADF_INSTALLED_LIST"
+        
     elif ! (( $ADF_SKIP_INSTALLED )); then
         echoinfo "\n>\n> Updating Node.js...\n>\n"
         volta install node@latest
-
-        echoinfo "\n>\n> Updating NPM, Yarn & PNPM...\n>\n"
-        volta install npm yarn pnpm
     fi
 
-    if ! grep -Fxq "fzf" "$ADF_INSTALLED_LIST"; then
+    if [[ ! -d ~/.fzf ]]; then
         command rm -rf ~/.fzf && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && bash ~/.fzf/install --all
-        echo "fzf" >> "$ADF_INSTALLED_LIST"
+    
+    elif ! (( $ADF_SKIP_INSTALLED )); then
+        ( cd ~/.fzf && git pull && bash ./install --all )
     fi
 
     local req_packages=("bat" "cargo-binstall" "crony" "exa" "fd" "gitui" "helix" "jumpy" "gdu" "ripgrep" "scout" "starship" "tokei" "topgrade" "trasher" "yt-dlp" "ytdl" "zellij")
 
-    if ! grep -Fxq "fetchy" "$ADF_INSTALLED_LIST" || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q require "${req_packages[@]}" --no-install; then
+    if [[ ! -f ~/.cargo/bin/fetchy ]] || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q require "${req_packages[@]}" --no-install; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
         cargo binstall fetchy-pkgs --no-confirm || return 1
         fetchy repos add -i "$ADF_CONFIG_FILES_DIR/fetchy-repo.ron" || return 1
         adf_update_fetchy_repo || return 1
-
-        echo "fetchy" >> "$ADF_INSTALLED_LIST"
     fi
 
     # Install missing packages
