@@ -153,6 +153,15 @@ function rustpublish() {
 	local crate_name=$(cat Cargo.toml | rg "^name = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
 	local crate_version=$(cat Cargo.toml | rg "^version = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
 
+	if [[ -d "target" ]]; then
+		local target_dir="target"
+	elif [[ -d "../target" ]]; then
+		local target_dir="../target"
+	else
+		echoerr "No 'target' directory found in current dir or parent"
+		return 1
+	fi
+
 	echoinfo "\n\n>\n> (1/3) Producing a proper standalone build...\n>\n"
 	cargo dist || return 1
 
@@ -161,7 +170,7 @@ function rustpublish() {
 		--title "$crate_name v$crate_version" \
 		--generate-notes \
 		--latest \
-		"target/distrib/$crate_name-v$crate_version-x86_64-unknown-linux-gnu.tar.xz" \
+		"$target_dir/distrib/$crate_name-v$crate_version-x86_64-unknown-linux-gnu.tar.xz" \
 		|| return 1
 
 	echoinfo "\n\n>\n> (3/3) Publishing to crates.io...\n>\n"
