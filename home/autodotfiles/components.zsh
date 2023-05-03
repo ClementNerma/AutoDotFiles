@@ -27,6 +27,10 @@ function adf_install_components() {
 
         sudo apt update
         sudo apt install -yqqq llvm libclang-dev
+        
+        echoinfo "\n>\n> Installing cargo-binstall...\n>\n"
+        
+        cargo install cargo-binstall
 
     elif ! (( $ADF_SKIP_INSTALLED )); then
         echoinfo "\n>\n> Updating Rustup...\n>\n"
