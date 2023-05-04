@@ -462,6 +462,30 @@
       )
     ),
     (
+      name: "syncer-server",
+      download: (
+        source: GitHub(
+          author: "ClementNerma",
+          repo_name: "Syncer",
+          asset_pattern: "^syncer-server-.*-x86_64-unknown-linux-gnu.tar.xz$"
+        ),
+        file_format: Archive(
+          format: TarXz,
+          files: [
+            (
+              relative_path: "/syncer-server$",
+              file_type: Binary(
+                copy_as: "syncer-server"
+              )
+            )
+          ]
+        ),
+        version_extraction: (
+          source: TagName
+        )
+      )
+    ),
+    (
       name: "tokei",
       download: (
         source: GitHub(
