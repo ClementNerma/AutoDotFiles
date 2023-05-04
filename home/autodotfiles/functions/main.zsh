@@ -150,20 +150,38 @@ function z() {
 function rustpublish() {
 	[[ -f Cargo.toml ]] || { echoerr "No 'Cargo.toml' file found."; return 1 }
 	[[ -d src ]] || { echoerr "No 'src' directory found."; return 1 }
-	[[ -d target ]] || { echoerr "No 'target' directory found."; return 1 }
 
 	local crate_name=$(cat Cargo.toml | rg "^name = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
 	local crate_version=$(cat Cargo.toml | rg "^version = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
 
 	echoinfo "\n\n>\n> (1/3) Producing a proper standalone build...\n>\n"
-	cargo dist || return 1
+
+	local targets=("x86_64-unknown-linux-musl" "aarch64-unknown-linux-musl")
+	local asset_files=()
+
+	for target in $targets; do
+		echowarn "\n| Building for target: $target...\n"
+
+		cross build --release --target "$target" || return 1
+		# strip "target/$target/release/$crate_name" || return 1
+		
+		local asset_file="/tmp/$crate_name-$crate_version-$target.tar.xz"
+		rm -i "$asset_file"
+		asset_files+=("$asset_file")
+
+		tar -cJf "$asset_file" "target/$target/release/$crate_name" || return 1
+
+		# Required to avoid problems with cross-compiling
+		# See: https://github.com/cross-rs/cross/issues/39
+		cargo clean
+	done
 
 	echoinfo "\n\n>\n> (2/3) Releasing to GitHub...\n>\n"
 	gh release create "v$crate_version" \
 		--title "$crate_name v$crate_version" \
 		--generate-notes \
 		--latest \
-		"target/distrib/$crate_name-v$crate_version-x86_64-unknown-linux-gnu.tar.xz" \
+		"${asset_files[@]}" \
 		|| return 1
 
 	echoinfo "\n\n>\n> (3/3) Publishing to crates.io...\n>\n"
