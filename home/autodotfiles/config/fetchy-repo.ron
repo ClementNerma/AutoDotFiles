@@ -145,7 +145,7 @@
           repo_name: "exa",
           asset_pattern: ([
             (x86_64, linux, "-linux-x86_64-musl-v.*.zip$"),
-            (aarch64, linux, "-linux-armv7-musl-v.*.zip$")
+            (aarch64, linux, "-linux-armv7-v.*.zip$")
           ])
         ),
         file_format: Archive(
