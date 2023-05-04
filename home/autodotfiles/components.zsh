@@ -83,7 +83,6 @@ function adf_install_components() {
         jumpy
         gdu
         ripgrep
-        scout
         starship
         tokei
         trasher
