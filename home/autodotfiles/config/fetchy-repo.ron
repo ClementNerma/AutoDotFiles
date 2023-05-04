@@ -9,7 +9,8 @@
           author: "sharkdp",
           repo_name: "bat",
           asset_pattern: ([
-            (x86_64, linux, "x86_64-unknown-linux-musl.tar.gz$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-gnu.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -35,7 +36,8 @@
           author: "ClementNerma",
           repo_name: "BackgroundJobs",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-gnu.tar.xz$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.xz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
@@ -61,7 +63,8 @@
           author: "cargo-bins",
           repo_name: "cargo-binstall",
           asset_pattern: ([
-            (x86_64, linux, "^cargo-binstall-x86_64-unknown-linux-musl.tgz$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tgz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tgz$")
           ])
         ),
         file_format: Archive(
@@ -87,14 +90,15 @@
           author: "ClementNerma",
           repo_name: "Crony",
           asset_pattern: ([
-            (x86_64, linux, "^crony-linux-x86_64.zip$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.xz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
-          format: Zip,
+          format: TarXz,
           files: [
             (
-              relative_path: "^crony$",
+              relative_path: "/crony$",
               file_type: Binary(
                 copy_as: "crony"
               )
@@ -113,7 +117,8 @@
           author: "solidiquis",
           repo_name: "erdtree",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-gnu.tar.gz$")
+            (x86_64, linux, "-x86_64-unknown-linux-gnu.tar.gz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -139,7 +144,8 @@
           author: "ogham",
           repo_name: "exa",
           asset_pattern: ([
-            (x86_64, linux, "^exa-linux-x86_64-musl-v.*.zip$")
+            (x86_64, linux, "-linux-x86_64-musl-v.*.zip$"),
+            (aarch64, linux, "-linux-armv7-musl-v.*.zip$")
           ])
         ),
         file_format: Archive(
@@ -165,7 +171,8 @@
           author: "sharkdp",
           repo_name: "fd",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-gnu.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -188,19 +195,22 @@
       name: "ffmpeg",
       download: (
         source: Direct(
-          url: "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+          url: ([
+            (x86_64, linux, "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"),
+            (aarch64, linux, "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-arm64-static.tar.xz"),
+          ])
         ),
         file_format: Archive(
           format: TarXz,
           files: [
             (
-              relative_path: "^ffmpeg-(\\d\\.)-amd64-static/ffmpeg$",
+              relative_path: "^ffmpeg-(\\d\\.)-(arm|amd)64-static/ffmpeg$",
               file_type: Binary(
                 copy_as: "ffmpeg"
               )
             ),
             (
-              relative_path: "^ffmpeg-(\\d\\.)-amd64-static/ffprobe$",
+              relative_path: "^ffmpeg-(\\d\\.)-(arm|amd)64-static/ffprobe$",
               file_type: Binary(
                 copy_as: "ffprobe"
               )
@@ -220,7 +230,8 @@
           author: "extrawurst",
           repo_name: "gitui",
           asset_pattern: ([
-            (x86_64, linux, "^gitui-linux-musl.tar.gz$")
+            (x86_64, linux, "^gitui-linux-musl.tar.gz$"),
+            (aarch64, linux, "^gitui-linux-aarch64.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -246,20 +257,21 @@
           author: "helix-editor",
           repo_name: "helix",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-linux.tar.xz$")
+            (x86_64, linux, "-x86_64-linux.tar.xz$"),
+            (aarch64, linux, "-aarch64-linux.tar.xz$")
           ])
         ),
         file_format: Archive(
           format: TarXz,
           files: [
             (
-              relative_path: "-x86_64-linux/hx$",
+              relative_path: "-linux/hx$",
               file_type: Binary(
                 copy_as: "hx"
               )
             ),
             (
-              relative_path: "-x86_64-linux/runtime$",
+              relative_path: "-linux/runtime$",
               file_type: ConfigSubDir(
                 copy_as: "runtime"
               )
@@ -278,14 +290,15 @@
           author: "ClementNerma",
           repo_name: "Jumpy",
           asset_pattern: ([
-            (x86_64, linux, "^jumpy-linux-x86_64-musl.zip$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.xz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
-          format: Zip,
+          format: TarXz,
           files: [
             (
-              relative_path: "^jumpy$",
+              relative_path: "/jumpy$",
               file_type: Binary(
                 copy_as: "jumpy"
               )
@@ -304,7 +317,8 @@
           author: "kopia",
           repo_name: "kopia",
           asset_pattern: ([
-            (x86_64, linux, "-linux-x64.tar.gz$")
+            (x86_64, linux, "-linux-x64.tar.gz$"),
+            (aarch64, linux, "-linux-arm64.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -330,14 +344,15 @@
           author: "dundee",
           repo_name: "gdu",
           asset_pattern: ([
-            (x86_64, linux, "^gdu_linux_amd64.tgz$")
+            (x86_64, linux, "^gdu_linux_amd64.tgz$"),
+            (aarch64, linux, "^gdu_linux_arm64.tgz$")
           ])
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "^gdu_linux_amd64$",
+              relative_path: "^gdu_linux_(amd|arm)64$",
               file_type: Binary(
                 copy_as: "gdu"
               )
@@ -356,7 +371,8 @@
           author: "cli",
           repo_name: "cli",
           asset_pattern: ([
-            (x86_64, linux, "_linux_amd64.tar.gz$")
+            (x86_64, linux, "_linux_amd64.tar.gz$"),
+            (aarch64, linux, "_linux_arm64.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -382,7 +398,8 @@
           author: "jesseduffield",
           repo_name: "lazydocker",
           asset_pattern: ([
-            (x86_64, linux, "^lazydocker_[\\d\\.]+_Linux_x86_64.tar.gz$")
+            (x86_64, linux, "_Linux_x86_64.tar.gz$"),
+            (aarch64, linux, "_Linux_arm64.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -408,14 +425,15 @@
           author: "nushell",
           repo_name: "nushell",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.gz$")
           ])
         ),
         file_format: Archive(
           format: TarGz,
           files: [
             (
-              relative_path: "-x86_64-unknown-linux-musl/nu$",
+              relative_path: "-unknown-linux-musl/nu$",
               file_type: Binary(
                 copy_as: "nu"
               )
@@ -434,7 +452,8 @@
           author: "BurntSushi",
           repo_name: "ripgrep",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$"),
+            (aarch64, linux, "-arm-unknown-linux-gnueabihf.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -478,7 +497,8 @@
           author: "starship",
           repo_name: "starship",
           asset_pattern: ([
-            (x86_64, linux, "^starship-x86_64-unknown-linux-musl.tar.gz$")
+            (x86_64, linux, "^starship-x86_64-unknown-linux-musl.tar.gz$"),
+            (aarch64, linux, "^starship-aarch64-unknown-linux-musl.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -504,7 +524,8 @@
           author: "ClementNerma",
           repo_name: "Syncer",
           asset_pattern: ([
-            (x86_64, linux, "^syncer-server-.*-x86_64-unknown-linux-gnu.tar.xz$")
+            (x86_64, linux, "^syncer-server-.*-x86_64-unknown-linux-musl.tar.xz$"),
+            (x86_64, linux, "^syncer-server-.*-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
@@ -530,7 +551,8 @@
           author: "XAMPPRocky",
           repo_name: "tokei",
           asset_pattern: ([
-            (x86_64, linux, "^tokei-x86_64-unknown-linux-musl.tar.gz$")
+            (x86_64, linux, "^tokei-x86_64-unknown-linux-musl.tar.gz$"),
+            (aarch64, linux, "^tokei-aarch64-unknown-linux-gnu.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -556,7 +578,8 @@
           author: "topgrade-rs",
           repo_name: "topgrade",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.gz$")
           ])
         ),
         file_format: Archive(
@@ -582,7 +605,8 @@
           author: "ClementNerma",
           repo_name: "Trasher",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-gnu.tar.xz$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.xz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
@@ -608,7 +632,8 @@
           author: "yt-dlp",
           repo_name: "yt-dlp",
           asset_pattern: ([
-            (x86_64, linux, "^yt-dlp$")
+            (x86_64, linux, "^yt-dlp$"),
+            (aarch64, linux, "^yt-dlp_linux_aarch64$")
           ])
         ),
         file_format: Binary(
@@ -626,14 +651,15 @@
           author: "ClementNerma",
           repo_name: "ytdl",
           asset_pattern: ([
-            (x86_64, linux, "^ytdl-linux-x86_64-musl.zip$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.xz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
-          format: Zip,
+          format: TarXz,
           files: [
             (
-              relative_path: "^ytdl$",
+              relative_path: "/ytdl$",
               file_type: Binary(
                 copy_as: "ytdl"
               )
@@ -652,7 +678,8 @@
           author: "zellij-org",
           repo_name: "zellij",
           asset_pattern: ([
-            (x86_64, linux, "^zellij-x86_64-unknown-linux-musl.tar.gz$")
+            (x86_64, linux, "^zellij-x86_64-unknown-linux-musl.tar.gz$"),
+            (aarch64, linux, "^zellij-aarch64-unknown-linux-musl.tar.gz$")
           ])
         ),
         file_format: Archive(
