@@ -8,7 +8,9 @@
         source: GitHub(
           author: "sharkdp",
           repo_name: "bat",
-          asset_pattern: "x86_64-unknown-linux-musl.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "x86_64-unknown-linux-musl.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -32,7 +34,9 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "BackgroundJobs",
-          asset_pattern: "-x86_64-unknown-linux-gnu.tar.xz$"
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-unknown-linux-gnu.tar.xz$")
+          ])
         ),
         file_format: Archive(
           format: TarXz,
@@ -56,7 +60,9 @@
         source: GitHub(
           author: "cargo-bins",
           repo_name: "cargo-binstall",
-          asset_pattern: "^cargo-binstall-x86_64-unknown-linux-musl.tgz$"
+          asset_pattern: ([
+            (x86_64, linux, "^cargo-binstall-x86_64-unknown-linux-musl.tgz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -80,7 +86,9 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "Crony",
-          asset_pattern: "^crony-linux-x86_64.zip$"
+          asset_pattern: ([
+            (x86_64, linux, "^crony-linux-x86_64.zip$")
+          ])
         ),
         file_format: Archive(
           format: Zip,
@@ -104,7 +112,9 @@
         source: GitHub(
           author: "solidiquis",
           repo_name: "erdtree",
-          asset_pattern: "-x86_64-unknown-linux-gnu.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-unknown-linux-gnu.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -128,7 +138,9 @@
         source: GitHub(
           author: "ogham",
           repo_name: "exa",
-          asset_pattern: "^exa-linux-x86_64-musl-v.*.zip$"
+          asset_pattern: ([
+            (x86_64, linux, "^exa-linux-x86_64-musl-v.*.zip$")
+          ])
         ),
         file_format: Archive(
           format: Zip,
@@ -152,7 +164,9 @@
         source: GitHub(
           author: "sharkdp",
           repo_name: "fd",
-          asset_pattern: "-x86_64-unknown-linux-musl.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -205,7 +219,9 @@
         source: GitHub(
           author: "extrawurst",
           repo_name: "gitui",
-          asset_pattern: "^gitui-linux-musl.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "^gitui-linux-musl.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -229,7 +245,9 @@
         source: GitHub(
           author: "helix-editor",
           repo_name: "helix",
-          asset_pattern: "-x86_64-linux.tar.xz$"
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-linux.tar.xz$")
+          ])
         ),
         file_format: Archive(
           format: TarXz,
@@ -259,7 +277,9 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "Jumpy",
-          asset_pattern: "^jumpy-linux-x86_64-musl.zip$"
+          asset_pattern: ([
+            (x86_64, linux, "^jumpy-linux-x86_64-musl.zip$")
+          ])
         ),
         file_format: Archive(
           format: Zip,
@@ -283,7 +303,9 @@
         source: GitHub(
           author: "kopia",
           repo_name: "kopia",
-          asset_pattern: "-linux-x64.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "-linux-x64.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -307,7 +329,9 @@
         source: GitHub(
           author: "dundee",
           repo_name: "gdu",
-          asset_pattern: "^gdu_linux_amd64.tgz$"
+          asset_pattern: ([
+            (x86_64, linux, "^gdu_linux_amd64.tgz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -331,7 +355,9 @@
         source: GitHub(
           author: "cli",
           repo_name: "cli",
-          asset_pattern: "_linux_amd64.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "_linux_amd64.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -355,7 +381,9 @@
         source: GitHub(
           author: "jesseduffield",
           repo_name: "lazydocker",
-          asset_pattern: "^lazydocker_[\\d\\.]+_Linux_x86_64.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "^lazydocker_[\\d\\.]+_Linux_x86_64.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -379,7 +407,9 @@
         source: GitHub(
           author: "nushell",
           repo_name: "nushell",
-          asset_pattern: "-x86_64-unknown-linux-musl.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -403,7 +433,9 @@
         source: GitHub(
           author: "BurntSushi",
           repo_name: "ripgrep",
-          asset_pattern: "-x86_64-unknown-linux-musl.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -427,7 +459,9 @@
         source: GitHub(
           author: "jhbabon",
           repo_name: "scout",
-          asset_pattern: "^scout-linux$"
+          asset_pattern: ([
+            (x86_64, linux, "^scout-linux$")
+          ])
         ),
         file_format: Binary(
           filename: "scout"
@@ -443,7 +477,9 @@
         source: GitHub(
           author: "starship",
           repo_name: "starship",
-          asset_pattern: "^starship-x86_64-unknown-linux-musl.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "^starship-x86_64-unknown-linux-musl.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -467,7 +503,9 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "Syncer",
-          asset_pattern: "^syncer-server-.*-x86_64-unknown-linux-gnu.tar.xz$"
+          asset_pattern: ([
+            (x86_64, linux, "^syncer-server-.*-x86_64-unknown-linux-gnu.tar.xz$")
+          ])
         ),
         file_format: Archive(
           format: TarXz,
@@ -491,7 +529,9 @@
         source: GitHub(
           author: "XAMPPRocky",
           repo_name: "tokei",
-          asset_pattern: "^tokei-x86_64-unknown-linux-musl.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "^tokei-x86_64-unknown-linux-musl.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -515,7 +555,9 @@
         source: GitHub(
           author: "topgrade-rs",
           repo_name: "topgrade",
-          asset_pattern: "-x86_64-unknown-linux-musl.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,
@@ -539,7 +581,9 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "Trasher",
-          asset_pattern: "-x86_64-unknown-linux-gnu.tar.xz$"
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-unknown-linux-gnu.tar.xz$")
+          ])
         ),
         file_format: Archive(
           format: TarXz,
@@ -563,7 +607,9 @@
         source: GitHub(
           author: "yt-dlp",
           repo_name: "yt-dlp",
-          asset_pattern: "^yt-dlp$"
+          asset_pattern: ([
+            (x86_64, linux, "^yt-dlp$")
+          ])
         ),
         file_format: Binary(
           filename: "yt-dlp"
@@ -579,7 +625,9 @@
         source: GitHub(
           author: "ClementNerma",
           repo_name: "ytdl",
-          asset_pattern: "^ytdl-linux-x86_64-musl.zip$"
+          asset_pattern: ([
+            (x86_64, linux, "^ytdl-linux-x86_64-musl.zip$")
+          ])
         ),
         file_format: Archive(
           format: Zip,
@@ -603,7 +651,9 @@
         source: GitHub(
           author: "zellij-org",
           repo_name: "zellij",
-          asset_pattern: "^zellij-x86_64-unknown-linux-musl.tar.gz$"
+          asset_pattern: ([
+            (x86_64, linux, "^zellij-x86_64-unknown-linux-musl.tar.gz$")
+          ])
         ),
         file_format: Archive(
           format: TarGz,

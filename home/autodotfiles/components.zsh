@@ -72,7 +72,25 @@ function adf_install_components() {
         ( cd ~/.fzf && git pull && bash ./install --all )
     fi
 
-    local req_packages=("bat" "cargo-binstall" "crony" "exa" "fd" "gitui" "helix" "jumpy" "gdu" "ripgrep" "scout" "starship" "tokei" "trasher" "yt-dlp" "ytdl" "zellij")
+    local req_packages=(
+        bat
+        cargo-binstall
+        crony
+        exa
+        fd
+        gitui
+        helix
+        jumpy
+        gdu
+        ripgrep
+        scout
+        starship
+        tokei
+        trasher
+        yt-dlp
+        ytdl
+        zellij
+    )
 
     if [[ ! -f ~/.cargo/bin/fetchy ]] || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q require "${req_packages[@]}" --no-install; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
