@@ -204,13 +204,13 @@
           format: TarXz,
           files: [
             (
-              relative_path: "^ffmpeg-(\\d\\.)-(arm|amd)64-static/ffmpeg$",
+              relative_path: "^ffmpeg-[\\d\\.]+-(arm|amd)64-static/ffmpeg$",
               file_type: Binary(
                 copy_as: "ffmpeg"
               )
             ),
             (
-              relative_path: "^ffmpeg-(\\d\\.)-(arm|amd)64-static/ffprobe$",
+              relative_path: "^ffmpeg-[\\d\\.]+-(arm|amd)64-static/ffprobe$",
               file_type: Binary(
                 copy_as: "ffprobe"
               )
@@ -218,7 +218,9 @@
           ]
         ),
         version_extraction: (
-          source: Url
+          source: Url,
+          regex: Some("(.*)"),
+          skip_validation: Some(true)
           // TODO: find a way to extraction version number
         )
       )
