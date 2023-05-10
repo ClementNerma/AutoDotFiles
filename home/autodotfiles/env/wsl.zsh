@@ -44,6 +44,9 @@ export TRASHDIR="$HOME/.trasher"
 # Alternate default entry directory that may occur sometimes
 export ALTERNATE_HOMEDIR="/mnt/c/WINDOWS/system32"
 
+# Set up web browser opening
+export BROWSER="$WIN_POWERSHELL_PATH /C start"
+
 # Open a file or directory in Windows
 function open() {
   local topath=${1:-$PWD}
