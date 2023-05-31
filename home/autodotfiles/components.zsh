@@ -91,6 +91,9 @@ function adf_install_components() {
         zellij
     )
 
+    # TODO: find a better approach
+    source $HOME/.cargo/env
+
     if [[ ! -f ~/.cargo/bin/fetchy ]] || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q require "${req_packages[@]}" --no-install; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
