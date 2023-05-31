@@ -51,8 +51,7 @@ function adf_install_components() {
         export PATH="$VOLTA_HOME/bin:$PATH" # Just for this session
 
         echoinfo "\n>\n> Installing Node.js & NPM...\n>\n"
-        volta install node@latest
-        volta install npm@bundled
+        volta install node@latest npm@bundled
 
         echoinfo "\n>\n> Installing Yarn & PNPM...\n>\n"
         volta install yarn pnpm
