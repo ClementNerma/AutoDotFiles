@@ -632,7 +632,7 @@
       download: (
         source: GitHub(
           author: "yt-dlp",
-          repo_name: "yt-dlp",
+          repo_name: "yt-dlp-nightly-builds",
           asset_pattern: ([
             (x86_64, linux, "^yt-dlp$"),
             (aarch64, linux, "^yt-dlp_linux_aarch64$")
