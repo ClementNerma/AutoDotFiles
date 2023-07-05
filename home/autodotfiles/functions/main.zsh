@@ -166,7 +166,7 @@ function rustpublish() {
 		done
 	fi
 
-	echoinfo "\n\n>\n> (1/3) Producing proper standalone builds...\n>"
+	echoinfo "\n\n>\n> Producing proper standalone builds...\n>"
 
 	for target in $targets; do
 		# # Clean up target files to fix a bug with 'cross'
@@ -200,16 +200,16 @@ function rustpublish() {
 		done
 	done
 
-	echoinfo "\n\n>\n> (2/3) Publishing to crates.io...\n>"
+	# echoinfo "\n\n>\n> (2/3) Publishing to crates.io...\n>"
 
-	for dir in $dirs; do
-		local crate_name=$(cat "$dir/Cargo.toml" | rg "^name = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
+	# for dir in $dirs; do
+	# 	local crate_name=$(cat "$dir/Cargo.toml" | rg "^name = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
 
-		echoinfo "\n> Publishing crate \z[yellow]°$crate_name\z[]°..."
-		cargo publish -p "$crate_name" || return 1
-	done
+	# 	echoinfo "\n> Publishing crate \z[yellow]°$crate_name\z[]°..."
+	# 	cargo publish -p "$crate_name" || return 1
+	# done
 
-	echoinfo "\n\n>\n> (3/3) Releasing to GitHub...\n>\n"
+	echoinfo "\n\n>\n> Releasing to GitHub...\n>\n"
 
 	gh release create "v$crate_version" \
 		--title "$(basename "$PWD") v$crate_version" \
