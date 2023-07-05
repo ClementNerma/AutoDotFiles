@@ -148,7 +148,8 @@ function z() {
 
 # Publish a new Rust project release
 function rustpublish() {
-	local targets=("x86_64-unknown-linux-musl" "aarch64-unknown-linux-musl")
+	# NOTE: Building x86_64 last as it's the once that will be kept for publishing to crates.io
+	local targets=("aarch64-unknown-linux-musl" "x86_64-unknown-linux-musl")
 	local asset_files=()
 	
 	[[ -f Cargo.toml ]] || { echoerr "No 'Cargo.toml' file found."; return 1 }
@@ -168,6 +169,9 @@ function rustpublish() {
 	echoinfo "\n\n>\n> (1/3) Producing proper standalone builds...\n>"
 
 	for target in $targets; do
+		# Clean up target files to fix a bug with 'cross'
+		cargo clean
+
 		echoinfo "\n> Building for target \z[yellow]°$target\z[]°..."
 
 		cross build --release --target "$target" || return 1
