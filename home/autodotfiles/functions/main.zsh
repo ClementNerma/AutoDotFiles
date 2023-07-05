@@ -148,44 +148,67 @@ function z() {
 
 # Publish a new Rust project release
 function rustpublish() {
-	[[ -f Cargo.toml ]] || { echoerr "No 'Cargo.toml' file found."; return 1 }
-	[[ -d src ]] || { echoerr "No 'src' directory found."; return 1 }
-
-	local crate_name=$(cat Cargo.toml | rg "^name = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
-	local crate_version=$(cat Cargo.toml | rg "^version = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
-
-	echoinfo "\n\n>\n> (1/3) Producing a proper standalone build...\n>\n"
-
 	local targets=("x86_64-unknown-linux-musl" "aarch64-unknown-linux-musl")
 	local asset_files=()
+	
+	[[ -f Cargo.toml ]] || { echoerr "No 'Cargo.toml' file found."; return 1 }
+	
+	local dirs=()
+
+	if [[ -d src ]]; then
+		dirs+=("$PWD")
+	else
+		for folder in *; do
+			if [[ -d "$folder" ]] && [[ -f "$folder/Cargo.toml" ]]; then
+				dirs+=("$PWD/$folder")
+			fi
+		done
+	fi
+
+	echoinfo "\n\n>\n> (1/3) Producing proper standalone builds...\n>"
 
 	for target in $targets; do
-		echowarn "\n| Building for target: $target...\n"
+		echoinfo "\n> Building for target \z[yellow]°$target\z[]°..."
 
 		cross build --release --target "$target" || return 1
 		# strip "target/$target/release/$crate_name" || return 1
-		
-		local asset_file="/tmp/$crate_name-$crate_version-$target.tar.xz"
-		rm -i "$asset_file"
-		asset_files+=("$asset_file")
 
-		tar -cJf "$asset_file" "target/$target/release/$crate_name" || return 1
+		echoinfo ""
 
-		# Required to avoid problems with cross-compiling
-		# See: https://github.com/cross-rs/cross/issues/39
-		cargo clean
+		for dir in $dirs; do
+			[[ -f "$dir/Cargo.toml" ]] || { echoerr "No 'Cargo.toml' file found."; return 1 }
+			[[ -d "$dir/src" ]] || { echoerr "No 'src' directory found."; return 1 }
+
+			local crate_name=$(cat "$dir/Cargo.toml" | rg "^name = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
+			local crate_version=$(cat "$dir/Cargo.toml" | rg "^version = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
+
+			echoinfo ">> Producing assets for crate \z[yellow]°$crate_name\z[]°..."
+
+			local asset_file="/tmp/$crate_name-$crate_version-$target.tar.xz"
+			rm -i "$asset_file"
+			asset_files+=("$asset_file")
+
+			tar -cJf "$asset_file" "target/$target/release/$crate_name" || return 1
+		done
 	done
 
-	echoinfo "\n\n>\n> (2/3) Releasing to GitHub...\n>\n"
+	echoinfo "\n\n>\n> (2/3) Publishing to crates.io...\n>"
+
+	for dir in $dirs; do
+		local crate_name=$(cat "$dir/Cargo.toml" | rg "^name = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
+
+		echoinfo "\n> Publishing crate \z[yellow]°$crate_name\z[]°..."
+		cargo publish -p "$crate_name" || return 1
+	done
+
+	echoinfo "\n\n>\n> (3/3) Releasing to GitHub...\n>\n"
+
 	gh release create "v$crate_version" \
-		--title "$crate_name v$crate_version" \
+		--title "$(basename "$PWD") v$crate_version" \
 		--generate-notes \
 		--latest \
 		"${asset_files[@]}" \
 		|| return 1
-
-	echoinfo "\n\n>\n> (3/3) Publishing to crates.io...\n>\n"
-	cargo publish || return 1
 
 	echosuccess "Done!"
 }
