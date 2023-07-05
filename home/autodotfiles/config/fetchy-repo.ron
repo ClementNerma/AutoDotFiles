@@ -520,6 +520,33 @@
       )
     ),
     (
+      name: "syncer-client",
+      download: (
+        source: GitHub(
+          author: "ClementNerma",
+          repo_name: "Syncer",
+          asset_pattern: ([
+            (x86_64, linux, "^syncer-client-.*-x86_64-unknown-linux-musl.tar.xz$"),
+            (x86_64, linux, "^syncer-client-.*-aarch64-unknown-linux-musl.tar.xz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarXz,
+          files: [
+            (
+              relative_path: "/syncer-client$",
+              file_type: Binary(
+                copy_as: "syncer-client"
+              )
+            )
+          ]
+        ),
+        version_extraction: (
+          source: TagName
+        )
+      )
+    ),
+    (
       name: "syncer-server",
       download: (
         source: GitHub(
@@ -537,6 +564,60 @@
               relative_path: "/syncer-server$",
               file_type: Binary(
                 copy_as: "syncer-server"
+              )
+            )
+          ]
+        ),
+        version_extraction: (
+          source: TagName
+        )
+      )
+    ),
+      (
+      name: "sloth-client",
+      download: (
+        source: GitHub(
+          author: "ClementNerma",
+          repo_name: "Sloth",
+          asset_pattern: ([
+            (x86_64, linux, "^sloth-client-.*-x86_64-unknown-linux-musl.tar.xz$"),
+            (x86_64, linux, "^sloth-client-.*-aarch64-unknown-linux-musl.tar.xz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarXz,
+          files: [
+            (
+              relative_path: "/sloth-client$",
+              file_type: Binary(
+                copy_as: "sloth-client"
+              )
+            )
+          ]
+        ),
+        version_extraction: (
+          source: TagName
+        )
+      )
+    ),
+    (
+      name: "sloth-server",
+      download: (
+        source: GitHub(
+          author: "ClementNerma",
+          repo_name: "Sloth",
+          asset_pattern: ([
+            (x86_64, linux, "^sloth-server-.*-x86_64-unknown-linux-musl.tar.xz$"),
+            (x86_64, linux, "^sloth-server-.*-aarch64-unknown-linux-musl.tar.xz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarXz,
+          files: [
+            (
+              relative_path: "/sloth-server$",
+              file_type: Binary(
+                copy_as: "sloth-server"
               )
             )
           ]
