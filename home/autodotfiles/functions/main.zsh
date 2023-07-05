@@ -169,8 +169,8 @@ function rustpublish() {
 	echoinfo "\n\n>\n> (1/3) Producing proper standalone builds...\n>"
 
 	for target in $targets; do
-		# Clean up target files to fix a bug with 'cross'
-		cargo clean
+		# # Clean up target files to fix a bug with 'cross'
+		# cargo clean
 
 		echoinfo "\n> Building for target \z[yellow]°$target\z[]°..."
 
@@ -186,13 +186,17 @@ function rustpublish() {
 			local crate_name=$(cat "$dir/Cargo.toml" | rg "^name = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
 			local crate_version=$(cat "$dir/Cargo.toml" | rg "^version = \"(.*)\"" -r "\$1" | head -n1 | dos2unix)
 
-			echoinfo ">> Producing assets for crate \z[yellow]°$crate_name\z[]°..."
+			if [[ -f "$dir/src/main.rs" ]]; then
+				echoinfo ">> Producing assets for crate \z[yellow]°$crate_name\z[]°..."
 
-			local asset_file="/tmp/$crate_name-$crate_version-$target.tar.xz"
-			rm -i "$asset_file"
-			asset_files+=("$asset_file")
+				local asset_file="/tmp/$crate_name-$crate_version-$target.tar.xz"
+				rm -i "$asset_file"
+				asset_files+=("$asset_file")
 
-			tar -cJf "$asset_file" "target/$target/release/$crate_name" || return 1
+				tar -cJf "$asset_file" "target/$target/release/$crate_name" || return 1
+			else
+				echowarn ">> No main file found for \z[blue]°$crate_name\z[]°, skipping asset production."
+			fi
 		done
 	done
 
