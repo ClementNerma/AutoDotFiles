@@ -30,7 +30,11 @@ function adf_install_components() {
         
         echoinfo "\n>\n> Installing cargo-binstall...\n>\n"
         
-        cargo install cargo-binstall
+        local cargo_binstall_tgz="/tmp/cargo-binstall-$(humandate).tgz"
+        dl "https://github.com/cargo-bins/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-musl.tgz" "$cargo_binstall_tgz"
+        tar -xf "$cargo_binstall_tgz" -C "/tmp"
+        mv "/tmp/cargo-binstall" "$ADF_BIN_DIR"
+        chmod +x "$ADF_BIN_DIR/cargo-binstall"
 
     elif ! (( $ADF_SKIP_INSTALLED )); then
         echoinfo "\n>\n> Updating Rustup...\n>\n"
