@@ -22,7 +22,7 @@ function mvbak() {
 
 	[[ ! -f $itempath && ! -d $itempath ]] && { echoerr "Provided path was not found: \z[green]°$itempath\z[]°"; return 1 }
 
-	local renpath="$itempath-$(humandate)"
+	local renpath="_bak-$(basename "$itempath")-$(humandate)"
 
 	mv "$itempath" "$renpath"
 	export LAST_MVBAK_PATH="$renpath"
