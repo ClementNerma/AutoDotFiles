@@ -230,12 +230,14 @@ function unison_slot_backup() {
 
 	if ! ssh "$ADF_UNISON_REMOTE_HOST" "[[ -d $ADF_UNISON_REMOTE_DATA_PATH ]]"; then
 		echoerr "Set up data path was not found on the remote"
+		return 1
 	fi
 
 	local remote_slot_path="$ADF_UNISON_REMOTE_DATA_PATH/$2"
 
 	if ! ssh "$ADF_UNISON_REMOTE_HOST" "[[ -d $remote_slot_path ]]"; then
 		echoerr "Provided slot was not found on the remote"
+		return 1
 	fi
 
 	echoinfo "Backing up..."
