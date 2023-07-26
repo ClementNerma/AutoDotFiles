@@ -220,3 +220,27 @@ function rustpublish() {
 
 	echosuccess "Done!"
 }
+
+# Backup to a slot with Unison
+function unison_slot_backup() {
+	[[ -z $ADF_UNISON_REMOTE_HOST ]] && { echoerr "Please set the global \z[yellow]°\$ADF_UNISON_REMOTE_HOST\z[]° variable"; return 1 }
+	[[ -z $ADF_UNISON_REMOTE_DATA_PATH ]] && { echoerr "Please set the global \z[yellow]°\$ADF_UNISON_REMOTE_DATA_PATH\z[]° variable"; return 1 }
+	[[ -z $1 ]] && { echoerr "Please provide a path to backup" }
+	[[ -z $2 ]] && { echoerr "Please provide a slot to backup to" }
+
+	if ! ssh "$ADF_UNISON_REMOTE_HOST" "[[ -d $ADF_UNISON_REMOTE_DATA_PATH ]]"; then
+		echoerr "Set up data path was not found on the remote"
+	fi
+
+	local remote_slot_path="$ADF_UNISON_REMOTE_DATA_PATH/$2"
+
+	if ! ssh "$ADF_UNISON_REMOTE_HOST" "[[ -d $remote_slot_path ]]"; then
+		echoerr "Provided slot was not found on the remote"
+	fi
+
+	echoinfo "Backing up..."
+	
+	if unison -batch -terse "$1" "ssh://$ADF_UNISON_REMOTE_HOST/$remote_slot_path"; then
+		echosuccess "Done!"
+	fi
+}
