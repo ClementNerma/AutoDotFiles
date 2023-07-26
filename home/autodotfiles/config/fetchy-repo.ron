@@ -709,6 +709,32 @@
       )
     ),
     (
+      name: "unison",
+      download: (
+        source: GitHub(
+          author: "bcpierce00",
+          repo_name: "unison",
+          asset_pattern: ([
+            (x86_64, linux, "^unison-([\\d\\.]+)-ubuntu-x86_64.tar.gz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "^bin/unison$",
+              file_type: Binary(
+                copy_as: "unison"
+              )
+            )
+          ]
+        ),
+        version_extraction: (
+          source: TagName
+        )
+      )
+    ),
+    (
       name: "yt-dlp",
       download: (
         source: GitHub(
