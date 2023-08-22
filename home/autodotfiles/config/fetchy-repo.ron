@@ -315,12 +315,12 @@
           author: "ClementNerma",
           repo_name: "Harmony",
           asset_pattern: ([
-            (x86_64, linux, "^harmony-client-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "^harmony-client-aarch64-unknown-linux-musl.tar.xz$")
+            (x86_64, linux, "^harmony-client-x86_64-unknown-linux-musl.tgz$"),
+            (aarch64, linux, "^harmony-client-aarch64-unknown-linux-musl.tgz$")
           ])
         ),
         file_format: Archive(
-          format: TarXz,
+          format: TarGz,
           files: [
             (
               relative_path: "/harmony-client$",
@@ -345,7 +345,7 @@
           ])
         ),
         file_format: Archive(
-          format: TarXz,
+          format: TarGz,
           files: [
             (
               relative_path: "/harmony-server$",
