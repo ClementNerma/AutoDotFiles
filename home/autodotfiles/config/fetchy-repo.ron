@@ -232,6 +232,57 @@
         version_extraction: TagName()
       )
     ),
+    
+    (
+      name: "gdu",
+      download: (
+        source: GitHub(
+          author: "dundee",
+          repo_name: "gdu",
+          asset_pattern: ([
+            (x86_64, linux, "^gdu_linux_amd64.tgz$"),
+            (aarch64, linux, "^gdu_linux_arm64.tgz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "^gdu_linux_(amd|arm)64$",
+              file_type: Binary(
+                copy_as: "gdu"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
+    (
+      name: "github-cli",
+      download: (
+        source: GitHub(
+          author: "cli",
+          repo_name: "cli",
+          asset_pattern: ([
+            (x86_64, linux, "_linux_amd64.tar.gz$"),
+            (aarch64, linux, "_linux_arm64.tar.gz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "/bin/gh$",
+              file_type: Binary(
+                copy_as: "gh"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
     (
       name: "gitui",
       download: (
@@ -331,56 +382,6 @@
               relative_path: "^kopia-.*/kopia$",
               file_type: Binary(
                 copy_as: "kopia"
-              )
-            )
-          ]
-        ),
-        version_extraction: TagName()
-      )
-    ),
-    (
-      name: "gdu",
-      download: (
-        source: GitHub(
-          author: "dundee",
-          repo_name: "gdu",
-          asset_pattern: ([
-            (x86_64, linux, "^gdu_linux_amd64.tgz$"),
-            (aarch64, linux, "^gdu_linux_arm64.tgz$")
-          ])
-        ),
-        file_format: Archive(
-          format: TarGz,
-          files: [
-            (
-              relative_path: "^gdu_linux_(amd|arm)64$",
-              file_type: Binary(
-                copy_as: "gdu"
-              )
-            )
-          ]
-        ),
-        version_extraction: TagName()
-      )
-    ),
-    (
-      name: "github-cli",
-      download: (
-        source: GitHub(
-          author: "cli",
-          repo_name: "cli",
-          asset_pattern: ([
-            (x86_64, linux, "_linux_amd64.tar.gz$"),
-            (aarch64, linux, "_linux_arm64.tar.gz$")
-          ])
-        ),
-        file_format: Archive(
-          format: TarGz,
-          files: [
-            (
-              relative_path: "/bin/gh$",
-              file_type: Binary(
-                copy_as: "gh"
               )
             )
           ]
