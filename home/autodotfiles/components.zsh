@@ -27,14 +27,6 @@ function adf_install_components() {
 
         sudo apt update
         sudo apt install -yqqq llvm libclang-dev
-        
-        echoinfo "\n>\n> Installing cargo-binstall...\n>\n"
-        
-        local cargo_binstall_tgz="/tmp/cargo-binstall-$(humandate).tgz"
-        dl "https://github.com/cargo-bins/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-musl.tgz" "$cargo_binstall_tgz"
-        tar -xf "$cargo_binstall_tgz" -C "/tmp"
-        mv "/tmp/cargo-binstall" "$ADF_BIN_DIR"
-        chmod +x "$ADF_BIN_DIR/cargo-binstall"
 
     elif ! (( $ADF_SKIP_INSTALLED )); then
         echoinfo "\n>\n> Updating Rustup...\n>\n"
@@ -97,10 +89,19 @@ function adf_install_components() {
     # TODO: find a better approach
     source $HOME/.cargo/env
 
-    if [[ ! -f ~/.cargo/bin/fetchy ]] || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q require "${req_packages[@]}" --no-install; then
+    if [[ ! -f "$ADF_BIN_DIR/fetchy" ]] || ! (( $ADF_SKIP_INSTALLED )) || ! fetchy -q require "${req_packages[@]}" --no-install; then
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
-        cargo binstall fetchy-pkgs --no-confirm || return 1
+        local cpu_architecture=$(lscpu | grep Architecture | awk {'print $2'})
+        local fetchy_tgz="/tmp/fetchy-$(humandate).tgz"
+        dl "https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-$cpu_architecture-unknown-linux-musl.tar.gz" "$fetchy_tgz"
+        tar -xf "$fetchy_tgz" -C "/tmp"
+        rm "$fetchy_tgz"
+        mv "/tmp/fetchy" "$ADF_BIN_DIR"
+        chmod +x "$ADF_BIN_DIR/fetchy"
+
+        echoinfo "\n>\n> Updating repositories...\n>\n"
+
         fetchy repos add -i "$ADF_CONFIG_FILES_DIR/fetchy-repo.ron" || return 1
         fetchy -q repos update || return 1
     fi

@@ -189,11 +189,11 @@ function rustpublish() {
 			if [[ -f "$dir/src/main.rs" ]]; then
 				echoinfo ">> Producing assets for crate \z[yellow]°$crate_name\z[]°..."
 
-				local asset_file="/tmp/$crate_name-$target.tar.xz"
+				local asset_file="/tmp/$crate_name-$target.tar.gz"
 				rm -i "$asset_file"
 				asset_files+=("$asset_file")
 
-				tar -cJf "$asset_file" "target/$target/release/$crate_name" || return 1
+				tar -czf "$asset_file" -C "target/$target/release" "$crate_name" || return 1
 			else
 				echowarn ">> No main file found for \z[blue]°$crate_name\z[]°, skipping asset production."
 			fi
