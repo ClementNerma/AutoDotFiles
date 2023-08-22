@@ -309,6 +309,56 @@
       )
     ),
     (
+      name: "harmony-client",
+      download: (
+        source: GitHub(
+          author: "ClementNerma",
+          repo_name: "Harmony",
+          asset_pattern: ([
+            (x86_64, linux, "^harmony-client-x86_64-unknown-linux-musl.tar.xz$"),
+            (x86_64, linux, "^harmony-client-aarch64-unknown-linux-musl.tar.xz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarXz,
+          files: [
+            (
+              relative_path: "/harmony-client$",
+              file_type: Binary(
+                copy_as: "harmony-client"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
+    (
+      name: "harmony-server",
+      download: (
+        source: GitHub(
+          author: "ClementNerma",
+          repo_name: "Harmony",
+          asset_pattern: ([
+            (x86_64, linux, "^harmony-server-x86_64-unknown-linux-musl.tar.xz$"),
+            (x86_64, linux, "^harmony-server-aarch64-unknown-linux-musl.tar.xz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarXz,
+          files: [
+            (
+              relative_path: "/harmony-server$",
+              file_type: Binary(
+                copy_as: "harmony-server"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
+    (
       name: "helix",
       download: (
         source: GitHub(
@@ -571,7 +621,7 @@
         version_extraction: TagName()
       )
     ),
-      (
+    (
       name: "sloth-client",
       download: (
         source: GitHub(
