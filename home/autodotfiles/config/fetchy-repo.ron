@@ -323,7 +323,7 @@
           format: TarGz,
           files: [
             (
-              relative_path: "/harmony-client$",
+              relative_path: "^harmony-client$",
               file_type: Binary(
                 copy_as: "harmony-client"
               )
@@ -348,7 +348,7 @@
           format: TarGz,
           files: [
             (
-              relative_path: "/harmony-server$",
+              relative_path: "^harmony-server$",
               file_type: Binary(
                 copy_as: "harmony-server"
               )
