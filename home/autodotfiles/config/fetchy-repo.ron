@@ -226,6 +226,33 @@
       )
     ),
     (
+      name: "filebrowser",
+      download: (
+        source: GitHub(
+          author: "filebrowser",
+          repo_name: "filebrowser",
+          asset_pattern: ([
+            (x86_64, linux, "^linux-amd64-filebrowser.tar.gz$"),
+            (aarch64, linux, "^linux-arm64-filebrowser.tar.gz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "^filebrowser$",
+              file_type: Binary(
+                copy_as: "filebrowser"
+              )
+            )
+          ]
+        ),
+        version_extraction: (
+          source: TagName
+        )
+      )
+    ),
+    (
       name: "gitui",
       download: (
         source: GitHub(
