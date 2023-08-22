@@ -316,7 +316,7 @@
           repo_name: "Harmony",
           asset_pattern: ([
             (x86_64, linux, "^harmony-client-x86_64-unknown-linux-musl.tar.xz$"),
-            (x86_64, linux, "^harmony-client-aarch64-unknown-linux-musl.tar.xz$")
+            (aarch64, linux, "^harmony-client-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
@@ -341,7 +341,7 @@
           repo_name: "Harmony",
           asset_pattern: ([
             (x86_64, linux, "^harmony-server-x86_64-unknown-linux-musl.tar.xz$"),
-            (x86_64, linux, "^harmony-server-aarch64-unknown-linux-musl.tar.xz$")
+            (aarch64, linux, "^harmony-server-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
@@ -579,7 +579,7 @@
           repo_name: "Syncer",
           asset_pattern: ([
             (x86_64, linux, "^syncer-client-.*-x86_64-unknown-linux-musl.tar.xz$"),
-            (x86_64, linux, "^syncer-client-.*-aarch64-unknown-linux-musl.tar.xz$")
+            (aarch64, linux, "^syncer-client-.*-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
@@ -604,7 +604,7 @@
           repo_name: "Syncer",
           asset_pattern: ([
             (x86_64, linux, "^syncer-server-.*-x86_64-unknown-linux-musl.tar.xz$"),
-            (x86_64, linux, "^syncer-server-.*-aarch64-unknown-linux-musl.tar.xz$")
+            (aarch64, linux, "^syncer-server-.*-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
@@ -629,7 +629,7 @@
           repo_name: "Sloth",
           asset_pattern: ([
             (x86_64, linux, "^sloth-client-.*-x86_64-unknown-linux-musl.tar.xz$"),
-            (x86_64, linux, "^sloth-client-.*-aarch64-unknown-linux-musl.tar.xz$")
+            (aarch64, linux, "^sloth-client-.*-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
@@ -654,7 +654,7 @@
           repo_name: "Sloth",
           asset_pattern: ([
             (x86_64, linux, "^sloth-server-.*-x86_64-unknown-linux-musl.tar.xz$"),
-            (x86_64, linux, "^sloth-server-.*-aarch64-unknown-linux-musl.tar.xz$")
+            (aarch64, linux, "^sloth-server-.*-aarch64-unknown-linux-musl.tar.xz$")
           ])
         ),
         file_format: Archive(
