@@ -448,6 +448,24 @@
       )
     ),
     (
+      name: "neovim",
+      download: (
+        source: GitHub(
+          author: "neovim",
+          repo_name: "neovim",
+          asset_pattern: ([
+            (x86_64, linux, "^nvim.appimage$")
+          ])
+        ),
+        file_format: Binary(
+          filename: "nvim"
+        ),
+        version_extraction: (
+          source: TagName
+        )
+      )
+    ),
+    (
       name: "nushell",
       download: (
         source: GitHub(
