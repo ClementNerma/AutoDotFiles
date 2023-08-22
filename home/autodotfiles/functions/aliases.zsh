@@ -25,6 +25,7 @@ alias unrm="trasher unrm"
 # Software: Git
 alias ga="git add"
 alias gb="git checkout -b"
+alias gm="git commit -m"
 alias gs="gitui"
 alias gr="git reset"
 alias gl="git log"
