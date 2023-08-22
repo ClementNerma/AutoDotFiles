@@ -53,7 +53,7 @@ bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
 
 # Set cursor to vertical and blocking instead of block and fixed
-echo '\e[5 q'
+echo -n '\e[5 q'
 
 # Load ADF
 source $HOME/autodotfiles/index.zsh
