@@ -203,7 +203,7 @@
             )
           ]
         ),
-        skip_validation: Some(true),
+        skip_version_validation: Some(true),
         version_extraction: Hardcoded("<unknown>")
       )
     ),
