@@ -24,9 +24,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -51,9 +49,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -78,9 +74,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -105,9 +99,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -132,9 +124,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -159,9 +149,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -186,9 +174,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -217,12 +203,8 @@
             )
           ]
         ),
-        version_extraction: (
-          source: Url,
-          regex: Some("(.*)"),
-          skip_validation: Some(true)
-          // TODO: find a way to extraction version number
-        )
+        skip_validation: Some(true),
+        version_extraction: Hardcoded("<unknown>")
       )
     ),
     (
@@ -247,9 +229,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -274,9 +254,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -307,9 +285,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -334,9 +310,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -361,9 +335,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -388,9 +360,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -415,9 +385,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -442,9 +410,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -460,9 +426,7 @@
         file_format: Binary(
           filename: "nvim"
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -487,9 +451,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -514,9 +476,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -532,9 +492,7 @@
         file_format: Binary(
           filename: "scout"
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -559,9 +517,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -586,9 +542,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -613,9 +567,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
       (
@@ -640,9 +592,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -667,9 +617,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -694,9 +642,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -721,9 +667,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -748,9 +692,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -774,9 +716,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -793,9 +733,7 @@
         file_format: Binary(
           filename: "yt-dlp"
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -820,9 +758,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     ),
     (
@@ -847,9 +783,7 @@
             )
           ]
         ),
-        version_extraction: (
-          source: TagName
-        )
+        version_extraction: TagName()
       )
     )
   ]
