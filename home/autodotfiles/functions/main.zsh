@@ -189,7 +189,7 @@ function rustpublish() {
 			if [[ -f "$dir/src/main.rs" ]]; then
 				echoinfo ">> Producing assets for crate \z[yellow]°$crate_name\z[]°..."
 
-				local asset_file="/tmp/$crate_name-$target.tar.gz"
+				local asset_file="/tmp/$crate_name-$target.tgz"
 				rm -i "$asset_file"
 				asset_files+=("$asset_file")
 

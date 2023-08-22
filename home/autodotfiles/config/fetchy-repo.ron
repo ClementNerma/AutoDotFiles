@@ -340,8 +340,8 @@
           author: "ClementNerma",
           repo_name: "Harmony",
           asset_pattern: ([
-            (x86_64, linux, "^harmony-server-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "^harmony-server-aarch64-unknown-linux-musl.tar.xz$")
+            (x86_64, linux, "^harmony-server-x86_64-unknown-linux-musl.tgz$"),
+            (aarch64, linux, "^harmony-server-aarch64-unknown-linux-musl.tgz$")
           ])
         ),
         file_format: Archive(
