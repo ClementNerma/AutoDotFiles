@@ -34,10 +34,13 @@ alias gc="git checkout"
 alias gp="git push"
 alias gpf="git push --force-with-lease"
 
+# Software: Neovim
+alias vi="nvim"
+
 # Software: 'ytdl'
 alias yd="ytdl dl"
 alias ytsync="ytdl sync"
 
 # Set the default editor
-export EDITOR="hx"
+export EDITOR="nvim"
 alias nano="$EDITOR"

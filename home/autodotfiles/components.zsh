@@ -82,7 +82,7 @@ function adf_install_components() {
         exa
         fd
         gitui
-        helix
+        neovim
         jumpy
         gdu
         ripgrep
