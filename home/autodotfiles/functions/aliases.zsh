@@ -35,7 +35,7 @@ alias gp="git push"
 alias gpf="git push --force-with-lease"
 
 # Software: Neovim
-alias vi="nvim -u $ADF_CONFIG_FILES_DIR/lazy-vim.lua"
+alias vi="nvim"
 
 # Software: 'ytdl'
 alias yd="ytdl dl"
