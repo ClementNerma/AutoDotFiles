@@ -39,18 +39,6 @@ function jumpy_handler() {
 
 chpwd_functions=(${chpwd_functions[@]} "jumpy_handler")
 
-# AstroNVim
-function nvim() {
-    local nvim_cfg_path="$HOME/.config/nvim"
-
-    if [[ ! -f "$nvim_cfg_path/init.lua" ]]; then
-        echoinfo "Installing AstroNVim..."
-        git clone --depth 1 https://github.com/AstroNvim/AstroNvim "$nvim_cfg_path"
-    fi
-
-    command nvim "$@"
-}
-
 # Integration for FZF
 source ~/.fzf.zsh
 
