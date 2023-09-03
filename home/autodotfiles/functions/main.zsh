@@ -242,7 +242,7 @@ function unison_slot_backup() {
 
 	echoinfo "Backing up..."
 	
-	if unison -batch -terse "$1" "ssh://$ADF_UNISON_REMOTE_HOST/$remote_slot_path"; then
+	if unison -batch -terse "$1" "${@:3}" "ssh://$ADF_UNISON_REMOTE_HOST/$remote_slot_path"; then
 		echosuccess "Done!"
 	fi
 }
