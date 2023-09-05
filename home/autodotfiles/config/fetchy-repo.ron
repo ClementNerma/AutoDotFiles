@@ -622,6 +622,31 @@
       )
     ),
     (
+      name: "syncthing",
+      download: (
+        source: GitHub(
+          author: "syncthing",
+          repo_name: "syncthing",
+          asset_pattern: ([
+            (x86_64, linux, "^syncthing-linux-amd64-.*.tar.gz$"),
+            (aarch64, linux, "^syncthing-linux-arm64-.*.tar.gz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "^syncthing-([^\\/]+)/syncthing$",
+              file_type: Binary(
+                copy_as: "syncthing"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
+    (
       name: "sloth-client",
       download: (
         source: GitHub(
