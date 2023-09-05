@@ -819,12 +819,12 @@
           author: "ClementNerma",
           repo_name: "ytdl",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.xz$")
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tgz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tgz$")
           ])
         ),
         file_format: Archive(
-          format: TarXz,
+          format: TarGz,
           files: [
             (
               relative_path: "/ytdl$",
