@@ -827,7 +827,7 @@
           format: TarGz,
           files: [
             (
-              relative_path: "/ytdl$",
+              relative_path: "^ytdl$",
               file_type: Binary(
                 copy_as: "ytdl"
               )
