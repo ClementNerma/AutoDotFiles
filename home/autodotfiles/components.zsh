@@ -71,9 +71,9 @@ function adf_install_components() {
         bat
         cargo-binstall
         crony
-        eza
         fd
         gitui
+        lsd
         neovim
         jumpy
         gdu

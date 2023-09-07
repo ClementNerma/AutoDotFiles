@@ -11,8 +11,8 @@ alias gosoft="cd $SOFTWAREDIR"
 # Run Bash
 alias bash="BASH_NO_ZSH=true bash"
 
-# Software: Eza
-alias ls="eza --all --long --group-directories-first --color-scale --binary"
+# Software: Lsd
+alias ls="lsd --almost-all --long --versionsort --group-dirs first --git"
 alias tree="ls --tree"
 
 # Software: Bat
