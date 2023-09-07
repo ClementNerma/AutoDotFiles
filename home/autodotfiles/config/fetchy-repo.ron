@@ -128,26 +128,18 @@
       )
     ),
     (
-      name: "exa",
+      name: "eza",
       download: (
         source: GitHub(
-          author: "ogham",
-          repo_name: "exa",
+          author: "eza-community",
+          repo_name: "eza",
           asset_pattern: ([
-            (x86_64, linux, "-linux-x86_64-musl-v.*.zip$"),
-            (aarch64, linux, "-linux-armv7-v.*.zip$")
+            (x86_64, linux, "^x86_64-unknown-linux-gnu-eza$"),
+            (aarch64, linux, "^aarch64-unknown-linux-gnu-eza$")
           ])
         ),
-        file_format: Archive(
-          format: Zip,
-          files: [
-            (
-              relative_path: "^bin/exa",
-              file_type: Binary(
-                copy_as: "exa"
-              )
-            )
-          ]
+        file_format: Binary(
+          filename: "eza"
         ),
         version_extraction: TagName()
       )
@@ -457,6 +449,31 @@
               relative_path: "^lazydocker$",
               file_type: Binary(
                 copy_as: "lazydocker"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
+    (
+      name: "lsd",
+      download: (
+        source: GitHub(
+          author: "lsd-rs",
+          repo_name: "lsd",
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.gz$"),
+            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.gz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "/lsd$",
+              file_type: Binary(
+                copy_as: "lsd"
               )
             )
           ]
