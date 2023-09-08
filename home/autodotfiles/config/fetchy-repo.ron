@@ -53,6 +53,33 @@
       )
     ),
     (
+      name: "bun",
+      download: (
+        source: GitHub(
+          author: "oven-sh",
+          repo_name: "bun",
+          asset_pattern: ([
+            (x86_64, linux, "^bun-linux-x64-baseline.zip$"),
+            (aarch64, linux, "^bun-linux-aarch64.zip$")
+          ])
+        ),
+        file_format: Archive(
+          format: Zip,
+          files: [
+            (
+              relative_path: "/bun$",
+              file_type: Binary(
+                copy_as: "bun"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName(
+          regex: Some("^bun-(v[0-9\\.]+)$")
+        )
+      )
+    ),
+    (
       name: "cargo-binstall",
       download: (
         source: GitHub(
