@@ -36,30 +36,6 @@ function adf_install_components() {
         rustup update
     fi
 
-    if [[ ! -d ~/.volta ]]; then
-        echoinfo "\n>\n> Installing Volta...\n>\n"
-
-        mvoldbak ~/.volta
-
-        curl https://get.volta.sh | bash
-
-        export VOLTA_HOME="$HOME/.volta"    # Just for this session
-        export PATH="$VOLTA_HOME/bin:$PATH" # Just for this session
-
-        echoinfo "\n>\n> Installing Node.js & NPM...\n>\n"
-        volta install node@latest npm@bundled
-
-        echoinfo "\n>\n> Installing Yarn & PNPM...\n>\n"
-        volta install yarn pnpm
-
-        yarn -v > /dev/null # Just to be sure Yarn was installed correctly
-        pnpm -v > /dev/null # Just to be sure PNPM was installed correctly
-        
-    elif ! (( $ADF_SKIP_INSTALLED )); then
-        echoinfo "\n>\n> Updating Node.js...\n>\n"
-        volta install node@latest
-    fi
-
     if [[ ! -d ~/.fzf ]]; then
         command rm -rf ~/.fzf && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && bash ~/.fzf/install --all
     
@@ -69,6 +45,7 @@ function adf_install_components() {
 
     local req_packages=(
         bat
+        bun
         cargo-binstall
         crony
         fd
