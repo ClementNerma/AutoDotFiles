@@ -13,6 +13,7 @@ function adf_local_backup() {
 
     if [[ -n $ADF_MIRROR_BACKUP && ! -d $ADF_MIRROR_BACKUP ]]; then
         echoerr "The provided mirror backup directory does not exist!"
+        return 1
     fi
     
     local passphrase
