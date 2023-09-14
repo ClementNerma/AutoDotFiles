@@ -116,10 +116,10 @@
           ])
         ),
         file_format: Archive(
-          format: TarXz,
+          format: TarGz,
           files: [
             (
-              relative_path: "/crony$",
+              relative_path: "^crony$",
               file_type: Binary(
                 copy_as: "crony"
               )
