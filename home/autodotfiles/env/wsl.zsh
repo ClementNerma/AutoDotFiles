@@ -82,26 +82,6 @@ function remount() {
 	sudo mount -t drvfs "${1:u}:" /mnt/${1:l} -o uid=$UID,gid=$GID
 }
 
-# Mount drives in WSL, including removable ones
-function mount_wsl_drives() {
-  for drive in /mnt/*
-  do
-    local letter=${drive:s/\/mnt\//}
-
-    if [[ ${#letter} = 1 ]] && [[ $letter != "c" ]]; then
-      if mountpoint -q "/mnt/$letter"; then
-        remount "$letter"
-      else
-        sudo rmdir "/mnt/$letter"
-      fi
-    fi
-  done
-
-  if [[ ! -d /mnt/c ]]; then
-    echoerr "Assertion error: \z[magenta]°C:\z[]° drive was not found while mounting WSL drives!"
-  fi
-}
-
 # Edit a file directly in a native text editor, even if stored inside WSL
 function edit() {
   ( cd "$(dirname "$1")" && "$SOFTWAREDIR/Lite XL/lite-xl.exe" "$(basename "$1")" )
@@ -183,9 +163,6 @@ export DISPLAY=":0"
 
 # Fix socket connection
 fix_socket_connection
-
-# Mount storage devices on startup (this typically takes 50~100 ms)
-mount_wsl_drives
 
 # Schedule clock fix
 # Required as WSL2's clock tends to go out of sync from time to time
