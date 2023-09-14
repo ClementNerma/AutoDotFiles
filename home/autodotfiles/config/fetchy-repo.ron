@@ -34,15 +34,15 @@
           author: "ClementNerma",
           repo_name: "BackgroundJobs",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.xz$")
+            (x86_64, linux, "^bjobs-x86_64-unknown-linux-musl.tgz$"),
+            (aarch64, linux, "^bjobs-aarch64-unknown-linux-musl.tgz$")
           ])
         ),
         file_format: Archive(
-          format: TarXz,
+          format: TarGz,
           files: [
             (
-              relative_path: "/bjobs$",
+              relative_path: "^bjobs$",
               file_type: Binary(
                 copy_as: "bjobs"
               )
