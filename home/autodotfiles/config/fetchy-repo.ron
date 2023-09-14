@@ -111,8 +111,8 @@
           author: "ClementNerma",
           repo_name: "Crony",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.xz$")
+            (x86_64, linux, "^crony-x86_64-unknown-linux-musl.tgz$"),
+            (aarch64, linux, "^crony-aarch64-unknown-linux-musl.tgz$")
           ])
         ),
         file_format: Archive(
