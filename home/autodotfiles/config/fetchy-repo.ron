@@ -130,6 +130,30 @@
       )
     ),
     (
+      name: "cross",
+      download: (
+        source: GitHub(
+          author: "cross-rs",
+          repo_name: "cross",
+          asset_pattern: ([
+            (x86_64, linux, "^cross-x86_64-unknown-linux-musl.tar.gz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "^cross$",
+              file_type: Binary(
+                copy_as: "cross"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
+    (
       name: "erdtree",
       download: (
         source: GitHub(
