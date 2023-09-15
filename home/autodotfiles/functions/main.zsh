@@ -148,6 +148,9 @@ function z() {
 
 # Publish a new Rust project release
 function rustpublish() {
+	# Require 'cross' to be installed
+	fetchy require cross || return 1
+
 	# NOTE: Building x86_64 last as it's the once that will be kept for publishing to crates.io
 	local targets=("aarch64-unknown-linux-musl" "x86_64-unknown-linux-musl")
 	local asset_files=()
@@ -169,14 +172,16 @@ function rustpublish() {
 	echoinfo "\n\n>\n> Producing proper standalone builds...\n>"
 
 	for target in $targets; do
-		# # Clean up target files to fix a bug with 'cross'
-		# cargo clean
-
 		echoinfo "\n> Building for target \z[yellow]°$target\z[]°..."
 
-		cross build --release --target "$target" || return 1
-		# strip "target/$target/release/$crate_name" || return 1
+		# We use a different target directory for each crate and each target, otherwise dependencies build
+		# may clash between platforms
+		# So instead of doing a full and slow `cargo clean` before each build step, we use external directories
+		# that will be kept between publishings.
+		local target_dir="/tmp/rust-publishing-targets/$(sha1sum <<< "$PWD" | cut -f 1 -d ' ')/$target"
+		mkdir -p "$target_dir"
 
+		cross build --release --target "$target" --target-dir "$target_dir" || return 1
 		echoinfo ""
 
 		for dir in $dirs; do
@@ -189,11 +194,11 @@ function rustpublish() {
 			if [[ -f "$dir/src/main.rs" ]]; then
 				echoinfo ">> Producing assets for crate \z[yellow]°$crate_name\z[]°..."
 
-				local asset_file="/tmp/$crate_name-$target.tgz"
+				local asset_file="$target_dir/$crate_name-$target.tgz"
 				rm -i "$asset_file"
 				asset_files+=("$asset_file")
 
-				tar -czf "$asset_file" -C "target/$target/release" "$crate_name" || return 1
+				( cd "$target_dir/$target/release" && tar -czf "$asset_file" "$crate_name" ) || return 1
 			else
 				echowarn ">> No main file found for \z[blue]°$crate_name\z[]°, skipping asset production."
 			fi
