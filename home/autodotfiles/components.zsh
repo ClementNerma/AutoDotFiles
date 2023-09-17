@@ -50,10 +50,11 @@ function adf_install_components() {
         crony
         fd
         gitui
-        lsd
-        neovim
-        jumpy
         gdu
+        jumpy
+        lsd
+        moar
+        neovim
         ripgrep
         starship
         tokei

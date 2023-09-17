@@ -533,6 +533,24 @@
       )
     ),
     (
+      name: "moar",
+      download: (
+        source: GitHub(
+          author: "walles",
+          repo_name: "moar",
+          asset_pattern: ([
+            // To update when a 64-bit version is released
+            (x86_64, linux, "-linux-386"),
+            (aarch64, linux, "-linux-arm")
+          ])
+        ),
+        file_format: Binary(
+          filename: "moar"
+        ),
+        version_extraction: TagName()
+      )
+    ),
+    (
       name: "neovim",
       download: (
         source: GitHub(

@@ -18,6 +18,9 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 
+# Integration for Moar
+export PAGER="moar"
+
 # Integration for Starship
 export STARSHIP_CONFIG="$ADF_CONFIG_FILES_DIR/starship.toml"
 
