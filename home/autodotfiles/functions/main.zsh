@@ -178,7 +178,8 @@ function rustpublish() {
 		# may clash between platforms
 		# So instead of doing a full and slow `cargo clean` before each build step, we use external directories
 		# that will be kept between publishings.
-		local target_dir="/tmp/rust-publishing-targets/$(sha1sum <<< "$PWD" | cut -f 1 -d ' ')/$target"
+		# This is also why we don't use the volatile `/tmp` but a persistent directory
+		local target_dir="$TEMPDIR/rust-publishing-targets/$(sha1sum <<< "$PWD" | cut -f 1 -d ' ')/$target"
 		mkdir -p "$target_dir"
 
 		cross build --release --target "$target" --target-dir "$target_dir" || return 1
