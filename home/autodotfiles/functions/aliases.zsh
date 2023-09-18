@@ -15,7 +15,7 @@ alias ls="lsd --almost-all --long --versionsort --group-dirs first --git"
 alias tree="ls --tree"
 
 # Software: Bat
-alias cat="bat --theme=base16"
+alias cat="bat --theme OneHalfDark --style plain"
 
 # Software: Trasher
 alias rm="trasher rm"
