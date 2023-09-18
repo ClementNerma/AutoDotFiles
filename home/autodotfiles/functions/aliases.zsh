@@ -38,6 +38,7 @@ alias nvim="nvim -u $ADF_CONFIG_FILES_DIR/lazy-vim.lua"
 alias vi="nvim"
 
 # Software: 'ytdl'
+alias ytdl="ytdl -c $ADF_DATA_DIR/ytdl/ytdl-config.json"
 alias yd="ytdl dl"
 alias ytsync="ytdl sync"
 

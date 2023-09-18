@@ -53,7 +53,10 @@ function code() {
 	fi
 }
 
-# Configuration override for YTDL
-function ytdl() {
-    command ytdl -c "$ADF_DATA_DIR/ytdl/ytdl-config.json" "$@"
+# Open a file with VSCode
+function codefile() {
+	[[ -n $1 ]] || { echoerr "Please provide a file to open"; return 1 }
+	[[ -f $1 ]] || { echoerr "Provided file does not exist"; return 1 }
+
+	command code "$1"
 }
