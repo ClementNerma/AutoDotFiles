@@ -5,7 +5,6 @@ alias gotemp="cd $TEMPDIR"
 alias godl="cd $DLDIR"
 alias gotrash="cd $TRASHDIR"
 alias goproj="cd $PROJDIR"
-alias gowork="cd $WORKDIR"
 alias gosoft="cd $SOFTWAREDIR"
 
 # Run Bash

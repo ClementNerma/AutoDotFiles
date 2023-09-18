@@ -38,7 +38,6 @@ export LOCBAKDIR="$HOMEDIR/Sauvegardes/ADF"
 
 # Main data are located in WSL's own filesystem
 export PROJDIR="$HOME/Projets"
-export WORKDIR="$HOME/Work"
 export TRASHDIR="$HOME/.trasher"
 
 # Alternate default entry directory that may occur sometimes
