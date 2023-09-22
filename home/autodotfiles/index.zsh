@@ -7,6 +7,9 @@
 #  reloading the whole configuration each time ; as well as to keep the ~/.zshrc file as clean and simple as possible.
 #
 
+# Set some ZSH options
+setopt localoptions extendedglob warncreateglobal typesetsilent noshortloops
+
 # Fix required to avoid the occassional following error:
 # > sh: 0: getcwd() failed: No such file or directory
 # when running some commands like `service`
