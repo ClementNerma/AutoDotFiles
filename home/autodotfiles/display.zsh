@@ -31,10 +31,6 @@ function echoc() {
     local i=0
     local rawtext=""
 
-    local segment_len
-    local add_color
-    local format_varname
-
     while (( i < ${#text} )); do
         i=$((i+1))
 
@@ -44,19 +40,19 @@ function echoc() {
             continue
         fi
 
-        substr="${text[$i+3,-1]}"
+        local substr="${text[$i+3,-1]}"
 
-        look="]°"
-        color="${substr%%$look*}"
+        local look="]°"
+        local color="${substr%%$look*}"
 
-        format_test_varname="$ADF_PREFIX_FORMAT${color:u}"
+        local format_test_varname="$ADF_PREFIX_FORMAT${color:u}"
 
         if [[ $color = $substr ]]; then
             output+="${text[$i]}"
             continue
         fi
 
-        segment_len=$((${#color}+5))
+        local segment_len=$((${#color}+5))
 
         if [[ -n $color && -z ${(P)format_test_varname} ]]; then
             _report_echoc_error "Unknown color ${ADF_FORMAT_YELLOW}$color" "$text" $((i-1)) $segment_len
@@ -71,13 +67,13 @@ function echoc() {
 
             shift -p colors_history
 
-            add_color="${colors_history[-1]:-reset}"
+            local add_color="${colors_history[-1]:-reset}"
         else
-            add_color="$color"
+            local add_color="$color"
             colors_history+=("$color")
         fi
 
-        format_varname="$ADF_PREFIX_FORMAT${add_color:u}"
+        local format_varname="$ADF_PREFIX_FORMAT${add_color:u}"
         i=$((i+4+${#color}))
         
         output+="${(P)format_varname}"

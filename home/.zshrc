@@ -16,11 +16,12 @@ function zerperf() {
 # Load required ZSH modules
 zmodload zsh/mathfunc
 
+# Set all options as local
+setopt localoptions
+
 # Prezto configuration version
 if [[ ! -f $HOME/.zpreztorc ]]; then
 	echo "Setting up Prezto configuration files..."
-
-	setopt EXTENDED_GLOB
 
 	for rcfile in "$HOME"/.zprezto/runcoms/^README.md(.N); do
 		ln -s "$rcfile" "$HOME/.${rcfile:t}"
