@@ -49,6 +49,7 @@ function adf_install_components() {
         cargo-binstall
         crony
         fd
+        fx
         gitui
         gdu
         jumpy

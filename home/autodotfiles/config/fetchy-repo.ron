@@ -275,7 +275,23 @@
         version_extraction: TagName()
       )
     ),
-    
+    (
+      name: "fx",
+      download: (
+        source: GitHub(
+          author: "antonmedv",
+          repo_name: "fx",
+          asset_pattern: ([
+            (x86_64, linux, "fx_linux_amd64"),
+            (aarch64, linux, "fx_linux_arm64")
+          ])
+        ),
+        file_format: Binary(
+          filename: "fx"
+        ),
+        version_extraction: TagName()
+      )
+    ),
     (
       name: "gdu",
       download: (
