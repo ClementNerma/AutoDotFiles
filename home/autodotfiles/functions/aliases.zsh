@@ -102,9 +102,9 @@ function code() {
 	local to_open=${workspace[1]:-$dir}
 
 	if command -v code-insiders > /dev/null; then
-		code-insiders "$to_open" "${@:2}"
+		(code-insiders "$to_open" "${@:2}" &)
 	else
-		command code "$to_open" "${@:2}"
+		(command code "$to_open" "${@:2}" &)
 	fi
 }
 
@@ -113,5 +113,5 @@ function codefile() {
 	[[ -n $1 ]] || { echoerr "Please provide a file to open"; return 1 }
 	[[ -f $1 ]] || { echoerr "Provided file does not exist"; return 1 }
 
-	command code "$1"
+	(command code "$1" &)
 }
