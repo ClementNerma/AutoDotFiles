@@ -855,15 +855,15 @@
           author: "ClementNerma",
           repo_name: "Trasher",
           asset_pattern: ([
-            (x86_64, linux, "-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "-aarch64-unknown-linux-musl.tar.xz$")
+            (x86_64, linux, "^trasher-x86_64-unknown-linux-musl.tgz$"),
+            (aarch64, linux, "^trasher-aarch64-unknown-linux-musl.tgz")
           ])
         ),
         file_format: Archive(
-          format: TarXz,
+          format: TarGz,
           files: [
             (
-              relative_path: "/trasher$",
+              relative_path: "^trasher$",
               file_type: Binary(
                 copy_as: "trasher"
               )
