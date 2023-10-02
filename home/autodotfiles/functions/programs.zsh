@@ -2,13 +2,28 @@
 # This file defines global functions and aliases
 #
 
+# Find root of current project
+function projroot() {
+	if git status 2>&1 > /dev/null; then
+		git rev-parse --show-toplevel
+	else
+		# Fallback
+		echo "$PWD"
+	fi
+}
+
 # Backup the current project
 function bakthis() {
-	local target="../_bak-$(basename "$PWD")-$(humandate)"
-	mkdir "$target"
-	fd --hidden --type 'directory' --search-path "." | xargs -I {} mkdir "$target/{}"
-	fd --hidden --type 'file' --search-path "." | xargs -I {} cp "{}" "$target/{}"
-	echosuccess "Done!"
+	local root_dir=$(projroot)
+
+	local target="../_bak-$(basename "$root_dir")-$(humandate)"
+
+	( cd "$root_dir" &&
+	  mkdir "$target" &&
+	  fd --hidden --type 'directory' --search-path "." | xargs -I {} mkdir "$target/{}" &&
+	  fd --hidden --type 'file' --search-path "." | xargs -I {} cp "{}" "$target/{}" &&
+	  echosuccess "Done!"
+	)
 }
 
 # Rename a Git branch
