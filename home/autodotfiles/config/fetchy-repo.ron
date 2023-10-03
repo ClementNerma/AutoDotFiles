@@ -178,23 +178,23 @@
         version_extraction: TagName()
       )
     ),
-    (
-      name: "eza",
-      download: (
-        source: GitHub(
-          author: "eza-community",
-          repo_name: "eza",
-          asset_pattern: ([
-            (x86_64, linux, "^x86_64-unknown-linux-gnu-eza$"),
-            (aarch64, linux, "^aarch64-unknown-linux-gnu-eza$")
-          ])
-        ),
-        file_format: Binary(
-          copy_as: "eza"
-        ),
-        version_extraction: TagName()
-      )
-    ),
+    // (
+    //   name: "eza",
+    //   download: (
+    //     source: GitHub(
+    //       author: "eza-community",
+    //       repo_name: "eza",
+    //       asset_pattern: ([
+    //         (x86_64, linux, "^x86_64-unknown-linux-gnu-eza$"),
+    //         (aarch64, linux, "^aarch64-unknown-linux-gnu-eza$")
+    //       ])
+    //     ),
+    //     file_format: Binary(
+    //       copy_as: "eza"
+    //     ),
+    //     version_extraction: TagName()
+    //   )
+    // ),
     (
       name: "fd",
       download: (
@@ -890,6 +890,31 @@
               relative_path: "^bin/unison$",
               file_type: Binary(
                 copy_as: "unison"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
+    (
+      name: "xplr",
+      download: (
+        source: GitHub(
+          author: "sayanarijit",
+          repo_name: "xplr",
+          asset_pattern: ([
+            (x86_64, linux, "^xplr-linux-musl.tar.gz$"),
+            (aarch64, linux, "^xplr-linux-aarch64.tar.gz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "^xplr$",
+              file_type: Binary(
+                copy_as: "xplr"
               )
             )
           ]
