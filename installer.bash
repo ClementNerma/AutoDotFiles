@@ -22,7 +22,11 @@ if ! command -v apt &> /dev/null; then
     _fail 3 "Command 'apt' was not found."
 fi
 
-if [ ! -x /usr/bin/sudo ]; then
+if [[ "$SHELL" =~ "termux" ]]; then
+	function sudo() {
+		"$@"
+	}
+elif [ ! -x /usr/bin/sudo ]; then
 	echo -e "\e[33m\!/ WARNING: 'sudo' command was not found, installing it for compatibility reasons.\e[0m"
 	
 	if ! su -s /bin/bash -c "apt install sudo -y" root; then

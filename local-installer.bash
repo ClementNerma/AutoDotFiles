@@ -48,8 +48,14 @@ echo -e "\e[92m===========================================\e[0m"
 echo -e "\e[92m====== AUTOMATED (OFFLINE) INSTALLER ======\e[0m"
 echo -e "\e[92m===========================================\e[0m"
 
-if [ ! -x /usr/bin ]; then
+if ! command -v apt &> /dev/null; then
     _fail 3 "Command 'apt' was not found."
+fi
+
+if [[ "$SHELL" =~ "termux" ]]; then
+	function sudo() {
+		"$@"
+	}
 fi
 
 if [ -d "$TMPDIR" ]; then

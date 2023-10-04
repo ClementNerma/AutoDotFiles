@@ -56,6 +56,11 @@ bindkey '5~' kill-word
 # Set cursor to vertical and blocking instead of block and fixed
 echo -n '\e[5 q'
 
+# Compatibility layer for Termux
+if [[ "$SHELL" =~ "termux" ]]; then
+	function sudo() { "$@" }
+fi
+
 # Load ADF
 source $HOME/autodotfiles/index.zsh
 
