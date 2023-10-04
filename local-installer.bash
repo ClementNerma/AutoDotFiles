@@ -33,11 +33,20 @@ if [[ -z $CURRPATH ]]; then
 	_fail 1 "Please run this script as: bash <script name>"
 fi
 
+# Define path to temporary directory
+if [[ "$SHELL" =~ "termux" ]]; then
+	export ADF_TEMP_DIR="$HOME/.faketemp"
+else
+	export ADF_TEMP_DIR="/tmp"
+fi
+
+mkdir -p "$ADF_TEMP_DIR"
+
 # Get current timestamp
 AUTO_INSTALLER_STARTED_AT=$(date +%s)
 
 # Choose a temporary directory
-TMPDIR="/tmp/_autodotfiles_autoinstaller_$AUTO_INSTALLER_STARTED_AT"
+TMPDIR="$ADF_TEMP_DIR/_autodotfiles_autoinstaller_$AUTO_INSTALLER_STARTED_AT"
 
 # Determine the parent directory of the current script
 INSTALL_FROM=$(dirname "$CURRPATH")

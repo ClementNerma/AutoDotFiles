@@ -86,7 +86,7 @@ function zerupdate_online() {
 	# Download the update from GitHub
 	echoinfo "> Download latest source code from GitHub..."
 
-	local filename="/tmp/adf-file-$(humandate).zip"
+	local filename="$ADF_TEMP_DIR/adf-file-$(humandate).zip"
 
 	dl "https://codeload.github.com/ClementNerma/AutoDotFiles/zip/main" "$filename" || { echoerr "> Failed to fetch archive from URL: \z[yellow]°$zipurl\z[]°!"; return 1 }
 

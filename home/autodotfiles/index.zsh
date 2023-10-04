@@ -47,6 +47,9 @@ export ADF_FILES_LIST="$HOME/.autodotfiles-files-list.txt"
 # Load the default configuration file
 source "$ADF_DIR/config.zsh"
 
+# Create the temporary directory
+mkdir -p "$ADF_TEMP_DIR"
+
 # Load display functions
 source "$ADF_DIR/display.zsh"
 

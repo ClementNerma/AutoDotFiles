@@ -14,3 +14,9 @@ export ADF_GIT_SSH_PRIVATE_KEY_FILENAME="id_rsa"
 
 # Number of rounds for (de-)obfuscation
 export ADF_OBF_ROUNDS=3
+
+if [[ "$SHELL" =~ "termux" ]]; then
+	export ADF_TEMP_DIR="$HOME/.faketemp"
+else
+	export ADF_TEMP_DIR="$HOME/tmp"
+fi

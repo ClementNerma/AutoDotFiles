@@ -72,11 +72,11 @@ function adf_install_components() {
         echoinfo "\n>\n> Updating Fetchy...\n>\n"
 
         local cpu_architecture=$(lscpu | grep Architecture | awk {'print $2'})
-        local fetchy_tgz="/tmp/fetchy-$(humandate).tgz"
+        local fetchy_tgz="$ADF_TEMP_DIR/fetchy-$(humandate).tgz"
         dl "https://github.com/ClementNerma/Fetchy/releases/latest/download/fetchy-$cpu_architecture-unknown-linux-musl.tgz" "$fetchy_tgz"
-        tar -xf "$fetchy_tgz" -C "/tmp"
+        tar -xf "$fetchy_tgz" -C "$ADF_TEMP_DIR"
         rm "$fetchy_tgz"
-        mv "/tmp/fetchy" "$ADF_BIN_DIR"
+        mv "$ADF_TEMP_DIR/fetchy" "$ADF_BIN_DIR"
         chmod +x "$ADF_BIN_DIR/fetchy"
 
         echoinfo "\n>\n> Updating repositories...\n>\n"

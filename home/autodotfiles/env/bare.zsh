@@ -5,7 +5,7 @@
 
 # Set up path to main directories
 export HOMEDIR="$HOME"
-export TEMPDIR="/tmp"
+export TEMPDIR="$ADF_TEMP_DIR"
 export TRASHDIR="$HOMEDIR/.trasher"
 export DLDIR="$HOMEDIR/Téléchargements"
 export SOFTWAREDIR="$HOMEDIR/Logiciels"
