@@ -22,7 +22,7 @@ if ! command -v apt &> /dev/null; then
     _fail 3 "Command 'apt' was not found."
 fi
 
-if [[ "$SHELL" =~ "termux" ]]; then
+if [[ -d /data/data/com.termux ]]; then
 	function sudo() {
 		"$@"
 	}

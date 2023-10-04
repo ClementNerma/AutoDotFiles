@@ -57,7 +57,7 @@ bindkey '5~' kill-word
 echo -n '\e[5 q'
 
 # Compatibility layer for Termux
-if [[ "$SHELL" =~ "termux" ]]; then
+if [[ -d /data/data/com.termux ]]; then
 	function sudo() { "$@" }
 fi
 

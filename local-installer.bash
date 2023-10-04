@@ -34,7 +34,7 @@ if [[ -z $CURRPATH ]]; then
 fi
 
 # Define path to temporary directory
-if [[ "$SHELL" =~ "termux" ]]; then
+if [[ -d /data/data/com.termux ]]; then
 	export ADF_TEMP_DIR="$HOME/.faketemp"
 else
 	export ADF_TEMP_DIR="/tmp"
@@ -61,7 +61,7 @@ if ! command -v apt &> /dev/null; then
     _fail 3 "Command 'apt' was not found."
 fi
 
-if [[ "$SHELL" =~ "termux" ]]; then
+if [[ -d /data/data/com.termux ]]; then
 	function sudo() {
 		"$@"
 	}
