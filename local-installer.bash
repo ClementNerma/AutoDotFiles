@@ -75,7 +75,7 @@ if ! mkdir -p "$TMPDIR"; then
 	_fail 5 "Failed to create a temporary directory at '$TMPDIR'."
 fi
 
-if [ ! -x /usr/bin/sudo ]; then
+if ! command -v sudo &> /dev/null; then
 	echo -e "\e[33m\!/ WARNING: 'sudo' command was not found, installing it for compatibility reasons.\e[0m"
 	
 	if ! su -s /bin/bash -c "apt install sudo -y" root; then
