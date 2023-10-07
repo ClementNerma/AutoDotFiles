@@ -40,6 +40,8 @@ else
 	fi
 fi
 
+echo "Selected temporary direcotry: $ADF_TEMP_DIR"
+
 mkdir -p "$ADF_TEMP_DIR"
 
 OFFLINE_INSTALLER_FILENAME="local-installer.bash"
