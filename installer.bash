@@ -27,15 +27,17 @@ if [[ -d /data/data/com.termux ]]; then
 		"$@"
 	}
 	
-	ADF_TEMP_DIR="$HOME/.faketemp"
-elif [ ! -x /usr/bin/sudo ]; then
-	echo -e "\e[33m\!/ WARNING: 'sudo' command was not found, installing it for compatibility reasons.\e[0m"
-	
-	if ! su -s /bin/bash -c "apt install sudo -y" root; then
-        _fail 6 "Failed to install 'sudo' package"
-    fi
+	export ADF_TEMP_DIR="$HOME/.faketemp"
+else
+	export ADF_TEMP_DIR="/tmp"
 
-	ADF_TEMP_DIR="/tmp"
+	if [ ! -x /usr/bin/sudo ]; then
+		echo -e "\e[33m\!/ WARNING: 'sudo' command was not found, installing it for compatibility reasons.\e[0m"
+		
+		if ! su -s /bin/bash -c "apt install sudo -y" root; then
+			_fail 6 "Failed to install 'sudo' package"
+		fi
+	fi
 fi
 
 mkdir -p "$ADF_TEMP_DIR"
