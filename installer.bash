@@ -13,10 +13,10 @@ function _fail() {
 }
 
 # Beginning of the installer!
-# echo
-# echo -e "\e[92m=================================\e[0m"
-# echo -e "\e[92m====== AUTOMATED INSTALLER ======\e[0m"
-# echo -e "\e[92m=================================\e[0m"
+echo
+echo -e "\e[92m=================================\e[0m"
+echo -e "\e[92m====== AUTOMATED INSTALLER ======\e[0m"
+echo -e "\e[92m=================================\e[0m"
 
 if ! command -v apt &> /dev/null; then
     _fail 3 "Command 'apt' was not found."
