@@ -27,6 +27,7 @@
         version_extraction: TagName()
       )
     ),
+
     (
       name: "bjobs",
       download: (
@@ -52,6 +53,7 @@
         version_extraction: TagName()
       )
     ),
+
     (
       name: "bun",
       download: (
@@ -79,6 +81,7 @@
         )
       )
     ),
+    
     (
       name: "cargo-binstall",
       download: (
@@ -104,6 +107,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "crony",
       download: (
@@ -129,6 +133,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "cross",
       download: (
@@ -153,6 +158,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "erdtree",
       download: (
@@ -178,23 +184,7 @@
         version_extraction: TagName()
       )
     ),
-    // (
-    //   name: "eza",
-    //   download: (
-    //     source: GitHub(
-    //       author: "eza-community",
-    //       repo_name: "eza",
-    //       asset_pattern: ([
-    //         (x86_64, linux, "^x86_64-unknown-linux-gnu-eza$"),
-    //         (aarch64, linux, "^aarch64-unknown-linux-gnu-eza$")
-    //       ])
-    //     ),
-    //     file_format: Binary(
-    //       copy_as: "eza"
-    //     ),
-    //     version_extraction: TagName()
-    //   )
-    // ),
+    
     (
       name: "fd",
       download: (
@@ -220,6 +210,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "ffmpeg",
       download: (
@@ -250,6 +241,7 @@
         version_extraction: Hardcoded("<unknown>")
       )
     ),
+    
     (
       name: "filebrowser",
       download: (
@@ -275,6 +267,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "fx",
       download: (
@@ -292,6 +285,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "gdu",
       download: (
@@ -317,6 +311,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "github-cli",
       download: (
@@ -342,6 +337,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "gitui",
       download: (
@@ -367,87 +363,7 @@
         version_extraction: TagName()
       )
     ),
-    (
-      name: "harmony-client",
-      download: (
-        source: GitHub(
-          author: "ClementNerma",
-          repo_name: "Harmony",
-          asset_pattern: ([
-            (x86_64, linux, "^harmony-client-x86_64-unknown-linux-musl.tgz$"),
-            (aarch64, linux, "^harmony-client-aarch64-unknown-linux-musl.tgz$")
-          ])
-        ),
-        file_format: Archive(
-          format: TarGz,
-          files: [
-            (
-              relative_path: "^harmony-client$",
-              file_type: Binary(
-                copy_as: "harmony-client"
-              )
-            )
-          ]
-        ),
-        version_extraction: TagName()
-      )
-    ),
-    (
-      name: "harmony-server",
-      download: (
-        source: GitHub(
-          author: "ClementNerma",
-          repo_name: "Harmony",
-          asset_pattern: ([
-            (x86_64, linux, "^harmony-server-x86_64-unknown-linux-musl.tgz$"),
-            (aarch64, linux, "^harmony-server-aarch64-unknown-linux-musl.tgz$")
-          ])
-        ),
-        file_format: Archive(
-          format: TarGz,
-          files: [
-            (
-              relative_path: "^harmony-server$",
-              file_type: Binary(
-                copy_as: "harmony-server"
-              )
-            )
-          ]
-        ),
-        version_extraction: TagName()
-      )
-    ),
-    (
-      name: "helix",
-      download: (
-        source: GitHub(
-          author: "helix-editor",
-          repo_name: "helix",
-          asset_pattern: ([
-            (x86_64, linux, "-x86_64-linux.tar.xz$"),
-            (aarch64, linux, "-aarch64-linux.tar.xz$")
-          ])
-        ),
-        file_format: Archive(
-          format: TarXz,
-          files: [
-            (
-              relative_path: "-linux/hx$",
-              file_type: Binary(
-                copy_as: "hx"
-              )
-            ),
-            (
-              relative_path: "-linux/runtime$",
-              file_type: ConfigSubDir(
-                copy_as: "runtime"
-              )
-            )
-          ]
-        ),
-        version_extraction: TagName()
-      )
-    ),
+    
     (
       name: "jumpy",
       download: (
@@ -473,6 +389,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "kopia",
       download: (
@@ -498,6 +415,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "lazydocker",
       download: (
@@ -523,6 +441,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "lsd",
       download: (
@@ -548,6 +467,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "moar",
       download: (
@@ -566,6 +486,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "neovim",
       download: (
@@ -582,6 +503,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "nushell",
       download: (
@@ -607,6 +529,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "ripgrep",
       download: (
@@ -632,6 +555,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "scout",
       download: (
@@ -648,6 +572,7 @@
         version_extraction: TagName()
       )
     ),
+
     (
       name: "starship",
       download: (
@@ -673,56 +598,7 @@
         version_extraction: TagName()
       )
     ),
-    (
-      name: "syncer-client",
-      download: (
-        source: GitHub(
-          author: "ClementNerma",
-          repo_name: "Syncer",
-          asset_pattern: ([
-            (x86_64, linux, "^syncer-client-.*-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "^syncer-client-.*-aarch64-unknown-linux-musl.tar.xz$")
-          ])
-        ),
-        file_format: Archive(
-          format: TarXz,
-          files: [
-            (
-              relative_path: "/syncer-client$",
-              file_type: Binary(
-                copy_as: "syncer-client"
-              )
-            )
-          ]
-        ),
-        version_extraction: TagName()
-      )
-    ),
-    (
-      name: "syncer-server",
-      download: (
-        source: GitHub(
-          author: "ClementNerma",
-          repo_name: "Syncer",
-          asset_pattern: ([
-            (x86_64, linux, "^syncer-server-.*-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "^syncer-server-.*-aarch64-unknown-linux-musl.tar.xz$")
-          ])
-        ),
-        file_format: Archive(
-          format: TarXz,
-          files: [
-            (
-              relative_path: "/syncer-server$",
-              file_type: Binary(
-                copy_as: "syncer-server"
-              )
-            )
-          ]
-        ),
-        version_extraction: TagName()
-      )
-    ),
+    
     (
       name: "syncthing",
       download: (
@@ -748,56 +624,7 @@
         version_extraction: TagName()
       )
     ),
-    (
-      name: "sloth-client",
-      download: (
-        source: GitHub(
-          author: "ClementNerma",
-          repo_name: "Sloth",
-          asset_pattern: ([
-            (x86_64, linux, "^sloth-client-.*-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "^sloth-client-.*-aarch64-unknown-linux-musl.tar.xz$")
-          ])
-        ),
-        file_format: Archive(
-          format: TarXz,
-          files: [
-            (
-              relative_path: "/sloth-client$",
-              file_type: Binary(
-                copy_as: "sloth-client"
-              )
-            )
-          ]
-        ),
-        version_extraction: TagName()
-      )
-    ),
-    (
-      name: "sloth-server",
-      download: (
-        source: GitHub(
-          author: "ClementNerma",
-          repo_name: "Sloth",
-          asset_pattern: ([
-            (x86_64, linux, "^sloth-server-.*-x86_64-unknown-linux-musl.tar.xz$"),
-            (aarch64, linux, "^sloth-server-.*-aarch64-unknown-linux-musl.tar.xz$")
-          ])
-        ),
-        file_format: Archive(
-          format: TarXz,
-          files: [
-            (
-              relative_path: "/sloth-server$",
-              file_type: Binary(
-                copy_as: "sloth-server"
-              )
-            )
-          ]
-        ),
-        version_extraction: TagName()
-      )
-    ),
+    
     (
       name: "tokei",
       download: (
@@ -823,6 +650,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "topgrade",
       download: (
@@ -848,6 +676,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "trasher",
       download: (
@@ -873,6 +702,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "unison",
       download: (
@@ -897,6 +727,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "xplr",
       download: (
@@ -922,6 +753,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "yt-dlp",
       download: (
@@ -939,6 +771,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "ytdl",
       download: (
@@ -964,6 +797,7 @@
         version_extraction: TagName()
       )
     ),
+    
     (
       name: "zellij",
       download: (
