@@ -486,6 +486,32 @@
         version_extraction: TagName()
       )
     ),
+
+    (
+      name: "mold",
+      download: (
+        source: GitHub(
+          author: "rui314",
+          repo_name: "mold",
+          asset_pattern: ([
+            (x86_64, linux, "-x86_64-linux.tar.gz"),
+            (aarch64, linux, "-aarch64-linux.tar.gz")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "/bin/mold$",
+              file_type: Binary(
+                copy_as: "mold"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
     
     (
       name: "neovim",
