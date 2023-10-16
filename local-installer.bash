@@ -112,6 +112,10 @@ touch ~/.autodotfiles-just-installed
 
 rm -rf "$TMPDIR"
 
+# Create main data directories
+mkdir -p ~/.local/share
+mkdir -p ~/.config
+
 echo Done\!
 
 # Unset 'sudo' alias if it was set up at the beginning of the script
