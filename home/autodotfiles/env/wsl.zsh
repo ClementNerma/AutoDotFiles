@@ -151,7 +151,7 @@ function fix_socket_connection() {
   done
 
   if [[ ${interop_pid} = 1 ]] ; then
-      echo "Failed to find a parent process with a working interop socket.  Interop is broken."
+      # echo "Failed to find a parent process with a working interop socket.  Interop is broken."
   else
       export WSL_INTEROP=/run/WSL/${interop_pid}_interop
   fi
