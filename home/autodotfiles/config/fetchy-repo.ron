@@ -55,6 +55,32 @@
     ),
 
     (
+      name: "bottom",
+      download: (
+        source: GitHub(
+          author: "ClementTsang",
+          repo_name: "bottom",
+          asset_pattern: ([
+            (x86_64, linux, "^bottom_x86_64-unknown-linux-musl.tar.gz"),
+            (aarch64, linux, "^bottom_aarch64-unknown-linux-musl.tar.gz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "^btm$",
+              file_type: Binary(
+                copy_as: "btm"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
+
+    (
       name: "bun",
       download: (
         source: GitHub(
