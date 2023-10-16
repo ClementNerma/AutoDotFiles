@@ -60,6 +60,7 @@ function adf_install_components() {
         starship
         tokei
         trasher
+        volta
         yt-dlp
         ytdl
         zellij

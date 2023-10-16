@@ -753,6 +753,43 @@
         version_extraction: TagName()
       )
     ),
+
+    (
+      name: "volta",
+      download: (
+        source: GitHub(
+          author: "volta-cli",
+          repo_name: "volta",
+          asset_pattern: ([
+            (x86_64, linux, "^volta-([\\d\\.]+)-linux.tar.gz$")
+          ])
+        ),
+        file_format: Archive(
+          format: TarGz,
+          files: [
+            (
+              relative_path: "^volta$",
+              file_type: Binary(
+                copy_as: "volta"
+              )
+            ),
+            (
+              relative_path: "^volta-shim$",
+              file_type: Binary(
+                copy_as: "volta-shim"
+              )
+            ),
+            (
+              relative_path: "^volta-migrate$",
+              file_type: Binary(
+                copy_as: "volta-migrate"
+              )
+            )
+          ]
+        ),
+        version_extraction: TagName()
+      )
+    ),
     
     (
       name: "xplr",
