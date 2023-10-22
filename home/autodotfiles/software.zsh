@@ -1,9 +1,4 @@
 
-# Integration for Rust (if installed)
-if [[ -f ~/.cargo/env ]]; then
-	source ~/.cargo/env
-fi
-
 # Integration for Trasher
 export TRASH_DIR=$TRASHDIR
 
@@ -30,6 +25,12 @@ else
     echowarn "Starship does not seem to be installed yet."
 fi
 
+# Integration for Rust
+source ~/.cargo/env
+
+# Integration for FZF
+source ~/.fzf.zsh
+
 # Integration for Jumpy
 function jumpy_handler() {
     if (( $__JUMPY_DONT_REGISTER )); then
@@ -41,9 +42,6 @@ function jumpy_handler() {
 }
 
 chpwd_functions=(${chpwd_functions[@]} "jumpy_handler")
-
-# Integration for FZF
-source ~/.fzf.zsh
 
 # Ensure Crony is started
 crony start --ignore-started
