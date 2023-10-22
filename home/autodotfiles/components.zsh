@@ -46,7 +46,6 @@ function adf_install_components() {
     local req_packages=(
         bat
         bottom
-        bun
         cargo-binstall
         crony
         fd
