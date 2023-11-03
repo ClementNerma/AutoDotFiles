@@ -14,7 +14,10 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 
 # Integration for Moar
-export PAGER="moar"
+export PAGER="moar -follow -quit-if-one-screen"
+
+# Integrate for NeoVim
+export EDITOR="nvim"
 
 # Integration for Starship
 export STARSHIP_CONFIG="$ADF_CONFIG_FILES_DIR/starship.toml"

@@ -34,14 +34,13 @@ alias gpf="bakthis && git push --force-with-lease"
 alias nvim="nvim -u $ADF_CONFIG_FILES_DIR/lazy-vim.lua"
 alias vi="nvim"
 
-# Software: 'ytdl'
+# Software: ytdl
 alias ytdl="ytdl -c $ADF_DATA_DIR/ytdl/ytdl-config.json"
 alias yd="ytdl dl"
 alias ytsync="ytdl sync"
 
-# Set the default editor
-export EDITOR="nvim"
-alias nano="$EDITOR"
+# Other shortcuts
+alias nano="\$EDITOR"
 
 # Software: Bat & FX
 function cat() {
