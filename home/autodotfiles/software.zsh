@@ -14,7 +14,8 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 
 # Integration for Moar
-export PAGER="moar -follow -quit-if-one-screen"
+export PAGER="moar"
+export MOAR='-follow -quit-if-one-screen'
 
 # Integrate for NeoVim
 export EDITOR="nvim"
