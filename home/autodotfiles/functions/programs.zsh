@@ -214,7 +214,13 @@ function rustpublish() {
 				rm -i "$asset_file"
 				asset_files+=("$asset_file")
 
-				( cd "$target_dir/$target/release" && tar -czf "$asset_file" "$crate_name" ) || return 1
+				if [[ $asset_file = *"-windows-"* ]]; then
+					local built_exe="$crate_name.exe"
+				else
+					local built_exe="$crate_name"
+				fi
+
+				( cd "$target_dir/$target/release" && tar -czf "$asset_file" "$built_exe" ) || return 1
 			else
 				echowarn ">> No main file found for \z[blue]°$crate_name\z[]°, skipping asset production."
 			fi
