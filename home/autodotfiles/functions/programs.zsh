@@ -167,7 +167,7 @@ function rustpublish() {
 	fetchy require cross || return 1
 
 	# NOTE: Building x86_64 last as it's the once that will be kept for publishing to crates.io
-	local targets=("aarch64-unknown-linux-musl" "x86_64-unknown-linux-musl")
+	local targets=("aarch64-unknown-linux-musl" "x86_64-unknown-linux-musl" "x86_64-pc-windows-gnu")
 	local asset_files=()
 	
 	[[ -f Cargo.toml ]] || { echoerr "No 'Cargo.toml' file found."; return 1 }
